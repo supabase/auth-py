@@ -1,7 +1,6 @@
-class GoTrue:
+class Client:
     def __init__(url, audience='', setCookie=False):
         pass
-
 
     def _request():
         pass
