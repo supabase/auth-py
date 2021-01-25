@@ -1,11 +1,11 @@
 [tool.poetry]
 name = "gotrue"
 version = "0.1.0"
-description = ""
-authors = ["Your Name <you@example.com>"]
+description = "Python Client Library for GoTrue"
+authors = ["Joel Lee <joel@joellee.org>"]
 
 [tool.poetry.dependencies]
-python = "^2.7"
+python = "^3.9.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^4.6"

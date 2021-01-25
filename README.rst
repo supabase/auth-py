@@ -12,10 +12,11 @@ TODOS
 - [] Write tests/setup CI using Github Actions + pytest
 - []
 
-## Installation
+*****
+Installation
+*****
 @TODO
 
-### Instructions
 Here's how you'd install the library with gotrue 
 #### With Poetry
 @TODO
@@ -26,6 +27,7 @@ Here's how you'd install the library with gotrue
 
 
 ### Usage
+`import gotrue`
 
 
 ### Development
