@@ -1,10 +1,13 @@
 class User:
     def __init__(api, tokenRepsonse, audience):
-        pass
+        self.api = api
+        self.url = api.apiURL
+        self._processTokenResponse(tokenResponse)
+        currentUser = self
 
     @staticmethod
     def removeSavedSession():
-        pass
+        # isBrowser()
 
     @staticmethod
     def recoverSession():

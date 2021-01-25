@@ -4,7 +4,7 @@ class Admin:
         self.user = user
 
     def listUsers(aud):
-        return requests.get()
+        return requests.post()
 
     def getUser(self,user):
         pass
