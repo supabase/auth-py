@@ -21,7 +21,6 @@ class Client:
         if aud:
             options.headers['X-JWT-AUD'] = aud
             
-
     def settings():
         pass
 
@@ -61,7 +60,6 @@ class Client:
 
     def verify(type, token, remember):
         requests.post("https://distracted-elion-6bf6a2.netlify.app/.netlify/identity/verify",data=json.dumps({"type": "signup", "token": "cixoe6C7k1tqx2UuYL_O3w"}))
-        pass
 
     def _setRememberHeaders(remember):
         if self.setCookie:
