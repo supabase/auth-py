@@ -14,31 +14,27 @@ class Client:
             print(
                 "Warning:\n\nDO NOT USE HTTP IN PRODUCTION FOR GOTRUE EVER!\nGoTrue REQUIRES HTTPS to work securely."
             )
-
         self.BASE_URL = url
 
-    def _request(path, options=[]):
-        options = option.headers or []
-        aud = options.audience or self.audience
-        if aud:
-            options.headers['X-JWT-AUD'] = aud
-
     def settings(self):
+        """Get environment settings for the server"""
         r = requests.get(f"{self.BASE_URL}/settings")
         return r
 
     def sign_up(credentials: dict):
         requests.post(f"{self.BASE_URL}/signup", credentials)
 
-    def login():
+    def sign_in(self, credentials: dict):
+        """Sign in with email and password"""
         pass
 
     def login_external_url(provider):
         pass
 
     def logout(jwt: str):
+        """Sign out user using a valid JWT"""
         # TODO: Validate how to send jwt
-        requests.post(f"{self.BASE_URL}/logout", jwt)
+        requests.post(f"{self.BASE_URL}/logout", auth=jwt)
 
     def confirm(self, token, remember):
         pass
@@ -51,18 +47,17 @@ class Client:
     def accept_invite(self, token, password, remember):
         pass
 
-    def get_user():
-        requests.get(f"{self.BASE_URL}/user", jwt)
+    def get_user(self, jwt: str):
+        """Get user info using a valid JWT"""
+        return requests.get(f"{self.BASE_URL}/user", auth=jwt)
 
-    def update_user():
-        pass
+    def update_user(self, jwt: str, info: dict):
+        """Update user info using a valid JWT"""
+        return requests.put(f"{self.BASE_URL}/user", auth=jwt, data=info)
 
     def verify(type, token, remember):
-        requests.post(f"{self.BASE_URL}/verify",
-                      data=json.dumps({
-                          "type": "signup",
-                          "token": "cixoe6C7k1tqx2UuYL_O3w"
-                      }))
+        #TODO
+        pass
 
     def send_magic_link(self, email: str):
         """Send a magic link for passwordless login"""
