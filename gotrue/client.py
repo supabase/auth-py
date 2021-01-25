@@ -3,7 +3,7 @@ import re
 import urllib
 import json
 
-HTTPRegexp = "/^http:\/\//"
+HTTPRegexp = "/^http://"
 defaultApiURL = "/.netlify/identity"
 
 
@@ -27,12 +27,8 @@ class Client:
         r = requests.get(f"{self.BASE_URL}/settings")
         return r
 
-    def sign_up(credentials):
-        data = json.dumps({
-            "email": "yadayada@gmail.com",
-            "password": "yadayada"
-        })
-        requests.post(f"{self.BASE_URL}/signup", data)
+    def sign_up(credentials: dict):
+        requests.post(f"{self.BASE_URL}/signup", credentials)
 
     def login():
         pass
@@ -40,24 +36,23 @@ class Client:
     def login_external_url(provider):
         pass
 
-    def confirm(token, remember):
+    def logout(jwt: str):
+        # TODO: Validate how to send jwt
+        requests.post(f"{self.BASE_URL}/logout", jwt)
+
+    def confirm(self, token, remember):
         pass
 
-    def request_password_recovery(email):
-        pass
-
-    def recover(token, remember):
+    def recover(self, email: str):
         """ Send a recovery email """
-        pass
+        data = json.dumps({"email": email})
+        return requests.post(f"{self.BASE_URL}/recover", data)
 
-    def accept_invite(token, password, remember):
-        pass
-
-    def acceptInviteUrl(provider, token):
+    def accept_invite(self, token, password, remember):
         pass
 
     def get_user():
-        pass
+        requests.get(f"{self.BASE_URL}/user", jwt)
 
     def update_user():
         pass
@@ -74,15 +69,18 @@ class Client:
         data = json.dumps({"email": email})
         return requests.post(f"{self.BASE_URL}/magiclink", data=data)
 
+    def invite(self, invitation):
+        """Invite a new user to join"""
+        return requests.post(f"{self.BASE_URL}/invite", invitation)
+
     def grant_token(type, payload):
         payload = json.dumps({
             "email": "yadayada@gmail.com",
             "password": "yadayada"
         })
         headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-        requests.post(
-            "https://distracted-elion-6bf6a2.netlify.app/.netlify/identity/verify",
-            data=json.dumps({
-                "type": "signup",
-                "token": "tokenthing"
-            }))
+        requests.post(f"{self.BASE_URL}/verify",
+                      data=json.dumps({
+                          "type": "signup",
+                          "token": "tokenthing"
+                      }))
