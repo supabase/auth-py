@@ -1,9 +1,13 @@
 
-# Gotrue-py
+*****
+Title
+*****
 **STATUS**: WIP. DO NOT USE
 This is a hacky `gotrue-py` client conceived during a very draggy class. The design mirrors that of [GoTrue-js](https://github.com/supabase/gotrue-js/blob/master/infra/db/00-schema.sql)
 
-## TODOs
+*****
+TODOS
+*****
 - [] Support basic methods like auth/signin/signup
 - [] Write tests/setup CI using Github Actions + pytest
 - []
