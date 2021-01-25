@@ -7,6 +7,10 @@ HTTPRegexp = "/^http://"
 defaultApiURL = "/.netlify/identity"
 
 
+def jsonify(dictionary: dict):
+    return json.dumps(dictionary)
+
+
 class Client:
     def __init__(self, url, audience='', setCookie=False):
         if re.match(HTTPRegexp, url):
@@ -18,11 +22,10 @@ class Client:
 
     def settings(self):
         """Get environment settings for the server"""
-        r = requests.get(f"{self.BASE_URL}/settings")
-        return r
+        return requests.get(f"{self.BASE_URL}/settings")
 
-    def sign_up(credentials: dict):
-        return requests.post(f"{self.BASE_URL}/signup", credentials)
+    def sign_up(self, credentials: dict):
+        return requests.post(f"{self.BASE_URL}/signup", jsonify(credentials))
 
     def sign_in(self, credentials: dict):
         """Sign in with email and password"""
@@ -30,26 +33,19 @@ class Client:
 
     def grant_token(self, type: str, data: dict):
         return requests.post(f"{self.BASE_URL}/token?grant_type=#{type}/",
-                             data)
+                             jsonify(data))
 
-    def login_external_url(provider):
-        pass
+    def refresh_access_token(self, refresh_token: str):
+        return grant_token("refresh_token", {"refresh_token": refresh_token})
 
     def sign_out(jwt: str):
         """Sign out user using a valid JWT"""
-        # TODO: Validate how to send jwt
-        requests.post(f"{self.BASE_URL}/logout", auth=jwt)
-
-    def confirm(self, token, remember):
-        pass
+        return requests.post(f"{self.BASE_URL}/logout", auth=jwt)
 
     def recover(self, email: str):
         """ Send a recovery email """
-        data = json.dumps({"email": email})
-        return requests.post(f"{self.BASE_URL}/recover", data)
-
-    def accept_invite(self, token, password, remember):
-        pass
+        data = {"email": email}
+        return requests.post(f"{self.BASE_URL}/recover", jsonify(data))
 
     def get_user(self, jwt: str):
         """Get user info using a valid JWT"""
@@ -59,7 +55,7 @@ class Client:
         """Update user info using a valid JWT"""
         return requests.put(f"{self.BASE_URL}/user", auth=jwt, data=info)
 
-    def verify(type, token, remember):
+    def verify(self, type, token, remember):
         #TODO
         pass
 
@@ -68,18 +64,6 @@ class Client:
         data = json.dumps({"email": email})
         return requests.post(f"{self.BASE_URL}/magiclink", data=data)
 
-    def invite(self, invitation):
+    def invite(self, invitation: dict):
         """Invite a new user to join"""
-        return requests.post(f"{self.BASE_URL}/invite", invitation)
-
-    def grant_token(type, payload):
-        payload = json.dumps({
-            "email": "yadayada@gmail.com",
-            "password": "yadayada"
-        })
-        headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-        requests.post(f"{self.BASE_URL}/verify",
-                      data=json.dumps({
-                          "type": "signup",
-                          "token": "tokenthing"
-                      }))
+        return requests.post(f"{self.BASE_URL}/invite", jsonify(invitation))
