@@ -22,16 +22,20 @@ class Client:
         return r
 
     def sign_up(credentials: dict):
-        requests.post(f"{self.BASE_URL}/signup", credentials)
+        return requests.post(f"{self.BASE_URL}/signup", credentials)
 
     def sign_in(self, credentials: dict):
         """Sign in with email and password"""
-        pass
+        return self.grant_token("password", credentials)
+
+    def grant_token(self, type: str, data: dict):
+        return requests.post(f"{self.BASE_URL}/token?grant_type=#{type}/",
+                             data)
 
     def login_external_url(provider):
         pass
 
-    def logout(jwt: str):
+    def sign_out(jwt: str):
         """Sign out user using a valid JWT"""
         # TODO: Validate how to send jwt
         requests.post(f"{self.BASE_URL}/logout", auth=jwt)
