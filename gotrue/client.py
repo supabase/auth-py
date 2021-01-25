@@ -14,10 +14,8 @@ class Client:
             print(
                 "Warning:\n\nDO NOT USE HTTP IN PRODUCTION FOR GOTRUE EVER!\nGoTrue REQUIRES HTTPS to work securely."
             )
-        if audience:
-            self.audience = audience
-        self.setCookie = setCookie
-        self.BASE_URL = "https://distracted-elion-6bf6a2.netlify.app/.netlify/identity"
+
+        self.BASE_URL = url
 
     def _request(path, options=[]):
         options = option.headers or []
@@ -27,7 +25,6 @@ class Client:
 
     def settings(self):
         r = requests.get(f"{self.BASE_URL}/settings")
-        print(r.status_code)
         return r
 
     def sign_up(credentials):
@@ -40,28 +37,29 @@ class Client:
     def login():
         pass
 
-    def loginExternalUrl(provider):
+    def login_external_url(provider):
         pass
 
     def confirm(token, remember):
         pass
 
-    def requestPasswordRecovery(email):
+    def request_password_recovery(email):
         pass
 
     def recover(token, remember):
+        """ Send a recovery email """
         pass
 
-    def acceptInvite(token, password, remember):
+    def accept_invite(token, password, remember):
         pass
 
     def acceptInviteUrl(provider, token):
         pass
 
-    def createUser(tokenResponse, remember=False):
+    def get_user():
         pass
 
-    def currentUser():
+    def update_user():
         pass
 
     def verify(type, token, remember):
@@ -71,9 +69,10 @@ class Client:
                           "token": "cixoe6C7k1tqx2UuYL_O3w"
                       }))
 
-    def send_magic_link(email: str):
+    def send_magic_link(self, email: str):
         """Send a magic link for passwordless login"""
-        pass
+        data = json.dumps({"email": email})
+        return requests.post(f"{self.BASE_URL}/magiclink", data=data)
 
     def grant_token(type, payload):
         payload = json.dumps({
