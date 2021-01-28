@@ -1,28 +1,19 @@
 
-*****
-Title
-*****
-**STATUS**: WIP. DO NOT USE
+# Gotrue-py
+
+## Status: POC, don't use unless urgent. Not all functions have been well tested
 This is a hacky `gotrue-py` client conceived during a very draggy class. The design mirrors that of [GoTrue-js](https://github.com/supabase/gotrue-js/blob/master/infra/db/00-schema.sql)
 
-*****
-TODOS
-*****
-- [] Support basic methods like auth/signin/signup
-- [] Write tests/setup CI using Github Actions + pytest
-- []
+## Todos 
+- Package the library
 
-*****
-Installation
-*****
-@TODO
+## Installation
 
 Here's how you'd install the library with gotrue 
-#### With Poetry
-@TODO
+### With Poetry
 
-#### With pip
-@TODO
+
+### With pip
 `pip3 install gotrue`
 
 

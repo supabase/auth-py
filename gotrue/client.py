@@ -55,10 +55,6 @@ class Client:
         """Update user info using a valid JWT"""
         return requests.put(f"{self.BASE_URL}/user", auth=jwt, data=info)
 
-    def verify(self, type, token, remember):
-        #TODO
-        pass
-
     def send_magic_link(self, email: str):
         """Send a magic link for passwordless login"""
         data = json.dumps({"email": email})
