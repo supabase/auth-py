@@ -19,8 +19,12 @@ Here's how you'd install the library with gotrue
 ```
 import gotrue
 
-client = gotrue.Client(www.genericauthwebsite.com")
-client.sign_up({"email": "anemail@gmail.com", "password": "gmebbnok"})
+client = gotrue.Client("www.genericauthwebsite.com")
+credentials = {"email": "anemail@gmail.com", "password": "gmebbnok"}
+client.sign_up(credentials)
+client.sign_in(credentials)
+
+
 ```
 
 
