@@ -1,7 +1,12 @@
+"""
+client.py
+====================================
+core module of the project
+"""
 import requests
 import re
-import urllib
 import json
+from urllib.parse import quote
 
 HTTPRegexp = "/^http://"
 defaultApiURL = "/.netlify/identity"
@@ -31,12 +36,12 @@ class Client:
         """Sign in with email and password"""
         return self.grant_token("password", credentials)
 
+    def refresh_access_token(self, refresh_token: str):
+        return grant_token("refresh_token", {"refresh_token": refresh_token})
+
     def grant_token(self, type: str, data: dict):
         return requests.post(f"{self.BASE_URL}/token?grant_type=#{type}/",
                              jsonify(data))
-
-    def refresh_access_token(self, refresh_token: str):
-        return grant_token("refresh_token", {"refresh_token": refresh_token})
 
     def sign_out(jwt: str):
         """Sign out user using a valid JWT"""
@@ -59,6 +64,9 @@ class Client:
         """Send a magic link for passwordless login"""
         data = json.dumps({"email": email})
         return requests.post(f"{self.BASE_URL}/magiclink", data=data)
+
+    def url_for_provider(self, provider: str) -> str:
+        return f"{self.BASE_URL}/authorize?provider=#{urllib.parse.quote(provider)}"
 
     def invite(self, invitation: dict):
         """Invite a new user to join"""
