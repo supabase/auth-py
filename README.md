@@ -18,7 +18,13 @@ Here's how you'd install the library with gotrue
 
 
 ### Usage
-`import gotrue`
+```
+import gotrue
+
+client = gotrue.Client("www.google.com")
+client.sign_up({"email": "anemail@gmail.com", "password": "gmebbnok"})
+
+```
 
 
 ### Development

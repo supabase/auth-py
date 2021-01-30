@@ -7,6 +7,7 @@ class User:
 
     @staticmethod
     def removeSavedSession():
+        pass
         # isBrowser()
 
     @staticmethod
@@ -22,7 +23,7 @@ class User:
 
     def jwt(forceRefresh):
         pass
-    
+
     def logout():
         pass
 
