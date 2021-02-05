@@ -17,31 +17,35 @@ def jsonify(dictionary: dict):
 
 
 class Client:
-    def __init__(self, url, audience='', setCookie=False):
+    def __init__(self, url, audience="", setCookie=False, headers={}):
         if re.match(HTTPRegexp, url):
             # TODO: Decide whether to convert this to a logging statement
             print(
                 "Warning:\n\nDO NOT USE HTTP IN PRODUCTION FOR GOTRUE EVER!\nGoTrue REQUIRES HTTPS to work securely."
             )
         self.BASE_URL = url
+        self.headers = headers
 
     def settings(self):
         """Get environment settings for the server"""
-        return requests.get(f"{self.BASE_URL}/settings")
+        return requests.get(f"{self.BASE_URL}/settings", headers=self.headers)
 
     def sign_up(self, credentials: dict):
-        return requests.post(f"{self.BASE_URL}/signup", jsonify(credentials))
+        return requests.post(
+            f"{self.BASE_URL}/signup", jsonify(credentials), headers=self.headers
+        )
 
     def sign_in(self, credentials: dict):
         """Sign in with email and password"""
-        return self.grant_token("password", credentials)
+        return self.grant_token("password", credentials, headers=self.headers)
 
     def refresh_access_token(self, refresh_token: str):
         return grant_token("refresh_token", {"refresh_token": refresh_token})
 
     def grant_token(self, type: str, data: dict):
-        return requests.post(f"{self.BASE_URL}/token?grant_type=#{type}/",
-                             jsonify(data))
+        return requests.post(
+            f"{self.BASE_URL}/token?grant_type=#{type}/", jsonify(data)
+        )
 
     def sign_out(jwt: str):
         """Sign out user using a valid JWT"""

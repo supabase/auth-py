@@ -24,9 +24,9 @@ credentials = {"email": "anemail@gmail.com", "password": "gmebbnok"}
 client.sign_up(credentials)
 client.sign_in(credentials)
 
-
 ```
 
 
-### Development
+### Development/TODOs
+- Figure out to use either Sessions to manage headers or allow passing in of headers
 
