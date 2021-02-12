@@ -3,20 +3,19 @@ client.py
 ====================================
 core module of the project
 """
+import datetime
 import functools
 import json
-import requests
 import re
 import uuid
 from typing import Any, Callable, Dict, Optional
-from urllib.parse import quote
+
+from gotrue.api import GoTrueApi
+from gotrue.libs.contants import GOTRUE_URL, STORAGE_KEY
+
 
 HTTPRegexp = "/^http://"
 defaultApiURL = "/.netlify/identity"
-
-
-def jsonify(dictionary: dict):
-    return json.dumps(dictionary)
 
 
 class Client:
@@ -72,8 +71,8 @@ class Client:
             The user's password.
         """
         self._remove_session()
-        data = self.api.sign_up(email, password)
-        if data.user.confirmed_at:
+        data = self.api.sign_up_with_email(email, password)
+        if "confirmed_at" in data.get("user", {}):
             self._save_session(data)
             self._notify_all_subscribers("SIGNED_IN")
         return data
@@ -184,7 +183,7 @@ class Client:
             self._persist_session(self.current_session, token_expiry_seconds)
 
     def _persist_session(self, current_session, seconds_to_expiry: int):
-        timenow_seconds: int = datetime.datetime.now()
+        timenow_seconds: int = int(round(datetime.datetime.now().timestamp()))
         expires_at: int = timenow_seconds + seconds_to_expiry
         data = {
             "current_session": current_session,
@@ -211,11 +210,11 @@ class Client:
         elif refresh_token is None:
             raise ValueError("No current session and refresh_token not supplied.")
         data = self.api.refresh_access_token(refresh_token)
-        if data is not None and "access_token" in data:
+        if "access_token" in data:
             self.current_session = data
             self.current_user = data.user
             self._notify_all_subscribers("SIGNED_IN")
-            token_expiry_seconds = data.get("expires_in")
+            token_expiry_seconds: int = data["expires_in"]
             if self.auto_refresh_token and token_expiry_seconds is not None:
                 self._set_timeout(
                     self._call_refresh_token, (token_expiry_seconds - 60) * 1000
@@ -228,3 +227,8 @@ class Client:
         """Notify all subscribers that auth event happened."""
         for value in self.state_change_emitters.values():
             value["callback"](event, self.current_session)
+
+    def _set_timeout(*args, **kwargs):
+        """"""
+        # TODO(fedden): Implement JS equivalent of setTimeout method.
+        pass
