@@ -11,7 +11,7 @@ import uuid
 from typing import Any, Callable, Dict, Optional
 
 from gotrue.api import GoTrueApi
-from gotrue.libs.contants import GOTRUE_URL, STORAGE_KEY
+from gotrue.lib.constants import GOTRUE_URL, STORAGE_KEY
 
 
 HTTPRegexp = "/^http://"

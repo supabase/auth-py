@@ -1,16 +1,16 @@
-from gotrue import __version__
 import pytest
 
 
 @pytest.fixture
 def client():
     from gotrue import client
+
     return client.Client("http://localhost:9999")
 
 
 def test_settings(client):
     res = client.settings()
-    assert (res.status_code == 200)
+    assert res.status_code == 200
 
 
 def test_refresh_access_token():
@@ -34,9 +34,9 @@ class TestUserHandling:
 
 def test_send_magic_link(client):
     res = client.send_magic_link("someemail@gmail.com")
-    assert (res.status_code == 200 or res.status_code == 429)
+    assert res.status_code == 200 or res.status_code == 429
 
 
 def test_recover_email(client):
     res = client.recover("someemail@gmail.com")
-    assert (res.status_code == 200 or res.status_code == 429)
+    assert res.status_code == 200 or res.status_code == 429
