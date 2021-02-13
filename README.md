@@ -65,6 +65,14 @@ assert client.user() is not None
 assert client.session() is not None
 ```
 
+## Tests
+At the moment we use a pre-defined supabase instance to test the functionality. This may change over time. You can run the tests like so:
+```bash
+SUPABASE_TEST_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYxMjYwOTMyMiwiZXhwIjoxOTI4MTg1MzIyfQ.XL9W5I_VRQ4iyQHVQmjG0BkwRfx6eVyYB3uAKcesukg" \
+SUPABASE_TEST_URL="https://tfsatoopsijgjhrqplra.supabase.co" \
+pytest -sx
+```
+
 ## Contributions
 We would be immensely grateful for any contributions to this project. In particular are the following items:
 - [x] Figure out to use either Sessions to manage headers or allow passing in of headers
