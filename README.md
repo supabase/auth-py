@@ -80,4 +80,5 @@ We would be immensely grateful for any contributions to this project. In particu
 - [ ] Add more tests.
 - [ ] Ensuring feature-parity with the js-client.
 - [ ] Supporting 3rd party provider authentication.
+- [ ] Implement a js port of setTimeout for the refresh session code.
 
