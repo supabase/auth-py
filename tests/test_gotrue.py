@@ -65,7 +65,7 @@ def test_get_user_and_session_methods(client):
     assert client.session() is not None
 
 
-def test_refresh_session():
+def test_refresh_session(client):
     """Test user can signup/in and refresh their session."""
     # Create a random user.
     random_email: str = f"{_random_string(10)}@supamail.com"
@@ -75,8 +75,8 @@ def test_refresh_session():
     assert client.current_user is not None
     assert client.current_session is not None
     # Refresh users session
-    user = client.refresh_session()
-    _assert_authenticated_user(user)
+    data = client.refresh_session()
+    assert data["status_code"] == 200
     assert client.current_user is not None
     assert client.current_session is not None
 

@@ -114,7 +114,7 @@ class Client:
         if self.current_session is None or "access_token" not in self.current_session:
             raise ValueError("Not logged in.")
         self._call_refresh_token()
-        data = self.api.get_user(self.current_session.access_token)
+        data = self.api.get_user(self.current_session["access_token"])
         self.current_user = data
         return data
 
@@ -218,7 +218,7 @@ class Client:
         data = self.api.refresh_access_token(refresh_token)
         if "access_token" in data:
             self.current_session = data
-            self.current_user = data.user
+            self.current_user = data["user"]
             self._notify_all_subscribers("SIGNED_IN")
             token_expiry_seconds: int = data["expires_in"]
             if self.auto_refresh_token and token_expiry_seconds is not None:
