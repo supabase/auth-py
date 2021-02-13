@@ -6,6 +6,11 @@ import requests
 from gotrue.lib.constants import COOKIE_OPTIONS
 
 
+def to_dict(request_response) -> Dict[str, Any]:
+    """Wrap up request_response to user-friendly dict."""
+    return {**request_response.json(), "status_code": request_response.status_code}
+
+
 class GoTrueApi:
     def __init__(
         self, url: str, headers: Dict[str, Any], cookie_options: Dict[str, Any]
@@ -29,7 +34,7 @@ class GoTrueApi:
         request = requests.post(
             f"{self.url}/signup", json.dumps(credentials), headers=self.headers
         )
-        return request.json()
+        return to_dict(request)
 
     def sign_in_with_email(self, email: str, password: str) -> Dict[str, Any]:
         """Logs in an existing user using their email address.
@@ -47,7 +52,7 @@ class GoTrueApi:
             json.dumps(credentials),
             headers=self.headers,
         )
-        return request.json()
+        return to_dict(request)
 
     def send_magic_link_email(self, email: str) -> Dict[str, Any]:
         """Sends a magic login link to an email address.
@@ -61,7 +66,7 @@ class GoTrueApi:
         request = requests.post(
             f"{self.url}/magiclink", json.dumps(credentials), headers=self.headers
         )
-        return request.json()
+        return to_dict(request)
 
     def invite_user_by_email(self, email: str) -> Dict[str, Any]:
         """Sends an invite link to an email address.
@@ -75,7 +80,7 @@ class GoTrueApi:
         request = requests.post(
             f"{self.url}/invite", json.dumps(credentials), headers=self.headers
         )
-        return request.json()
+        return to_dict(request)
 
     def reset_password_for_email(self, email: str) -> Dict[str, Any]:
         """Sends a reset request to an email address.
@@ -89,7 +94,7 @@ class GoTrueApi:
         request = requests.post(
             f"{self.url}/recover", json.dumps(credentials), headers=self.headers
         )
-        return request.json()
+        return to_dict(request)
 
     def _create_request_headers(self, jwt: str) -> Dict[str, str]:
         """Create temporary object.
@@ -131,7 +136,7 @@ class GoTrueApi:
         request = requests.get(
             f"{self.url}/user", headers=self._create_request_headers(jwt)
         )
-        return request.json()
+        return to_dict(request)
 
     def update_user(self, jwt: str, **attributes) -> Dict[str, Any]:
         """Updates the user data through the attributes kwargs."""
@@ -140,7 +145,7 @@ class GoTrueApi:
             json.dumps(attributes),
             headers=self._create_request_headers(jwt),
         )
-        return request.json()
+        return to_dict(request)
 
     def refresh_access_token(self, refresh_token: str) -> Dict[str, Any]:
         """Generates a new JWT.
@@ -155,7 +160,7 @@ class GoTrueApi:
             json.dumps({"refresh_token": refresh_token}),
             headers=self.headers,
         )
-        return request.json()
+        return to_dict(request)
 
     def set_auth_cookie(req, res):
         """Stub for pairty with JS api."""
