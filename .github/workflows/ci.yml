@@ -9,15 +9,16 @@ on:
 
 jobs:
   test:
+    env:
+      SUPABASE_TEST_URL: "https://tfsatoopsijgjhrqplra.supabase.co" 
+      SUPABASE_TEST_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYxMjYwOTMyMiwiZXhwIjoxOTI4MTg1MzIyfQ.XL9W5I_VRQ4iyQHVQmjG0BkwRfx6eVyYB3uAKcesukg"
     name: Test / OS ${{ matrix.os }} / Node ${{ matrix.node }}
     strategy:
       matrix:
         os: [ubuntu-latest]
         python-version: [3.6, 3.7, 3.8, 3.9]
-
-
     runs-on: ${{ matrix.os }}
-
+    # TODO(fedden): We need to discuss these steps: We could just use a test-supabase instance or we could update the docker image and use that for the tests.
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
@@ -45,4 +46,5 @@ jobs:
         time: "5s"
     - name: Test with pytest
       run: |
-        pytest
+        pytest -sx
+
