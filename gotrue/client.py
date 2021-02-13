@@ -111,7 +111,7 @@ class Client:
         Force refreshes the session including the user data incase it was
         updated in a different session.
         """
-        if self.current_session is None or not self.current_session.access_token:
+        if self.current_session is None or "access_token" not in self.current_session:
             raise ValueError("Not logged in.")
         self._call_refresh_token()
         data = self.api.get_user(self.current_session.access_token)

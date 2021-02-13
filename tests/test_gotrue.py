@@ -35,10 +35,6 @@ def client():
     )
 
 
-def test_refresh_access_token():
-    pass
-
-
 def test_user_auth_flow(client):
     """Ensures user can sign up, log out and log into their account."""
     random_email: str = f"{_random_string(10)}@supamail.com"
@@ -57,14 +53,37 @@ def test_user_auth_flow(client):
     assert client.current_session is not None
 
 
+def test_get_user_and_session_methods(client):
+    """Ensure we can get the current user and session via the getters."""
+    # Create a random user.
+    random_email: str = f"{_random_string(10)}@supamail.com"
+    random_password: str = _random_string(20)
+    user = client.sign_up(email=random_email, password=random_password)
+    _assert_authenticated_user(user)
+    # Test that we get not null users and sessions.
+    assert client.user() is not None
+    assert client.session() is not None
+
+
+def test_refresh_session():
+    """Test user can signup/in and refresh their session."""
+    # Create a random user.
+    random_email: str = f"{_random_string(10)}@supamail.com"
+    random_password: str = _random_string(20)
+    user = client.sign_up(email=random_email, password=random_password)
+    _assert_authenticated_user(user)
+    assert client.current_user is not None
+    assert client.current_session is not None
+    # Refresh users session
+    user = client.refresh_session()
+    _assert_authenticated_user(user)
+    assert client.current_user is not None
+    assert client.current_session is not None
+
+
 def test_send_magic_link(client):
     """Tests client can send a magic link to email address."""
     random_email: str = f"{_random_string(10)}@supamail.com"
     # We send a magic link if no password is supplied with the email.
     data = client.sign_in(email=random_email)
     assert data.get("status_code") == 200
-
-
-def test_recover_email(client):
-    res = client.recover("someemail@gmail.com")
-    assert res.status_code == 200 or res.status_code == 429
