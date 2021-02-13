@@ -72,7 +72,9 @@ class Client:
         """
         self._remove_session()
         data = self.api.sign_up_with_email(email, password)
-        if "confirmed_at" in data.get("user", {}):
+        if "expires_in" in data and "user" in data:
+            # The user has confirmed their email or the underlying DB doesn't
+            # require email confirmation.
             self._save_session(data)
             self._notify_all_subscribers("SIGNED_IN")
         return data
@@ -82,18 +84,17 @@ class Client:
         email: Optional[str] = None,
         password: Optional[str] = None,
         provider: Optional[str] = None,
-    ) -> Optional[Dict[str, Any]]:
+    ) -> Dict[str, Any]:
         """Log in an exisiting user, or login via a third-party provider."""
         self._remove_session()
         if email is not None and password is None:
-            self.api.send_magic_link_email(email)
-            data = None
+            data = self.api.send_magic_link_email(email)
         elif email is not None and password is not None:
             data = self._handle_email_sign_in(email, password)
         elif provider is not None:
             data = self._handle_provider_sign_in(provider)
         else:
-            raise ValueError("Email or provider must not be None.")
+            raise ValueError("Email or provider must be defined, both can't be None.")
         return data
 
     def user(self) -> Optional[Dict[str, Any]]:
@@ -172,9 +173,14 @@ class Client:
 
     def _save_session(self, session):
         """Save session to client."""
+        required_keys = ["user", "expires_in"]
+        if any(key not in session for key in required_keys):
+            raise ValueError(
+                f"Session not defined as expected, one of {required_keys} not "
+                f"present in session dict..")
         self.current_session = session
-        self.current_user = session.user
-        token_expiry_seconds = session.get("expires_in")
+        self.current_user = session["user"]
+        token_expiry_seconds = session["expires_in"]
         if self.auto_refresh_token and token_expiry_seconds is not None:
             self._set_timeout(
                 self._call_refresh_token, (token_expiry_seconds - 60) * 1000
