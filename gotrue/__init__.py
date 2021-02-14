@@ -1,6 +1,6 @@
-__version__ = '0.2.0'
+__version__ = '2.0.0'
 
+from . import lib
 from . import api
 from . import client
-from . import lib
 from .client import Client
