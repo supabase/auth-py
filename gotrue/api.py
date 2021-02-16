@@ -24,11 +24,16 @@ class GoTrueApi:
         """Creates a new user using their email address
 
         Parameters
-        ---------
+        ----------
         email : str
             The user's email address.
         password : str
             The user's password.
+
+        Returns
+        -------
+        request : dict of any
+            The user or error message returned by the supabase backend.
         """
         credentials = {"email": email, "password": password}
         request = requests.post(
@@ -40,11 +45,16 @@ class GoTrueApi:
         """Logs in an existing user using their email address.
 
         Parameters
-        ---------
+        ----------
         email : str
             The user's email address.
         password : str
             The user's password.
+
+        Returns
+        -------
+        request : dict of any
+            The user or error message returned by the supabase backend.
         """
         credentials = {"email": email, "password": password}
         request = requests.post(
@@ -58,9 +68,14 @@ class GoTrueApi:
         """Sends a magic login link to an email address.
 
         Parameters
-        ---------
+        ----------
         email : str
             The user's email address.
+
+        Returns
+        -------
+        request : dict of any
+            The user or error message returned by the supabase backend.
         """
         credentials = {"email": email}
         request = requests.post(
@@ -72,9 +87,14 @@ class GoTrueApi:
         """Sends an invite link to an email address.
 
         Parameters
-        ---------
+        ----------
         email : str
             The user's email address.
+
+        Returns
+        -------
+        request : dict of any
+            The invite or error message returned by the supabase backend.
         """
         credentials = {"email": email}
         request = requests.post(
@@ -86,9 +106,15 @@ class GoTrueApi:
         """Sends a reset request to an email address.
 
         Parameters
-        ---------
+        ----------
         email : str
             The user's email address.
+
+        Returns
+        -------
+        request : dict of any
+            The password reset status or error message returned by the supabase
+            backend.
         """
         credentials = {"email": email}
         request = requests.post(
@@ -106,6 +132,12 @@ class GoTrueApi:
         ----------
         jwt : str
              A valid, logged-in JWT.
+
+        Returns
+        -------
+        headers : dict of str
+            The headers required for a successful request statement with the
+            supabase backend.
         """
         headers = {**self.headers}
         headers["Authorization"] = f"Bearer {jwt}"
@@ -132,6 +164,11 @@ class GoTrueApi:
         ----------
         jwt : str
              A valid, logged-in JWT.
+
+        Returns
+        -------
+        request : dict of any
+            The user or error message returned by the supabase backend.
         """
         request = requests.get(
             f"{self.url}/user", headers=self._create_request_headers(jwt)
