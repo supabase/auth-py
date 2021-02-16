@@ -63,7 +63,7 @@ class Client:
     def sign_up(self, email: str, password: str):
         """Creates a new user.
 
-        Paramters
+        Parameters
         ---------
         email : str
             The user's email address.
