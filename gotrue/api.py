@@ -163,7 +163,7 @@ class GoTrueApi:
         return to_dict(request)
 
     def set_auth_cookie(req, res):
-        """Stub for pairty with JS api."""
+        """Stub for parity with JS api."""
         raise NotImplementedError("set_auth_cookie not implemented.")
 
     def get_user_by_cookie(req):
