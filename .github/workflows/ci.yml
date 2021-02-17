@@ -14,10 +14,8 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         python-version: [3.6, 3.7, 3.8, 3.9]
-
-
     runs-on: ${{ matrix.os }}
-
+    # TODO(fedden): We need to discuss these steps: We could just use a test-supabase instance or we could update the docker image and use that for the tests.
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
@@ -45,4 +43,5 @@ jobs:
         time: "5s"
     - name: Test with pytest
       run: |
-        pytest
+        pytest -sx
+
