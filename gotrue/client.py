@@ -127,6 +127,11 @@ class Client:
         self._notify_all_subscribers("USER_UPDATED")
         return data
 
+    def set_auth(self, access_token: str):
+        """Overrides the JWT on the current client. The JWT will then be sent in all subsequent network requests."""
+        self._save_session({**self.current_session, "access_token": access_token, "token_type": "bearer", "user": None})
+        return self.current_session
+
     def get_session_from_url(self, store_session: bool):
         """Gets the session data from a URL string."""
         raise NotImplementedError(
