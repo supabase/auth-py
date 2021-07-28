@@ -1,4 +1,4 @@
-requests==^2.25
+requests
 pytest
 sphinx
 recommonmark
