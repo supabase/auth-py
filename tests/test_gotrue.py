@@ -1,3 +1,4 @@
+from gotrue.client import Client
 import os
 import random
 import string
@@ -35,7 +36,7 @@ def client():
     )
 
 
-def test_user_auth_flow(client):
+def test_user_auth_flow(client: Client):
     """Ensures user can sign up, log out and log into their account."""
     random_email: str = f"{_random_string(10)}@supamail.com"
     random_password: str = _random_string(20)
@@ -53,7 +54,7 @@ def test_user_auth_flow(client):
     assert client.current_session is not None
 
 
-def test_get_user_and_session_methods(client):
+def test_get_user_and_session_methods(client: Client):
     """Ensure we can get the current user and session via the getters."""
     # Create a random user.
     random_email: str = f"{_random_string(10)}@supamail.com"
@@ -65,7 +66,7 @@ def test_get_user_and_session_methods(client):
     assert client.session() is not None
 
 
-def test_refresh_session(client):
+def test_refresh_session(client: Client):
     """Test user can signup/in and refresh their session."""
     # Create a random user.
     random_email: str = f"{_random_string(10)}@supamail.com"
@@ -81,9 +82,22 @@ def test_refresh_session(client):
     assert client.current_session is not None
 
 
-def test_send_magic_link(client):
+def test_send_magic_link(client: Client):
     """Tests client can send a magic link to email address."""
     random_email: str = f"{_random_string(10)}@supamail.com"
     # We send a magic link if no password is supplied with the email.
     data = client.sign_in(email=random_email)
     assert data.get("status_code") == 200
+
+
+def test_set_auth(client: Client):
+    """Test client can override the access_token"""
+    random_email: str = f"{_random_string(10)}@supamail.com"
+    random_password: str = _random_string(20)
+    user = client.sign_up(email=random_email, password=random_password)
+    _assert_authenticated_user(user)
+
+    mock_access_token = _random_string(20)
+    client.set_auth(mock_access_token)
+    new_session = client.session()
+    assert new_session["access_token"] == mock_access_token
