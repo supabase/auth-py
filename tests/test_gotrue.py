@@ -1,3 +1,4 @@
+from gotrue.lib.constants import GOTRUE_URL
 from gotrue.client import Client
 import os
 import random
@@ -9,7 +10,8 @@ import pytest
 
 def _random_string(length: int = 10) -> str:
     """Generate random string."""
-    return "".join(random.choices(string.ascii_uppercase + string.digits, k=length))
+    return "".join(
+        random.choices(string.ascii_uppercase + string.digits, k=length))
 
 
 def _assert_authenticated_user(data: Dict[str, Any]):
@@ -29,11 +31,22 @@ def client():
 
     supabase_url: str = os.environ.get("SUPABASE_TEST_URL")
     supabase_key: str = os.environ.get("SUPABASE_TEST_KEY")
-    url: str = f"{supabase_url}/auth/v1"
-    return Client(
-        url=url,
-        headers={"apiKey": supabase_key, "Authorization": f"Bearer {supabase_key}"},
-    )
+    if supabase_url and supabase_key:
+        url: str = f"{supabase_url}/auth/v1"
+        return Client(
+            url=url,
+            headers={
+                "apiKey": supabase_key,
+                "Authorization": f"Bearer {supabase_key}"
+            },
+        )
+    else:
+        return Client(
+            url=GOTRUE_URL,
+            headers={
+                "Authorization":
+                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwicm9sZSI6InN1cGFiYXNlX2FkbWluIiwiaWF0IjoxNTE2MjM5MDIyfQ.0sOtTSTfPv5oPZxsjvBO249FI4S4p0ymHoIZ6H6z9Y8"
+            })
 
 
 def test_user_auth_flow(client: Client):
