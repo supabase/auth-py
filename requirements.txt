@@ -2,3 +2,6 @@ requests
 pytest
 sphinx
 recommonmark
+faker
+pytest-asyncio
+aiohttp

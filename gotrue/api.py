@@ -2,25 +2,28 @@ import json
 from typing import Any, Dict
 
 import requests
+from requests.api import request
 
 from gotrue.lib.constants import COOKIE_OPTIONS
 
 
 def to_dict(request_response) -> Dict[str, Any]:
     """Wrap up request_response to user-friendly dict."""
-    return {**request_response.json(), "status_code": request_response.status_code}
+    return {
+        **request_response.json(), "status_code": request_response.status_code
+    }
 
 
 class GoTrueApi:
-    def __init__(
-        self, url: str, headers: Dict[str, Any], cookie_options: Dict[str, Any]
-    ):
+    def __init__(self, url: str, headers: Dict[str, Any],
+                 cookie_options: Dict[str, Any]):
         """Initialise API class."""
         self.url = url
         self.headers = headers
         self.cookie_options = {**COOKIE_OPTIONS, **cookie_options}
 
-    def sign_up_with_email(self, email: str, password: str) -> Dict[str, Any]:
+    async def sign_up_with_email(self, email: str,
+                                 password: str) -> Dict[str, Any]:
         """Creates a new user using their email address
 
         Parameters
@@ -36,9 +39,9 @@ class GoTrueApi:
             The user or error message returned by the supabase backend.
         """
         credentials = {"email": email, "password": password}
-        request = requests.post(
-            f"{self.url}/signup", json.dumps(credentials), headers=self.headers
-        )
+        request = requests.post(f"{self.url}/signup",
+                                json.dumps(credentials),
+                                headers=self.headers)
         return to_dict(request)
 
     def sign_in_with_email(self, email: str, password: str) -> Dict[str, Any]:
@@ -78,9 +81,9 @@ class GoTrueApi:
             The user or error message returned by the supabase backend.
         """
         credentials = {"email": email}
-        request = requests.post(
-            f"{self.url}/magiclink", json.dumps(credentials), headers=self.headers
-        )
+        request = requests.post(f"{self.url}/magiclink",
+                                json.dumps(credentials),
+                                headers=self.headers)
         return to_dict(request)
 
     def invite_user_by_email(self, email: str) -> Dict[str, Any]:
@@ -97,9 +100,9 @@ class GoTrueApi:
             The invite or error message returned by the supabase backend.
         """
         credentials = {"email": email}
-        request = requests.post(
-            f"{self.url}/invite", json.dumps(credentials), headers=self.headers
-        )
+        request = requests.post(f"{self.url}/invite",
+                                json.dumps(credentials),
+                                headers=self.headers)
         return to_dict(request)
 
     def reset_password_for_email(self, email: str) -> Dict[str, Any]:
@@ -117,9 +120,9 @@ class GoTrueApi:
             backend.
         """
         credentials = {"email": email}
-        request = requests.post(
-            f"{self.url}/recover", json.dumps(credentials), headers=self.headers
-        )
+        request = requests.post(f"{self.url}/recover",
+                                json.dumps(credentials),
+                                headers=self.headers)
         return to_dict(request)
 
     def _create_request_headers(self, jwt: str) -> Dict[str, str]:
@@ -151,7 +154,8 @@ class GoTrueApi:
         jwt : str
              A valid, logged-in JWT.
         """
-        requests.post(f"{self.url}/logout", headers=self._create_request_headers(jwt))
+        requests.post(f"{self.url}/logout",
+                      headers=self._create_request_headers(jwt))
 
     def get_url_for_provider(self, provider: str) -> str:
         """Generates the relevant login URL for a third-party provider."""
@@ -170,9 +174,8 @@ class GoTrueApi:
         request : dict of any
             The user or error message returned by the supabase backend.
         """
-        request = requests.get(
-            f"{self.url}/user", headers=self._create_request_headers(jwt)
-        )
+        request = requests.get(f"{self.url}/user",
+                               headers=self._create_request_headers(jwt))
         return to_dict(request)
 
     def update_user(self, jwt: str, **attributes) -> Dict[str, Any]:
@@ -206,3 +209,46 @@ class GoTrueApi:
     def get_user_by_cookie(req):
         """Stub for parity with JS api."""
         raise NotImplementedError("get_user_by_cookie not implemented.")
+
+    async def sign_up_with_phone(self, phone: str, password: str):
+        # TODO: Joel
+        pass
+
+    async def sign_in_with_phone(self, phone: str, password: str):
+        # TODO: Joel
+        pass
+
+    async def sent_mobile_OTP(self, phone: str):
+        """
+        Sends a mobile OTP via SMS. Will register the account if it doesn't already exist.
+        Parameters
+        ----------
+        phone : str
+             The phone number of the user.
+
+        """
+        # TODO: Joel -- Change the error formatting
+        try:
+            data = requests.post(f"{self.url}/otp",
+                                 json.dumps(phone),
+                                 headers=self.headers)
+            return data
+        except Exception as e:
+            return None
+
+    async def verify_mobile_otp(self, phone: str, token: str,
+                                options: Dict[str, any]):
+        try:
+            credentials = {
+                "phone": phone,
+                "token": token,
+                "type": "sms",
+                "redirect_to": options.get("redirect_to")
+            }
+            data = requests.post(f"{self.url}/verify",
+                                 json.dumps(credentials),
+                                 headers=self.headers)
+            # TODO : Joel -- be more specific
+            return data
+        except Exception as e:
+            return None
