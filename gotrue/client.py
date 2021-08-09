@@ -6,6 +6,7 @@ core module of the project
 import datetime
 import functools
 import json
+from locale import Error
 import re
 import uuid
 from typing import Any, Callable, Dict, Optional
@@ -20,11 +21,11 @@ defaultApiURL = "/.netlify/identity"
 class Client:
     def __init__(
         self,
-        headers: Dict[str, str],
         url: str = GOTRUE_URL,
         detect_session_in_url: bool = True,
         auto_refresh_token: bool = True,
         persist_session: bool = True,
+        headers: Dict[str, str] = {},
         local_storage: Dict[str, Any] = {},
         cookie_options: Dict[str, Any] = {},
     ):
@@ -48,19 +49,18 @@ class Client:
         if re.match(HTTPRegexp, url):
             print(
                 "Warning:\n\nDO NOT USE HTTP IN PRODUCTION FOR GOTRUE EVER!\n"
-                "GoTrue REQUIRES HTTPS to work securely.")
+                "GoTrue REQUIRES HTTPS to work securely."
+            )
         self.state_change_emitters: Dict[str, Any] = {}
         self.current_user = None
         self.current_session = None
         self.auto_refresh_token = auto_refresh_token
         self.persist_session = persist_session
         self.local_storage: Dict[str, Any] = {}
-        self.api = GoTrueApi(url=url,
-                             headers=headers,
-                             cookie_options=cookie_options)
+        self.api = GoTrueApi(url=url, headers=headers, cookie_options=cookie_options)
         self._recover_session()
 
-    async def sign_up(self, email: str, password: str):
+    async def sign_up(self, email: str, password: str, phone: str = None):
         """Creates a new user.
 
         Parameters
@@ -70,16 +70,20 @@ class Client:
         password : str
             The user's password.
         """
-        self._remove_session()
-        data = self.api.sign_up_with_email(email, password)
-        if "expires_in" in data and "user" in data:
-            # The user has confirmed their email or the underlying DB doesn't
-            # require email confirmation.
-            self._save_session(data)
-            self._notify_all_subscribers("SIGNED_IN")
-        return data
+        try:
+            self._remove_session()
+            data = await self.api.sign_up_with_email(email, password)
+            if "expires_in" in data and "user" in data:
+                # The user has confirmed their email or the underlying DB doesn't
+                # require email confirmation.
+                self._save_session(data)
+                self._notify_all_subscribers("SIGNED_IN")
+            return data
+        except Error:
+            print("An error has occurred")
+            raise
 
-    def sign_in(
+    async def sign_in(
         self,
         email: Optional[str] = None,
         password: Optional[str] = None,
@@ -94,8 +98,7 @@ class Client:
         elif provider is not None:
             data = self._handle_provider_sign_in(provider)
         else:
-            raise ValueError(
-                "Email or provider must be defined, both can't be None.")
+            raise ValueError("Email or provider must be defined, both can't be None.")
         return data
 
     def user(self) -> Optional[Dict[str, Any]]:
@@ -121,28 +124,30 @@ class Client:
 
     def update(self, **attributes) -> Dict[str, Any]:
         """Updates user data, if there is a logged in user."""
-        if self.current_session is None or not self.current_session.get(
-                "access_token"):
+        if self.current_session is None or not self.current_session.get("access_token"):
             raise ValueError("Not logged in.")
-        data = self.api.update_user(self.current_session["access_token"],
-                                    **attributes)
+        data = self.api.update_user(self.current_session["access_token"], **attributes)
         self.current_user = data
         self._notify_all_subscribers("USER_UPDATED")
         return data
 
     def set_auth(self, access_token: str):
         """Overrides the JWT on the current client. The JWT will then be sent in all subsequent network requests."""
-        self._save_session({
-            **self.current_session, "access_token": access_token,
-            "token_type": "bearer",
-            "user": None
-        })
+        self._save_session(
+            {
+                **self.current_session,
+                "access_token": access_token,
+                "token_type": "bearer",
+                "user": None,
+            }
+        )
         return self.current_session
 
     def get_session_from_url(self, store_session: bool):
         """Gets the session data from a URL string."""
         raise NotImplementedError(
-            "This method is a stub and is only required by the JS client.")
+            "This method is a stub and is only required by the JS client."
+        )
 
     def sign_out(self):
         """Log the user out."""
@@ -158,22 +163,23 @@ class Client:
         """"""
         unique_id: str = str(uuid.uuid4())
         subscription: Dict[str, Any] = {
-            "id":
-            unique_id,
-            "callback":
-            callback,
-            "unsubscribe":
-            functools.partial(self.state_change_emitters.pop, id=unique_id),
+            "id": unique_id,
+            "callback": callback,
+            "unsubscribe": functools.partial(
+                self.state_change_emitters.pop, id=unique_id
+            ),
         }
         self.state_change_emitters[unique_id] = subscription
         return subscription
 
-    def _handle_email_sign_in(self, email: str,
-                              password: str) -> Dict[str, Any]:
+    def _handle_email_sign_in(self, email: str, password: str) -> Dict[str, Any]:
         """Sign in with email and password."""
         data = self.api.sign_in_with_email(email, password)
-        if (data is not None and data.get("user") is not None
-                and "confirmed_at" in data["user"]):
+        if (
+            data is not None
+            and data.get("user") is not None
+            and "confirmed_at" in data["user"]
+        ):
             self._save_session(data)
             self._notify_all_subscribers("SIGNED_IN")
         return data
@@ -188,13 +194,15 @@ class Client:
         if any(key not in session for key in required_keys):
             raise ValueError(
                 f"Session not defined as expected, one of {required_keys} not "
-                f"present in session dict..")
+                f"present in session dict.."
+            )
         self.current_session = session
         self.current_user = session["user"]
         token_expiry_seconds = session["expires_in"]
         if self.auto_refresh_token and token_expiry_seconds is not None:
-            self._set_timeout(self._call_refresh_token,
-                              (token_expiry_seconds - 60) * 1000)
+            self._set_timeout(
+                self._call_refresh_token, (token_expiry_seconds - 60) * 1000
+            )
         if self.persist_session:
             self._persist_session(self.current_session, token_expiry_seconds)
 
@@ -220,12 +228,13 @@ class Client:
         pass
 
     def _call_refresh_token(self, refresh_token: Optional[str] = None):
-        logged_in: bool = self.current_session is not None and "access_token" in self.current_session
+        logged_in: bool = (
+            self.current_session is not None and "access_token" in self.current_session
+        )
         if refresh_token is None and logged_in:
             refresh_token = self.current_session["refresh_token"]
         elif refresh_token is None:
-            raise ValueError(
-                "No current session and refresh_token not supplied.")
+            raise ValueError("No current session and refresh_token not supplied.")
         data = self.api.refresh_access_token(refresh_token)
         if "access_token" in data:
             self.current_session = data
@@ -233,11 +242,11 @@ class Client:
             self._notify_all_subscribers("SIGNED_IN")
             token_expiry_seconds: int = data["expires_in"]
             if self.auto_refresh_token and token_expiry_seconds is not None:
-                self._set_timeout(self._call_refresh_token,
-                                  (token_expiry_seconds - 60) * 1000)
+                self._set_timeout(
+                    self._call_refresh_token, (token_expiry_seconds - 60) * 1000
+                )
             if self.persist_session:
-                self._persist_session(self.current_session,
-                                      token_expiry_seconds)
+                self._persist_session(self.current_session, token_expiry_seconds)
         return data
 
     def _notify_all_subscribers(self, event: str):
