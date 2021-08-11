@@ -209,6 +209,20 @@ class GoTrueApi:
         raise NotImplementedError("get_user_by_cookie not implemented.")
 
     async def sign_up_with_phone(self, phone: str, password: str):
+        """[summary]
+
+        Parameters
+        ----------
+        phone : str
+            The phone number of the user
+        password : str
+            The password of the user
+
+        Returns
+        -------
+        [type]
+            [description]
+        """
         credentials = {"phone": phone, "password": password}
         try:
             data = requests.post(
@@ -220,6 +234,20 @@ class GoTrueApi:
             return None
 
     async def sign_in_with_phone(self, phone: str, password: str):
+        """Logs in an existing user using their phone number and password.
+
+        Parameters
+        ----------
+        phone : str
+            The phone number of the user.
+        password : str
+            The password of the user.
+
+        Returns
+        -------
+        [type]
+            [description]
+        """
         credentials = {"phone": phone, password: password}
         try:
             query_string = "?grant_type=password"
@@ -252,6 +280,22 @@ class GoTrueApi:
             return None
 
     async def verify_mobile_otp(self, phone: str, token: str, options: Dict[str, any]):
+        """Send User supplied Mobile OTP to be verified
+
+        Parameters
+        ----------
+        phone : str
+            The user's phone number WITH international prefix
+        token : str
+            Token that user was sent to their mobile phone
+        options : Dict[str, any]
+            [description]
+
+        Returns
+        -------
+        [type]
+            [description]
+        """
         try:
             credentials = {
                 "phone": phone,
@@ -262,7 +306,7 @@ class GoTrueApi:
             data = requests.post(
                 f"{self.url}/verify", json.dumps(credentials), headers=self.headers
             )
-            # TODO : Joel -- be more specific
+            # TODO : Joel -- be more specific with the exception
             return data
         except Exception as e:
             return None
