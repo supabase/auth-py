@@ -2,6 +2,7 @@ from gotrue.client import Client
 import pytest
 import os
 from faker import Faker
+from jsonschema import validate
 
 fake = Faker()
 Faker.seed(0)
@@ -18,17 +19,28 @@ def client():
     from gotrue import Client
 
     url: str = GOTRUE_URL
-    return Client(url=url,
-                  auto_refresh_token=False,
-                  persist_session=True,
-                  headers={})
+    return Client(url=url, auto_refresh_token=False, persist_session=True, headers={})
 
 
 @pytest.mark.asyncio
 async def test_signup_with_email_and_password(client: Client):
+    resp_schema = {
+        "type": "object",
+        "properties": {
+            "aud": {"type": "string"},
+            "confirmation_sent_at": {"type": "string"},
+            "created_at": {"type": "string"},
+            "email": {"type": "string"},
+            "id": {"type": "string"},
+            "phone": {"const": ""},
+            "role": {"const": ""},
+            "updated_at": {"type": "string"},
+            "app_metadata": {"provider": {"const": "email"}},
+        },
+    }
     res = await client.sign_up(EMAIL, PASSWORD)
-    print(res)
     assert res.get("status_code") == 200
+    validate(res, resp_schema)
 
 
 @pytest.mark.asyncio
