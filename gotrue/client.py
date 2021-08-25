@@ -11,7 +11,7 @@ import uuid
 from typing import Any, Callable, Dict, Optional
 
 from gotrue.api import GoTrueApi
-from gotrue.lib.constants import GOTRUE_URL, STORAGE_KEY
+from gotrue.lib.constants import GOTRUE_URL, STORAGE_KEY, DEFAULT_HEADERS
 
 
 HTTPRegexp = "/^http://"
@@ -51,13 +51,15 @@ class Client:
                 "Warning:\n\nDO NOT USE HTTP IN PRODUCTION FOR GOTRUE EVER!\n"
                 "GoTrue REQUIRES HTTPS to work securely."
             )
+        self.headers = DEFAULT_HEADERS
+        self.headers.update(headers)
         self.state_change_emitters: Dict[str, Any] = {}
         self.current_user = None
         self.current_session = None
         self.auto_refresh_token = auto_refresh_token
         self.persist_session = persist_session
         self.local_storage: Dict[str, Any] = {}
-        self.api = GoTrueApi(url=url, headers=headers, cookie_options=cookie_options)
+        self.api = GoTrueApi(url=url, headers=self.headers, cookie_options=cookie_options)
         self._recover_session()
 
     def sign_up(self, email: str, password: str):

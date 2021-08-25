@@ -114,3 +114,15 @@ def test_set_auth(client: Client):
     client.set_auth(mock_access_token)
     new_session = client.session()
     assert new_session["access_token"] == mock_access_token
+
+
+def test_default_headers(client: Client):
+    """Test client for existing default headers"""
+    from gotrue import __version__
+    default_key = "X-Client-Info"
+    client_info = f"gotrue-py/{__version__}"
+    assert default_key in client.headers
+    assert client.headers[default_key] == client_info
+
+    assert default_key in client.api.headers
+    assert client.api.headers[default_key] == client_info
