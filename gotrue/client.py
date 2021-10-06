@@ -84,6 +84,7 @@ class Client:
         email: Optional[str] = None,
         password: Optional[str] = None,
         provider: Optional[str] = None,
+        phone: Optional[str] = None,
     ) -> Dict[str, Any]:
         """Log in an exisiting user, or login via a third-party provider."""
         self._remove_session()
@@ -91,10 +92,34 @@ class Client:
             data = self.api.send_magic_link_email(email)
         elif email is not None and password is not None:
             data = self._handle_email_sign_in(email, password)
+        elif phone is not None and password is None:
+            data = self.api.send_mobile_otp(phone)
         elif provider is not None:
             data = self._handle_provider_sign_in(provider)
         else:
-            raise ValueError("Email or provider must be defined, both can't be None.")
+            raise ValueError("Email, provider, or phone must be defined, all can't be None.")
+        return data
+
+    def verify_otp(
+        self,
+        phone: str,
+        token: str,
+        options: Optional[Dict[str, Any]] = {},
+    ) -> Dict[str, Any]:
+        """Log in a user given a User supplied OTP received via mobile."""
+        self._remove_session()
+
+        if options is None:
+            options = {}
+        
+        data = self.api.verify_mobile_otp(phone, token, options)
+
+        if "access_token" in data:
+            session = data
+
+            self._save_session(session) 
+            self._notify_all_subscribers('SIGNED _IN')
+
         return data
 
     def user(self) -> Optional[Dict[str, Any]]:
