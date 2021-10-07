@@ -41,6 +41,27 @@ class GoTrueApi:
         )
         return to_dict(request)
 
+    def sign_up_with_phone(self, phone: str, password: str) -> Dict[str, Any]:
+        """Creates a new user using their phone number
+
+        Parameters
+        ----------
+        phone : str
+            The user's phone number.
+        password : str
+            The user's password.
+
+        Returns
+        -------
+        request : dict of any
+            The user or error message returned by the supabase backend.
+        """
+        credentials = {"phone": phone, "password": password}
+        request = requests.post(
+            f"{self.url}/signup", json.dumps(credentials), headers=self.headers
+        )
+        return to_dict(request)
+
     def send_mobile_otp(self, phone: str) -> Dict[str, Any]:
         """Sends a mobile OTP via SMS. Will register the account if it doesn't already exist
 
@@ -78,9 +99,9 @@ class GoTrueApi:
             The user or error message returned by the supabase backend.
         """
         payload = {
-            "phone": phone, 
-            "token": token, 
-            "type": "sms", 
+            "phone": phone,
+            "token": token,
+            "type": "sms",
             "redirect_to": options.get("redirect_to")
         }
         request = requests.post(

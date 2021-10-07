@@ -60,7 +60,7 @@ class Client:
         self.api = GoTrueApi(url=url, headers=headers, cookie_options=cookie_options)
         self._recover_session()
 
-    def sign_up(self, email: str, password: str):
+    def sign_up(self, password: str, phone: Optional[str], email: Optional[str]):
         """Creates a new user.
 
         Parameters
@@ -71,7 +71,14 @@ class Client:
             The user's password.
         """
         self._remove_session()
-        data = self.api.sign_up_with_email(email, password)
+
+        if email and password:
+            data = self.api.sign_up_with_email(email, password)
+        elif phone and password:
+            data = self.api.sign_up_with_phone(phone, password)
+        else:
+            raise ValueError("Email or phone must be defined, both can't be None.")
+
         if "expires_in" in data and "user" in data:
             # The user has confirmed their email or the underlying DB doesn't
             # require email confirmation.
@@ -111,13 +118,13 @@ class Client:
 
         if options is None:
             options = {}
-        
+
         data = self.api.verify_mobile_otp(phone, token, options)
 
         if "access_token" in data:
             session = data
 
-            self._save_session(session) 
+            self._save_session(session)
             self._notify_all_subscribers('SIGNED _IN')
 
         return data
