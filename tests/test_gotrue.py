@@ -152,7 +152,7 @@ def test_sign_up_phone_password(client: Client):
 
 
 def test_verify_mobile_otp(client: Client):
-    """Test client can sign up with phone and password"""
+    """Test client can verify their mobile using OTP"""
     random_token: str = '123456'
     random_phone: str = _random_phone_number()
     data = client.verify_otp(phone=random_phone, token=random_token)
