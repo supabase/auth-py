@@ -41,6 +41,74 @@ class GoTrueApi:
         )
         return to_dict(request)
 
+    def sign_up_with_phone(self, phone: str, password: str) -> Dict[str, Any]:
+        """Creates a new user using their phone number
+
+        Parameters
+        ----------
+        phone : str
+            The user's phone number.
+        password : str
+            The user's password.
+
+        Returns
+        -------
+        request : dict of any
+            The user or error message returned by the supabase backend.
+        """
+        credentials = {"phone": phone, "password": password}
+        request = requests.post(
+            f"{self.url}/signup", json.dumps(credentials), headers=self.headers
+        )
+        return to_dict(request)
+
+    def send_mobile_otp(self, phone: str) -> Dict[str, Any]:
+        """Sends a mobile OTP via SMS. Will register the account if it doesn't already exist
+
+        Parameters
+        ----------
+        phone : str
+            The user's phone number WITH international prefix.
+
+        Returns
+        -------
+        request : dict of any
+            The user or error message returned by the supabase backend.
+        """
+        credentials = {"phone": phone}
+        request = requests.post(
+            f"{self.url}/otp", json.dumps(credentials), headers=self.headers
+        )
+        return to_dict(request)
+
+    def verify_mobile_otp(self, phone: str, token: str, options: Dict[str, Any]) -> Dict[str, Any]:
+        """Send User supplied Mobile OTP to be verified
+
+        Parameters
+        ----------
+        phone : str
+            The user's phone number WITH international prefix
+        token : str
+            Token that user was sent to their mobile phone
+        options : dict of any
+            A URL or mobile address to send the user to after they are confirmed.
+
+        Returns
+        -------
+        request : dict of any
+            The user or error message returned by the supabase backend.
+        """
+        payload = {
+            "phone": phone,
+            "token": token,
+            "type": "sms",
+            "redirect_to": options.get("redirect_to")
+        }
+        request = requests.post(
+            f"{self.url}/verify", json.dumps(payload), headers=self.headers
+        )
+        return to_dict(request)
+
     def sign_in_with_email(self, email: str, password: str) -> Dict[str, Any]:
         """Logs in an existing user using their email address.
 

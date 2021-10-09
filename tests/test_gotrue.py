@@ -14,6 +14,15 @@ def _random_string(length: int = 10) -> str:
         random.choices(string.ascii_uppercase + string.digits, k=length))
 
 
+def _random_phone_number() -> str:
+    first = str(random.randint(100, 999))
+    second = str(random.randint(1, 888)).zfill(3)
+    last = (str(random.randint(1, 9998)).zfill(4))
+    while last in ['1111', '2222', '3333', '4444', '5555', '6666', '7777', '8888']:
+        last = (str(random.randint(1, 9998)).zfill(4))
+    return '{}-{}-{}'.format(first, second, last)
+
+
 def _assert_authenticated_user(data: Dict[str, Any]):
     """Raise assertion error if user is not logged in correctly."""
     assert "access_token" in data
@@ -114,3 +123,42 @@ def test_set_auth(client: Client):
     client.set_auth(mock_access_token)
     new_session = client.session()
     assert new_session["access_token"] == mock_access_token
+
+
+def test_sign_up_phone_password(client: Client):
+    """Test client can sign up with phone and password"""
+    random_phone: str = _random_phone_number()
+    random_password: str = _random_string(20)
+    data = client.sign_up(phone=random_phone, password=random_password)
+    _assert_authenticated_user(data)
+    assert client.current_user is not None
+    assert client.current_session is not None
+
+    assert "id" in data and isinstance(data.get('id'), str)
+    assert "created_at" in data and isinstance(data.get('created_at'), str)
+    assert "email" in data and data.get('email') == ''
+    assert "confirmation_sent_at" in data and isinstance(
+        data.get('confirmation_sent_at'), str)
+    assert "phone" in data and data.get('phone') == random_phone
+    assert "aud" in data and isinstance(data.get('aud'), str)
+    assert "updated_at" in data and isinstance(data.get('updated_at'), str)
+    assert "app_metadata" in data and isinstance(
+        data.get('app_metadata'), dict)
+    assert "provider" in data.get(
+        'app_metadata') and data['app_metadata'].get('provider') == 'phone'
+    assert "user_metadata" in data and isinstance(data.get('id'), dict)
+    assert "status" in data.get(
+        'user_metadata') and data['user_metadata'].get('status') == 'alpha'
+
+
+def test_verify_mobile_otp(client: Client):
+    """Test client can verify their mobile using OTP"""
+    random_token: str = '123456'
+    random_phone: str = _random_phone_number()
+    data = client.verify_otp(phone=random_phone, token=random_token)
+
+    assert "session" in data and data['session'] is None
+    assert "user" in data and data['user'] is None
+    assert "error" in data
+    assert "message" in data['error']
+    assert "Otp has expired or is invalid" in data['error']['message']
