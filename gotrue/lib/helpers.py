@@ -1,13 +1,18 @@
 from typing import Any, Callable, Optional, TypeVar, Union
+from urllib.parse import quote
 
 from requests import Response
 
-from gotrue.models import ApiError, Session, User
+from gotrue.lib.types import ApiError, Session, User
 
 T = TypeVar("T")
 
 
-def _parse_none(
+def encode_uri_component(uri: str) -> str:
+    return quote(uri.encode("utf-8"))
+
+
+def parse_none(
     value: Optional[T],
     func: Callable[[Any], T],
 ) -> Optional[T]:
@@ -16,7 +21,7 @@ def _parse_none(
     return func(value)
 
 
-def _parse_response(response: Response, func: Callable[[Any], T]) -> T:
+def parse_response(response: Response, func: Callable[[Any], T]) -> T:
     if response.status_code == 200:
         json = response.json()
         data = json.get("data")
@@ -30,7 +35,7 @@ def _parse_response(response: Response, func: Callable[[Any], T]) -> T:
         raise ApiError(message=response.text, status=response.status_code)
 
 
-def _parse_session_or_user(arg: Any) -> Union[Session, User]:
+def parse_session_or_user(arg: Any) -> Union[Session, User]:
     if "access_token" in arg:
         Session.from_dict(arg)
     return User.from_dict(arg)
