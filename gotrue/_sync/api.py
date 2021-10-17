@@ -26,6 +26,15 @@ class SyncGoTrueApi:
         self.cookie_options = cookie_options
         self.http_client = SyncClient()
 
+    def __enter__(self) -> "SyncGoTrueApi":
+        return self
+
+    def __exit__(self, exc_t, exc_v, exc_tb) -> None:
+        self.close()
+
+    def close(self) -> None:
+        self.http_client.aclose()
+
     def sign_up_with_email(
         self,
         email: str,

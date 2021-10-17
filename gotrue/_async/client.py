@@ -65,6 +65,15 @@ class AsyncGoTrueClient:
         self.local_storage = local_storage
         self.api = AsyncGoTrueApi(url, headers, cookie_options)
 
+    async def __aenter__(self) -> "AsyncGoTrueClient":
+        return self
+
+    async def __aexit__(self, exc_t, exc_v, exc_tb) -> None:
+        await self.close()
+
+    async def close(self) -> None:
+        await self.api.close()
+
     async def init_recover(self) -> None:
         """Recover the current session from local storage."""
         await self._recover_session()
