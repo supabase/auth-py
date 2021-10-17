@@ -199,6 +199,14 @@ class Session:
         return data
 
 
+class AuthChangeEvent(str, Enum):
+    SIGNED_IN = "SIGNED_IN"
+    SIGNED_OUT = "SIGNED_OUT"
+    USER_UPDATED = "USER_UPDATED"
+    USER_DELETED = "USER_DELETED"
+    PASSWORD_RECOVERY = "PASSWORD_RECOVERY"
+
+
 class Provider(str, Enum):
     azure = "azure"
     bitbucket = "bitbucket"
