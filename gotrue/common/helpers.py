@@ -1,8 +1,9 @@
 from typing import Any, Callable, Optional, TypeVar, Union
 from urllib.parse import quote
 
-from gotrue.lib.types import ApiError, Session, User
-from requests import Response
+from httpx import Response
+
+from .types import ApiError, Session, User
 
 T = TypeVar("T")
 

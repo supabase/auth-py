@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Dict, Optional
 
 
-class SupportedStorage(ABC):
+class SyncSupportedStorage(ABC):
     @abstractmethod
     def get_item(self, key: str) -> Optional[str]:
         ...
@@ -16,7 +16,7 @@ class SupportedStorage(ABC):
         ...
 
 
-class MemoryStorage(SupportedStorage):
+class SyncMemoryStorage(SyncSupportedStorage):
     def __init__(self):
         self.storage: Dict[str, str] = {}
 

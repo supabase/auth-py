@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any, Callable, Dict, Optional
 
-from gotrue.lib.helpers import parse_none
+from .helpers import parse_none
 
 
 @dataclass
