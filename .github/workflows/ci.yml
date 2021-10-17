@@ -9,7 +9,7 @@ on:
 
 jobs:
   test:
-    name: Test / OS ${{ matrix.os }} / Node ${{ matrix.node }}
+    name: Test / OS ${{ matrix.os }} / Python ${{ matrix.node }}
     strategy:
       matrix:
         os: [ubuntu-latest]
