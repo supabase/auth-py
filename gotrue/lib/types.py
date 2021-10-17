@@ -26,6 +26,42 @@ class ApiError(BaseException):
 
 
 @dataclass
+class CookieOptions:
+    name: str
+    """The name of the cookie. Defaults to `sb:token`."""
+    lifetime: int
+    """The cookie lifetime (expiration) in seconds. Set to 8 hours by default."""
+    domain: str
+    """The cookie domain this should run on.
+    Leave it blank to restrict it to your domain."""
+    path: str
+    same_site: str
+    """SameSite configuration for the session cookie.
+    Defaults to 'lax', but can be changed to 'strict' or 'none'.
+    Set it to false if you want to disable the SameSite setting."""
+
+    def __post_init__(self) -> None:
+        self.name = str(self.name)
+        self.lifetime = int(str(self.lifetime))
+        self.domain = str(self.domain)
+        self.path = str(self.path)
+        self.same_site = str(self.same_site)
+
+    @staticmethod
+    def from_dict(data: dict) -> "CookieOptions":
+        return CookieOptions(**data)
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "name": self.name,
+            "lifetime": self.lifetime,
+            "domain": self.domain,
+            "path": self.path,
+            "same_site": self.same_site,
+        }
+
+
+@dataclass
 class User:
     action_link: Optional[str]
     app_metadata: Dict[str, Any]
