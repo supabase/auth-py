@@ -3,26 +3,32 @@ from typing import Any, Dict, Optional, Union
 
 from requests import delete, get, post, put
 
-from gotrue.lib.constants import COOKIE_OPTIONS
 from gotrue.lib.helpers import (
     encode_uri_component,
     parse_response,
     parse_session_or_user,
 )
-from gotrue.lib.types import LinkType, Provider, Session, User, UserAttributes
+from gotrue.lib.types import (
+    CookieOptions,
+    LinkType,
+    Provider,
+    Session,
+    User,
+    UserAttributes,
+)
 
 
 class GoTrueApi:
     def __init__(
         self,
         url: str,
-        headers: Dict[str, Any],
-        cookie_options: Dict[str, Any],
-    ):
+        headers: Dict[str, str],
+        cookie_options: CookieOptions,
+    ) -> None:
         """Initialise API class."""
         self.url = url
         self.headers = headers
-        self.cookie_options = {**COOKIE_OPTIONS, **cookie_options}
+        self.cookie_options = cookie_options
 
     def sign_up_with_email(
         self,
