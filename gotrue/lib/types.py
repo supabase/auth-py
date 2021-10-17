@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, Optional
+from typing import Any, Callable, Dict, Optional
 
 from gotrue.lib.helpers import parse_none
 
@@ -197,6 +197,19 @@ class Session:
         if self.user:
             data["user"] = self.user.to_dict()
         return data
+
+
+@dataclass
+class Subscription:
+    id: str
+    """The subscriber UUID. This will be set by the client."""
+    callback: Callable[["AuthChangeEvent", Optional[Session]], None]
+    """The function to call every time there is an event."""
+    unsubscribe: Callable[[], None]
+    """Call this to remove the listener."""
+
+    def __post_init__(self) -> None:
+        self.id = str(self.id)
 
 
 class AuthChangeEvent(str, Enum):
