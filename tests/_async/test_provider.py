@@ -6,56 +6,58 @@ from gotrue.types import Provider
 GOTRUE_URL = "http://localhost:9999"
 
 
-def create_client() -> AsyncGoTrueClient:
-    return AsyncGoTrueClient(
+@pytest.fixture(name="client")
+async def create_client() -> AsyncGoTrueClient:
+    async with AsyncGoTrueClient(
         url=GOTRUE_URL,
         auto_refresh_token=False,
         persist_session=False,
-    )
+    ) as client:
+        yield client
 
 
 @pytest.mark.asyncio
-async def test_sign_in_with_provider():
+async def test_sign_in_with_provider(client: AsyncGoTrueClient):
     try:
-        async with create_client() as client:
-            response = await client.sign_in(provider=Provider.google)
-            assert isinstance(response, str)
+        response = await client.sign_in(provider=Provider.google)
+        assert isinstance(response, str)
     except Exception as e:
         assert False, str(e)
 
 
 @pytest.mark.asyncio
-async def test_sign_in_with_provider_can_append_a_redirect_url():
+async def test_sign_in_with_provider_can_append_a_redirect_url(
+    client: AsyncGoTrueClient,
+):
     try:
-        async with create_client() as client:
-            response = await client.sign_in(
-                provider=Provider.google,
-                redirect_to="https://localhost:9000/welcome",
-            )
-            assert isinstance(response, str)
+        response = await client.sign_in(
+            provider=Provider.google,
+            redirect_to="https://localhost:9000/welcome",
+        )
+        assert isinstance(response, str)
     except Exception as e:
         assert False, str(e)
 
 
 @pytest.mark.asyncio
-async def test_sign_in_with_provider_can_append_scopes():
+async def test_sign_in_with_provider_can_append_scopes(client: AsyncGoTrueClient):
     try:
-        async with create_client() as client:
-            response = await client.sign_in(provider=Provider.google, scopes="repo")
-            assert isinstance(response, str)
+        response = await client.sign_in(provider=Provider.google, scopes="repo")
+        assert isinstance(response, str)
     except Exception as e:
         assert False, str(e)
 
 
 @pytest.mark.asyncio
-async def test_sign_in_with_provider_can_append_multiple_options():
+async def test_sign_in_with_provider_can_append_multiple_options(
+    client: AsyncGoTrueClient,
+):
     try:
-        async with create_client() as client:
-            response = await client.sign_in(
-                provider=Provider.google,
-                redirect_to="https://localhost:9000/welcome",
-                scopes="repo",
-            )
-            assert isinstance(response, str)
+        response = await client.sign_in(
+            provider=Provider.google,
+            redirect_to="https://localhost:9000/welcome",
+            scopes="repo",
+        )
+        assert isinstance(response, str)
     except Exception as e:
         assert False, str(e)
