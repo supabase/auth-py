@@ -426,7 +426,7 @@ class AsyncGoTrueClient:
         """Unsubscribe from a subscription."""
         self.state_change_emitters.pop(id)
 
-    async def on_auth_state_change(
+    def on_auth_state_change(
         self,
         callback: Callable[["AuthChangeEvent", Optional[Session]], None],
     ) -> Subscription:
