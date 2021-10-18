@@ -1,8 +1,17 @@
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Callable, Dict, Optional
+from typing import Any, Callable, Dict, Optional, TypeVar
 
-from .helpers import parse_none
+T = TypeVar("T")
+
+
+def parse_none(
+    value: Optional[T],
+    func: Callable[[Any], T],
+) -> Optional[T]:
+    if value is None:
+        return None
+    return func(value)
 
 
 @dataclass

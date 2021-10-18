@@ -1,4 +1,4 @@
-from typing import Any, Callable, Optional, TypeVar, Union
+from typing import Any, Callable, TypeVar, Union
 from urllib.parse import quote
 
 from httpx import Response
@@ -10,15 +10,6 @@ T = TypeVar("T")
 
 def encode_uri_component(uri: str) -> str:
     return quote(uri.encode("utf-8"))
-
-
-def parse_none(
-    value: Optional[T],
-    func: Callable[[Any], T],
-) -> Optional[T]:
-    if value is None:
-        return None
-    return func(value)
 
 
 def parse_response(response: Response, func: Callable[[Any], T]) -> T:
