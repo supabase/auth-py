@@ -8,6 +8,7 @@ from ..types import CookieOptions, LinkType, Provider, Session, User, UserAttrib
 class AsyncGoTrueApi:
     def __init__(
         self,
+        *,
         url: str,
         headers: Dict[str, str],
         cookie_options: CookieOptions,
@@ -29,6 +30,7 @@ class AsyncGoTrueApi:
 
     async def sign_up_with_email(
         self,
+        *,
         email: str,
         password: str,
         redirect_to: Optional[str] = None,
@@ -70,6 +72,7 @@ class AsyncGoTrueApi:
 
     async def sign_in_with_email(
         self,
+        *,
         email: str,
         password: str,
         redirect_to: Optional[str] = None,
@@ -107,6 +110,7 @@ class AsyncGoTrueApi:
 
     async def sign_up_with_phone(
         self,
+        *,
         phone: str,
         password: str,
         data: Optional[Dict[str, Any]] = None,
@@ -141,6 +145,7 @@ class AsyncGoTrueApi:
 
     async def sign_in_with_phone(
         self,
+        *,
         phone: str,
         password: str,
     ) -> Session:
@@ -172,6 +177,7 @@ class AsyncGoTrueApi:
 
     async def send_magic_link_email(
         self,
+        *,
         email: str,
         redirect_to: Optional[str] = None,
     ) -> None:
@@ -199,7 +205,7 @@ class AsyncGoTrueApi:
         response = await self.http_client.post(url, json=data, headers=headers)
         return parse_response(response, lambda _: None)
 
-    async def send_mobile_otp(self, phone: str) -> None:
+    async def send_mobile_otp(self, *, phone: str) -> None:
         """Sends a mobile OTP via SMS. Will register the account if it doesn't already exist
 
         Parameters
@@ -220,6 +226,7 @@ class AsyncGoTrueApi:
 
     async def verify_mobile_otp(
         self,
+        *,
         phone: str,
         token: str,
         redirect_to: Optional[str] = None,
@@ -261,6 +268,7 @@ class AsyncGoTrueApi:
 
     async def invite_user_by_email(
         self,
+        *,
         email: str,
         redirect_to: Optional[str] = None,
         data: Optional[Dict[str, Any]] = None,
@@ -298,6 +306,7 @@ class AsyncGoTrueApi:
 
     async def reset_password_for_email(
         self,
+        *,
         email: str,
         redirect_to: Optional[str] = None,
     ) -> None:
@@ -325,7 +334,7 @@ class AsyncGoTrueApi:
         response = await self.http_client.post(url, json=data, headers=headers)
         return parse_response(response, lambda _: None)
 
-    def _create_request_headers(self, jwt: str) -> Dict[str, str]:
+    def _create_request_headers(self, *, jwt: str) -> Dict[str, str]:
         """Create temporary object.
 
         Create a temporary object with all configured headers and adds the
@@ -346,7 +355,7 @@ class AsyncGoTrueApi:
         headers["Authorization"] = f"Bearer {jwt}"
         return headers
 
-    async def sign_out(self, jwt: str) -> None:
+    async def sign_out(self, *, jwt: str) -> None:
         """Removes a logged-in session.
 
         Parameters
@@ -354,12 +363,13 @@ class AsyncGoTrueApi:
         jwt : str
             A valid, logged-in JWT.
         """
-        headers = self._create_request_headers(jwt)
+        headers = self._create_request_headers(jwt=jwt)
         url = f"{self.url}/logout"
         await self.http_client.post(url, headers=headers)
 
     async def get_url_for_provider(
         self,
+        *,
         provider: Provider,
         redirect_to: Optional[str] = None,
         scopes: Optional[str] = None,
@@ -393,7 +403,7 @@ class AsyncGoTrueApi:
             url_params.append(f"scopes={encode_uri_component(scopes)}")
         return f"{self.url}/authorize?{'&'.join(url_params)}"
 
-    async def get_user(self, jwt: str) -> User:
+    async def get_user(self, *, jwt: str) -> User:
         """Gets the user details.
 
         Parameters
@@ -411,13 +421,14 @@ class AsyncGoTrueApi:
         error : ApiError
             If an error occurs
         """
-        headers = self._create_request_headers(jwt)
+        headers = self._create_request_headers(jwt=jwt)
         url = f"{self.url}/user"
         response = await self.http_client.get(url, headers=headers)
         return parse_response(response, User.from_dict)
 
     async def update_user(
         self,
+        *,
         jwt: str,
         attributes: UserAttributes,
     ) -> User:
@@ -441,13 +452,13 @@ class AsyncGoTrueApi:
         error : ApiError
             If an error occurs
         """
-        headers = self._create_request_headers(jwt)
+        headers = self._create_request_headers(jwt=jwt)
         data = attributes.to_dict()
         url = f"{self.url}/user"
         response = await self.http_client.put(url, json=data, headers=headers)
         return parse_response(response, User.from_dict)
 
-    async def delete_user(self, uid: str, jwt: str) -> User:
+    async def delete_user(self, *, uid: str, jwt: str) -> User:
         """Delete a user. Requires a `service_role` key.
 
         This function should only be called on a server.
@@ -470,12 +481,12 @@ class AsyncGoTrueApi:
         error : ApiError
             If an error occurs
         """
-        headers = self._create_request_headers(jwt)
+        headers = self._create_request_headers(jwt=jwt)
         url = f"{self.url}/admin/users/${uid}"
         response = await self.http_client.delete(url, headers=headers)
         return parse_response(response, User.from_dict)
 
-    async def refresh_access_token(self, refresh_token: str) -> Session:
+    async def refresh_access_token(self, *, refresh_token: str) -> Session:
         """Generates a new JWT.
 
         Parameters
@@ -502,6 +513,7 @@ class AsyncGoTrueApi:
 
     async def generate_link(
         self,
+        *,
         type: LinkType,
         email: str,
         password: Optional[str] = None,
@@ -550,10 +562,10 @@ class AsyncGoTrueApi:
         response = await self.http_client.post(url, json=data, headers=headers)
         return parse_response(response, parse_session_or_user)
 
-    async def set_auth_cookie(self, req, res):
+    async def set_auth_cookie(self, *, req, res):
         """Stub for parity with JS api."""
         raise NotImplementedError("set_auth_cookie not implemented.")
 
-    async def get_user_by_cookie(self, req):
+    async def get_user_by_cookie(self, *, req):
         """Stub for parity with JS api."""
         raise NotImplementedError("get_user_by_cookie not implemented.")

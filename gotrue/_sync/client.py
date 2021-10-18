@@ -27,6 +27,7 @@ HTTPRegexp = "/^http://"
 class SyncGoTrueClient:
     def __init__(
         self,
+        *,
         url: str = GOTRUE_URL,
         headers: Dict[str, str] = DEFAULT_HEADERS,
         auto_refresh_token: bool = True,
@@ -63,7 +64,11 @@ class SyncGoTrueClient:
         self.auto_refresh_token = auto_refresh_token
         self.persist_session = persist_session
         self.local_storage = local_storage
-        self.api = SyncGoTrueApi(url, headers, cookie_options)
+        self.api = SyncGoTrueApi(
+            url=url,
+            headers=headers,
+            cookie_options=cookie_options,
+        )
 
     def __enter__(self) -> "SyncGoTrueClient":
         return self
@@ -81,6 +86,7 @@ class SyncGoTrueClient:
 
     def sign_up(
         self,
+        *,
         email: Optional[str] = None,
         phone: Optional[str] = None,
         password: Optional[str] = None,
@@ -116,9 +122,16 @@ class SyncGoTrueClient:
         self._remove_session()
 
         if email and password:
-            response = self.api.sign_up_with_email(email, password, redirect_to, data)
+            response = self.api.sign_up_with_email(
+                email=email,
+                password=password,
+                redirect_to=redirect_to,
+                data=data,
+            )
         elif phone and password:
-            response = self.api.sign_up_with_phone(phone, password, data)
+            response = self.api.sign_up_with_phone(
+                phone=phone, password=password, data=data
+            )
         elif not password:
             raise ValueError("Password must be defined, can't be None.")
         else:
@@ -127,12 +140,13 @@ class SyncGoTrueClient:
         if isinstance(response, Session):
             # The user has confirmed their email or the underlying DB doesn't
             # require email confirmation.
-            self._save_session(response)
-            self._notify_all_subscribers(AuthChangeEvent.SIGNED_IN)
+            self._save_session(session=response)
+            self._notify_all_subscribers(event=AuthChangeEvent.SIGNED_IN)
         return response
 
     def sign_in(
         self,
+        *,
         email: Optional[str] = None,
         phone: Optional[str] = None,
         password: Optional[str] = None,
@@ -186,20 +200,28 @@ class SyncGoTrueClient:
         """
         self._remove_session()
         if email and not password:
-            response = self.api.send_magic_link_email(email)
+            response = self.api.send_magic_link_email(email=email)
         elif email and password:
-            response = self._handle_email_sign_in(email, password, redirect_to)
+            response = self._handle_email_sign_in(
+                email=email,
+                password=password,
+                redirect_to=redirect_to,
+            )
         elif phone and not password:
-            response = self.api.send_mobile_otp(phone)
+            response = self.api.send_mobile_otp(phone=phone)
         elif phone and password:
-            response = self._handle_phone_sign_in(phone, password)
+            response = self._handle_phone_sign_in(phone=phone, password=password)
         elif refresh_token:
             # current_session and current_user will be updated to latest
             # on _call_refresh_token using the passed refresh_token
-            self._call_refresh_token(refresh_token)
+            self._call_refresh_token(refresh_token=refresh_token)
             response = self.current_session
         elif provider:
-            response = self._handle_provider_sign_in(provider, redirect_to, scopes)
+            response = self._handle_provider_sign_in(
+                provider=provider,
+                redirect_to=redirect_to,
+                scopes=scopes,
+            )
         else:
             raise ValueError(
                 "Email, phone, refresh_token, or provider must be defined, "
@@ -209,6 +231,7 @@ class SyncGoTrueClient:
 
     def verify_otp(
         self,
+        *,
         phone: str,
         token: str,
         redirect_to: Optional[str] = None,
@@ -236,10 +259,14 @@ class SyncGoTrueClient:
             If an error occurs
         """
         self._remove_session()
-        response = self.api.verify_mobile_otp(phone, token, redirect_to)
+        response = self.api.verify_mobile_otp(
+            phone=phone,
+            token=token,
+            redirect_to=redirect_to,
+        )
         if isinstance(response, Session):
-            self._save_session(response)
-            self._notify_all_subscribers(AuthChangeEvent.SIGNED_IN)
+            self._save_session(session=response)
+            self._notify_all_subscribers(event=AuthChangeEvent.SIGNED_IN)
         return response
 
     def user(self) -> Optional[User]:
@@ -261,7 +288,7 @@ class SyncGoTrueClient:
         response = self._call_refresh_token()
         return response
 
-    def update(self, attributes: UserAttributes) -> User:
+    def update(self, *, attributes: UserAttributes) -> User:
         """Updates user data, if there is a logged in user.
 
         Parameters
@@ -281,12 +308,15 @@ class SyncGoTrueClient:
         """
         if not self.current_session:
             raise ValueError("Not logged in.")
-        response = self.api.update_user(self.current_session.access_token, attributes)
+        response = self.api.update_user(
+            jwt=self.current_session.access_token,
+            attributes=attributes,
+        )
         self.current_user = response
-        self._notify_all_subscribers(AuthChangeEvent.USER_UPDATED)
+        self._notify_all_subscribers(event=AuthChangeEvent.USER_UPDATED)
         return response
 
-    def set_session(self, refresh_token: str) -> Session:
+    def set_session(self, *, refresh_token: str) -> Session:
         """Sets the session data from refresh_token and returns current Session
 
         Parameters
@@ -304,12 +334,12 @@ class SyncGoTrueClient:
         error : ApiError
             If an error occurs
         """
-        response = self.api.refresh_access_token(refresh_token)
-        self._save_session(response)
-        self._notify_all_subscribers(AuthChangeEvent.SIGNED_IN)
+        response = self.api.refresh_access_token(refresh_token=refresh_token)
+        self._save_session(session=response)
+        self._notify_all_subscribers(event=AuthChangeEvent.SIGNED_IN)
         return response
 
-    def set_auth(self, access_token: str) -> Session:
+    def set_auth(self, *, access_token: str) -> Session:
         """Overrides the JWT on the current client. The JWT will then be sent in
         all subsequent network requests.
 
@@ -342,10 +372,10 @@ class SyncGoTrueClient:
             session.expires_at = self.current_session.expires_at
             session.refresh_token = self.current_session.refresh_token
             session.provider_token = self.current_session.provider_token
-        self._save_session(session)
+        self._save_session(session=session)
         return session
 
-    def get_session_from_url(self, url: str, store_session: bool = False) -> Session:
+    def get_session_from_url(self, *, url: str, store_session: bool = False) -> Session:
         """Gets the session data from a URL string.
 
         Parameters
@@ -386,7 +416,7 @@ class SyncGoTrueClient:
             expires_at = round(time.time()) + int(expires_in[0])
         except ValueError:
             raise ApiError("Invalid expires_in.", 400)
-        response = self.api.get_user(access_token[0])
+        response = self.api.get_user(jwt=access_token[0])
         provider_token = query.get("provider_token")
         session = Session(
             access_token=access_token[0],
@@ -398,10 +428,10 @@ class SyncGoTrueClient:
             provider_token=provider_token[0] if provider_token else None,
         )
         if store_session:
-            self._save_session(session)
-            self._notify_all_subscribers(AuthChangeEvent.SIGNED_IN)
+            self._save_session(session=session)
+            self._notify_all_subscribers(event=AuthChangeEvent.SIGNED_IN)
             if query.get("type") == "recovery":
-                self._notify_all_subscribers(AuthChangeEvent.PASSWORD_RECOVERY)
+                self._notify_all_subscribers(event=AuthChangeEvent.PASSWORD_RECOVERY)
         return session
 
     def sign_out(self) -> None:
@@ -410,16 +440,17 @@ class SyncGoTrueClient:
         if self.current_session:
             access_token = self.current_session.access_token
         self._remove_session()
-        self._notify_all_subscribers(AuthChangeEvent.SIGNED_OUT)
+        self._notify_all_subscribers(event=AuthChangeEvent.SIGNED_OUT)
         if access_token:
-            self.api.sign_out(access_token)
+            self.api.sign_out(jwt=access_token)
 
-    def _unsubscribe(self, id: str) -> None:
+    def _unsubscribe(self, *, id: str) -> None:
         """Unsubscribe from a subscription."""
         self.state_change_emitters.pop(id)
 
     def on_auth_state_change(
         self,
+        *,
         callback: Callable[["AuthChangeEvent", Optional[Session]], None],
     ) -> Subscription:
         """Receive a notification every time an auth event happens.
@@ -450,31 +481,41 @@ class SyncGoTrueClient:
 
     def _handle_email_sign_in(
         self,
+        *,
         email: str,
         password: str,
         redirect_to: Optional[str],
     ) -> Session:
         """Sign in with email and password."""
-        response = self.api.sign_in_with_email(email, password, redirect_to)
-        self._save_session(response)
-        self._notify_all_subscribers(AuthChangeEvent.SIGNED_IN)
+        response = self.api.sign_in_with_email(
+            email=email,
+            password=password,
+            redirect_to=redirect_to,
+        )
+        self._save_session(session=response)
+        self._notify_all_subscribers(event=AuthChangeEvent.SIGNED_IN)
         return response
 
-    def _handle_phone_sign_in(self, phone: str, password: str) -> Session:
+    def _handle_phone_sign_in(self, *, phone: str, password: str) -> Session:
         """Sign in with phone and password."""
-        response = self.api.sign_in_with_phone(phone, password)
-        self._save_session(response)
-        self._notify_all_subscribers(AuthChangeEvent.SIGNED_IN)
+        response = self.api.sign_in_with_phone(phone=phone, password=password)
+        self._save_session(session=response)
+        self._notify_all_subscribers(event=AuthChangeEvent.SIGNED_IN)
         return response
 
     def _handle_provider_sign_in(
         self,
+        *,
         provider: Provider,
         redirect_to: Optional[str],
         scopes: Optional[str],
     ) -> str:
         """Sign in with provider."""
-        response = self.api.get_url_for_provider(provider, redirect_to, scopes)
+        response = self.api.get_url_for_provider(
+            provider=provider,
+            redirect_to=redirect_to,
+            scopes=scopes,
+        )
         return response
 
     def _recover_session(self) -> None:
@@ -495,8 +536,8 @@ class SyncGoTrueClient:
             session = Session.from_dict(session_raw)
             time_now = round(time())
             if expires_at >= time_now:
-                self._save_session(session)
-                self._notify_all_subscribers(AuthChangeEvent.SIGNED_IN)
+                self._save_session(session=session)
+                self._notify_all_subscribers(event=AuthChangeEvent.SIGNED_IN)
 
     def _recover_and_refresh(self) -> None:
         """Recovers the session from LocalStorage and refreshes"""
@@ -518,7 +559,7 @@ class SyncGoTrueClient:
             if expires_at < time_now:
                 if self.auto_refresh_token and session.refresh_token:
                     try:
-                        self._call_refresh_token(session.refresh_token)
+                        self._call_refresh_token(refresh_token=session.refresh_token)
                     except ApiError:
                         self._remove_session()
                 else:
@@ -526,26 +567,26 @@ class SyncGoTrueClient:
             elif not session or not session.user:
                 self._remove_session()
             else:
-                self._save_session(session)
-                self._notify_all_subscribers(AuthChangeEvent.SIGNED_IN)
+                self._save_session(session=session)
+                self._notify_all_subscribers(event=AuthChangeEvent.SIGNED_IN)
 
-    def _call_refresh_token(self, refresh_token: Optional[str] = None) -> Session:
+    def _call_refresh_token(self, *, refresh_token: Optional[str] = None) -> Session:
         if refresh_token is None:
             if self.current_session:
                 refresh_token = self.current_session.refresh_token
             else:
                 raise ValueError("No current session and refresh_token not supplied.")
-        response = self.api.refresh_access_token(cast(str, refresh_token))
-        self._save_session(response)
-        self._notify_all_subscribers(AuthChangeEvent.SIGNED_IN)
+        response = self.api.refresh_access_token(refresh_token=cast(str, refresh_token))
+        self._save_session(session=response)
+        self._notify_all_subscribers(event=AuthChangeEvent.SIGNED_IN)
         return response
 
-    def _notify_all_subscribers(self, event: AuthChangeEvent) -> None:
+    def _notify_all_subscribers(self, *, event: AuthChangeEvent) -> None:
         """Notify all subscribers that auth event happened."""
         for value in self.state_change_emitters.values():
             value.callback(event, self.current_session)
 
-    def _save_session(self, session: Session) -> None:
+    def _save_session(self, *, session: Session) -> None:
         """Save session to client."""
         if not session.user:
             raise ValueError("User of session is None")
@@ -558,12 +599,12 @@ class SyncGoTrueClient:
             expire_in = session.expires_at - time_now
             refresh_duration_before_expires = 60 if expire_in > 60 else 0.5
             self._start_auto_refresh_token(
-                (expire_in - refresh_duration_before_expires) * 1000
+                value=(expire_in - refresh_duration_before_expires) * 1000
             )
         if self.persist_session and session.expires_at:
-            self._persist_session(session)
+            self._persist_session(session=session)
 
-    def _persist_session(self, session: Session) -> None:
+    def _persist_session(self, *, session: Session) -> None:
         data = {"session": session.to_dict(), "expires_at": session.expires_at}
         self.local_storage.set_item(STORAGE_KEY, dumps(data))
 
@@ -575,7 +616,7 @@ class SyncGoTrueClient:
             self.refresh_token_timer.cancel()
         self.local_storage.remove_item(STORAGE_KEY)
 
-    def _start_auto_refresh_token(self, value: float) -> None:
+    def _start_auto_refresh_token(self, *, value: float) -> None:
         if self.refresh_token_timer:
             self.refresh_token_timer.cancel()
         if value <= 0 or not self.auto_refresh_token:

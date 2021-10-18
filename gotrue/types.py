@@ -26,6 +26,20 @@ class ApiError(BaseException):
 
     @staticmethod
     def from_dict(data: dict) -> "ApiError":
+        if "msg" in data and "code" in data:
+            return ApiError(
+                msg=data["msg"],
+                code=data["code"],
+            )
+        if "error" in data and "error_description" in data:
+            try:
+                code = int(data["error"])
+            except ValueError:
+                code = -1
+            return ApiError(
+                msg=data["error_description"],
+                code=code,
+            )
         return ApiError(**data)
 
     def to_dict(self) -> Dict[str, Any]:

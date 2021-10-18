@@ -6,7 +6,9 @@ GOTRUE_URL = "http://localhost:9999"
 
 client = SyncGoTrueClient(url=GOTRUE_URL)
 
-subscription = client.on_auth_state_change(lambda _, __: print("Auth state changed"))
+subscription = client.on_auth_state_change(
+    callback=lambda _, __: print("Auth state changed")
+)
 
 
 def test_subscribe_a_listener():

@@ -28,8 +28,8 @@ def test_sign_up_with_email_and_password():
     try:
         with create_api() as api:
             response = api.sign_up_with_email(
-                email,
-                password,
+                email=email,
+                password=password,
                 redirect_to="http://localhost:9999/welcome",
                 data={"status": "alpha"},
             )
