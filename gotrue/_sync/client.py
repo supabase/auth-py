@@ -116,9 +116,7 @@ class SyncGoTrueClient:
         self._remove_session()
 
         if email and password:
-            response = self.api.sign_up_with_email(
-                email, password, redirect_to, data
-            )
+            response = self.api.sign_up_with_email(email, password, redirect_to, data)
         elif phone and password:
             response = self.api.sign_up_with_phone(phone, password, data)
         elif not password:
@@ -201,9 +199,7 @@ class SyncGoTrueClient:
             self._call_refresh_token(refresh_token)
             response = self.current_session
         elif provider:
-            response = self._handle_provider_sign_in(
-                provider, redirect_to, scopes
-            )
+            response = self._handle_provider_sign_in(provider, redirect_to, scopes)
         else:
             raise ValueError(
                 "Email, phone, refresh_token, or provider must be defined, "
@@ -285,9 +281,7 @@ class SyncGoTrueClient:
         """
         if not self.current_session:
             raise ValueError("Not logged in.")
-        response = self.api.update_user(
-            self.current_session.access_token, attributes
-        )
+        response = self.api.update_user(self.current_session.access_token, attributes)
         self.current_user = response
         self._notify_all_subscribers(AuthChangeEvent.USER_UPDATED)
         return response
@@ -351,9 +345,7 @@ class SyncGoTrueClient:
         self._save_session(session)
         return session
 
-    def get_session_from_url(
-        self, url: str, store_session: bool = False
-    ) -> Session:
+    def get_session_from_url(self, url: str, store_session: bool = False) -> Session:
         """Gets the session data from a URL string.
 
         Parameters
