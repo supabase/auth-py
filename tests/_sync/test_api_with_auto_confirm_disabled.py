@@ -25,16 +25,16 @@ password = fake.password()
 @pytest.mark.asyncio
 def test_sign_up_with_email_and_password():
     try:
-        api = create_api()
-        response = api.sign_up_with_email(
-            email,
-            password,
-            redirect_to="https://localhost:9999/welcome",
-            data={"status": "alpha"},
-        )
-        assert isinstance(response, User)
-    except Exception:
-        assert False
+        with create_api() as api:
+            response = api.sign_up_with_email(
+                email,
+                password,
+                redirect_to="https://localhost:9999/welcome",
+                data={"status": "alpha"},
+            )
+            assert isinstance(response, User)
+    except Exception as e:
+        assert False, str(e)
 
 
 email2 = f"api_generate_link_signup_{fake.email().lower()}"
@@ -44,17 +44,17 @@ password2 = fake.password()
 @pytest.mark.asyncio
 def test_generate_sign_up_link():
     try:
-        api = create_api()
-        response = api.generate_link(
-            type=LinkType.signup,
-            email=email2,
-            password=password2,
-            redirect_to="https://localhost:9999/welcome",
-            data={"status": "alpha"},
-        )
-        assert isinstance(response, User)
-    except Exception:
-        assert False
+        with create_api() as api:
+            response = api.generate_link(
+                type=LinkType.signup,
+                email=email2,
+                password=password2,
+                redirect_to="https://localhost:9999/welcome",
+                data={"status": "alpha"},
+            )
+            assert isinstance(response, User)
+    except Exception as e:
+        assert False, str(e)
 
 
 email3 = f"api_generate_link_signup_{fake.email().lower()}"
@@ -63,41 +63,41 @@ email3 = f"api_generate_link_signup_{fake.email().lower()}"
 @pytest.mark.asyncio
 def test_generate_magic_link():
     try:
-        api = create_api()
-        response = api.generate_link(
-            type=LinkType.magiclink,
-            email=email3,
-            redirect_to="https://localhost:9999/welcome",
-        )
-        assert isinstance(response, User)
-    except Exception:
-        assert False
+        with create_api() as api:
+            response = api.generate_link(
+                type=LinkType.magiclink,
+                email=email3,
+                redirect_to="https://localhost:9999/welcome",
+            )
+            assert isinstance(response, User)
+    except Exception as e:
+        assert False, str(e)
 
 
 @pytest.mark.asyncio
 def test_generate_invite_link():
     try:
-        api = create_api()
-        response = api.generate_link(
-            type=LinkType.invite,
-            email=email3,
-            redirect_to="https://localhost:9999/welcome",
-        )
-        assert isinstance(response, User)
-    except Exception:
-        assert False
+        with create_api() as api:
+            response = api.generate_link(
+                type=LinkType.invite,
+                email=email3,
+                redirect_to="https://localhost:9999/welcome",
+            )
+            assert isinstance(response, User)
+    except Exception as e:
+        assert False, str(e)
 
 
 @pytest.mark.asyncio
 @pytest.mark.depends(on=[test_sign_up_with_email_and_password.__name__])
 def test_generate_recovery_link():
     try:
-        api = create_api()
-        response = api.generate_link(
-            type=LinkType.recovery,
-            email=email,
-            redirect_to="https://localhost:9999/welcome",
-        )
-        assert isinstance(response, User)
-    except Exception:
-        assert False
+        with create_api() as api:
+            response = api.generate_link(
+                type=LinkType.recovery,
+                email=email,
+                redirect_to="https://localhost:9999/welcome",
+            )
+            assert isinstance(response, User)
+    except Exception as e:
+        assert False, str(e)
