@@ -28,15 +28,10 @@ jobs:
       with:
         poetry-version: 1.1.2
     - name: Build Docker image
-      run: |
-        cd infra
-        docker-compose down
-        docker-compose up -d
+      run: make run_infra
     - name: Sleep for 5 seconds
-      uses: jakejarvis/wait-action@master
-      with:
-        time: "5s"
+      uses: sleep 5
     - name: Run Tests
       run: make tests
-    - name: Upload coverage
+    - name: Upload Coverage
       uses: codecov/codecov-action@v1
