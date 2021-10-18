@@ -10,7 +10,7 @@ install:
 
 tests: install
 	poetry run pre-commit run --all-files
-	poetry run pytest --cov=./ --cov-report=xml -sx
+	poetry run pytest --cov=./ --cov-report=xml -vv
 
 run_infra:
 	cd infra &&\
