@@ -422,7 +422,23 @@ class SyncGoTrueClient:
         self,
         callback: Callable[["AuthChangeEvent", Optional[Session]], None],
     ) -> Subscription:
-        """"""
+        """Receive a notification every time an auth event happens.
+
+        Parameters
+        ----------
+        callback : Callable[[AuthChangeEvent, Optional[Session]], None]
+            The callback to call when an auth event happens.
+
+        Returns
+        -------
+        subscription : Subscription
+            A subscription object which can be used to unsubscribe itself.
+
+        Raises
+        ------
+        error : ApiError
+            If an error occurs
+        """
         unique_id: str = str(uuid4())
         subscription = Subscription(
             id=unique_id,
