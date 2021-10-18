@@ -7,8 +7,8 @@ from typing import Any, Callable, Dict, Optional, Union, cast
 from urllib.parse import parse_qs, urlparse
 from uuid import uuid4
 
-from ..common.constants import COOKIE_OPTIONS, DEFAULT_HEADERS, GOTRUE_URL, STORAGE_KEY
-from ..common.types import (
+from ..constants import COOKIE_OPTIONS, DEFAULT_HEADERS, GOTRUE_URL, STORAGE_KEY
+from ..types import (
     ApiError,
     AuthChangeEvent,
     CookieOptions,

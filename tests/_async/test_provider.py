@@ -1,7 +1,7 @@
 import pytest
 
 from gotrue import AsyncGoTrueClient
-from gotrue.common.types import Provider
+from gotrue.types import Provider
 
 client = AsyncGoTrueClient(auto_refresh_token=False, persist_session=False)
 

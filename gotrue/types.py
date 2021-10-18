@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum
+from json import dumps
 from typing import Any, Callable, Dict, Optional, TypeVar
 
 T = TypeVar("T")
@@ -32,6 +33,12 @@ class ApiError(BaseException):
             "message": self.message,
             "status": self.status,
         }
+
+    def __str__(self) -> str:
+        return dumps(self.to_dict())
+
+    def __repr__(self) -> str:
+        return self.__str__()
 
 
 @dataclass
@@ -72,22 +79,24 @@ class CookieOptions:
 
 @dataclass
 class User:
-    action_link: Optional[str]
     app_metadata: Dict[str, Any]
     aud: str
-    confirmation_sent_at: Optional[str]
-    confirmed_at: Optional[str]
     created_at: str
-    email: Optional[str]
-    email_confirmed_at: Optional[str]
+    email_change_confirm_status: bool
     id: str
-    last_sign_in_at: Optional[str]
-    phone: Optional[str]
-    phone_confirmed_at: Optional[str]
-    recovery_sent_at: Optional[str]
-    role: Optional[str]
-    updated_at: Optional[str]
-    user_metadata: Dict[str, Any]
+    user_metadata: Optional[Dict[str, Any]] = None
+    confirmation_sent_at: Optional[str] = None
+    action_link: Optional[str] = None
+    last_sign_in_at: Optional[str] = None
+    phone: Optional[str] = None
+    phone_confirmed_at: Optional[str] = None
+    recovery_sent_at: Optional[str] = None
+    role: Optional[str] = None
+    updated_at: Optional[str] = None
+    email_confirmed_at: Optional[str] = None
+    confirmed_at: Optional[str] = None
+    invited_at: Optional[str] = None
+    email: Optional[str] = None
 
     def __post_init__(self) -> None:
         self.action_link = parse_none(self.action_link, str)
@@ -98,6 +107,7 @@ class User:
         self.created_at = str(self.created_at)
         self.email = parse_none(self.email, str)
         self.email_confirmed_at = parse_none(self.email_confirmed_at, str)
+        self.email_change_confirm_status = bool(self.email_change_confirm_status)
         self.id = str(self.id)
         self.last_sign_in_at = parse_none(self.last_sign_in_at, str)
         self.phone = parse_none(self.phone, str)
@@ -105,7 +115,8 @@ class User:
         self.recovery_sent_at = parse_none(self.recovery_sent_at, str)
         self.role = parse_none(self.role, str)
         self.updated_at = parse_none(self.updated_at, str)
-        self.user_metadata = dict(self.user_metadata)
+        self.user_metadata = parse_none(self.user_metadata, dict)
+        self.invited_at = parse_none(self.invited_at, str)
 
     @staticmethod
     def from_dict(data: dict) -> "User":
@@ -121,6 +132,7 @@ class User:
             "created_at": self.created_at,
             "email": self.email,
             "email_confirmed_at": self.email_confirmed_at,
+            "email_change_confirm_status": self.email_change_confirm_status,
             "id": self.id,
             "last_sign_in_at": self.last_sign_in_at,
             "phone": self.phone,
@@ -129,18 +141,19 @@ class User:
             "role": self.role,
             "updated_at": self.updated_at,
             "user_metadata": self.user_metadata,
+            "invited_at": self.invited_at,
         }
 
 
 @dataclass
 class UserAttributes:
-    email: Optional[str]
+    email: Optional[str] = None
     """The user's email."""
-    password: Optional[str]
+    password: Optional[str] = None
     """The user's password."""
-    email_change_token: Optional[str]
+    email_change_token: Optional[str] = None
     """An email change token."""
-    data: Optional[Any]
+    data: Optional[Any] = None
     """A custom data object. Can be any JSON."""
 
     def __post_init__(self) -> None:
@@ -165,15 +178,15 @@ class UserAttributes:
 @dataclass
 class Session:
     access_token: str
-    expires_at: Optional[int]
+    token_type: str
+    expires_at: Optional[int] = None
     """A timestamp of when the token will expire. Returned when a login is confirmed."""
-    expires_in: Optional[int]
+    expires_in: Optional[int] = None
     """The number of seconds until the token expires (since it was issued).
     Returned when a login is confirmed."""
-    provider_token: Optional[str]
-    refresh_token: Optional[str]
-    token_type: str
-    user: Optional[User]
+    provider_token: Optional[str] = None
+    refresh_token: Optional[str] = None
+    user: Optional[User] = None
 
     def __post_init__(self) -> None:
         self.access_token = str(self.access_token)

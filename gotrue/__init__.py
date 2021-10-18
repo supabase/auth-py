@@ -6,7 +6,7 @@ from ._async.storage import AsyncMemoryStorage, AsyncSupportedStorage  # noqa: F
 from ._sync.api import SyncGoTrueApi  # noqa: F401
 from ._sync.client import SyncGoTrueClient  # noqa: F401
 from ._sync.storage import SyncMemoryStorage, SyncSupportedStorage  # noqa: F401
-from .common.types import *  # noqa: F401, F403
+from .types import *  # noqa: F401, F403
 
 Client = SyncGoTrueClient
 GoTrueApi = SyncGoTrueApi

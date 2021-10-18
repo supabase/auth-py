@@ -1,16 +1,8 @@
-from json import dumps
 from typing import Any, Dict, Optional, Union
 
-from ..common.helpers import encode_uri_component, parse_response, parse_session_or_user
-from ..common.http_clients import AsyncClient
-from ..common.types import (
-    CookieOptions,
-    LinkType,
-    Provider,
-    Session,
-    User,
-    UserAttributes,
-)
+from ..helpers import encode_uri_component, parse_response, parse_session_or_user
+from ..http_clients import AsyncClient
+from ..types import CookieOptions, LinkType, Provider, Session, User, UserAttributes
 
 
 class AsyncGoTrueApi:
@@ -73,7 +65,7 @@ class AsyncGoTrueApi:
             query_string = f"?redirect_to={redirect_to_encoded}"
         data = {"email": email, "password": password, "data": data}
         url = f"{self.url}/signup{query_string}"
-        response = await self.http_client.post(url, json=dumps(data), headers=headers)
+        response = await self.http_client.post(url, json=data, headers=headers)
         return parse_response(response, parse_session_or_user)
 
     async def sign_in_with_email(
@@ -110,7 +102,7 @@ class AsyncGoTrueApi:
             query_string += f"&redirect_to={redirect_to_encoded}"
         data = {"email": email, "password": password}
         url = f"{self.url}/token{query_string}"
-        response = await self.http_client.post(url, json=dumps(data), headers=headers)
+        response = await self.http_client.post(url, json=data, headers=headers)
         return parse_response(response, Session.from_dict)
 
     async def sign_up_with_phone(
@@ -144,7 +136,7 @@ class AsyncGoTrueApi:
         headers = self.headers
         data = {"phone": phone, "password": password, "data": data}
         url = f"{self.url}/signup"
-        response = await self.http_client.post(url, json=dumps(data), headers=headers)
+        response = await self.http_client.post(url, json=data, headers=headers)
         return parse_response(response, parse_session_or_user)
 
     async def sign_in_with_phone(
@@ -175,7 +167,7 @@ class AsyncGoTrueApi:
         query_string = "?grant_type=password"
         data = {"phone": phone, "password": password}
         url = f"{self.url}/token{query_string}"
-        response = await self.http_client.post(url, json=dumps(data), headers=headers)
+        response = await self.http_client.post(url, json=data, headers=headers)
         return parse_response(response, Session.from_dict)
 
     async def send_magic_link_email(
@@ -204,7 +196,7 @@ class AsyncGoTrueApi:
             query_string = f"?redirect_to={redirect_to_encoded}"
         data = {"email": email}
         url = f"{self.url}/magiclink{query_string}"
-        response = await self.http_client.post(url, json=dumps(data), headers=headers)
+        response = await self.http_client.post(url, json=data, headers=headers)
         return parse_response(response, lambda _: None)
 
     async def send_mobile_otp(self, phone: str) -> None:
@@ -223,7 +215,7 @@ class AsyncGoTrueApi:
         headers = self.headers
         data = {"phone": phone}
         url = f"{self.url}/otp"
-        response = await self.http_client.post(url, json=dumps(data), headers=headers)
+        response = await self.http_client.post(url, json=data, headers=headers)
         return parse_response(response, lambda _: None)
 
     async def verify_mobile_otp(
@@ -264,7 +256,7 @@ class AsyncGoTrueApi:
             redirect_to_encoded = encode_uri_component(redirect_to)
             data["redirect_to"] = redirect_to_encoded
         url = f"{self.url}/verify"
-        response = await self.http_client.post(url, json=dumps(data), headers=headers)
+        response = await self.http_client.post(url, json=data, headers=headers)
         return parse_response(response, parse_session_or_user)
 
     async def invite_user_by_email(
@@ -301,7 +293,7 @@ class AsyncGoTrueApi:
             query_string = f"?redirect_to={redirect_to_encoded}"
         data = {"email": email, "data": data}
         url = f"{self.url}/invite{query_string}"
-        response = await self.http_client.post(url, json=dumps(data), headers=headers)
+        response = await self.http_client.post(url, json=data, headers=headers)
         return parse_response(response, User.from_dict)
 
     async def reset_password_for_email(
@@ -330,7 +322,7 @@ class AsyncGoTrueApi:
             query_string = f"?redirect_to={redirect_to_encoded}"
         data = {"email": email}
         url = f"{self.url}/recover{query_string}"
-        response = await self.http_client.post(url, json=dumps(data), headers=headers)
+        response = await self.http_client.post(url, json=data, headers=headers)
         return parse_response(response, lambda _: None)
 
     def _create_request_headers(self, jwt: str) -> Dict[str, str]:
@@ -452,7 +444,7 @@ class AsyncGoTrueApi:
         headers = self._create_request_headers(jwt)
         data = attributes.to_dict()
         url = f"{self.url}/user"
-        response = await self.http_client.put(url, json=dumps(data), headers=headers)
+        response = await self.http_client.put(url, json=data, headers=headers)
         return parse_response(response, User.from_dict)
 
     async def delete_user(self, uid: str, jwt: str) -> User:
@@ -505,7 +497,7 @@ class AsyncGoTrueApi:
         query_string = "?grant_type=refresh_token"
         data = {"refresh_token": refresh_token}
         url = f"{self.url}/token{query_string}"
-        response = await self.http_client.post(url, json=dumps(data), headers=headers)
+        response = await self.http_client.post(url, json=data, headers=headers)
         return parse_response(response, Session.from_dict)
 
     async def generate_link(
@@ -545,7 +537,7 @@ class AsyncGoTrueApi:
         """
         headers = self.headers
         data = {
-            "type": str(type),
+            "type": type,
             "email": email,
             "data": data,
         }
@@ -555,7 +547,7 @@ class AsyncGoTrueApi:
             redirect_to_encoded = encode_uri_component(redirect_to)
             data["redirect_to"] = redirect_to_encoded
         url = f"{self.url}/admin/generate_link"
-        response = await self.http_client.post(url, json=dumps(data), headers=headers)
+        response = await self.http_client.post(url, json=data, headers=headers)
         return parse_response(response, parse_session_or_user)
 
     async def set_auth_cookie(self, req, res):
