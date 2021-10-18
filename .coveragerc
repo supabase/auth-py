@@ -1,3 +1,5 @@
 [run]
 omit =
+    build_sync.py
+    conftest.py
     tests/*
