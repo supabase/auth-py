@@ -21,10 +21,12 @@ class AsyncMemoryStorage(AsyncSupportedStorage):
         self.storage: Dict[str, str] = {}
 
     async def get_item(self, key: str) -> Optional[str]:
-        return self.storage.get(key)
+        if key in self.storage:
+            return self.storage[key]
 
     async def set_item(self, key: str, value: str) -> None:
         self.storage[key] = value
 
     async def remove_item(self, key: str) -> None:
-        del self.storage[key]
+        if key in self.storage:
+            del self.storage[key]
