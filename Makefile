@@ -8,8 +8,13 @@ build_sync:
 install:
 	poetry install
 
-tests: install
+tests: install tests_only tests_pre_commit
+	echo "Done"
+
+tests_pre_commit:
 	poetry run pre-commit run --all-files
+
+tests_only:
 	poetry run pytest --cov=./ --cov-report=xml -vv
 
 run_infra:
