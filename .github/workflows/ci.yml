@@ -30,7 +30,7 @@ jobs:
     - name: Build Docker image
       run: make run_infra
     - name: Sleep for 5 seconds
-      uses: sleep 5
+      run: sleep 5
     - name: Run Tests
       run: make tests
     - name: Upload Coverage
