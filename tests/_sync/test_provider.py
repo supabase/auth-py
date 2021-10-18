@@ -3,9 +3,15 @@ import pytest
 from gotrue import SyncGoTrueClient
 from gotrue.types import Provider
 
+GOTRUE_URL = "http://localhost:9999"
+
 
 def create_client() -> SyncGoTrueClient:
-    return SyncGoTrueClient(auto_refresh_token=False, persist_session=False)
+    return SyncGoTrueClient(
+        url=GOTRUE_URL,
+        auto_refresh_token=False,
+        persist_session=False,
+    )
 
 
 @pytest.mark.asyncio

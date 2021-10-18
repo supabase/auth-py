@@ -18,7 +18,8 @@ def parse_response(response: Response, func: Callable[[Any], T]) -> T:
         json = response.json()
         return func(json)
     except HTTPError:
-        raise ApiError(message=response.text, status=response.status_code)
+        json = response.json()
+        raise ApiError.from_dict(json)
 
 
 def parse_session_or_user(arg: Any) -> Union[Session, User]:

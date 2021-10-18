@@ -17,12 +17,12 @@ def parse_none(
 
 @dataclass
 class ApiError(BaseException):
-    message: str
-    status: int
+    msg: str
+    code: int
 
     def __post_init__(self) -> None:
-        self.message = str(self.message)
-        self.status = int(str(self.status))
+        self.msg = str(self.msg)
+        self.code = int(str(self.code))
 
     @staticmethod
     def from_dict(data: dict) -> "ApiError":
@@ -30,8 +30,8 @@ class ApiError(BaseException):
 
     def to_dict(self) -> Dict[str, Any]:
         return {
-            "message": self.message,
-            "status": self.status,
+            "msg": self.msg,
+            "code": self.code,
         }
 
     def __str__(self) -> str:

@@ -23,3 +23,6 @@ run_infra:
 	cd infra &&\
 	docker-compose down &&\
 	docker-compose up -d
+
+build_and_tests: build_sync tests
+	echo "Done"

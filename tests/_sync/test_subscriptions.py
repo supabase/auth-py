@@ -2,7 +2,9 @@ import pytest
 
 from gotrue import SyncGoTrueClient
 
-client = SyncGoTrueClient()
+GOTRUE_URL = "http://localhost:9999"
+
+client = SyncGoTrueClient(url=GOTRUE_URL)
 
 subscription = client.on_auth_state_change(lambda _, __: print("Auth state changed"))
 

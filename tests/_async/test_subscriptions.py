@@ -2,7 +2,9 @@ import pytest
 
 from gotrue import AsyncGoTrueClient
 
-client = AsyncGoTrueClient()
+GOTRUE_URL = "http://localhost:9999"
+
+client = AsyncGoTrueClient(url=GOTRUE_URL)
 
 subscription = client.on_auth_state_change(lambda _, __: print("Auth state changed"))
 
