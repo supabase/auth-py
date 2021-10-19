@@ -75,6 +75,7 @@ async def test_sign_up(client: AsyncGoTrueClient):
         provider = response.user.app_metadata.get("provider")
         assert provider
         assert isinstance(provider, list)
+        print(f"Provider: {provider}")
         assert "email" in provider
         assert response.user.user_metadata
         assert response.user.user_metadata.get("status") == "alpha"
@@ -156,6 +157,7 @@ async def test_sign_in(client: AsyncGoTrueClient):
         provider = response.user.app_metadata.get("provider")
         assert provider
         assert isinstance(provider, list)
+        print(f"Provider: {provider}")
         assert "email" in provider
     except Exception as e:
         assert False, str(e)
@@ -189,6 +191,7 @@ async def test_sign_in_with_refresh_token(client_with_session: AsyncGoTrueClient
         provider = response2.user.app_metadata.get("provider")
         assert provider
         assert isinstance(provider, list)
+        print(f"Provider: {provider}")
         assert "email" in provider
     except Exception as e:
         assert False, str(e)
@@ -211,6 +214,7 @@ async def test_get_user(client: AsyncGoTrueClient):
         provider = response.app_metadata.get("provider")
         assert provider
         assert isinstance(provider, list)
+        print(f"Provider: {provider}")
         assert "email" in provider
     except Exception as e:
         assert False, str(e)

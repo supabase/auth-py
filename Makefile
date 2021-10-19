@@ -24,5 +24,5 @@ run_infra:
 	docker-compose down &&\
 	docker-compose up -d
 
-build_and_tests: build_sync tests
+build_run_tests: build_sync run_infra tests
 	echo "Done"
