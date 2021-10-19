@@ -72,11 +72,7 @@ async def test_sign_up(client: AsyncGoTrueClient):
         assert response.user.created_at
         assert response.user.updated_at
         assert response.user.app_metadata
-        provider = response.user.app_metadata.get("provider")
-        assert provider
-        assert isinstance(provider, list)
-        print(f"Provider: {provider}")
-        assert "email" in provider
+        assert response.user.app_metadata.get("provider") == "email"
         assert response.user.user_metadata
         assert response.user.user_metadata.get("status") == "alpha"
     except Exception as e:
@@ -154,11 +150,7 @@ async def test_sign_in(client: AsyncGoTrueClient):
         assert response.user.created_at
         assert response.user.updated_at
         assert response.user.app_metadata
-        provider = response.user.app_metadata.get("provider")
-        assert provider
-        assert isinstance(provider, list)
-        print(f"Provider: {provider}")
-        assert "email" in provider
+        assert response.user.app_metadata.get("provider") == "email"
     except Exception as e:
         assert False, str(e)
 
@@ -188,11 +180,7 @@ async def test_sign_in_with_refresh_token(client_with_session: AsyncGoTrueClient
         assert response2.user.created_at
         assert response2.user.updated_at
         assert response2.user.app_metadata
-        provider = response2.user.app_metadata.get("provider")
-        assert provider
-        assert isinstance(provider, list)
-        print(f"Provider: {provider}")
-        assert "email" in provider
+        assert response2.user.app_metadata.get("provider") == "email"
     except Exception as e:
         assert False, str(e)
 
@@ -212,10 +200,7 @@ async def test_get_user(client: AsyncGoTrueClient):
         assert response.updated_at
         assert response.app_metadata
         provider = response.app_metadata.get("provider")
-        assert provider
-        assert isinstance(provider, list)
-        print(f"Provider: {provider}")
-        assert "email" in provider
+        assert provider == "email"
     except Exception as e:
         assert False, str(e)
 
