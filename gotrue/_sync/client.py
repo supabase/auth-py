@@ -312,7 +312,8 @@ class SyncGoTrueClient:
             jwt=self.current_session.access_token,
             attributes=attributes,
         )
-        self.current_user = response
+        self.current_session.user = response
+        self._save_session(session=self.current_session)
         self._notify_all_subscribers(event=AuthChangeEvent.USER_UPDATED)
         return response
 
@@ -588,10 +589,6 @@ class SyncGoTrueClient:
 
     def _save_session(self, *, session: Session) -> None:
         """Save session to client."""
-        if not session.user:
-            raise ValueError("User of session is None")
-        if not session.expires_in:
-            raise ValueError("Expires_in of session is None or empty")
         self.current_session = session
         self.current_user = session.user
         if session.expires_at:

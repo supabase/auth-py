@@ -269,11 +269,11 @@ class AsyncGoTrueClient:
             self._notify_all_subscribers(event=AuthChangeEvent.SIGNED_IN)
         return response
 
-    async def user(self) -> Optional[User]:
+    def user(self) -> Optional[User]:
         """Returns the user data, if there is a logged in user."""
         return self.current_user
 
-    async def session(self) -> Optional[Session]:
+    def session(self) -> Optional[Session]:
         """Returns the session data, if there is an active session."""
         return self.current_session
 
@@ -312,7 +312,8 @@ class AsyncGoTrueClient:
             jwt=self.current_session.access_token,
             attributes=attributes,
         )
-        self.current_user = response
+        self.current_session.user = response
+        await self._save_session(session=self.current_session)
         self._notify_all_subscribers(event=AuthChangeEvent.USER_UPDATED)
         return response
 
@@ -596,10 +597,6 @@ class AsyncGoTrueClient:
 
     async def _save_session(self, *, session: Session) -> None:
         """Save session to client."""
-        if not session.user:
-            raise ValueError("User of session is None")
-        if not session.expires_in:
-            raise ValueError("Expires_in of session is None or empty")
         self.current_session = session
         self.current_user = session.user
         if session.expires_at:
