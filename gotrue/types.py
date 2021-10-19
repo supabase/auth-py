@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from enum import Enum
 from json import dumps
+from time import time
 from typing import Any, Callable, Dict, Optional, TypeVar
 
 T = TypeVar("T")
@@ -174,7 +175,6 @@ class UserAttributes:
         self.email = parse_none(self.email, str)
         self.password = parse_none(self.password, str)
         self.email_change_token = parse_none(self.email_change_token, str)
-        self.data = parse_none(self.data, Any)
 
     @staticmethod
     def from_dict(data: dict) -> "UserAttributes":
@@ -204,8 +204,10 @@ class Session:
 
     def __post_init__(self) -> None:
         self.access_token = str(self.access_token)
-        self.expires_at = parse_none(self.expires_at, lambda x: int(str(x)))
         self.expires_in = parse_none(self.expires_in, lambda x: int(str(x)))
+        self.expires_at = parse_none(self.expires_at, lambda x: int(str(x)))
+        if self.expires_in and not self.expires_at:
+            self.expires_at = round(time()) + self.expires_in
         self.provider_token = parse_none(self.provider_token, str)
         self.refresh_token = parse_none(self.refresh_token, str)
         self.token_type = str(self.token_type)

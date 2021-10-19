@@ -24,5 +24,5 @@ def parse_response(response: Response, func: Callable[[Any], T]) -> T:
 
 def parse_session_or_user(arg: Any) -> Union[Session, User]:
     if "access_token" in arg:
-        Session.from_dict(arg)
+        return Session.from_dict(arg)
     return User.from_dict(arg)
