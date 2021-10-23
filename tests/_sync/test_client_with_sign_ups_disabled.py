@@ -1,3 +1,5 @@
+from typing import Iterable
+
 import pytest
 from faker import Faker
 
@@ -8,7 +10,7 @@ GOTRUE_URL = "http://localhost:9997"
 
 
 @pytest.fixture(name="client")
-def create_client() -> SyncGoTrueClient:
+def create_client() -> Iterable[SyncGoTrueClient]:
     with SyncGoTrueClient(
         url=GOTRUE_URL,
         auto_refresh_token=False,

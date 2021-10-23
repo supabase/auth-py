@@ -1,3 +1,5 @@
+from typing import AsyncIterable
+
 import pytest
 from faker import Faker
 
@@ -10,7 +12,7 @@ TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwicm9sZS
 
 
 @pytest.fixture(name="api")
-async def create_api() -> AsyncGoTrueApi:
+async def create_api() -> AsyncIterable[AsyncGoTrueApi]:
     async with AsyncGoTrueApi(
         url=GOTRUE_URL,
         headers={"Authorization": f"Bearer {TOKEN}"},

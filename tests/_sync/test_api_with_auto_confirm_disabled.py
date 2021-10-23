@@ -1,3 +1,5 @@
+from typing import Iterable
+
 import pytest
 from faker import Faker
 
@@ -10,7 +12,7 @@ TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwicm9sZS
 
 
 @pytest.fixture(name="api")
-def create_api() -> SyncGoTrueApi:
+def create_api() -> Iterable[SyncGoTrueApi]:
     with SyncGoTrueApi(
         url=GOTRUE_URL,
         headers={"Authorization": f"Bearer {TOKEN}"},

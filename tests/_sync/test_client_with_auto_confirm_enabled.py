@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Iterable, Optional
 
 import pytest
 from faker import Faker
@@ -11,7 +11,7 @@ TEST_TWILIO = False
 
 
 @pytest.fixture(name="client")
-def create_client() -> SyncGoTrueClient:
+def create_client() -> Iterable[SyncGoTrueClient]:
     with SyncGoTrueClient(
         url=GOTRUE_URL,
         auto_refresh_token=False,
@@ -21,7 +21,7 @@ def create_client() -> SyncGoTrueClient:
 
 
 @pytest.fixture(name="client_with_session")
-def create_client_with_session() -> SyncGoTrueClient:
+def create_client_with_session() -> Iterable[SyncGoTrueClient]:
     with SyncGoTrueClient(
         url=GOTRUE_URL,
         auto_refresh_token=False,
@@ -31,7 +31,7 @@ def create_client_with_session() -> SyncGoTrueClient:
 
 
 @pytest.fixture(name="new_client")
-def create_new_client() -> SyncGoTrueClient:
+def create_new_client() -> Iterable[SyncGoTrueClient]:
     with SyncGoTrueClient(
         url=GOTRUE_URL,
         auto_refresh_token=False,

@@ -1,3 +1,5 @@
+from typing import AsyncIterable
+
 import pytest
 
 from gotrue import AsyncGoTrueClient
@@ -7,7 +9,7 @@ GOTRUE_URL = "http://localhost:9999"
 
 
 @pytest.fixture(name="client")
-async def create_client() -> AsyncGoTrueClient:
+async def create_client() -> AsyncIterable[AsyncGoTrueClient]:
     async with AsyncGoTrueClient(
         url=GOTRUE_URL,
         auto_refresh_token=False,

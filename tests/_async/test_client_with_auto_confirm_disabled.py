@@ -1,3 +1,5 @@
+from typing import AsyncIterable
+
 import pytest
 from faker import Faker
 
@@ -9,7 +11,7 @@ TEST_TWILIO = False
 
 
 @pytest.fixture(name="client")
-async def create_client() -> AsyncGoTrueClient:
+async def create_client() -> AsyncIterable[AsyncGoTrueClient]:
     async with AsyncGoTrueClient(
         url=GOTRUE_URL,
         auto_refresh_token=False,
