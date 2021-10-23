@@ -1,11 +1,7 @@
-build_sync:
-	poetry run unasync gotrue tests
-
 install:
 	poetry install
 
 tests: install tests_only tests_pre_commit
-	echo "Done"
 
 tests_pre_commit:
 	poetry run pre-commit run --all-files
@@ -18,5 +14,10 @@ run_infra:
 	docker-compose down &&\
 	docker-compose up -d
 
-build_run_tests: build_sync run_infra tests
+run_tests: run_infra tests
+
+build_sync:
+	poetry run unasync gotrue tests
+
+build_run_tests: build_sync run_tests
 	echo "Done"
