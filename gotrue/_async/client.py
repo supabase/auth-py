@@ -113,7 +113,7 @@ class AsyncGoTrueClient:
 
         Raises
         ------
-        error : ApiError
+        error : APIError
             If an error occurs
         """
         await self._remove_session()
@@ -192,7 +192,7 @@ class AsyncGoTrueClient:
 
         Raises
         ------
-        error : ApiError
+        error : APIError
             If an error occurs
         """
         await self._remove_session()
@@ -252,7 +252,7 @@ class AsyncGoTrueClient:
 
         Raises
         ------
-        error : ApiError
+        error : APIError
             If an error occurs
         """
         await self._remove_session()
@@ -300,7 +300,7 @@ class AsyncGoTrueClient:
 
         Raises
         ------
-        error : ApiError
+        error : APIError
             If an error occurs
         """
         if not self.current_session:
@@ -329,7 +329,7 @@ class AsyncGoTrueClient:
 
         Raises
         ------
-        error : ApiError
+        error : APIError
             If an error occurs
         """
         response = await self.api.refresh_access_token(refresh_token=refresh_token)
@@ -353,7 +353,7 @@ class AsyncGoTrueClient:
 
         Raises
         ------
-        error : ApiError
+        error : APIError
             If an error occurs
         """
         session = Session(
@@ -392,7 +392,7 @@ class AsyncGoTrueClient:
 
         Raises
         ------
-        error : ApiError
+        error : APIError
             If an error occurs
         """
         data = urlparse(url)
@@ -467,7 +467,7 @@ class AsyncGoTrueClient:
 
         Raises
         ------
-        error : ApiError
+        error : APIError
             If an error occurs
         """
         unique_id: str = str(uuid4())

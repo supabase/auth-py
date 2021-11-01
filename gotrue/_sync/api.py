@@ -57,7 +57,7 @@ class SyncGoTrueApi:
 
         Raises
         ------
-        error : ApiError
+        error : APIError
             If an error occurs
         """
         headers = self.headers
@@ -95,7 +95,7 @@ class SyncGoTrueApi:
 
         Raises
         ------
-        error : ApiError
+        error : APIError
             If an error occurs
         """
         headers = self.headers
@@ -134,7 +134,7 @@ class SyncGoTrueApi:
 
         Raises
         ------
-        error : ApiError
+        error : APIError
             If an error occurs
         """
         headers = self.headers
@@ -165,7 +165,7 @@ class SyncGoTrueApi:
 
         Raises
         ------
-        error : ApiError
+        error : APIError
             If an error occurs
         """
         headers = self.headers
@@ -192,7 +192,7 @@ class SyncGoTrueApi:
 
         Raises
         ------
-        error : ApiError
+        error : APIError
             If an error occurs
         """
         headers = self.headers
@@ -215,7 +215,7 @@ class SyncGoTrueApi:
 
         Raises
         ------
-        error : ApiError
+        error : APIError
             If an error occurs
         """
         headers = self.headers
@@ -250,7 +250,7 @@ class SyncGoTrueApi:
 
         Raises
         ------
-        error : ApiError
+        error : APIError
             If an error occurs
         """
         headers = self.headers
@@ -291,7 +291,7 @@ class SyncGoTrueApi:
 
         Raises
         ------
-        error : ApiError
+        error : APIError
             If an error occurs
         """
         headers = self.headers
@@ -321,7 +321,7 @@ class SyncGoTrueApi:
 
         Raises
         ------
-        error : ApiError
+        error : APIError
             If an error occurs
         """
         headers = self.headers
@@ -392,7 +392,7 @@ class SyncGoTrueApi:
 
         Raises
         ------
-        error : ApiError
+        error : APIError
             If an error occurs
         """
         url_params = [f"provider={encode_uri_component(provider)}"]
@@ -418,7 +418,7 @@ class SyncGoTrueApi:
 
         Raises
         ------
-        error : ApiError
+        error : APIError
             If an error occurs
         """
         headers = self._create_request_headers(jwt=jwt)
@@ -449,7 +449,7 @@ class SyncGoTrueApi:
 
         Raises
         ------
-        error : ApiError
+        error : APIError
             If an error occurs
         """
         headers = self._create_request_headers(jwt=jwt)
@@ -478,7 +478,7 @@ class SyncGoTrueApi:
 
         Raises
         ------
-        error : ApiError
+        error : APIError
             If an error occurs
         """
         headers = self._create_request_headers(jwt=jwt)
@@ -501,7 +501,7 @@ class SyncGoTrueApi:
 
         Raises
         ------
-        error : ApiError
+        error : APIError
             If an error occurs
         """
         headers = self.headers
@@ -544,7 +544,7 @@ class SyncGoTrueApi:
 
         Raises
         ------
-        error : ApiError
+        error : APIError
             If an error occurs
         """
         headers = self.headers
