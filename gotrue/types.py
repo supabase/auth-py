@@ -1,9 +1,11 @@
+from __future__ import annotations
+
 from dataclasses import dataclass
 from enum import Enum
 from inspect import signature
 from json import dumps
 from time import time
-from typing import Any, Callable, Dict, List, Optional, Type, TypeVar
+from typing import Any, Callable, Optional, Type, TypeVar
 
 T = TypeVar("T")
 
@@ -38,7 +40,7 @@ class APIError(BaseException):
         self.code = int(str(self.code))
 
     @classmethod
-    def from_dict(cls, data: dict) -> "APIError":
+    def from_dict(cls, data: dict) -> APIError:
         if "msg" in data and "code" in data:
             return APIError(
                 msg=data["msg"],
@@ -55,7 +57,7 @@ class APIError(BaseException):
             )
         return parse_dict(cls, **data)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "msg": self.msg,
             "code": self.code,
@@ -91,10 +93,10 @@ class CookieOptions:
         self.same_site = str(self.same_site)
 
     @classmethod
-    def from_dict(cls, data: dict) -> "CookieOptions":
+    def from_dict(cls, data: dict) -> CookieOptions:
         return parse_dict(cls, **data)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "name": self.name,
             "lifetime": self.lifetime,
@@ -106,12 +108,12 @@ class CookieOptions:
 
 @dataclass
 class User:
-    app_metadata: Dict[str, Any]
+    app_metadata: dict[str, Any]
     aud: str
     created_at: str
     id: str
-    user_metadata: Dict[str, Any]
-    identities: Optional[List["Identity"]] = None
+    user_metadata: dict[str, Any]
+    identities: Optional[list[Identity]] = None
     confirmation_sent_at: Optional[str] = None
     action_link: Optional[str] = None
     last_sign_in_at: Optional[str] = None
@@ -156,17 +158,17 @@ class User:
                 identity.__post_init__()
 
     @classmethod
-    def from_dict(cls, data: dict) -> "User":
+    def from_dict(cls, data: dict) -> User:
         identities_data = data.pop("identities", None)
         if identities_data and isinstance(identities_data, list):
-            identities: List["Identity"] = []
+            identities: list[Identity] = []
             for identity_data in identities_data:
                 identity = Identity.from_dict(identity_data)
                 identities.append(identity)
             data["identities"] = identities
         return parse_dict(cls, **data)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "action_link": self.action_link,
             "app_metadata": self.app_metadata,
@@ -195,7 +197,7 @@ class Identity:
     provider: str
     created_at: str
     updated_at: str
-    identity_data: Optional[Dict[str, Any]] = None
+    identity_data: Optional[dict[str, Any]] = None
     last_sign_in_at: Optional[str] = None
 
     def __post_init__(self) -> None:
@@ -208,10 +210,10 @@ class Identity:
         self.user_id = str(self.user_id)
 
     @classmethod
-    def from_dict(cls, data: dict) -> "Identity":
+    def from_dict(cls, data: dict) -> Identity:
         return parse_dict(cls, **data)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "created_at": self.created_at,
             "id": self.id,
@@ -240,10 +242,10 @@ class UserAttributes:
         self.email_change_token = parse_none(self.email_change_token, str)
 
     @classmethod
-    def from_dict(cls, data: dict) -> "UserAttributes":
+    def from_dict(cls, data: dict) -> UserAttributes:
         return parse_dict(cls, **data)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "email": self.email,
             "password": self.password,
@@ -278,15 +280,15 @@ class Session:
             self.user.__post_init__()
 
     @classmethod
-    def from_dict(cls, data: dict) -> "Session":
+    def from_dict(cls, data: dict) -> Session:
         user_data = data.pop("user", None)
         if user_data:
             user = User.from_dict(user_data)
             data["user"] = user
         return parse_dict(cls, **data)
 
-    def to_dict(self) -> Dict[str, Any]:
-        data: Dict[str, Any] = {
+    def to_dict(self) -> dict[str, Any]:
+        data: dict[str, Any] = {
             "access_token": self.access_token,
             "expires_at": self.expires_at,
             "expires_in": self.expires_in,
@@ -303,7 +305,7 @@ class Session:
 class Subscription:
     id: str
     """The subscriber UUID. This will be set by the client."""
-    callback: Callable[["AuthChangeEvent", Optional[Session]], None]
+    callback: Callable[[AuthChangeEvent, Optional[Session]], None]
     """The function to call every time there is an event."""
     unsubscribe: Callable[[], None]
     """Call this to remove the listener."""

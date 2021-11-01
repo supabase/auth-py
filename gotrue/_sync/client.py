@@ -1,8 +1,10 @@
+from __future__ import annotations
+
 from functools import partial
 from json import dumps, loads
 from threading import Timer
 from time import time
-from typing import Any, Callable, Dict, Optional, Union, cast
+from typing import Any, Callable, Optional, Union, cast
 from urllib.parse import parse_qs, urlparse
 from uuid import uuid4
 
@@ -26,7 +28,7 @@ class SyncGoTrueClient:
         self,
         *,
         url: str = GOTRUE_URL,
-        headers: Dict[str, str] = DEFAULT_HEADERS,
+        headers: dict[str, str] = DEFAULT_HEADERS,
         auto_refresh_token: bool = True,
         persist_session: bool = True,
         local_storage: SyncSupportedStorage = SyncMemoryStorage(),
@@ -36,7 +38,7 @@ class SyncGoTrueClient:
 
         url : str
             The URL of the GoTrue server.
-        headers : Dict[str, str]
+        headers : dict[str, str]
             Any additional headers to send to the GoTrue server.
         auto_refresh_token : bool
             Set to "true" if you want to automatically refresh the token before
@@ -54,7 +56,7 @@ class SyncGoTrueClient:
                 "Warning:\n\nDO NOT USE HTTP IN PRODUCTION FOR GOTRUE EVER!\n"
                 "GoTrue REQUIRES HTTPS to work securely."
             )
-        self.state_change_emitters: Dict[str, Subscription] = {}
+        self.state_change_emitters: dict[str, Subscription] = {}
         self.refresh_token_timer: Optional[Timer] = None
         self.current_user: Optional[User] = None
         self.current_session: Optional[Session] = None
@@ -67,7 +69,7 @@ class SyncGoTrueClient:
             cookie_options=cookie_options,
         )
 
-    def __enter__(self) -> "SyncGoTrueClient":
+    def __enter__(self) -> SyncGoTrueClient:
         return self
 
     def __exit__(self, exc_t, exc_v, exc_tb) -> None:
@@ -88,7 +90,7 @@ class SyncGoTrueClient:
         phone: Optional[str] = None,
         password: Optional[str] = None,
         redirect_to: Optional[str] = None,
-        data: Optional[Dict[str, Any]] = None,
+        data: Optional[dict[str, Any]] = None,
     ) -> Union[Session, User]:
         """Creates a new user.
 
@@ -102,7 +104,7 @@ class SyncGoTrueClient:
             The user's password.
         redirect_to : Optional[str]
             A URL or mobile address to send the user to after they are confirmed.
-        data : Optional[Dict[str, Any]]
+        data : Optional[dict[str, Any]]
             Optional user metadata.
 
         Returns

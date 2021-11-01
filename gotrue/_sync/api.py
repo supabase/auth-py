@@ -1,4 +1,6 @@
-from typing import Any, Dict, Optional, Union
+from __future__ import annotations
+
+from typing import Any, Optional, Union
 
 from ..helpers import encode_uri_component, parse_response, parse_session_or_user
 from ..http_clients import SyncClient
@@ -10,7 +12,7 @@ class SyncGoTrueApi:
         self,
         *,
         url: str,
-        headers: Dict[str, str],
+        headers: dict[str, str],
         cookie_options: CookieOptions,
     ) -> None:
         """Initialise API class."""
@@ -19,7 +21,7 @@ class SyncGoTrueApi:
         self.cookie_options = cookie_options
         self.http_client = SyncClient()
 
-    def __enter__(self) -> "SyncGoTrueApi":
+    def __enter__(self) -> SyncGoTrueApi:
         return self
 
     def __exit__(self, exc_t, exc_v, exc_tb) -> None:
@@ -34,7 +36,7 @@ class SyncGoTrueApi:
         email: str,
         password: str,
         redirect_to: Optional[str] = None,
-        data: Optional[Dict[str, Any]] = None,
+        data: Optional[dict[str, Any]] = None,
     ) -> Union[Session, User]:
         """Creates a new user using their email address.
 
@@ -46,7 +48,7 @@ class SyncGoTrueApi:
             The password of the user.
         redirect_to : Optional[str]
             A URL or mobile address to send the user to after they are confirmed.
-        data : Optional[Dict[str, Any]]
+        data : Optional[dict[str, Any]]
             Optional user metadata.
 
         Returns
@@ -113,7 +115,7 @@ class SyncGoTrueApi:
         *,
         phone: str,
         password: str,
-        data: Optional[Dict[str, Any]] = None,
+        data: Optional[dict[str, Any]] = None,
     ) -> Union[Session, User]:
         """Signs up a new user using their phone number and a password.
 
@@ -123,7 +125,7 @@ class SyncGoTrueApi:
             The phone number of the user.
         password : str
             The password of the user.
-        data : Optional[Dict[str, Any]]
+        data : Optional[dict[str, Any]]
             Optional user metadata.
 
         Returns
@@ -271,7 +273,7 @@ class SyncGoTrueApi:
         *,
         email: str,
         redirect_to: Optional[str] = None,
-        data: Optional[Dict[str, Any]] = None,
+        data: Optional[dict[str, Any]] = None,
     ) -> User:
         """Sends an invite link to an email address.
 
@@ -281,7 +283,7 @@ class SyncGoTrueApi:
             The email address of the user.
         redirect_to : Optional[str]
             A URL or mobile address to send the user to after they are confirmed.
-        data : Optional[Dict[str, Any]]
+        data : Optional[dict[str, Any]]
             Optional user metadata.
 
         Returns
@@ -334,7 +336,7 @@ class SyncGoTrueApi:
         response = self.http_client.post(url, json=data, headers=headers)
         return parse_response(response, lambda _: None)
 
-    def _create_request_headers(self, *, jwt: str) -> Dict[str, str]:
+    def _create_request_headers(self, *, jwt: str) -> dict[str, str]:
         """Create temporary object.
 
         Create a temporary object with all configured headers and adds the
@@ -518,7 +520,7 @@ class SyncGoTrueApi:
         email: str,
         password: Optional[str] = None,
         redirect_to: Optional[str] = None,
-        data: Optional[Dict[str, Any]] = None,
+        data: Optional[dict[str, Any]] = None,
     ) -> Union[Session, User]:
         """
         Generates links to be sent via email or other.
@@ -533,7 +535,7 @@ class SyncGoTrueApi:
             User password. For signup only.
         redirect_to : Optional[str]
             The link type ("signup" or "magiclink" or "recovery" or "invite").
-        data : Optional[Dict[str, Any]]
+        data : Optional[dict[str, Any]]
             Optional user metadata. For signup only.
 
         Returns

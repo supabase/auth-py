@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 from abc import ABC, abstractmethod
-from typing import Dict, Optional
+from typing import Optional
 
 
 class AsyncSupportedStorage(ABC):
@@ -18,7 +20,7 @@ class AsyncSupportedStorage(ABC):
 
 class AsyncMemoryStorage(AsyncSupportedStorage):
     def __init__(self):
-        self.storage: Dict[str, str] = {}
+        self.storage: dict[str, str] = {}
 
     async def get_item(self, key: str) -> Optional[str]:
         if key in self.storage:
