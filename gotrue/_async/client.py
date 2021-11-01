@@ -1,6 +1,5 @@
 from functools import partial
 from json import dumps, loads
-from re import match
 from threading import Timer
 from time import time
 from typing import Any, Callable, Dict, Optional, Union, cast
@@ -20,8 +19,6 @@ from ..types import (
 )
 from .api import AsyncGoTrueApi
 from .storage import AsyncMemoryStorage, AsyncSupportedStorage
-
-HTTPRegexp = "/^http://"
 
 
 class AsyncGoTrueClient:
@@ -52,7 +49,7 @@ class AsyncGoTrueClient:
         cookie_options : CookieOptions
             The options for the cookie.
         """
-        if match(HTTPRegexp, url):
+        if url.startswith("http"):
             print(
                 "Warning:\n\nDO NOT USE HTTP IN PRODUCTION FOR GOTRUE EVER!\n"
                 "GoTrue REQUIRES HTTPS to work securely."
