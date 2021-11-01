@@ -109,7 +109,6 @@ class User:
     app_metadata: Dict[str, Any]
     aud: str
     created_at: str
-    email_change_confirm_status: bool
     id: str
     user_metadata: Optional[Dict[str, Any]] = None
     confirmation_sent_at: Optional[str] = None
@@ -134,7 +133,6 @@ class User:
         self.created_at = str(self.created_at)
         self.email = parse_none(self.email, str)
         self.email_confirmed_at = parse_none(self.email_confirmed_at, str)
-        self.email_change_confirm_status = bool(self.email_change_confirm_status)
         self.id = str(self.id)
         self.last_sign_in_at = parse_none(self.last_sign_in_at, str)
         self.phone = parse_none(self.phone, str)
@@ -159,7 +157,6 @@ class User:
             "created_at": self.created_at,
             "email": self.email,
             "email_confirmed_at": self.email_confirmed_at,
-            "email_change_confirm_status": self.email_change_confirm_status,
             "id": self.id,
             "last_sign_in_at": self.last_sign_in_at,
             "phone": self.phone,
