@@ -110,7 +110,7 @@ class User:
     aud: str
     created_at: str
     id: str
-    user_metadata: Optional[Dict[str, Any]] = None
+    user_metadata: Dict[str, Any]
     confirmation_sent_at: Optional[str] = None
     action_link: Optional[str] = None
     last_sign_in_at: Optional[str] = None
@@ -140,7 +140,7 @@ class User:
         self.recovery_sent_at = parse_none(self.recovery_sent_at, str)
         self.role = parse_none(self.role, str)
         self.updated_at = parse_none(self.updated_at, str)
-        self.user_metadata = parse_none(self.user_metadata, dict)
+        self.user_metadata = dict(self.user_metadata)
         self.invited_at = parse_none(self.invited_at, str)
 
     @classmethod
