@@ -1,19 +1,31 @@
 from dataclasses import dataclass
 from enum import Enum
+from inspect import signature
 from json import dumps
 from time import time
-from typing import Any, Callable, Dict, Optional, TypeVar
+from typing import Any, Callable, Dict, Optional, Type, TypeVar
 
 T = TypeVar("T")
 
 
-def parse_none(
-    value: Optional[T],
-    func: Callable[[Any], T],
-) -> Optional[T]:
-    if value is None:
+def parse_none(v: Optional[T], f: Callable[[Any], T]) -> Optional[T]:
+    if v is None:
         return None
-    return func(value)
+    return f(v)
+
+
+def parse_dict(cls: Type[T], **json: dict) -> T:
+    cls_fields = {field for field in signature(cls).parameters}
+    native_args, new_args = {}, {}
+    for name, val in json.items():
+        if name in cls_fields:
+            native_args[name] = val
+        else:
+            new_args[name] = val
+    ret = cls(**native_args)
+    for new_name, new_val in new_args.items():
+        setattr(ret, new_name, new_val)
+    return ret
 
 
 @dataclass
@@ -25,8 +37,8 @@ class ApiError(BaseException):
         self.msg = str(self.msg)
         self.code = int(str(self.code))
 
-    @staticmethod
-    def from_dict(data: dict) -> "ApiError":
+    @classmethod
+    def from_dict(cls, data: dict) -> "ApiError":
         if "msg" in data and "code" in data:
             return ApiError(
                 msg=data["msg"],
@@ -41,7 +53,7 @@ class ApiError(BaseException):
                 msg=data["error_description"],
                 code=code,
             )
-        return ApiError(**data)
+        return parse_dict(cls, **data)
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -78,9 +90,9 @@ class CookieOptions:
         self.path = str(self.path)
         self.same_site = str(self.same_site)
 
-    @staticmethod
-    def from_dict(data: dict) -> "CookieOptions":
-        return CookieOptions(**data)
+    @classmethod
+    def from_dict(cls, data: dict) -> "CookieOptions":
+        return parse_dict(cls, **data)
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -133,9 +145,9 @@ class User:
         self.user_metadata = parse_none(self.user_metadata, dict)
         self.invited_at = parse_none(self.invited_at, str)
 
-    @staticmethod
-    def from_dict(data: dict) -> "User":
-        return User(**data)
+    @classmethod
+    def from_dict(cls, data: dict) -> "User":
+        return parse_dict(cls, **data)
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -176,9 +188,9 @@ class UserAttributes:
         self.password = parse_none(self.password, str)
         self.email_change_token = parse_none(self.email_change_token, str)
 
-    @staticmethod
-    def from_dict(data: dict) -> "UserAttributes":
-        return UserAttributes(**data)
+    @classmethod
+    def from_dict(cls, data: dict) -> "UserAttributes":
+        return parse_dict(cls, **data)
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -214,14 +226,14 @@ class Session:
         if self.user:
             self.user.__post_init__()
 
-    @staticmethod
-    def from_dict(data: dict) -> "Session":
+    @classmethod
+    def from_dict(cls, data: dict) -> "Session":
         user: Optional[User] = None
         user_data = data.get("user")
         if user_data:
             user = User.from_dict(user_data)
-        del data["user"]
-        return Session(**data, user=user)
+            data["user"] = user
+        return parse_dict(cls, **data)
 
     def to_dict(self) -> Dict[str, Any]:
         data: Dict[str, Any] = {
