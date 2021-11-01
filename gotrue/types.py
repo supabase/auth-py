@@ -3,7 +3,7 @@ from enum import Enum
 from inspect import signature
 from json import dumps
 from time import time
-from typing import Any, Callable, Dict, Optional, Type, TypeVar
+from typing import Any, Callable, Dict, List, Optional, Type, TypeVar
 
 T = TypeVar("T")
 
@@ -110,6 +110,7 @@ class User:
     aud: str
     created_at: str
     id: str
+    identities: List["Identity"]
     user_metadata: Dict[str, Any]
     confirmation_sent_at: Optional[str] = None
     action_link: Optional[str] = None
@@ -123,6 +124,10 @@ class User:
     confirmed_at: Optional[str] = None
     invited_at: Optional[str] = None
     email: Optional[str] = None
+    new_email: Optional[str] = None
+    email_change_sent_at: Optional[str] = None
+    new_phone: Optional[str] = None
+    phone_change_sent_at: Optional[str] = None
 
     def __post_init__(self) -> None:
         self.action_link = parse_none(self.action_link, str)
@@ -142,9 +147,22 @@ class User:
         self.updated_at = parse_none(self.updated_at, str)
         self.user_metadata = dict(self.user_metadata)
         self.invited_at = parse_none(self.invited_at, str)
+        self.new_email = parse_none(self.new_email, str)
+        self.email_change_sent_at = parse_none(self.email_change_sent_at, str)
+        self.new_phone = parse_none(self.new_phone, str)
+        self.phone_change_sent_at = parse_none(self.phone_change_sent_at, str)
+        for identity in self.identities:
+            identity.__post_init__()
 
     @classmethod
     def from_dict(cls, data: dict) -> "User":
+        identities_data = data.pop("identities", None)
+        if identities_data and isinstance(identities_data, list):
+            identities: List["Identity"] = []
+            for identity_data in identities_data:
+                identity = Identity.from_dict(identity_data)
+                identities.append(identity)
+            data["identities"] = identities
         return parse_dict(cls, **data)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -166,6 +184,41 @@ class User:
             "updated_at": self.updated_at,
             "user_metadata": self.user_metadata,
             "invited_at": self.invited_at,
+        }
+
+
+@dataclass
+class Identity:
+    id: str
+    user_id: str
+    provider: str
+    created_at: str
+    updated_at: str
+    identity_data: Optional[Dict[str, Any]] = None
+    last_sign_in_at: Optional[str] = None
+
+    def __post_init__(self) -> None:
+        self.created_at = str(self.created_at)
+        self.id = str(self.id)
+        self.identity_data = parse_none(self.identity_data, dict)
+        self.last_sign_in_at = parse_none(self.last_sign_in_at, str)
+        self.provider = str(self.provider)
+        self.updated_at = str(self.updated_at)
+        self.user_id = str(self.user_id)
+
+    @classmethod
+    def from_dict(cls, data: dict) -> "Identity":
+        return parse_dict(cls, **data)
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "created_at": self.created_at,
+            "id": self.id,
+            "identity_data": self.identity_data,
+            "last_sign_in_at": self.last_sign_in_at,
+            "provider": self.provider,
+            "updated_at": self.updated_at,
+            "user_id": self.user_id,
         }
 
 
@@ -225,8 +278,7 @@ class Session:
 
     @classmethod
     def from_dict(cls, data: dict) -> "Session":
-        user: Optional[User] = None
-        user_data = data.get("user")
+        user_data = data.pop("user", None)
         if user_data:
             user = User.from_dict(user_data)
             data["user"] = user
