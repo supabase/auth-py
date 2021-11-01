@@ -102,17 +102,12 @@ async def test_set_session_should_return_no_error(
 
 @pytest.mark.asyncio
 @pytest.mark.depends(on=[test_sign_up.__name__])
-async def test_sign_up_the_same_user_twice_should_throw_an_error(
+async def test_sign_up_the_same_user_twice_not_should_throw_an_error(
     client: AsyncGoTrueClient,
 ):
-    expected_error_message = (
-        "Thanks for registering, now check your email to complete the process."
-    )
     try:
-        await client.sign_up(email=email, password=password)
-        assert False
-    except ApiError as e:
-        assert e.msg == expected_error_message
+        response = await client.sign_up(email=email, password=password)
+        assert isinstance(response, User)
     except Exception as e:
         assert False, str(e)
 
