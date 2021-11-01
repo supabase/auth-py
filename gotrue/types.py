@@ -110,8 +110,8 @@ class User:
     aud: str
     created_at: str
     id: str
-    identities: List["Identity"]
     user_metadata: Dict[str, Any]
+    identities: Optional[List["Identity"]] = None
     confirmation_sent_at: Optional[str] = None
     action_link: Optional[str] = None
     last_sign_in_at: Optional[str] = None
@@ -151,8 +151,9 @@ class User:
         self.email_change_sent_at = parse_none(self.email_change_sent_at, str)
         self.new_phone = parse_none(self.new_phone, str)
         self.phone_change_sent_at = parse_none(self.phone_change_sent_at, str)
-        for identity in self.identities:
-            identity.__post_init__()
+        if self.identities:
+            for identity in self.identities:
+                identity.__post_init__()
 
     @classmethod
     def from_dict(cls, data: dict) -> "User":
