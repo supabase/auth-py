@@ -4,7 +4,7 @@ import pytest
 from faker import Faker
 
 from gotrue import AsyncGoTrueClient
-from gotrue.types import ApiError, User
+from gotrue.types import APIError, User
 
 GOTRUE_URL = "http://localhost:9999"
 TEST_TWILIO = False
@@ -55,7 +55,7 @@ async def test_sign_up_with_the_same_user_twice_should_throw_an_error(
             password=password,
         )
         assert False
-    except ApiError as e:
+    except APIError as e:
         assert expected_error_message in e.msg
     except Exception as e:
         assert False, str(e)
@@ -71,7 +71,7 @@ async def test_sign_in(client: AsyncGoTrueClient):
             password=password,
         )
         assert False
-    except ApiError as e:
+    except APIError as e:
         assert e.msg == expected_error_message
     except Exception as e:
         assert False, str(e)
@@ -87,7 +87,7 @@ async def test_sign_in_with_the_wrong_password(client: AsyncGoTrueClient):
             password=password + "2",
         )
         assert False
-    except ApiError as e:
+    except APIError as e:
         assert e.msg == expected_error_message
     except Exception as e:
         assert False, str(e)
@@ -119,7 +119,7 @@ async def test_verify_mobile_otp_errors_on_bad_token(client: AsyncGoTrueClient):
     try:
         await client.verify_otp(phone=phone, token="123456")
         assert False
-    except ApiError as e:
+    except APIError as e:
         assert expected_error_message in e.msg
     except Exception as e:
         assert False, str(e)

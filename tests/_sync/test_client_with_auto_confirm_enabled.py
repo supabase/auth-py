@@ -4,7 +4,7 @@ import pytest
 from faker import Faker
 
 from gotrue import SyncGoTrueClient
-from gotrue.types import ApiError, Session, User, UserAttributes
+from gotrue.types import APIError, Session, User, UserAttributes
 
 GOTRUE_URL = "http://localhost:9998"
 TEST_TWILIO = False
@@ -259,7 +259,7 @@ def test_sign_in_with_the_wrong_password(client: SyncGoTrueClient):
     try:
         client.sign_in(email=email, password=password + "2")
         assert False
-    except ApiError:
+    except APIError:
         assert True
     except Exception as e:
         assert False, str(e)

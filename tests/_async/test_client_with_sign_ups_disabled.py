@@ -4,7 +4,7 @@ import pytest
 from faker import Faker
 
 from gotrue import AsyncGoTrueClient
-from gotrue.types import ApiError
+from gotrue.types import APIError
 
 GOTRUE_URL = "http://localhost:9997"
 
@@ -31,7 +31,7 @@ async def test_sign_up(client: AsyncGoTrueClient):
     try:
         await client.sign_up(email=email, password=password)
         assert False
-    except ApiError as e:
+    except APIError as e:
         assert e.msg == expected_error_message
     except Exception as e:
         assert False, str(e)

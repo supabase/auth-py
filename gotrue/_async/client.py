@@ -8,7 +8,7 @@ from uuid import uuid4
 
 from ..constants import COOKIE_OPTIONS, DEFAULT_HEADERS, GOTRUE_URL, STORAGE_KEY
 from ..types import (
-    ApiError,
+    APIError,
     AuthChangeEvent,
     CookieOptions,
     Provider,
@@ -403,19 +403,19 @@ class AsyncGoTrueClient:
         refresh_token = query.get("refresh_token")
         token_type = query.get("token_type")
         if error_description:
-            raise ApiError(error_description[0], 400)
+            raise APIError(error_description[0], 400)
         if not access_token:
-            raise ApiError("No access_token detected.", 400)
+            raise APIError("No access_token detected.", 400)
         if not expires_in or expires_in[0]:
-            raise ApiError("No expires_in detected.", 400)
+            raise APIError("No expires_in detected.", 400)
         if not refresh_token:
-            raise ApiError("No refresh_token detected.", 400)
+            raise APIError("No refresh_token detected.", 400)
         if not token_type:
-            raise ApiError("No token_type detected.", 400)
+            raise APIError("No token_type detected.", 400)
         try:
             expires_at = round(time.time()) + int(expires_in[0])
         except ValueError:
-            raise ApiError("Invalid expires_in.", 400)
+            raise APIError("Invalid expires_in.", 400)
         response = await self.api.get_user(jwt=access_token[0])
         provider_token = query.get("provider_token")
         session = Session(
@@ -562,7 +562,7 @@ class AsyncGoTrueClient:
                         await self._call_refresh_token(
                             refresh_token=session.refresh_token
                         )
-                    except ApiError:
+                    except APIError:
                         await self._remove_session()
                 else:
                     await self._remove_session()

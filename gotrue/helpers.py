@@ -3,7 +3,7 @@ from urllib.parse import quote
 
 from httpx import HTTPError, Response
 
-from .types import ApiError, Session, User
+from .types import APIError, Session, User
 
 T = TypeVar("T")
 
@@ -19,7 +19,7 @@ def parse_response(response: Response, func: Callable[[Any], T]) -> T:
         return func(json)
     except HTTPError:
         json = response.json()
-        raise ApiError.from_dict(json)
+        raise APIError.from_dict(json)
 
 
 def parse_session_or_user(arg: Any) -> Union[Session, User]:

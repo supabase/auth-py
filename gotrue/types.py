@@ -29,7 +29,7 @@ def parse_dict(cls: Type[T], **json: dict) -> T:
 
 
 @dataclass
-class ApiError(BaseException):
+class APIError(BaseException):
     msg: str
     code: int
 
@@ -38,9 +38,9 @@ class ApiError(BaseException):
         self.code = int(str(self.code))
 
     @classmethod
-    def from_dict(cls, data: dict) -> "ApiError":
+    def from_dict(cls, data: dict) -> "APIError":
         if "msg" in data and "code" in data:
-            return ApiError(
+            return APIError(
                 msg=data["msg"],
                 code=data["code"],
             )
@@ -49,7 +49,7 @@ class ApiError(BaseException):
                 code = int(data["error"])
             except ValueError:
                 code = -1
-            return ApiError(
+            return APIError(
                 msg=data["error_description"],
                 code=code,
             )
