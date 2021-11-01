@@ -268,15 +268,17 @@ class AuthChangeEvent(str, Enum):
 
 
 class Provider(str, Enum):
+    apple = "apple"
     azure = "azure"
     bitbucket = "bitbucket"
+    discord = "discord"
     facebook = "facebook"
     github = "github"
     gitlab = "gitlab"
     google = "google"
+    slack = "slack"
+    spotify = "spotify"
     twitter = "twitter"
-    apple = "apple"
-    discord = "discord"
     twitch = "twitch"
 
 
