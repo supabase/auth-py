@@ -7,7 +7,7 @@ from ..http_clients import SyncClient
 from ..types import CookieOptions, LinkType, Provider, Session, User, UserAttributes
 
 
-class SyncGoTrueApi:
+class SyncGoTrueAPI:
     def __init__(
         self,
         *,
@@ -21,7 +21,7 @@ class SyncGoTrueApi:
         self.cookie_options = cookie_options
         self.http_client = SyncClient()
 
-    def __enter__(self) -> SyncGoTrueApi:
+    def __enter__(self) -> SyncGoTrueAPI:
         return self
 
     def __exit__(self, exc_t, exc_v, exc_tb) -> None:

@@ -19,7 +19,7 @@ from ..types import (
     User,
     UserAttributes,
 )
-from .api import AsyncGoTrueApi
+from .api import AsyncGoTrueAPI
 from .storage import AsyncMemoryStorage, AsyncSupportedStorage
 
 
@@ -63,7 +63,7 @@ class AsyncGoTrueClient:
         self.auto_refresh_token = auto_refresh_token
         self.persist_session = persist_session
         self.local_storage = local_storage
-        self.api = AsyncGoTrueApi(
+        self.api = AsyncGoTrueAPI(
             url=url,
             headers=headers,
             cookie_options=cookie_options,

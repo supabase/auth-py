@@ -19,7 +19,7 @@ from ..types import (
     User,
     UserAttributes,
 )
-from .api import SyncGoTrueApi
+from .api import SyncGoTrueAPI
 from .storage import SyncMemoryStorage, SyncSupportedStorage
 
 
@@ -63,7 +63,7 @@ class SyncGoTrueClient:
         self.auto_refresh_token = auto_refresh_token
         self.persist_session = persist_session
         self.local_storage = local_storage
-        self.api = SyncGoTrueApi(
+        self.api = SyncGoTrueAPI(
             url=url,
             headers=headers,
             cookie_options=cookie_options,

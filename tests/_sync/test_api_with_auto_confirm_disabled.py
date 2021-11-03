@@ -3,7 +3,7 @@ from typing import Iterable
 import pytest
 from faker import Faker
 
-from gotrue import SyncGoTrueApi
+from gotrue import SyncGoTrueAPI
 from gotrue.constants import COOKIE_OPTIONS
 from gotrue.types import CookieOptions, LinkType, User
 
@@ -12,8 +12,8 @@ TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwicm9sZS
 
 
 @pytest.fixture(name="api")
-def create_api() -> Iterable[SyncGoTrueApi]:
-    with SyncGoTrueApi(
+def create_api() -> Iterable[SyncGoTrueAPI]:
+    with SyncGoTrueAPI(
         url=GOTRUE_URL,
         headers={"Authorization": f"Bearer {TOKEN}"},
         cookie_options=CookieOptions.from_dict(COOKIE_OPTIONS),
@@ -28,7 +28,7 @@ password = fake.password()
 
 
 @pytest.mark.asyncio
-def test_sign_up_with_email_and_password(api: SyncGoTrueApi):
+def test_sign_up_with_email_and_password(api: SyncGoTrueAPI):
     try:
         response = api.sign_up_with_email(
             email=email,
@@ -46,7 +46,7 @@ password2 = fake.password()
 
 
 @pytest.mark.asyncio
-def test_generate_sign_up_link(api: SyncGoTrueApi):
+def test_generate_sign_up_link(api: SyncGoTrueAPI):
     try:
         response = api.generate_link(
             type=LinkType.signup,
@@ -64,7 +64,7 @@ email3 = f"api_generate_link_signup_{fake.email().lower()}"
 
 
 @pytest.mark.asyncio
-def test_generate_magic_link(api: SyncGoTrueApi):
+def test_generate_magic_link(api: SyncGoTrueAPI):
     try:
         response = api.generate_link(
             type=LinkType.magiclink,
@@ -77,7 +77,7 @@ def test_generate_magic_link(api: SyncGoTrueApi):
 
 
 @pytest.mark.asyncio
-def test_generate_invite_link(api: SyncGoTrueApi):
+def test_generate_invite_link(api: SyncGoTrueAPI):
     try:
         response = api.generate_link(
             type=LinkType.invite,
@@ -91,7 +91,7 @@ def test_generate_invite_link(api: SyncGoTrueApi):
 
 @pytest.mark.asyncio
 @pytest.mark.depends(on=[test_sign_up_with_email_and_password.__name__])
-def test_generate_recovery_link(api: SyncGoTrueApi):
+def test_generate_recovery_link(api: SyncGoTrueAPI):
     try:
         response = api.generate_link(
             type=LinkType.recovery,

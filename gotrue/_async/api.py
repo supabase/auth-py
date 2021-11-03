@@ -7,7 +7,7 @@ from ..http_clients import AsyncClient
 from ..types import CookieOptions, LinkType, Provider, Session, User, UserAttributes
 
 
-class AsyncGoTrueApi:
+class AsyncGoTrueAPI:
     def __init__(
         self,
         *,
@@ -21,7 +21,7 @@ class AsyncGoTrueApi:
         self.cookie_options = cookie_options
         self.http_client = AsyncClient()
 
-    async def __aenter__(self) -> AsyncGoTrueApi:
+    async def __aenter__(self) -> AsyncGoTrueAPI:
         return self
 
     async def __aexit__(self, exc_t, exc_v, exc_tb) -> None:
