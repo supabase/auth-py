@@ -472,7 +472,7 @@ class AsyncGoTrueClient:
         error : APIError
             If an error occurs
         """
-        unique_id: str = str(uuid4())
+        unique_id: str = uuid4().hex
         subscription = Subscription(
             id=unique_id,
             callback=callback,
