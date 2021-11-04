@@ -336,7 +336,7 @@ class AsyncGoTrueAPI:
         response = await self.http_client.post(url, json=data, headers=headers)
         return parse_response(response, lambda _: None)
 
-    def _create_request_headers(self, *, jwt: str) -> dict[str, str]:
+    def __create_request_headers(self, *, jwt: str) -> dict[str, str]:
         """Create temporary object.
 
         Create a temporary object with all configured headers and adds the
@@ -365,7 +365,7 @@ class AsyncGoTrueAPI:
         jwt : str
             A valid, logged-in JWT.
         """
-        headers = self._create_request_headers(jwt=jwt)
+        headers = self.__create_request_headers(jwt=jwt)
         url = f"{self.url}/logout"
         await self.http_client.post(url, headers=headers)
 
@@ -423,7 +423,7 @@ class AsyncGoTrueAPI:
         error : APIError
             If an error occurs
         """
-        headers = self._create_request_headers(jwt=jwt)
+        headers = self.__create_request_headers(jwt=jwt)
         url = f"{self.url}/user"
         response = await self.http_client.get(url, headers=headers)
         return parse_response(response, User.from_dict)
@@ -454,7 +454,7 @@ class AsyncGoTrueAPI:
         error : APIError
             If an error occurs
         """
-        headers = self._create_request_headers(jwt=jwt)
+        headers = self.__create_request_headers(jwt=jwt)
         data = attributes.to_dict()
         url = f"{self.url}/user"
         response = await self.http_client.put(url, json=data, headers=headers)
@@ -483,7 +483,7 @@ class AsyncGoTrueAPI:
         error : APIError
             If an error occurs
         """
-        headers = self._create_request_headers(jwt=jwt)
+        headers = self.__create_request_headers(jwt=jwt)
         url = f"{self.url}/admin/users/${uid}"
         response = await self.http_client.delete(url, headers=headers)
         return parse_response(response, User.from_dict)
