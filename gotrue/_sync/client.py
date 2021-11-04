@@ -520,8 +520,8 @@ class SyncGoTrueClient:
         )
         return response
 
-    def __recover_session(self) -> None:
-        """Attempts to get the session from LocalStorage"""
+    def __recover_common(self) -> Optional[tuple[Session, int, int]]:
+        """Recover common logic"""
         json = self.local_storage.get_item(STORAGE_KEY)
         if not json:
             return
@@ -534,43 +534,40 @@ class SyncGoTrueClient:
             and session_raw
             and isinstance(session_raw, dict)
         ):
-            expires_at = int(expires_at_raw)
             session = Session.from_dict(session_raw)
+            expires_at = int(expires_at_raw)
             time_now = round(time())
-            if expires_at >= time_now:
-                self.__save_session(session=session)
-                self.__notify_all_subscribers(event=AuthChangeEvent.SIGNED_IN)
+            return session, expires_at, time_now
+
+    def __recover_session(self) -> None:
+        """Attempts to get the session from LocalStorage"""
+        result = self.__recover_common()
+        if not result:
+            return
+        session, expires_at, time_now = result
+        if expires_at >= time_now:
+            self.__save_session(session=session)
+            self.__notify_all_subscribers(event=AuthChangeEvent.SIGNED_IN)
 
     def __recover_and_refresh(self) -> None:
         """Recovers the session from LocalStorage and refreshes"""
-        json = self.local_storage.get_item(STORAGE_KEY)
-        if not json:
+        result = self.__recover_common()
+        if not result:
             return
-        data = loads(json)
-        session_raw = data.get("session")
-        expires_at_raw = data.get("expires_at")
-        if (
-            expires_at_raw
-            and isinstance(expires_at_raw, int)
-            and session_raw
-            and isinstance(session_raw, dict)
-        ):
-            expires_at = int(expires_at_raw)
-            session = Session.from_dict(session_raw)
-            time_now = round(time())
-            if expires_at < time_now:
-                if self.auto_refresh_token and session.refresh_token:
-                    try:
-                        self.__call_refresh_token(refresh_token=session.refresh_token)
-                    except APIError:
-                        self.__remove_session()
-                else:
+        session, expires_at, time_now = result
+        if expires_at < time_now:
+            if self.auto_refresh_token and session.refresh_token:
+                try:
+                    self.__call_refresh_token(refresh_token=session.refresh_token)
+                except APIError:
                     self.__remove_session()
-            elif not session or not session.user:
-                self.__remove_session()
             else:
-                self.__save_session(session=session)
-                self.__notify_all_subscribers(event=AuthChangeEvent.SIGNED_IN)
+                self.__remove_session()
+        elif not session or not session.user:
+            self.__remove_session()
+        else:
+            self.__save_session(session=session)
+            self.__notify_all_subscribers(event=AuthChangeEvent.SIGNED_IN)
 
     def __call_refresh_token(self, *, refresh_token: Optional[str] = None) -> Session:
         if refresh_token is None:
