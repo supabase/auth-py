@@ -1,9 +1,8 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from enum import Enum
 from inspect import signature
-from json import dumps
 from time import time
 from typing import Any, Callable, Optional, Type, TypeVar
 
@@ -58,16 +57,7 @@ class APIError(BaseException):
         return parse_dict(cls, **data)
 
     def to_dict(self) -> dict[str, Any]:
-        return {
-            "msg": self.msg,
-            "code": self.code,
-        }
-
-    def __str__(self) -> str:
-        return dumps(self.to_dict())
-
-    def __repr__(self) -> str:
-        return self.__str__()
+        return asdict(self)
 
 
 @dataclass
@@ -97,13 +87,7 @@ class CookieOptions:
         return parse_dict(cls, **data)
 
     def to_dict(self) -> dict[str, Any]:
-        return {
-            "name": self.name,
-            "lifetime": self.lifetime,
-            "domain": self.domain,
-            "path": self.path,
-            "same_site": self.same_site,
-        }
+        return asdict(self)
 
 
 @dataclass
@@ -169,25 +153,7 @@ class User:
         return parse_dict(cls, **data)
 
     def to_dict(self) -> dict[str, Any]:
-        return {
-            "action_link": self.action_link,
-            "app_metadata": self.app_metadata,
-            "aud": self.aud,
-            "confirmation_sent_at": self.confirmation_sent_at,
-            "confirmed_at": self.confirmed_at,
-            "created_at": self.created_at,
-            "email": self.email,
-            "email_confirmed_at": self.email_confirmed_at,
-            "id": self.id,
-            "last_sign_in_at": self.last_sign_in_at,
-            "phone": self.phone,
-            "phone_confirmed_at": self.phone_confirmed_at,
-            "recovery_sent_at": self.recovery_sent_at,
-            "role": self.role,
-            "updated_at": self.updated_at,
-            "user_metadata": self.user_metadata,
-            "invited_at": self.invited_at,
-        }
+        return asdict(self)
 
 
 @dataclass
@@ -214,15 +180,7 @@ class Identity:
         return parse_dict(cls, **data)
 
     def to_dict(self) -> dict[str, Any]:
-        return {
-            "created_at": self.created_at,
-            "id": self.id,
-            "identity_data": self.identity_data,
-            "last_sign_in_at": self.last_sign_in_at,
-            "provider": self.provider,
-            "updated_at": self.updated_at,
-            "user_id": self.user_id,
-        }
+        return asdict(self)
 
 
 @dataclass
@@ -246,12 +204,7 @@ class UserAttributes:
         return parse_dict(cls, **data)
 
     def to_dict(self) -> dict[str, Any]:
-        return {
-            "email": self.email,
-            "password": self.password,
-            "email_change_token": self.email_change_token,
-            "data": self.data,
-        }
+        return asdict(self)
 
 
 @dataclass
@@ -288,17 +241,7 @@ class Session:
         return parse_dict(cls, **data)
 
     def to_dict(self) -> dict[str, Any]:
-        data: dict[str, Any] = {
-            "access_token": self.access_token,
-            "expires_at": self.expires_at,
-            "expires_in": self.expires_in,
-            "provider_token": self.provider_token,
-            "refresh_token": self.refresh_token,
-            "token_type": self.token_type,
-        }
-        if self.user:
-            data["user"] = self.user.to_dict()
-        return data
+        return asdict(self)
 
 
 @dataclass
