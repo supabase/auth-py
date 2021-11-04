@@ -92,7 +92,8 @@ class SyncGoTrueClient:
         redirect_to: Optional[str] = None,
         data: Optional[dict[str, Any]] = None,
     ) -> Union[Session, User]:
-        """Creates a new user.
+        """Creates a new user. If email and phone are provided, email will be
+        used and phone will be ignored.
 
         Parameters
         ---------
@@ -155,6 +156,7 @@ class SyncGoTrueClient:
         scopes: Optional[str] = None,
     ) -> Optional[Union[Session, str]]:
         """Log in an existing user, or login via a third-party provider.
+        If email and phone are provided, email will be used and phone will be ignored.
 
         Parameters
         ---------
