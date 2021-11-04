@@ -80,8 +80,8 @@ class AsyncGoTrueClient:
 
     async def init_recover(self) -> None:
         """Recover the current session from local storage."""
-        await self.__recover_session()
-        await self.__recover_and_refresh()
+        await self._recover_session()
+        await self._recover_and_refresh()
 
     async def sign_up(
         self,
@@ -119,7 +119,7 @@ class AsyncGoTrueClient:
         error : APIError
             If an error occurs
         """
-        await self.__remove_session()
+        await self._remove_session()
 
         if email and password:
             response = await self.api.sign_up_with_email(
@@ -140,8 +140,8 @@ class AsyncGoTrueClient:
         if isinstance(response, Session):
             # The user has confirmed their email or the underlying DB doesn't
             # require email confirmation.
-            await self.__save_session(session=response)
-            self.__notify_all_subscribers(event=AuthChangeEvent.SIGNED_IN)
+            await self._save_session(session=response)
+            self._notify_all_subscribers(event=AuthChangeEvent.SIGNED_IN)
         return response
 
     async def sign_in(
@@ -199,11 +199,11 @@ class AsyncGoTrueClient:
         error : APIError
             If an error occurs
         """
-        await self.__remove_session()
+        await self._remove_session()
         if email and not password:
             response = await self.api.send_magic_link_email(email=email)
         elif email and password:
-            response = await self.__handle_email_sign_in(
+            response = await self._handle_email_sign_in(
                 email=email,
                 password=password,
                 redirect_to=redirect_to,
@@ -211,14 +211,14 @@ class AsyncGoTrueClient:
         elif phone and not password:
             response = await self.api.send_mobile_otp(phone=phone)
         elif phone and password:
-            response = await self.__handle_phone_sign_in(phone=phone, password=password)
+            response = await self._handle_phone_sign_in(phone=phone, password=password)
         elif refresh_token:
             # current_session and current_user will be updated to latest
             # on _call_refresh_token using the passed refresh_token
-            await self.__call_refresh_token(refresh_token=refresh_token)
+            await self._call_refresh_token(refresh_token=refresh_token)
             response = self.current_session
         elif provider:
-            response = await self.__handle_provider_sign_in(
+            response = await self._handle_provider_sign_in(
                 provider=provider,
                 redirect_to=redirect_to,
                 scopes=scopes,
@@ -259,15 +259,15 @@ class AsyncGoTrueClient:
         error : APIError
             If an error occurs
         """
-        await self.__remove_session()
+        await self._remove_session()
         response = await self.api.verify_mobile_otp(
             phone=phone,
             token=token,
             redirect_to=redirect_to,
         )
         if isinstance(response, Session):
-            await self.__save_session(session=response)
-            self.__notify_all_subscribers(event=AuthChangeEvent.SIGNED_IN)
+            await self._save_session(session=response)
+            self._notify_all_subscribers(event=AuthChangeEvent.SIGNED_IN)
         return response
 
     def user(self) -> Optional[User]:
@@ -286,7 +286,7 @@ class AsyncGoTrueClient:
         """
         if not self.current_session:
             raise ValueError("Not logged in.")
-        response = await self.__call_refresh_token()
+        response = await self._call_refresh_token()
         return response
 
     async def update(self, *, attributes: UserAttributes) -> User:
@@ -314,8 +314,8 @@ class AsyncGoTrueClient:
             attributes=attributes,
         )
         self.current_session.user = response
-        await self.__save_session(session=self.current_session)
-        self.__notify_all_subscribers(event=AuthChangeEvent.USER_UPDATED)
+        await self._save_session(session=self.current_session)
+        self._notify_all_subscribers(event=AuthChangeEvent.USER_UPDATED)
         return response
 
     async def set_session(self, *, refresh_token: str) -> Session:
@@ -337,8 +337,8 @@ class AsyncGoTrueClient:
             If an error occurs
         """
         response = await self.api.refresh_access_token(refresh_token=refresh_token)
-        await self.__save_session(session=response)
-        self.__notify_all_subscribers(event=AuthChangeEvent.SIGNED_IN)
+        await self._save_session(session=response)
+        self._notify_all_subscribers(event=AuthChangeEvent.SIGNED_IN)
         return response
 
     async def set_auth(self, *, access_token: str) -> Session:
@@ -374,7 +374,7 @@ class AsyncGoTrueClient:
             session.expires_at = self.current_session.expires_at
             session.refresh_token = self.current_session.refresh_token
             session.provider_token = self.current_session.provider_token
-        await self.__save_session(session=session)
+        await self._save_session(session=session)
         return session
 
     async def get_session_from_url(
@@ -432,10 +432,10 @@ class AsyncGoTrueClient:
             provider_token=provider_token[0] if provider_token else None,
         )
         if store_session:
-            await self.__save_session(session=session)
-            self.__notify_all_subscribers(event=AuthChangeEvent.SIGNED_IN)
+            await self._save_session(session=session)
+            self._notify_all_subscribers(event=AuthChangeEvent.SIGNED_IN)
             if query.get("type") == "recovery":
-                self.__notify_all_subscribers(event=AuthChangeEvent.PASSWORD_RECOVERY)
+                self._notify_all_subscribers(event=AuthChangeEvent.PASSWORD_RECOVERY)
         return session
 
     async def sign_out(self) -> None:
@@ -443,12 +443,12 @@ class AsyncGoTrueClient:
         access_token: Optional[str] = None
         if self.current_session:
             access_token = self.current_session.access_token
-        await self.__remove_session()
-        self.__notify_all_subscribers(event=AuthChangeEvent.SIGNED_OUT)
+        await self._remove_session()
+        self._notify_all_subscribers(event=AuthChangeEvent.SIGNED_OUT)
         if access_token:
             await self.api.sign_out(jwt=access_token)
 
-    def __unsubscribe(self, *, id: str) -> None:
+    def _unsubscribe(self, *, id: str) -> None:
         """Unsubscribe from a subscription."""
         self.state_change_emitters.pop(id)
 
@@ -478,12 +478,12 @@ class AsyncGoTrueClient:
         subscription = Subscription(
             id=unique_id,
             callback=callback,
-            unsubscribe=partial(self.__unsubscribe, id=unique_id),
+            unsubscribe=partial(self._unsubscribe, id=unique_id),
         )
         self.state_change_emitters[unique_id] = subscription
         return subscription
 
-    async def __handle_email_sign_in(
+    async def _handle_email_sign_in(
         self,
         *,
         email: str,
@@ -496,18 +496,18 @@ class AsyncGoTrueClient:
             password=password,
             redirect_to=redirect_to,
         )
-        await self.__save_session(session=response)
-        self.__notify_all_subscribers(event=AuthChangeEvent.SIGNED_IN)
+        await self._save_session(session=response)
+        self._notify_all_subscribers(event=AuthChangeEvent.SIGNED_IN)
         return response
 
-    async def __handle_phone_sign_in(self, *, phone: str, password: str) -> Session:
+    async def _handle_phone_sign_in(self, *, phone: str, password: str) -> Session:
         """Sign in with phone and password."""
         response = await self.api.sign_in_with_phone(phone=phone, password=password)
-        await self.__save_session(session=response)
-        self.__notify_all_subscribers(event=AuthChangeEvent.SIGNED_IN)
+        await self._save_session(session=response)
+        self._notify_all_subscribers(event=AuthChangeEvent.SIGNED_IN)
         return response
 
-    async def __handle_provider_sign_in(
+    async def _handle_provider_sign_in(
         self,
         *,
         provider: Provider,
@@ -522,7 +522,7 @@ class AsyncGoTrueClient:
         )
         return response
 
-    async def __recover_common(self) -> Optional[tuple[Session, int, int]]:
+    async def _recover_common(self) -> Optional[tuple[Session, int, int]]:
         """Recover common logic"""
         json = await self.local_storage.get_item(STORAGE_KEY)
         if not json:
@@ -541,37 +541,37 @@ class AsyncGoTrueClient:
             time_now = round(time())
             return session, expires_at, time_now
 
-    async def __recover_session(self) -> None:
+    async def _recover_session(self) -> None:
         """Attempts to get the session from LocalStorage"""
-        result = await self.__recover_common()
+        result = await self._recover_common()
         if not result:
             return
         session, expires_at, time_now = result
         if expires_at >= time_now:
-            await self.__save_session(session=session)
-            self.__notify_all_subscribers(event=AuthChangeEvent.SIGNED_IN)
+            await self._save_session(session=session)
+            self._notify_all_subscribers(event=AuthChangeEvent.SIGNED_IN)
 
-    async def __recover_and_refresh(self) -> None:
+    async def _recover_and_refresh(self) -> None:
         """Recovers the session from LocalStorage and refreshes"""
-        result = await self.__recover_common()
+        result = await self._recover_common()
         if not result:
             return
         session, expires_at, time_now = result
         if expires_at < time_now:
             if self.auto_refresh_token and session.refresh_token:
                 try:
-                    await self.__call_refresh_token(refresh_token=session.refresh_token)
+                    await self._call_refresh_token(refresh_token=session.refresh_token)
                 except APIError:
-                    await self.__remove_session()
+                    await self._remove_session()
             else:
-                await self.__remove_session()
+                await self._remove_session()
         elif not session or not session.user:
-            await self.__remove_session()
+            await self._remove_session()
         else:
-            await self.__save_session(session=session)
-            self.__notify_all_subscribers(event=AuthChangeEvent.SIGNED_IN)
+            await self._save_session(session=session)
+            self._notify_all_subscribers(event=AuthChangeEvent.SIGNED_IN)
 
-    async def __call_refresh_token(
+    async def _call_refresh_token(
         self, *, refresh_token: Optional[str] = None
     ) -> Session:
         if refresh_token is None:
@@ -582,16 +582,16 @@ class AsyncGoTrueClient:
         response = await self.api.refresh_access_token(
             refresh_token=cast(str, refresh_token)
         )
-        await self.__save_session(session=response)
-        self.__notify_all_subscribers(event=AuthChangeEvent.SIGNED_IN)
+        await self._save_session(session=response)
+        self._notify_all_subscribers(event=AuthChangeEvent.SIGNED_IN)
         return response
 
-    def __notify_all_subscribers(self, *, event: AuthChangeEvent) -> None:
+    def _notify_all_subscribers(self, *, event: AuthChangeEvent) -> None:
         """Notify all subscribers that auth event happened."""
         for value in self.state_change_emitters.values():
             value.callback(event, self.current_session)
 
-    async def __save_session(self, *, session: Session) -> None:
+    async def _save_session(self, *, session: Session) -> None:
         """Save session to client."""
         self.current_session = session
         self.current_user = session.user
@@ -599,17 +599,17 @@ class AsyncGoTrueClient:
             time_now = round(time())
             expire_in = session.expires_at - time_now
             refresh_duration_before_expires = 60 if expire_in > 60 else 0.5
-            self.__start_auto_refresh_token(
+            self._start_auto_refresh_token(
                 value=(expire_in - refresh_duration_before_expires) * 1000
             )
         if self.persist_session and session.expires_at:
-            await self.__persist_session(session=session)
+            await self._persist_session(session=session)
 
-    async def __persist_session(self, *, session: Session) -> None:
+    async def _persist_session(self, *, session: Session) -> None:
         data = {"session": session.to_dict(), "expires_at": session.expires_at}
         await self.local_storage.set_item(STORAGE_KEY, dumps(data))
 
-    async def __remove_session(self) -> None:
+    async def _remove_session(self) -> None:
         """Remove the session."""
         self.current_session = None
         self.current_user = None
@@ -617,10 +617,10 @@ class AsyncGoTrueClient:
             self.refresh_token_timer.cancel()
         await self.local_storage.remove_item(STORAGE_KEY)
 
-    def __start_auto_refresh_token(self, *, value: float) -> None:
+    def _start_auto_refresh_token(self, *, value: float) -> None:
         if self.refresh_token_timer:
             self.refresh_token_timer.cancel()
         if value <= 0 or not self.auto_refresh_token:
             return
-        self.refresh_token_timer = Timer(value, self.__call_refresh_token)
+        self.refresh_token_timer = Timer(value, self._call_refresh_token)
         self.refresh_token_timer.start()
