@@ -3,16 +3,11 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass
 from enum import Enum
 from inspect import signature
-from time import time
-from typing import Any, Callable, Optional, Type, TypeVar
+from typing import Any, Callable, Dict, List, Optional, Type, TypeVar
+
+from pydantic import BaseModel
 
 T = TypeVar("T")
-
-
-def parse_none(v: Optional[T], f: Callable[[Any], T]) -> Optional[T]:
-    if v is None:
-        return None
-    return f(v)
 
 
 def parse_dict(cls: Type[T], **json: dict) -> T:
@@ -56,12 +51,11 @@ class APIError(BaseException):
             )
         return parse_dict(cls, **data)
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
 
 
-@dataclass
-class CookieOptions:
+class CookieOptions(BaseModel):
     name: str
     """The name of the cookie. Defaults to `sb:token`."""
     lifetime: int
@@ -75,29 +69,24 @@ class CookieOptions:
     Defaults to 'lax', but can be changed to 'strict' or 'none'.
     Set it to false if you want to disable the SameSite setting."""
 
-    def __post_init__(self) -> None:
-        self.name = str(self.name)
-        self.lifetime = int(str(self.lifetime))
-        self.domain = str(self.domain)
-        self.path = str(self.path)
-        self.same_site = str(self.same_site)
 
-    @classmethod
-    def from_dict(cls, data: dict) -> CookieOptions:
-        return parse_dict(cls, **data)
-
-    def to_dict(self) -> dict[str, Any]:
-        return asdict(self)
+class Identity(BaseModel):
+    id: str
+    user_id: str
+    provider: str
+    created_at: str
+    updated_at: str
+    identity_data: Optional[Dict[str, Any]] = None
+    last_sign_in_at: Optional[str] = None
 
 
-@dataclass
-class User:
-    app_metadata: dict[str, Any]
+class User(BaseModel):
+    app_metadata: Dict[str, Any]
     aud: str
     created_at: str
     id: str
-    user_metadata: dict[str, Any]
-    identities: Optional[list[Identity]] = None
+    user_metadata: Dict[str, Any]
+    identities: Optional[List[Identity]] = None
     confirmation_sent_at: Optional[str] = None
     action_link: Optional[str] = None
     last_sign_in_at: Optional[str] = None
@@ -115,76 +104,8 @@ class User:
     new_phone: Optional[str] = None
     phone_change_sent_at: Optional[str] = None
 
-    def __post_init__(self) -> None:
-        self.action_link = parse_none(self.action_link, str)
-        self.app_metadata = dict(self.app_metadata)
-        self.aud = str(self.aud)
-        self.confirmation_sent_at = parse_none(self.confirmation_sent_at, str)
-        self.confirmed_at = parse_none(self.confirmed_at, str)
-        self.created_at = str(self.created_at)
-        self.email = parse_none(self.email, str)
-        self.email_confirmed_at = parse_none(self.email_confirmed_at, str)
-        self.id = str(self.id)
-        self.last_sign_in_at = parse_none(self.last_sign_in_at, str)
-        self.phone = parse_none(self.phone, str)
-        self.phone_confirmed_at = parse_none(self.phone_confirmed_at, str)
-        self.recovery_sent_at = parse_none(self.recovery_sent_at, str)
-        self.role = parse_none(self.role, str)
-        self.updated_at = parse_none(self.updated_at, str)
-        self.user_metadata = dict(self.user_metadata)
-        self.invited_at = parse_none(self.invited_at, str)
-        self.new_email = parse_none(self.new_email, str)
-        self.email_change_sent_at = parse_none(self.email_change_sent_at, str)
-        self.new_phone = parse_none(self.new_phone, str)
-        self.phone_change_sent_at = parse_none(self.phone_change_sent_at, str)
-        if self.identities:
-            for identity in self.identities:
-                identity.__post_init__()
 
-    @classmethod
-    def from_dict(cls, data: dict) -> User:
-        identities_data = data.pop("identities", None)
-        if identities_data and isinstance(identities_data, list):
-            identities: list[Identity] = []
-            for identity_data in identities_data:
-                identity = Identity.from_dict(identity_data)
-                identities.append(identity)
-            data["identities"] = identities
-        return parse_dict(cls, **data)
-
-    def to_dict(self) -> dict[str, Any]:
-        return asdict(self)
-
-
-@dataclass
-class Identity:
-    id: str
-    user_id: str
-    provider: str
-    created_at: str
-    updated_at: str
-    identity_data: Optional[dict[str, Any]] = None
-    last_sign_in_at: Optional[str] = None
-
-    def __post_init__(self) -> None:
-        self.created_at = str(self.created_at)
-        self.id = str(self.id)
-        self.identity_data = parse_none(self.identity_data, dict)
-        self.last_sign_in_at = parse_none(self.last_sign_in_at, str)
-        self.provider = str(self.provider)
-        self.updated_at = str(self.updated_at)
-        self.user_id = str(self.user_id)
-
-    @classmethod
-    def from_dict(cls, data: dict) -> Identity:
-        return parse_dict(cls, **data)
-
-    def to_dict(self) -> dict[str, Any]:
-        return asdict(self)
-
-
-@dataclass
-class UserAttributes:
+class UserAttributes(BaseModel):
     email: Optional[str] = None
     """The user's email."""
     password: Optional[str] = None
@@ -194,21 +115,8 @@ class UserAttributes:
     data: Optional[Any] = None
     """A custom data object. Can be any JSON."""
 
-    def __post_init__(self) -> None:
-        self.email = parse_none(self.email, str)
-        self.password = parse_none(self.password, str)
-        self.email_change_token = parse_none(self.email_change_token, str)
 
-    @classmethod
-    def from_dict(cls, data: dict) -> UserAttributes:
-        return parse_dict(cls, **data)
-
-    def to_dict(self) -> dict[str, Any]:
-        return asdict(self)
-
-
-@dataclass
-class Session:
+class Session(BaseModel):
     access_token: str
     token_type: str
     expires_at: Optional[int] = None
@@ -220,42 +128,6 @@ class Session:
     refresh_token: Optional[str] = None
     user: Optional[User] = None
 
-    def __post_init__(self) -> None:
-        self.access_token = str(self.access_token)
-        self.expires_in = parse_none(self.expires_in, lambda x: int(str(x)))
-        self.expires_at = parse_none(self.expires_at, lambda x: int(str(x)))
-        if self.expires_in and not self.expires_at:
-            self.expires_at = round(time()) + self.expires_in
-        self.provider_token = parse_none(self.provider_token, str)
-        self.refresh_token = parse_none(self.refresh_token, str)
-        self.token_type = str(self.token_type)
-        if self.user:
-            self.user.__post_init__()
-
-    @classmethod
-    def from_dict(cls, data: dict) -> Session:
-        user_data = data.pop("user", None)
-        if user_data:
-            user = User.from_dict(user_data)
-            data["user"] = user
-        return parse_dict(cls, **data)
-
-    def to_dict(self) -> dict[str, Any]:
-        return asdict(self)
-
-
-@dataclass
-class Subscription:
-    id: str
-    """The subscriber UUID. This will be set by the client."""
-    callback: Callable[[AuthChangeEvent, Optional[Session]], None]
-    """The function to call every time there is an event."""
-    unsubscribe: Callable[[], None]
-    """Call this to remove the listener."""
-
-    def __post_init__(self) -> None:
-        self.id = str(self.id)
-
 
 class AuthChangeEvent(str, Enum):
     SIGNED_IN = "SIGNED_IN"
@@ -263,6 +135,15 @@ class AuthChangeEvent(str, Enum):
     USER_UPDATED = "USER_UPDATED"
     USER_DELETED = "USER_DELETED"
     PASSWORD_RECOVERY = "PASSWORD_RECOVERY"
+
+
+class Subscription(BaseModel):
+    id: str
+    """The subscriber UUID. This will be set by the client."""
+    callback: Callable[[AuthChangeEvent, Optional[Session]], None]
+    """The function to call every time there is an event."""
+    unsubscribe: Callable[[], None]
+    """Call this to remove the listener."""
 
 
 class Provider(str, Enum):

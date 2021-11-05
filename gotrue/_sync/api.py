@@ -108,7 +108,7 @@ class SyncGoTrueAPI:
         data = {"email": email, "password": password}
         url = f"{self.url}/token{query_string}"
         response = self.http_client.post(url, json=data, headers=headers)
-        return parse_response(response, Session.from_dict)
+        return parse_response(response, lambda arg: Session(**arg))
 
     def sign_up_with_phone(
         self,
@@ -175,7 +175,7 @@ class SyncGoTrueAPI:
         data = {"phone": phone, "password": password}
         url = f"{self.url}/token{query_string}"
         response = self.http_client.post(url, json=data, headers=headers)
-        return parse_response(response, Session.from_dict)
+        return parse_response(response, lambda arg: Session(**arg))
 
     def send_magic_link_email(
         self,
@@ -304,7 +304,7 @@ class SyncGoTrueAPI:
         data = {"email": email, "data": data}
         url = f"{self.url}/invite{query_string}"
         response = self.http_client.post(url, json=data, headers=headers)
-        return parse_response(response, User.from_dict)
+        return parse_response(response, lambda arg: User(**arg))
 
     def reset_password_for_email(
         self,
@@ -426,7 +426,7 @@ class SyncGoTrueAPI:
         headers = self._create_request_headers(jwt=jwt)
         url = f"{self.url}/user"
         response = self.http_client.get(url, headers=headers)
-        return parse_response(response, User.from_dict)
+        return parse_response(response, lambda arg: User(**arg))
 
     def update_user(
         self,
@@ -455,10 +455,10 @@ class SyncGoTrueAPI:
             If an error occurs
         """
         headers = self._create_request_headers(jwt=jwt)
-        data = attributes.to_dict()
+        data = attributes.dict()
         url = f"{self.url}/user"
         response = self.http_client.put(url, json=data, headers=headers)
-        return parse_response(response, User.from_dict)
+        return parse_response(response, lambda arg: User(**arg))
 
     def delete_user(self, *, uid: str, jwt: str) -> User:
         """Delete a user. Requires a `service_role` key.
@@ -486,7 +486,7 @@ class SyncGoTrueAPI:
         headers = self._create_request_headers(jwt=jwt)
         url = f"{self.url}/admin/users/${uid}"
         response = self.http_client.delete(url, headers=headers)
-        return parse_response(response, User.from_dict)
+        return parse_response(response, lambda arg: User(**arg))
 
     def refresh_access_token(self, *, refresh_token: str) -> Session:
         """Generates a new JWT.
@@ -511,7 +511,7 @@ class SyncGoTrueAPI:
         data = {"refresh_token": refresh_token}
         url = f"{self.url}/token{query_string}"
         response = self.http_client.post(url, json=data, headers=headers)
-        return parse_response(response, Session.from_dict)
+        return parse_response(response, lambda arg: Session(**arg))
 
     def generate_link(
         self,

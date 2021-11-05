@@ -16,7 +16,7 @@ def create_api() -> Iterable[SyncGoTrueAPI]:
     with SyncGoTrueAPI(
         url=GOTRUE_URL,
         headers={"Authorization": f"Bearer {TOKEN}"},
-        cookie_options=CookieOptions.from_dict(COOKIE_OPTIONS),
+        cookie_options=CookieOptions(**COOKIE_OPTIONS),
     ) as api:
         yield api
 
