@@ -4,7 +4,7 @@ from functools import partial
 from json import dumps, loads
 from threading import Timer
 from time import time
-from typing import Any, Callable, Optional, Union, cast
+from typing import Any, Callable, Dict, Optional, Tuple, Union, cast
 from urllib.parse import parse_qs, urlparse
 from uuid import uuid4
 
@@ -28,7 +28,7 @@ class SyncGoTrueClient:
         self,
         *,
         url: str = GOTRUE_URL,
-        headers: dict[str, str] = DEFAULT_HEADERS,
+        headers: Dict[str, str] = DEFAULT_HEADERS,
         auto_refresh_token: bool = True,
         persist_session: bool = True,
         local_storage: SyncSupportedStorage = SyncMemoryStorage(),
@@ -38,7 +38,7 @@ class SyncGoTrueClient:
 
         url : str
             The URL of the GoTrue server.
-        headers : dict[str, str]
+        headers : Dict[str, str]
             Any additional headers to send to the GoTrue server.
         auto_refresh_token : bool
             Set to "true" if you want to automatically refresh the token before
@@ -56,7 +56,7 @@ class SyncGoTrueClient:
                 "Warning:\n\nDO NOT USE HTTP IN PRODUCTION FOR GOTRUE EVER!\n"
                 "GoTrue REQUIRES HTTPS to work securely."
             )
-        self.state_change_emitters: dict[str, Subscription] = {}
+        self.state_change_emitters: Dict[str, Subscription] = {}
         self.refresh_token_timer: Optional[Timer] = None
         self.current_user: Optional[User] = None
         self.current_session: Optional[Session] = None
@@ -90,7 +90,7 @@ class SyncGoTrueClient:
         phone: Optional[str] = None,
         password: Optional[str] = None,
         redirect_to: Optional[str] = None,
-        data: Optional[dict[str, Any]] = None,
+        data: Optional[Dict[str, Any]] = None,
     ) -> Union[Session, User]:
         """Creates a new user. If email and phone are provided, email will be
         used and phone will be ignored.
@@ -105,7 +105,7 @@ class SyncGoTrueClient:
             The user's password.
         redirect_to : Optional[str]
             A URL or mobile address to send the user to after they are confirmed.
-        data : Optional[dict[str, Any]]
+        data : Optional[Dict[str, Any]]
             Optional user metadata.
 
         Returns
@@ -520,7 +520,7 @@ class SyncGoTrueClient:
         )
         return response
 
-    def _recover_common(self) -> Optional[tuple[Session, int, int]]:
+    def _recover_common(self) -> Optional[Tuple[Session, int, int]]:
         """Recover common logic"""
         json = self.local_storage.get_item(STORAGE_KEY)
         if not json:
