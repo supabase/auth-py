@@ -16,7 +16,7 @@ async def create_api() -> AsyncIterable[AsyncGoTrueAPI]:
     async with AsyncGoTrueAPI(
         url=GOTRUE_URL,
         headers={"Authorization": f"Bearer {TOKEN}"},
-        cookie_options=CookieOptions(**COOKIE_OPTIONS),
+        cookie_options=CookieOptions.parse_obj(COOKIE_OPTIONS),
     ) as api:
         yield api
 

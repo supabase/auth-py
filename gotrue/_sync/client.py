@@ -32,7 +32,7 @@ class SyncGoTrueClient:
         auto_refresh_token: bool = True,
         persist_session: bool = True,
         local_storage: SyncSupportedStorage = SyncMemoryStorage(),
-        cookie_options: CookieOptions = CookieOptions(**COOKIE_OPTIONS),
+        cookie_options: CookieOptions = CookieOptions.parse_obj(COOKIE_OPTIONS),
     ) -> None:
         """Create a new client
 
@@ -534,7 +534,7 @@ class SyncGoTrueClient:
             and session_raw
             and isinstance(session_raw, dict)
         ):
-            session = Session(**session_raw)
+            session = Session.parse_obj(session_raw)
             expires_at = int(expires_at_raw)
             time_now = round(time())
             return session, expires_at, time_now

@@ -28,5 +28,5 @@ def parse_response(response: Response, func: Callable[[Any], T]) -> T:
 
 def parse_session_or_user(arg: Any) -> Union[Session, User]:
     if "access_token" in arg:
-        return Session(**arg)
-    return User(**arg)
+        return Session.parse_obj(arg)
+    return User.parse_obj(arg)
