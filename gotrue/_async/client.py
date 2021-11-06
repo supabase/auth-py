@@ -455,7 +455,7 @@ class AsyncGoTrueClient:
     def on_auth_state_change(
         self,
         *,
-        callback: Callable[["AuthChangeEvent", Optional[Session]], None],
+        callback: Callable[[AuthChangeEvent, Optional[Session]], None],
     ) -> Subscription:
         """Receive a notification every time an auth event happens.
 

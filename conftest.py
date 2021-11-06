@@ -48,4 +48,4 @@ def pytest_runtest_setup(item):
             # if name found, test has failed for the combination of
             # class name & test name
             if test_name is not None:
-                pytest.xfail("previous test failed ({})".format(test_name))
+                pytest.xfail(f"previous test failed ({test_name})")

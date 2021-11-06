@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from time import time
 from typing import Any, Callable, TypeVar, Union
 from urllib.parse import quote

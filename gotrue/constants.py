@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 GOTRUE_URL = "http://localhost:9999"
 AUDIENCE = ""
 DEFAULT_HEADERS = {}
