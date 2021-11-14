@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+from datetime import datetime
 from enum import Enum
 from time import time
 from typing import Any, Callable, Dict, List, Optional, Type, TypeVar, Union
+from uuid import UUID
 
 from httpx import Response
 from pydantic import BaseModel, root_validator
@@ -43,38 +45,38 @@ class CookieOptions(BaseModelFromResponse):
 
 
 class Identity(BaseModelFromResponse):
-    id: str
-    user_id: str
+    id: UUID
+    user_id: UUID
     provider: str
-    created_at: str
-    updated_at: str
+    created_at: datetime
+    updated_at: datetime
     identity_data: Optional[Dict[str, Any]] = None
-    last_sign_in_at: Optional[str] = None
+    last_sign_in_at: Optional[datetime] = None
 
 
 class User(BaseModelFromResponse):
     app_metadata: Dict[str, Any]
     aud: str
-    created_at: str
-    id: str
+    created_at: datetime
+    id: UUID
     user_metadata: Dict[str, Any]
     identities: Optional[List[Identity]] = None
-    confirmation_sent_at: Optional[str] = None
+    confirmation_sent_at: Optional[datetime] = None
     action_link: Optional[str] = None
-    last_sign_in_at: Optional[str] = None
+    last_sign_in_at: Optional[datetime] = None
     phone: Optional[str] = None
-    phone_confirmed_at: Optional[str] = None
-    recovery_sent_at: Optional[str] = None
+    phone_confirmed_at: Optional[datetime] = None
+    recovery_sent_at: Optional[datetime] = None
     role: Optional[str] = None
-    updated_at: Optional[str] = None
-    email_confirmed_at: Optional[str] = None
-    confirmed_at: Optional[str] = None
-    invited_at: Optional[str] = None
+    updated_at: Optional[datetime] = None
+    email_confirmed_at: Optional[datetime] = None
+    confirmed_at: Optional[datetime] = None
+    invited_at: Optional[datetime] = None
     email: Optional[str] = None
     new_email: Optional[str] = None
-    email_change_sent_at: Optional[str] = None
+    email_change_sent_at: Optional[datetime] = None
     new_phone: Optional[str] = None
-    phone_change_sent_at: Optional[str] = None
+    phone_change_sent_at: Optional[datetime] = None
 
 
 class UserAttributes(BaseModelFromResponse):
@@ -117,7 +119,7 @@ class AuthChangeEvent(str, Enum):
 
 
 class Subscription(BaseModelFromResponse):
-    id: str
+    id: UUID
     """The subscriber UUID. This will be set by the client."""
     callback: Callable[[AuthChangeEvent, Optional[Session]], None]
     """The function to call every time there is an event."""

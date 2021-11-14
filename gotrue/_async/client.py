@@ -607,7 +607,7 @@ class AsyncGoTrueClient:
 
     async def _persist_session(self, *, session: Session) -> None:
         data = {"session": session.dict(), "expires_at": session.expires_at}
-        await self.local_storage.set_item(STORAGE_KEY, dumps(data))
+        await self.local_storage.set_item(STORAGE_KEY, dumps(data, default=str))
 
     async def _remove_session(self) -> None:
         """Remove the session."""
