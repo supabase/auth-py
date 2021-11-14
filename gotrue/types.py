@@ -102,8 +102,9 @@ class Session(BaseModelFromResponse):
 
     @root_validator
     def validator(cls, values: dict) -> dict:
-        if values.get("expires_in") and not values.get("expires_at"):
-            values["expires_at"] = round(time()) + values.get("expires_in")
+        expires_in = values.get("expires_in")
+        if expires_in and not values.get("expires_at"):
+            values["expires_at"] = round(time()) + expires_in
         return values
 
 
