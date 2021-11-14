@@ -9,6 +9,7 @@ from urllib.parse import parse_qs, urlparse
 from uuid import uuid4
 
 from ..constants import COOKIE_OPTIONS, DEFAULT_HEADERS, GOTRUE_URL, STORAGE_KEY
+from ..exceptions import APIError
 from ..types import (
     AuthChangeEvent,
     CookieOptions,
@@ -18,7 +19,6 @@ from ..types import (
     User,
     UserAttributes,
 )
-from ..exceptions import APIError
 from .api import SyncGoTrueAPI
 from .storage import SyncMemoryStorage, SyncSupportedStorage
 
@@ -377,9 +377,7 @@ class SyncGoTrueClient:
         self._save_session(session=session)
         return session
 
-    def get_session_from_url(
-        self, *, url: str, store_session: bool = False
-    ) -> Session:
+    def get_session_from_url(self, *, url: str, store_session: bool = False) -> Session:
         """Gets the session data from a URL string.
 
         Parameters
@@ -571,17 +569,13 @@ class SyncGoTrueClient:
             self._save_session(session=session)
             self._notify_all_subscribers(event=AuthChangeEvent.SIGNED_IN)
 
-    def _call_refresh_token(
-        self, *, refresh_token: Optional[str] = None
-    ) -> Session:
+    def _call_refresh_token(self, *, refresh_token: Optional[str] = None) -> Session:
         if refresh_token is None:
             if self.current_session:
                 refresh_token = self.current_session.refresh_token
             else:
                 raise ValueError("No current session and refresh_token not supplied.")
-        response = self.api.refresh_access_token(
-            refresh_token=cast(str, refresh_token)
-        )
+        response = self.api.refresh_access_token(refresh_token=cast(str, refresh_token))
         self._save_session(session=response)
         self._notify_all_subscribers(event=AuthChangeEvent.SIGNED_IN)
         return response

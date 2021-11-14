@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from enum import Enum
 from time import time
-from httpx import Response
 from typing import Any, Callable, Dict, List, Optional, Type, TypeVar, Union
 
+from httpx import Response
 from pydantic import BaseModel, root_validator
 
 from gotrue.helpers import check_response

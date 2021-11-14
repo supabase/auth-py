@@ -9,6 +9,7 @@ from urllib.parse import parse_qs, urlparse
 from uuid import uuid4
 
 from ..constants import COOKIE_OPTIONS, DEFAULT_HEADERS, GOTRUE_URL, STORAGE_KEY
+from ..exceptions import APIError
 from ..types import (
     AuthChangeEvent,
     CookieOptions,
@@ -18,7 +19,6 @@ from ..types import (
     User,
     UserAttributes,
 )
-from ..exceptions import APIError
 from .api import AsyncGoTrueAPI
 from .storage import AsyncMemoryStorage, AsyncSupportedStorage
 

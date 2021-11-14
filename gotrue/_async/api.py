@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, Optional, Union
 
-from ..helpers import encode_uri_component, check_response
+from ..helpers import check_response, encode_uri_component
 from ..http_clients import AsyncClient
 from ..types import (
     CookieOptions,
