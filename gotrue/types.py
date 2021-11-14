@@ -1,61 +1,33 @@
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass
 from enum import Enum
-from inspect import signature
-from typing import Any, Callable, Dict, List, Optional, Type, TypeVar
+from time import time
+from httpx import Response
+from typing import Any, Callable, Dict, List, Optional, Type, TypeVar, Union
 
-from pydantic import BaseModel
+from pydantic import BaseModel, root_validator
 
-T = TypeVar("T")
+from gotrue.helpers import check_response
 
-
-def parse_dict(cls: Type[T], **json: dict) -> T:
-    cls_fields = {field for field in signature(cls).parameters}
-    native_args, new_args = {}, {}
-    for name, val in json.items():
-        if name in cls_fields:
-            native_args[name] = val
-        else:
-            new_args[name] = val
-    ret = cls(**native_args)
-    for new_name, new_val in new_args.items():
-        setattr(ret, new_name, new_val)
-    return ret
+T = TypeVar("T", bound=BaseModel)
 
 
-@dataclass
-class APIError(BaseException):
-    msg: str
-    code: int
+def determine_session_or_user_model_from_response(
+    response: Response,
+) -> Union[Type[Session], Type[User]]:
+    if "access_token" in response.json():
+        return Session
+    return User
 
-    def __post_init__(self) -> None:
-        self.msg = str(self.msg)
-        self.code = int(str(self.code))
 
+class BaseModelFromResponse(BaseModel):
     @classmethod
-    def from_dict(cls, data: dict) -> APIError:
-        if "msg" in data and "code" in data:
-            return APIError(
-                msg=data["msg"],
-                code=data["code"],
-            )
-        if "error" in data and "error_description" in data:
-            try:
-                code = int(data["error"])
-            except ValueError:
-                code = -1
-            return APIError(
-                msg=data["error_description"],
-                code=code,
-            )
-        return parse_dict(cls, **data)
-
-    def to_dict(self) -> Dict[str, Any]:
-        return asdict(self)
+    def parse_response(cls: Type[T], response: Response) -> T:
+        check_response(response)
+        return cls.parse_obj(response.json())
 
 
-class CookieOptions(BaseModel):
+class CookieOptions(BaseModelFromResponse):
     name: str
     """The name of the cookie. Defaults to `sb:token`."""
     lifetime: int
@@ -70,7 +42,7 @@ class CookieOptions(BaseModel):
     Set it to false if you want to disable the SameSite setting."""
 
 
-class Identity(BaseModel):
+class Identity(BaseModelFromResponse):
     id: str
     user_id: str
     provider: str
@@ -80,7 +52,7 @@ class Identity(BaseModel):
     last_sign_in_at: Optional[str] = None
 
 
-class User(BaseModel):
+class User(BaseModelFromResponse):
     app_metadata: Dict[str, Any]
     aud: str
     created_at: str
@@ -105,7 +77,7 @@ class User(BaseModel):
     phone_change_sent_at: Optional[str] = None
 
 
-class UserAttributes(BaseModel):
+class UserAttributes(BaseModelFromResponse):
     email: Optional[str] = None
     """The user's email."""
     password: Optional[str] = None
@@ -116,7 +88,7 @@ class UserAttributes(BaseModel):
     """A custom data object. Can be any JSON."""
 
 
-class Session(BaseModel):
+class Session(BaseModelFromResponse):
     access_token: str
     token_type: str
     expires_at: Optional[int] = None
@@ -128,6 +100,12 @@ class Session(BaseModel):
     refresh_token: Optional[str] = None
     user: Optional[User] = None
 
+    @root_validator
+    def validator(cls, values: dict) -> dict:
+        if values.get("expires_in") and not values.get("expires_at"):
+            values["expires_at"] = round(time()) + values.get("expires_in")
+        return values
+
 
 class AuthChangeEvent(str, Enum):
     SIGNED_IN = "SIGNED_IN"
@@ -137,7 +115,7 @@ class AuthChangeEvent(str, Enum):
     PASSWORD_RECOVERY = "PASSWORD_RECOVERY"
 
 
-class Subscription(BaseModel):
+class Subscription(BaseModelFromResponse):
     id: str
     """The subscriber UUID. This will be set by the client."""
     callback: Callable[[AuthChangeEvent, Optional[Session]], None]

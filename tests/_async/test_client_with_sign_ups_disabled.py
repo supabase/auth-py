@@ -4,7 +4,7 @@ import pytest
 from faker import Faker
 
 from gotrue import AsyncGoTrueClient
-from gotrue.types import APIError
+from gotrue.exceptions import APIError
 
 GOTRUE_URL = "http://localhost:9997"
 

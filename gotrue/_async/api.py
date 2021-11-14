@@ -2,9 +2,17 @@ from __future__ import annotations
 
 from typing import Any, Dict, Optional, Union
 
-from ..helpers import encode_uri_component, parse_response, parse_session_or_user
+from ..helpers import encode_uri_component, check_response
 from ..http_clients import AsyncClient
-from ..types import CookieOptions, LinkType, Provider, Session, User, UserAttributes
+from ..types import (
+    CookieOptions,
+    LinkType,
+    Provider,
+    Session,
+    User,
+    UserAttributes,
+    determine_session_or_user_model_from_response,
+)
 
 
 class AsyncGoTrueAPI:
@@ -70,7 +78,8 @@ class AsyncGoTrueAPI:
         data = {"email": email, "password": password, "data": data}
         url = f"{self.url}/signup{query_string}"
         response = await self.http_client.post(url, json=data, headers=headers)
-        return parse_response(response, parse_session_or_user)
+        SessionOrUserModel = determine_session_or_user_model_from_response(response)
+        return SessionOrUserModel.parse_response(response)
 
     async def sign_in_with_email(
         self,
@@ -108,7 +117,7 @@ class AsyncGoTrueAPI:
         data = {"email": email, "password": password}
         url = f"{self.url}/token{query_string}"
         response = await self.http_client.post(url, json=data, headers=headers)
-        return parse_response(response, Session.parse_obj)
+        return Session.parse_response(response)
 
     async def sign_up_with_phone(
         self,
@@ -143,7 +152,8 @@ class AsyncGoTrueAPI:
         data = {"phone": phone, "password": password, "data": data}
         url = f"{self.url}/signup"
         response = await self.http_client.post(url, json=data, headers=headers)
-        return parse_response(response, parse_session_or_user)
+        SessionOrUserModel = determine_session_or_user_model_from_response(response)
+        return SessionOrUserModel.parse_response(response)
 
     async def sign_in_with_phone(
         self,
@@ -175,7 +185,7 @@ class AsyncGoTrueAPI:
         data = {"phone": phone, "password": password}
         url = f"{self.url}/token{query_string}"
         response = await self.http_client.post(url, json=data, headers=headers)
-        return parse_response(response, Session.parse_obj)
+        return Session.parse_response(response)
 
     async def send_magic_link_email(
         self,
@@ -205,7 +215,7 @@ class AsyncGoTrueAPI:
         data = {"email": email}
         url = f"{self.url}/magiclink{query_string}"
         response = await self.http_client.post(url, json=data, headers=headers)
-        return parse_response(response, lambda _: None)
+        return check_response(response)
 
     async def send_mobile_otp(self, *, phone: str) -> None:
         """Sends a mobile OTP via SMS. Will register the account if it doesn't already exist
@@ -224,7 +234,7 @@ class AsyncGoTrueAPI:
         data = {"phone": phone}
         url = f"{self.url}/otp"
         response = await self.http_client.post(url, json=data, headers=headers)
-        return parse_response(response, lambda _: None)
+        return check_response(response)
 
     async def verify_mobile_otp(
         self,
@@ -266,7 +276,8 @@ class AsyncGoTrueAPI:
             data["redirect_to"] = redirect_to_encoded
         url = f"{self.url}/verify"
         response = await self.http_client.post(url, json=data, headers=headers)
-        return parse_response(response, parse_session_or_user)
+        SessionOrUserModel = determine_session_or_user_model_from_response(response)
+        return SessionOrUserModel.parse_response(response)
 
     async def invite_user_by_email(
         self,
@@ -304,7 +315,7 @@ class AsyncGoTrueAPI:
         data = {"email": email, "data": data}
         url = f"{self.url}/invite{query_string}"
         response = await self.http_client.post(url, json=data, headers=headers)
-        return parse_response(response, User.parse_obj)
+        return User.parse_response(response)
 
     async def reset_password_for_email(
         self,
@@ -334,7 +345,7 @@ class AsyncGoTrueAPI:
         data = {"email": email}
         url = f"{self.url}/recover{query_string}"
         response = await self.http_client.post(url, json=data, headers=headers)
-        return parse_response(response, lambda _: None)
+        return check_response(response)
 
     def _create_request_headers(self, *, jwt: str) -> Dict[str, str]:
         """Create temporary object.
@@ -426,7 +437,7 @@ class AsyncGoTrueAPI:
         headers = self._create_request_headers(jwt=jwt)
         url = f"{self.url}/user"
         response = await self.http_client.get(url, headers=headers)
-        return parse_response(response, User.parse_obj)
+        return User.parse_response(response)
 
     async def update_user(
         self,
@@ -458,7 +469,7 @@ class AsyncGoTrueAPI:
         data = attributes.dict()
         url = f"{self.url}/user"
         response = await self.http_client.put(url, json=data, headers=headers)
-        return parse_response(response, User.parse_obj)
+        return User.parse_response(response)
 
     async def delete_user(self, *, uid: str, jwt: str) -> User:
         """Delete a user. Requires a `service_role` key.
@@ -486,7 +497,7 @@ class AsyncGoTrueAPI:
         headers = self._create_request_headers(jwt=jwt)
         url = f"{self.url}/admin/users/${uid}"
         response = await self.http_client.delete(url, headers=headers)
-        return parse_response(response, User.parse_obj)
+        return User.parse_response(response)
 
     async def refresh_access_token(self, *, refresh_token: str) -> Session:
         """Generates a new JWT.
@@ -511,7 +522,7 @@ class AsyncGoTrueAPI:
         data = {"refresh_token": refresh_token}
         url = f"{self.url}/token{query_string}"
         response = await self.http_client.post(url, json=data, headers=headers)
-        return parse_response(response, Session.parse_obj)
+        return Session.parse_response(response)
 
     async def generate_link(
         self,
@@ -562,7 +573,8 @@ class AsyncGoTrueAPI:
             data["redirect_to"] = redirect_to_encoded
         url = f"{self.url}/admin/generate_link"
         response = await self.http_client.post(url, json=data, headers=headers)
-        return parse_response(response, parse_session_or_user)
+        SessionOrUserModel = determine_session_or_user_model_from_response(response)
+        return SessionOrUserModel.parse_response(response)
 
     async def set_auth_cookie(self, *, req, res):
         """Stub for parity with JS api."""

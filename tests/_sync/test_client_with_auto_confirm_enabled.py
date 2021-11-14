@@ -4,7 +4,8 @@ import pytest
 from faker import Faker
 
 from gotrue import SyncGoTrueClient
-from gotrue.types import APIError, Session, User, UserAttributes
+from gotrue.types import Session, User, UserAttributes
+from gotrue.exceptions import APIError
 
 GOTRUE_URL = "http://localhost:9998"
 TEST_TWILIO = False
@@ -92,7 +93,9 @@ def test_set_session_should_return_no_error(
         assert response.refresh_token
         client_with_session.set_session(refresh_token=response.refresh_token)
         data = {"hello": "world"}
-        response = client_with_session.update(attributes=UserAttributes(data=data))
+        response = client_with_session.update(
+            attributes=UserAttributes(data=data)
+        )
         assert response.user_metadata == data
     except Exception as e:
         assert False, str(e)
@@ -162,7 +165,9 @@ def test_sign_in_with_refresh_token(client_with_session: SyncGoTrueClient):
         )
         assert isinstance(response, Session)
         assert response.refresh_token
-        response2 = client_with_session.sign_in(refresh_token=response.refresh_token)
+        response2 = client_with_session.sign_in(
+            refresh_token=response.refresh_token
+        )
         assert isinstance(response2, Session)
         assert response2.access_token
         assert response2.refresh_token
@@ -206,7 +211,9 @@ def test_get_user(client: SyncGoTrueClient):
 def test_update_user(client: SyncGoTrueClient):
     try:
         client.init_recover()
-        response = client.update(attributes=UserAttributes(data={"hello": "world"}))
+        response = client.update(
+            attributes=UserAttributes(data={"hello": "world"})
+        )
         assert isinstance(response, User)
         assert response.id
         assert response.email == email

@@ -10,7 +10,6 @@ from uuid import uuid4
 
 from ..constants import COOKIE_OPTIONS, DEFAULT_HEADERS, GOTRUE_URL, STORAGE_KEY
 from ..types import (
-    APIError,
     AuthChangeEvent,
     CookieOptions,
     Provider,
@@ -19,6 +18,7 @@ from ..types import (
     User,
     UserAttributes,
 )
+from ..exceptions import APIError
 from .api import AsyncGoTrueAPI
 from .storage import AsyncMemoryStorage, AsyncSupportedStorage
 

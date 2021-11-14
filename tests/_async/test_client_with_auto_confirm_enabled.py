@@ -4,7 +4,8 @@ import pytest
 from faker import Faker
 
 from gotrue import AsyncGoTrueClient
-from gotrue.types import APIError, Session, User, UserAttributes
+from gotrue.types import Session, User, UserAttributes
+from gotrue.exceptions import APIError
 
 GOTRUE_URL = "http://localhost:9998"
 TEST_TWILIO = False
