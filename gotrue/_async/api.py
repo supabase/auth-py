@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
+from ..exceptions import APIError
 from ..helpers import check_response, encode_uri_component
 from ..http_clients import AsyncClient
 from ..types import (
@@ -37,6 +38,60 @@ class AsyncGoTrueAPI:
 
     async def close(self) -> None:
         await self.http_client.aclose()
+
+    async def create_user(self, *, attributes: UserAttributes) -> User:
+        """Creates a new user.
+
+        This function should only be called on a server.
+        Never expose your `service_role` key in the browser.
+
+        Parameters
+        ----------
+        attributes: UserAttributes
+            The data you want to create the user with.
+
+        Returns
+        -------
+        response : User
+            The created user
+
+        Raises
+        ------
+        error : APIError
+            If an error occurs
+        """
+        headers = self.headers
+        data = attributes.dict()
+        url = f"{self.url}/admin/users"
+        response = await self.http_client.post(url, json=data, headers=headers)
+        return User.parse_response(response)
+
+    async def list_users(self) -> List[User]:
+        """Get a list of users.
+
+        This function should only be called on a server.
+        Never expose your `service_role` key in the browser.
+
+        Returns
+        -------
+        response : List[User]
+            A list of users
+
+        Raises
+        ------
+        error : APIError
+            If an error occurs
+        """
+        headers = self.headers
+        url = f"{self.url}/admin/users"
+        response = await self.http_client.get(url, headers=headers)
+        check_response(response)
+        users = response.json().get("users")
+        if users is None:
+            raise APIError(f"No users found in response", 400)
+        if not isinstance(users, list):
+            raise APIError(f"Expected a list of users", 400)
+        return [User.parse_obj(response) for response in users]
 
     async def sign_up_with_email(
         self,

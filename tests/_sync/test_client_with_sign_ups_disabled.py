@@ -3,10 +3,23 @@ from typing import Iterable
 import pytest
 from faker import Faker
 
-from gotrue import SyncGoTrueClient
+from gotrue import SyncGoTrueAPI, SyncGoTrueClient
+from gotrue.constants import COOKIE_OPTIONS
 from gotrue.exceptions import APIError
+from gotrue.types import CookieOptions, LinkType, User, UserAttributes
 
 GOTRUE_URL = "http://localhost:9997"
+AUTH_ADMIN_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwicm9sZSI6InN1cGFiYXNlX2FkbWluIiwiaWF0IjoxNTE2MjM5MDIyfQ.0sOtTSTfPv5oPZxsjvBO249FI4S4p0ymHoIZ6H6z9Y8"
+
+
+@pytest.fixture(name="auth_admin")
+def create_auth_admin() -> Iterable[SyncGoTrueAPI]:
+    with SyncGoTrueAPI(
+        url=GOTRUE_URL,
+        headers={"Authorization": f"Bearer {AUTH_ADMIN_TOKEN}"},
+        cookie_options=CookieOptions.parse_obj(COOKIE_OPTIONS),
+    ) as api:
+        yield api
 
 
 @pytest.fixture(name="client")
@@ -33,5 +46,75 @@ def test_sign_up(client: SyncGoTrueClient):
         assert False
     except APIError as e:
         assert e.msg == expected_error_message
+    except Exception as e:
+        assert False, str(e)
+
+
+invited_user = fake.email().lower()
+
+
+@pytest.mark.asyncio
+def test_generate_link_should_be_able_to_generate_multiple_links(
+    auth_admin: SyncGoTrueAPI,
+):
+    try:
+        response = auth_admin.generate_link(
+            type=LinkType.invite,
+            email=invited_user,
+            redirect_to="http://localhost:9997",
+        )
+        assert isinstance(response, User)
+        assert response.email == invited_user
+        assert response.action_link
+        assert "http://localhost:9997/?token=" in response.action_link
+        assert response.app_metadata
+        assert response.app_metadata.get("provider") == "email"
+        providers = response.app_metadata.get("providers")
+        assert providers
+        assert isinstance(providers, list)
+        assert len(providers) == 1
+        assert providers[0] == "email"
+        assert response.role == ""
+        assert response.user_metadata == {}
+        assert response.identities == []
+        user = response
+        response = auth_admin.generate_link(
+            type=LinkType.invite,
+            email=invited_user,
+        )
+        assert isinstance(response, User)
+        assert response.email == invited_user
+        assert response.action_link
+        assert "http://localhost:9997/?token=" in response.action_link
+        assert response.app_metadata
+        assert response.app_metadata.get("provider") == "email"
+        providers = response.app_metadata.get("providers")
+        assert providers
+        assert isinstance(providers, list)
+        assert len(providers) == 1
+        assert providers[0] == "email"
+        assert response.role == ""
+        assert response.user_metadata == {}
+        assert response.identities == []
+        user_again = response
+        assert user.id == user_again.id
+    except Exception as e:
+        assert False, str(e)
+
+
+email2 = fake.email().lower()
+
+
+@pytest.mark.asyncio
+def test_create_user(auth_admin: SyncGoTrueAPI):
+    try:
+        attributes = UserAttributes(email=email2)
+        response = auth_admin.create_user(attributes=attributes)
+        assert isinstance(response, User)
+        assert response.email == email2
+        response = auth_admin.list_users()
+        user = next((u for u in response if u.email == email2), None)
+        assert user
+        assert user.email == email2
     except Exception as e:
         assert False, str(e)
