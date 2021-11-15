@@ -8,7 +8,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        python-version: [3.7, 3.8, 3.9]
+        python-version: [3.7, 3.8, 3.9, '3.10']
     runs-on: ${{ matrix.os }}
     # TODO(fedden): We need to discuss these steps: We could just use a test-supabase instance or we could update the docker image and use that for the tests.
     steps:
@@ -21,7 +21,7 @@ jobs:
     - name: Set up Poetry 2.1.0
       uses: abatilo/actions-poetry@v2.1.0
       with:
-        poetry-version: 1.1.2
+        poetry-version: 1.1.11
     - name: Build Docker image
       run: make run_infra
     - name: Sleep for 5 seconds
