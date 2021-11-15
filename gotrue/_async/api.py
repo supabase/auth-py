@@ -23,12 +23,13 @@ class AsyncGoTrueAPI:
         url: str,
         headers: Dict[str, str],
         cookie_options: CookieOptions,
+        http_client: Optional[AsyncClient] = None,
     ) -> None:
         """Initialise API class."""
         self.url = url
         self.headers = headers
         self.cookie_options = cookie_options
-        self.http_client = AsyncClient()
+        self.http_client = http_client if http_client else AsyncClient()
 
     async def __aenter__(self) -> AsyncGoTrueAPI:
         return self

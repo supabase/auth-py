@@ -33,6 +33,7 @@ class SyncGoTrueClient:
         persist_session: bool = True,
         local_storage: SyncSupportedStorage = SyncMemoryStorage(),
         cookie_options: CookieOptions = CookieOptions.parse_obj(COOKIE_OPTIONS),
+        api: Optional[SyncGoTrueAPI] = None,
     ) -> None:
         """Create a new client
 
@@ -63,11 +64,8 @@ class SyncGoTrueClient:
         self.auto_refresh_token = auto_refresh_token
         self.persist_session = persist_session
         self.local_storage = local_storage
-        self.api = SyncGoTrueAPI(
-            url=url,
-            headers=headers,
-            cookie_options=cookie_options,
-        )
+        args = {"url": url, "headers": headers, "cookie_options": cookie_options}
+        self.api = api if api else SyncGoTrueAPI(**args)
 
     def __enter__(self) -> SyncGoTrueClient:
         return self
