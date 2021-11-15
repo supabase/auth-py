@@ -57,6 +57,7 @@ class Identity(BaseModelFromResponse):
 class User(BaseModelFromResponse):
     app_metadata: Dict[str, Any]
     aud: str
+    """The user's audience. Use audiences to group users."""
     created_at: datetime
     id: UUID
     user_metadata: Dict[str, Any]
