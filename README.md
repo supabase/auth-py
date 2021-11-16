@@ -1,10 +1,10 @@
 # Gotrue-py
 
-This is a Python port of the [supabase js gotrue client](https://github.com/supabase/gotrue-js). The current status is that there is not complete feature pairity when compared with the js-client, but this something we are working on.
+This is a Python port of the [supabase js gotrue client](https://github.com/supabase/gotrue-js). The current state is that there is a features parity but with small differences that are mentioned in the section **Differences to the JS client**.
 
 ## Installation
 
-We are still working on making the go-true python library more user-friendly. For now here are some sparse notes on how to install the module
+We are still working on making the `gotrue` python library more user-friendly. For now here are some sparse notes on how to install the module.
 
 ### Poetry
 
@@ -34,7 +34,11 @@ const { data, error } = client.sign_up(...)
 
 The other key difference is we do not use pascalCase to encode variable and method names. Instead we use the snake_case convention adopted in the Python language.
 
-## Usage
+Also, the `gotrue` library for Python parses the date-time string into `datetime` Python objects. The [JS client](https://github.com/supabase/gotrue-js) keeps the date-time as strings.
+
+## Usage (outdated)
+
+**Important:** This section is outdated, you can be guided by the [JS client documentation](https://supabase.github.io/gotrue-js) because this Python client has a lot of parity with the JS client.
 
 To instanciate the client, you'll need the URL and any request headers at a minimum.
 
@@ -77,23 +81,9 @@ assert client.user() is not None
 assert client.session() is not None
 ```
 
-## Tests
-
-At the moment we use a pre-defined supabase instance to test the functionality. This may change over time. You can run the tests like so:
-
-```bash
-SUPABASE_TEST_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYxMjYwOTMyMiwiZXhwIjoxOTI4MTg1MzIyfQ.XL9W5I_VRQ4iyQHVQmjG0BkwRfx6eVyYB3uAKcesukg" \
-SUPABASE_TEST_URL="https://tfsatoopsijgjhrqplra.supabase.co" \
-pytest -sx
-```
-
 ## Contributions
 
 We would be immensely grateful for any contributions to this project. In particular are the following items:
 
-- [x] Figure out to use either Sessions to manage headers or allow passing in of headers
-- [ ] Add documentation.
-- [ ] Add more tests.
-- [ ] Ensuring feature-parity with the js-client.
-- [ ] Supporting 3rd party provider authentication.
-- [ ] Implement a js port of setTimeout for the refresh session code.
+- Add documentation
+- Update `README.md`
