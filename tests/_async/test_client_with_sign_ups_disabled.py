@@ -4,7 +4,7 @@ import pytest
 from faker import Faker
 
 from gotrue import AsyncGoTrueAPI, AsyncGoTrueClient
-from gotrue.constants import COOKIE_OPTIONS
+from gotrue.constants import COOKIE_OPTIONS, DEFAULT_HEADERS
 from gotrue.exceptions import APIError
 from gotrue.types import CookieOptions, LinkType, User, UserAttributes
 
@@ -118,3 +118,12 @@ async def test_create_user(auth_admin: AsyncGoTrueAPI):
         assert user.email == email2
     except Exception as e:
         assert False, str(e)
+
+
+@pytest.mark.asyncio
+def test_default_headers(client: AsyncGoTrueClient):
+    """Test client for existing default headers"""
+    default_key = "X-Client-Info"
+    assert default_key in DEFAULT_HEADERS
+    assert default_key in client.api.headers
+    assert client.api.headers[default_key] == DEFAULT_HEADERS[default_key]
