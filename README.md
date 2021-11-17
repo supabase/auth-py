@@ -40,7 +40,7 @@ Also, the `gotrue` library for Python parses the date-time string into `datetime
 
 **Important:** This section is outdated, you can be guided by the [JS client documentation](https://supabase.github.io/gotrue-js) because this Python client has a lot of parity with the JS client.
 
-To instanciate the client, you'll need the URL and any request headers at a minimum.
+To instantiate the client, you'll need the URL and any request headers at a minimum.
 
 ```python
 from gotrue import Client
