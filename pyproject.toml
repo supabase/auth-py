@@ -22,7 +22,7 @@ pydantic = "^1.8.2"
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
 Sphinx = "^4.2.0"
-flake8 = "^3.9.2"
+flake8 = "^4.0.1"
 black = "^21.11b1"
 isort = "^5.9.3"
 pre-commit = "^2.15.0"
