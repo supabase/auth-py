@@ -1,5 +1,14 @@
-__version__ = '0.2.0'
+from __future__ import annotations
 
-from . import api
-from . import client
-from .client import Client
+__version__ = "0.2.0"
+
+from ._async.api import AsyncGoTrueAPI
+from ._async.client import AsyncGoTrueClient
+from ._async.storage import AsyncMemoryStorage, AsyncSupportedStorage
+from ._sync.api import SyncGoTrueAPI
+from ._sync.client import SyncGoTrueClient
+from ._sync.storage import SyncMemoryStorage, SyncSupportedStorage
+from .types import *
+
+Client = SyncGoTrueClient
+GoTrueAPI = SyncGoTrueAPI

@@ -16,7 +16,8 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.7"
-requests = "^2.26.0"
+httpx = "^0.20.0"
+pydantic = "^1.8.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
@@ -24,6 +25,12 @@ Sphinx = "^4.2.0"
 flake8 = "^3.9.2"
 black = "^21.9b0"
 isort = "^5.9.3"
+pre-commit = "^2.15.0"
+pytest-cov = "^3.0.0"
+pytest-depends = "^1.0.1"
+pytest-asyncio = "^0.16.0"
+Faker = "^9.3.1"
+unasync-cli = "^0.0.9"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
