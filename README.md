@@ -1,4 +1,13 @@
-# Gotrue-py
+# gotrue-py
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+[![Version](https://img.shields.io/pypi/v/gotrue?color=%2334D058&label=Version)](https://pypi.org/project/gotrue)
+[![Last commit](https://img.shields.io/github/last-commit/supabase-community/gotrue-py.svg?style=flat)](https://github.com/supabase-community/gotrue-py/commits)
+[![GitHub commit activity](https://img.shields.io/github/commit-activity/m/supabase-community/gotrue-py)](https://github.com/supabase-community/gotrue-py/commits)
+[![Github Stars](https://img.shields.io/github/stars/supabase-community/gotrue-py?style=flat&logo=github)](https://github.com/supabase-community/gotrue-py/stargazers)
+[![Github Forks](https://img.shields.io/github/forks/supabase-community/gotrue-py?style=flat&logo=github)](https://github.com/supabase-community/gotrue-py/network/members)
+[![Github Watchers](https://img.shields.io/github/watchers/supabase-community/gotrue-py?style=flat&logo=github)](https://github.com/supabase-community/gotrue-py)
+[![GitHub contributors](https://img.shields.io/github/contributors/supabase-community/gotrue-py)](https://github.com/supabase-community/gotrue-py/graphs/contributors)
 
 This is a Python port of the [supabase js gotrue client](https://github.com/supabase/gotrue-js). The current state is that there is a features parity but with small differences that are mentioned in the section **Differences to the JS client**.
 
