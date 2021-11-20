@@ -33,6 +33,15 @@ Faker = "^9.3.1"
 unasync-cli = "^0.0.9"
 commitizen = "^2.20.0"
 
+[tool.commitizen]
+name = "cz_conventional_commits"
+version = "0.2.0"
+version_files = [
+    "gotrue/__init__.py",
+    "pyproject.toml:version"
+]
+tag_format = "v$version"
+
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
