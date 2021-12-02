@@ -576,6 +576,7 @@ class SyncGoTrueClient:
                 raise ValueError("No current session and refresh_token not supplied.")
         response = self.api.refresh_access_token(refresh_token=cast(str, refresh_token))
         self._save_session(session=response)
+        self._notify_all_subscribers(event=AuthChangeEvent.TOKEN_REFRESHED)
         self._notify_all_subscribers(event=AuthChangeEvent.SIGNED_IN)
         return response
 
