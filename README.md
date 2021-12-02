@@ -1,7 +1,7 @@
 # gotrue-py
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?label=license)](https://opensource.org/licenses/MIT)
-[![CI](https://github.com/leynier/gotrue-py/actions/workflows/ci.yml/badge.svg)](https://github.com/leynier/gotrue-py/actions/workflows/ci.yml)
+[![CI](https://github.com/supabase-community/gotrue-py/actions/workflows/ci.yml/badge.svg)](https://github.com/supabase-community/gotrue-py/actions/workflows/ci.yml)
 [![Version](https://img.shields.io/pypi/v/gotrue?color=%2334D058)](https://pypi.org/project/gotrue)
 [![Codecov](https://codecov.io/gh/supabase-community/gotrue-py/branch/main/graph/badge.svg)](https://codecov.io/gh/supabase-community/gotrue-py)
 [![Last commit](https://img.shields.io/github/last-commit/supabase-community/gotrue-py.svg?style=flat)](https://github.com/supabase-community/gotrue-py/commits)
