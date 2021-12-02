@@ -2,6 +2,7 @@ from typing import Iterable, Optional
 
 import pytest
 from faker import Faker
+
 from gotrue import SyncGoTrueAPI
 from gotrue.constants import COOKIE_OPTIONS
 from gotrue.types import CookieOptions, Session, User
