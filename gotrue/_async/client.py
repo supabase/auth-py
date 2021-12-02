@@ -431,8 +431,9 @@ class AsyncGoTrueClient:
         )
         if store_session:
             await self._save_session(session=session)
+            recovery_mode = query.get("type")
             self._notify_all_subscribers(event=AuthChangeEvent.SIGNED_IN)
-            if query.get("type") == "recovery":
+            if recovery_mode == "recovery":
                 self._notify_all_subscribers(event=AuthChangeEvent.PASSWORD_RECOVERY)
         return session
 
