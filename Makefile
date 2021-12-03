@@ -24,10 +24,13 @@ clean_infra:
 	docker-compose down &&\
 	docker system prune -a --volumes -f
 
-run_tests: run_infra tests
+run_tests: run_infra sleep tests
 
 build_sync:
 	poetry run unasync gotrue tests
 
 build_run_tests: build_sync run_tests
 	echo "Done"
+
+sleep:
+	sleep 10
