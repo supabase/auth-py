@@ -375,7 +375,12 @@ class SyncGoTrueClient:
         self._save_session(session=session)
         return session
 
-    def get_session_from_url(self, *, url: str, store_session: bool = False) -> Session:
+    def get_session_from_url(
+        self,
+        *,
+        url: str,
+        store_session: bool = False,
+    ) -> Session:
         """Gets the session data from a URL string.
 
         Parameters
@@ -404,16 +409,16 @@ class SyncGoTrueClient:
         token_type = query.get("token_type")
         if error_description:
             raise APIError(error_description[0], 400)
-        if not access_token:
+        if not access_token or not access_token[0]:
             raise APIError("No access_token detected.", 400)
-        if not expires_in or expires_in[0]:
+        if not expires_in or not expires_in[0]:
             raise APIError("No expires_in detected.", 400)
-        if not refresh_token:
+        if not refresh_token or not refresh_token[0]:
             raise APIError("No refresh_token detected.", 400)
-        if not token_type:
+        if not token_type or not token_type[0]:
             raise APIError("No token_type detected.", 400)
         try:
-            expires_at = round(time.time()) + int(expires_in[0])
+            expires_at = round(time()) + int(expires_in[0])
         except ValueError:
             raise APIError("Invalid expires_in.", 400)
         response = self.api.get_user(jwt=access_token[0])
@@ -429,8 +434,9 @@ class SyncGoTrueClient:
         )
         if store_session:
             self._save_session(session=session)
+            recovery_mode = query.get("type")
             self._notify_all_subscribers(event=AuthChangeEvent.SIGNED_IN)
-            if query.get("type") == "recovery":
+            if recovery_mode == "recovery":
                 self._notify_all_subscribers(event=AuthChangeEvent.PASSWORD_RECOVERY)
         return session
 
@@ -575,6 +581,7 @@ class SyncGoTrueClient:
                 raise ValueError("No current session and refresh_token not supplied.")
         response = self.api.refresh_access_token(refresh_token=cast(str, refresh_token))
         self._save_session(session=response)
+        self._notify_all_subscribers(event=AuthChangeEvent.TOKEN_REFRESHED)
         self._notify_all_subscribers(event=AuthChangeEvent.SIGNED_IN)
         return response
 

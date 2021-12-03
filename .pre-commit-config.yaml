@@ -35,7 +35,7 @@ repos:
                 ]
 
     - repo: https://github.com/ambv/black
-      rev: 21.11b0
+      rev: 21.11b1
       hooks:
           - id: black
 
@@ -44,3 +44,9 @@ repos:
       hooks:
           - id: pyupgrade
             args: ["--py37-plus", "--keep-runtime-typing"]
+
+    - repo: https://github.com/commitizen-tools/commitizen
+      rev: v2.20.0
+      hooks:
+          - id: commitizen
+            stages: [commit-msg]

@@ -204,6 +204,21 @@ def test_get_user(client: SyncGoTrueClient):
 
 @pytest.mark.asyncio
 @pytest.mark.depends(on=[test_sign_in.__name__])
+def test_get_session(client: SyncGoTrueClient):
+    try:
+        client.init_recover()
+        response = client.session()
+        assert isinstance(response, Session)
+        assert response.access_token
+        assert response.refresh_token
+        assert response.expires_in
+        assert response.expires_at
+    except Exception as e:
+        assert False, str(e)
+
+
+@pytest.mark.asyncio
+@pytest.mark.depends(on=[test_sign_in.__name__])
 def test_update_user(client: SyncGoTrueClient):
     try:
         client.init_recover()
@@ -244,7 +259,10 @@ def test_get_user_after_update(client: SyncGoTrueClient):
 @pytest.mark.depends(on=[test_get_user_after_update.__name__])
 def test_sign_out(client: SyncGoTrueClient):
     try:
+        client.init_recover()
         client.sign_out()
+        response = client.session()
+        assert response is None
     except Exception as e:
         assert False, str(e)
 
@@ -261,6 +279,20 @@ def test_get_user_after_sign_out(client: SyncGoTrueClient):
 
 
 @pytest.mark.asyncio
+@pytest.mark.depends(on=[test_sign_out.__name__])
+def test_get_update_user_after_sign_out(client: SyncGoTrueClient):
+    expected_error_message = "Not logged in."
+    try:
+        client.init_recover()
+        client.update(attributes=UserAttributes(data={"hello": "world"}))
+        assert False
+    except ValueError as e:
+        assert str(e) == expected_error_message
+    except Exception as e:
+        assert False, str(e)
+
+
+@pytest.mark.asyncio
 @pytest.mark.depends(on=[test_get_user_after_sign_out.__name__])
 def test_sign_in_with_the_wrong_password(client: SyncGoTrueClient):
     try:
@@ -268,5 +300,72 @@ def test_sign_in_with_the_wrong_password(client: SyncGoTrueClient):
         assert False
     except APIError:
         assert True
+    except Exception as e:
+        assert False, str(e)
+
+
+@pytest.mark.asyncio
+def test_sign_up_with_password_none(client: SyncGoTrueClient):
+    expected_error_message = "Password must be defined, can't be None."
+    try:
+        client.sign_up(email=email)
+        assert False
+    except ValueError as e:
+        assert str(e) == expected_error_message
+    except Exception as e:
+        assert False, str(e)
+
+
+@pytest.mark.asyncio
+def test_sign_up_with_email_and_phone_none(client: SyncGoTrueClient):
+    expected_error_message = "Email or phone must be defined, both can't be None."
+    try:
+        client.sign_up(password=password)
+        assert False
+    except ValueError as e:
+        assert str(e) == expected_error_message
+    except Exception as e:
+        assert False, str(e)
+
+
+@pytest.mark.asyncio
+def test_sign_in_with_all_nones(client: SyncGoTrueClient):
+    expected_error_message = (
+        "Email, phone, refresh_token, or provider must be defined, "
+        "all can't be None."
+    )
+    try:
+        client.sign_in()
+        assert False
+    except ValueError as e:
+        assert str(e) == expected_error_message
+    except Exception as e:
+        assert False, str(e)
+
+
+@pytest.mark.asyncio
+def test_sign_in_with_magic_link(client: SyncGoTrueClient):
+    try:
+        response = client.sign_in(email=email)
+        assert response is None
+    except Exception as e:
+        assert False, str(e)
+
+
+@pytest.mark.asyncio
+@pytest.mark.depends(on=[test_sign_up.__name__])
+def test_get_session_from_url(client: SyncGoTrueClient):
+    try:
+        assert access_token
+        dummy_url = (
+            "https://localhost"
+            f"?access_token={access_token}"
+            "&refresh_token=refresh_token"
+            "&token_type=bearer"
+            "&expires_in=3600"
+            "&type=recovery"
+        )
+        response = client.get_session_from_url(url=dummy_url, store_session=True)
+        assert isinstance(response, Session)
     except Exception as e:
         assert False, str(e)

@@ -112,11 +112,12 @@ class Session(BaseModelFromResponse):
 
 
 class AuthChangeEvent(str, Enum):
+    PASSWORD_RECOVERY = "PASSWORD_RECOVERY"
     SIGNED_IN = "SIGNED_IN"
     SIGNED_OUT = "SIGNED_OUT"
+    TOKEN_REFRESHED = "TOKEN_REFRESHED"
     USER_UPDATED = "USER_UPDATED"
     USER_DELETED = "USER_DELETED"
-    PASSWORD_RECOVERY = "PASSWORD_RECOVERY"
 
 
 class Subscription(BaseModelFromResponse):

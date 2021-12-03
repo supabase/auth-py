@@ -81,7 +81,7 @@ async def test_sign_in(client: AsyncGoTrueClient):
 @pytest.mark.asyncio
 @pytest.mark.depends(on=[test_sign_up_with_email_and_password.__name__])
 async def test_sign_in_with_the_wrong_password(client: AsyncGoTrueClient):
-    expected_error_message = "Email not confirmed"
+    expected_error_message = "Invalid login credentials"
     try:
         await client.sign_in(
             email=email,
