@@ -350,3 +350,22 @@ def test_sign_in_with_magic_link(client: SyncGoTrueClient):
         assert response is None
     except Exception as e:
         assert False, str(e)
+
+
+@pytest.mark.asyncio
+@pytest.mark.depends(on=[test_sign_up.__name__])
+def test_get_session_from_url(client: SyncGoTrueClient):
+    try:
+        assert access_token
+        dummy_url = (
+            "https://localhost"
+            f"?access_token={access_token}"
+            "&refresh_token=refresh_token"
+            "&token_type=bearer"
+            "&expires_in=3600"
+            "&type=recovery"
+        )
+        response = client.get_session_from_url(url=dummy_url, store_session=True)
+        assert isinstance(response, Session)
+    except Exception as e:
+        assert False, str(e)
