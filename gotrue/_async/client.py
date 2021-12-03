@@ -411,12 +411,12 @@ class AsyncGoTrueClient:
             raise APIError(error_description[0], 400)
         if not access_token or not access_token[0]:
             raise APIError("No access_token detected.", 400)
-        if not expires_in or not expires_in[0]:
-            raise APIError("No expires_in detected.", 400)
         if not refresh_token or not refresh_token[0]:
             raise APIError("No refresh_token detected.", 400)
         if not token_type or not token_type[0]:
             raise APIError("No token_type detected.", 400)
+        if not expires_in or not expires_in[0]:
+            raise APIError("No expires_in detected.", 400)
         try:
             expires_at = round(time()) + int(expires_in[0])
         except ValueError:
@@ -436,7 +436,7 @@ class AsyncGoTrueClient:
             await self._save_session(session=session)
             recovery_mode = query.get("type")
             self._notify_all_subscribers(event=AuthChangeEvent.SIGNED_IN)
-            if recovery_mode == "recovery":
+            if recovery_mode and recovery_mode[0] == "recovery":
                 self._notify_all_subscribers(event=AuthChangeEvent.PASSWORD_RECOVERY)
         return session
 
