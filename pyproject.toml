@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gotrue"
-version = "0.2.0"
+version = "0.3.0"
 description = "Python Client Library for GoTrue"
 authors = ["Joel Lee <joel@joellee.org>"]
 homepage = "https://github.com/supabase-community/gotrue-py"
@@ -25,7 +25,7 @@ Sphinx = "^4.3.1"
 flake8 = "^4.0.1"
 black = "^21.11b1"
 isort = "^5.9.3"
-pre-commit = "^2.15.0"
+pre-commit = "^2.16.0"
 pytest-cov = "^3.0.0"
 pytest-depends = "^1.0.1"
 pytest-asyncio = "^0.16.0"
@@ -35,7 +35,7 @@ commitizen = "^2.20.0"
 
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "0.2.0"
+version = "0.3.0"
 version_files = [
     "gotrue/__init__.py",
     "pyproject.toml:version"
