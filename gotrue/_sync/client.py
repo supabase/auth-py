@@ -28,12 +28,13 @@ class SyncGoTrueClient:
         self,
         *,
         url: str = GOTRUE_URL,
-        headers: Dict[str, str] = DEFAULT_HEADERS,
+        headers: Dict[str, str] = {},
         auto_refresh_token: bool = True,
         persist_session: bool = True,
         local_storage: SyncSupportedStorage = SyncMemoryStorage(),
         cookie_options: CookieOptions = CookieOptions.parse_obj(COOKIE_OPTIONS),
         api: Optional[SyncGoTrueAPI] = None,
+        replace_default_headers: bool = False,
     ) -> None:
         """Create a new client
 
@@ -64,7 +65,12 @@ class SyncGoTrueClient:
         self.auto_refresh_token = auto_refresh_token
         self.persist_session = persist_session
         self.local_storage = local_storage
-        args = {"url": url, "headers": headers, "cookie_options": cookie_options}
+        empty_or_default_headers = {} if replace_default_headers else DEFAULT_HEADERS
+        args = {
+            "url": url,
+            "headers": {**empty_or_default_headers, **headers},
+            "cookie_options": cookie_options,
+        }
         self.api = api if api else SyncGoTrueAPI(**args)
 
     def __enter__(self) -> SyncGoTrueClient:
