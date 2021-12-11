@@ -21,7 +21,7 @@ run_infra:
 
 clean_infra:
 	cd infra &&\
-	docker-compose down &&\
+	docker-compose down --remove-orphans &&\
 	docker system prune -a --volumes -f
 
 run_tests: run_infra sleep tests
@@ -33,4 +33,4 @@ build_run_tests: build_sync run_tests
 	echo "Done"
 
 sleep:
-	sleep 10
+	sleep 20
