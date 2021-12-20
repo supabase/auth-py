@@ -134,6 +134,23 @@ async def test_set_auth_should_set_the_auth_headers_on_a_new_client(
 
 
 @pytest.mark.asyncio
+@pytest.mark.depends(
+    on=[test_set_auth_should_set_the_auth_headers_on_a_new_client.__name__]
+)
+async def test_set_auth_should_set_the_auth_headers_on_a_new_client_and_recover(
+    new_client: AsyncGoTrueClient,
+):
+    try:
+        assert access_token
+        await new_client.init_recover()
+        await new_client.set_auth(access_token=access_token)
+        assert new_client.current_session
+        assert new_client.current_session.access_token == access_token
+    except Exception as e:
+        assert False, str(e)
+
+
+@pytest.mark.asyncio
 @pytest.mark.depends(on=[test_sign_up.__name__])
 async def test_sign_in(client: AsyncGoTrueClient):
     try:
@@ -373,5 +390,77 @@ async def test_get_session_from_url(client: AsyncGoTrueClient):
         )
         response = await client.get_session_from_url(url=dummy_url, store_session=True)
         assert isinstance(response, Session)
+    except Exception as e:
+        assert False, str(e)
+
+
+@pytest.mark.asyncio
+async def test_get_session_from_url_errors(client: AsyncGoTrueClient):
+    try:
+        dummy_url = "https://localhost"
+        error_description = fake.email()
+        try:
+            await client.get_session_from_url(
+                url=dummy_url + f"?error_description={error_description}"
+            )
+            assert False
+        except APIError as e:
+            assert e.code == 400
+            assert e.msg == error_description
+        try:
+            await client.get_session_from_url(url=dummy_url)
+            assert False
+        except APIError as e:
+            assert e.code == 400
+            assert e.msg == "No access_token detected."
+        dummy_url += "?access_token=access_token"
+        try:
+            await client.get_session_from_url(url=dummy_url)
+            assert False
+        except APIError as e:
+            assert e.code == 400
+            assert e.msg == "No refresh_token detected."
+        dummy_url += "&refresh_token=refresh_token"
+        try:
+            await client.get_session_from_url(url=dummy_url)
+            assert False
+        except APIError as e:
+            assert e.code == 400
+            assert e.msg == "No token_type detected."
+        dummy_url += "&token_type=bearer"
+        try:
+            await client.get_session_from_url(url=dummy_url)
+            assert False
+        except APIError as e:
+            assert e.code == 400
+            assert e.msg == "No expires_in detected."
+        dummy_url += "&expires_in=str"
+        try:
+            await client.get_session_from_url(url=dummy_url)
+            assert False
+        except APIError as e:
+            assert e.code == 400
+            assert e.msg == "Invalid expires_in."
+    except Exception as e:
+        assert False, str(e)
+
+
+@pytest.mark.asyncio
+@pytest.mark.depends(on=[test_get_update_user_after_sign_out.__name__])
+async def test_refresh_session(client: AsyncGoTrueClient):
+    try:
+        response = await client.sign_in(email=email, password=password)
+        assert isinstance(response, Session)
+        assert response.refresh_token
+        response = await client.set_session(refresh_token=response.refresh_token)
+        assert isinstance(response, Session)
+        response = await client.refresh_session()
+        assert isinstance(response, Session)
+        await client.sign_out()
+        try:
+            await client.refresh_session()
+            assert False
+        except ValueError as e:
+            assert str(e) == "Not logged in."
     except Exception as e:
         assert False, str(e)

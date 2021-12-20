@@ -28,12 +28,13 @@ class SyncGoTrueClient:
         self,
         *,
         url: str = GOTRUE_URL,
-        headers: Dict[str, str] = DEFAULT_HEADERS,
+        headers: Dict[str, str] = {},
         auto_refresh_token: bool = True,
         persist_session: bool = True,
         local_storage: SyncSupportedStorage = SyncMemoryStorage(),
         cookie_options: CookieOptions = CookieOptions.parse_obj(COOKIE_OPTIONS),
         api: Optional[SyncGoTrueAPI] = None,
+        replace_default_headers: bool = False,
     ) -> None:
         """Create a new client
 
@@ -64,7 +65,12 @@ class SyncGoTrueClient:
         self.auto_refresh_token = auto_refresh_token
         self.persist_session = persist_session
         self.local_storage = local_storage
-        args = {"url": url, "headers": headers, "cookie_options": cookie_options}
+        empty_or_default_headers = {} if replace_default_headers else DEFAULT_HEADERS
+        args = {
+            "url": url,
+            "headers": {**empty_or_default_headers, **headers},
+            "cookie_options": cookie_options,
+        }
         self.api = api if api else SyncGoTrueAPI(**args)
 
     def __enter__(self) -> SyncGoTrueClient:
@@ -411,12 +417,12 @@ class SyncGoTrueClient:
             raise APIError(error_description[0], 400)
         if not access_token or not access_token[0]:
             raise APIError("No access_token detected.", 400)
-        if not expires_in or not expires_in[0]:
-            raise APIError("No expires_in detected.", 400)
         if not refresh_token or not refresh_token[0]:
             raise APIError("No refresh_token detected.", 400)
         if not token_type or not token_type[0]:
             raise APIError("No token_type detected.", 400)
+        if not expires_in or not expires_in[0]:
+            raise APIError("No expires_in detected.", 400)
         try:
             expires_at = round(time()) + int(expires_in[0])
         except ValueError:
@@ -436,7 +442,7 @@ class SyncGoTrueClient:
             self._save_session(session=session)
             recovery_mode = query.get("type")
             self._notify_all_subscribers(event=AuthChangeEvent.SIGNED_IN)
-            if recovery_mode == "recovery":
+            if recovery_mode and recovery_mode[0] == "recovery":
                 self._notify_all_subscribers(event=AuthChangeEvent.PASSWORD_RECOVERY)
         return session
 
