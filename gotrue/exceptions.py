@@ -5,7 +5,7 @@ from typing import Any, Dict
 
 
 @dataclass
-class APIError(BaseException):
+class APIError(Exception):
     msg: str
     code: int
 
