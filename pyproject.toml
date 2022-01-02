@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gotrue"
-version = "0.3.0"
+version = "0.3.1"
 description = "Python Client Library for GoTrue"
 authors = ["Joel Lee <joel@joellee.org>"]
 homepage = "https://github.com/supabase-community/gotrue-py"
@@ -35,7 +35,7 @@ commitizen = "^2.20.3"
 
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "0.3.0"
+version = "0.3.1"
 version_files = [
     "gotrue/__init__.py",
     "pyproject.toml:version"
