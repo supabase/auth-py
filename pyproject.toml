@@ -34,13 +34,16 @@ unasync-cli = "^0.0.9"
 commitizen = "^2.20.3"
 
 [tool.commitizen]
-name = "cz_conventional_commits"
+name = "cz_customize"
 version = "0.3.1"
 version_files = [
     "gotrue/__init__.py",
     "pyproject.toml:version"
 ]
 tag_format = "v$version"
+
+[tool.commitizen.customize]
+bump_map = {"!" = "MINOR", "BREAKING-CHANGE" = "MINOR", "feat" = "MINOR", "fix" = "PATCH", "refacto" = "PATCH", "perf" = "PATCH"}
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

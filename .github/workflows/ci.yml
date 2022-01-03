@@ -28,7 +28,7 @@ jobs:
 
   publish:
     needs: test
-    if: ${{ !startsWith(github.event.head_commit.message, 'bump:') && !startsWith(github.event.head_commit.message, 'chore') && github.ref == 'refs/heads/main' && github.event_name == 'push' }}
+    if: ${{ !startsWith(github.event.head_commit.message, 'bump:') && !startsWith(github.event.head_commit.message, 'chore:') && !startsWith(github.event.head_commit.message, 'chore') && github.ref == 'refs/heads/main' && github.event_name == 'push' }}
     runs-on: ubuntu-latest
     name: "Bump version, create changelog and publish"
     steps:
@@ -41,12 +41,11 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: main
-          changelog_increment_filename: body.md
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          body_path: body.md
-          tag_name: ${{ env.REVISION }}
+          generate_release_notes: true
+          tag_name: v${{ env.REVISION }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Set up Python 3.9
