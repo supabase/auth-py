@@ -17,7 +17,7 @@ classifiers = [
 [tool.poetry.dependencies]
 python = "^3.7"
 httpx = ">=0.20,<0.22"
-pydantic = "^1.8.2"
+pydantic = "^1.9.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
@@ -31,16 +31,17 @@ pytest-depends = "^1.0.1"
 pytest-asyncio = "^0.16.0"
 Faker = "^11.1.0"
 unasync-cli = "^0.0.9"
-commitizen = "^2.20.3"
+python-semantic-release = "^7.23.0"
 
-[tool.commitizen]
-name = "cz_conventional_commits"
-version = "0.3.1"
-version_files = [
-    "gotrue/__init__.py",
-    "pyproject.toml:version"
-]
-tag_format = "v$version"
+[tool.semantic_release]
+version_variable = "gotrue/__init__.py:__version__"
+version_toml = "pyproject.toml:tool.poetry.version"
+major_on_zero = false
+commit_subject = "chore(release): bump version to v{version}"
+build_command = "curl -sSL https://install.python-poetry.org | python - && export PATH=\"/github/home/.local/bin:$PATH\" && poetry install && poetry build"
+upload_to_repository = false
+branch = "main"
+changelog_components = "semantic_release.changelog.changelog_headers,semantic_release.changelog.compare_url"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
