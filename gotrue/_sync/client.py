@@ -482,13 +482,13 @@ class SyncGoTrueClient:
         error : APIError
             If an error occurs
         """
-        unique_id: str = uuid4().hex
+        unique_id = uuid4()
         subscription = Subscription(
             id=unique_id,
             callback=callback,
-            unsubscribe=partial(self._unsubscribe, id=unique_id),
+            unsubscribe=partial(self._unsubscribe, id=unique_id.hex),
         )
-        self.state_change_emitters[unique_id] = subscription
+        self.state_change_emitters[unique_id.hex] = subscription
         return subscription
 
     def _handle_email_sign_in(
