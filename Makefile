@@ -3,8 +3,6 @@ install:
 
 install_poetry:
 	curl -sSL https://install.python-poetry.org | python -
-	sudo rm -r .venv
-	poetry install
 
 tests: install tests_only tests_pre_commit
 
