@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.2 (2022-01-04)
+### Fix
+* Deploy action ([`467fa3f`](https://github.com/supabase-community/gotrue-py/commit/467fa3f6b9e09295806cbac3e8c4fcfe05c3147d))
+
+**[See all commits in this version](https://github.com/supabase-community/gotrue-py/compare/v0.3.1...v0.3.2)**
+
 ## v0.3.0 (2021-12-03)
 
 ### Fix
