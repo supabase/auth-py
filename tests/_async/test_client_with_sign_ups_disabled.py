@@ -106,7 +106,6 @@ email2 = fake.email().lower()
 
 
 @pytest.mark.asyncio
-@pytest.mark.skip(reason="Until https://github.com/supabase/gotrue/pull/306 is merged")
 async def test_create_user(auth_admin: AsyncGoTrueAPI):
     try:
         attributes = UserAttributes(email=email2)
