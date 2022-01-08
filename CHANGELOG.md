@@ -4,7 +4,6 @@
 
 ## v0.3.3 (2022-01-08)
 
-
 **[See all commits in this version](https://github.com/supabase-community/gotrue-py/compare/v0.3.2...v0.3.3)**
 
 ## v0.3.2 (2022-01-04)
