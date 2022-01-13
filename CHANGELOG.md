@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.4 (2022-01-13)
+### Fix
+* String formatting in `delete_user` ([#64](https://github.com/supabase-community/gotrue-py/issues/64)) ([`d783015`](https://github.com/supabase-community/gotrue-py/commit/d783015b5d2472fe95a83f5d42efe97f79331516))
+
+**[See all commits in this version](https://github.com/supabase-community/gotrue-py/compare/v0.3.3...v0.3.4)**
+
 ## v0.3.3 (2022-01-08)
 
 **[See all commits in this version](https://github.com/supabase-community/gotrue-py/compare/v0.3.2...v0.3.3)**
