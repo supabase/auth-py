@@ -553,7 +553,7 @@ class SyncGoTrueAPI:
             If an error occurs
         """
         headers = self._create_request_headers(jwt=jwt)
-        url = f"{self.url}/admin/users/${uid}"
+        url = f"{self.url}/admin/users/{uid}"
         response = self.http_client.delete(url, headers=headers)
         return User.parse_response(response)
 
