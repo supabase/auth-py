@@ -71,7 +71,7 @@ class SyncGoTrueClient:
             "headers": {**empty_or_default_headers, **headers},
             "cookie_options": cookie_options,
         }
-        self.api = api if api else SyncGoTrueAPI(**args)
+        self.api = api or SyncGoTrueAPI(**args)
 
     def __enter__(self) -> SyncGoTrueClient:
         return self
@@ -206,7 +206,7 @@ class SyncGoTrueClient:
         self._remove_session()
         if email and not password:
             response = self.api.send_magic_link_email(email=email)
-        elif email and password:
+        elif email:
             response = self._handle_email_sign_in(
                 email=email,
                 password=password,
@@ -214,7 +214,7 @@ class SyncGoTrueClient:
             )
         elif phone and not password:
             response = self.api.send_mobile_otp(phone=phone)
-        elif phone and password:
+        elif phone:
             response = self._handle_phone_sign_in(phone=phone, password=password)
         elif refresh_token:
             # current_session and current_user will be updated to latest
@@ -290,8 +290,7 @@ class SyncGoTrueClient:
         """
         if not self.current_session:
             raise ValueError("Not logged in.")
-        response = self._call_refresh_token()
-        return response
+        return self._call_refresh_token()
 
     def update(self, *, attributes: UserAttributes) -> User:
         """Updates user data, if there is a logged in user.
@@ -523,12 +522,11 @@ class SyncGoTrueClient:
         scopes: Optional[str],
     ) -> str:
         """Sign in with provider."""
-        response = self.api.get_url_for_provider(
+        return self.api.get_url_for_provider(
             provider=provider,
             redirect_to=redirect_to,
             scopes=scopes,
         )
-        return response
 
     def _recover_common(self) -> Optional[Tuple[Session, int, int]]:
         """Recover common logic"""
@@ -565,15 +563,16 @@ class SyncGoTrueClient:
         if not result:
             return
         session, expires_at, time_now = result
-        if expires_at < time_now:
-            if self.auto_refresh_token and session.refresh_token:
-                try:
-                    self._call_refresh_token(refresh_token=session.refresh_token)
-                except APIError:
-                    self._remove_session()
-            else:
+        if (
+            expires_at < time_now
+            and self.auto_refresh_token
+            and session.refresh_token
+        ):
+            try:
+                self._call_refresh_token(refresh_token=session.refresh_token)
+            except APIError:
                 self._remove_session()
-        elif not session or not session.user:
+        elif expires_at < time_now or not session or not session.user:
             self._remove_session()
         else:
             self._save_session(session=session)
