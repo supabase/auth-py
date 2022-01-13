@@ -53,7 +53,7 @@ class SyncGoTrueClient:
         cookie_options : CookieOptions
             The options for the cookie.
         """
-        if url.startswith("http"):
+        if url.startswith("http://"):
             print(
                 "Warning:\n\nDO NOT USE HTTP IN PRODUCTION FOR GOTRUE EVER!\n"
                 "GoTrue REQUIRES HTTPS to work securely."
