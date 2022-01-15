@@ -239,7 +239,7 @@ class AsyncGoTrueAPI:
             If an error occurs
         """
         data = {"phone": phone, "password": password}
-        url = f'{self.url}/token?grant_type=password'
+        url = f"{self.url}/token?grant_type=password"
         headers = self.headers
         response = await self.http_client.post(url, json=data, headers=headers)
         return Session.parse_response(response)
@@ -575,7 +575,7 @@ class AsyncGoTrueAPI:
             If an error occurs
         """
         data = {"refresh_token": refresh_token}
-        url = f'{self.url}/token?grant_type=refresh_token'
+        url = f"{self.url}/token?grant_type=refresh_token"
         headers = self.headers
         response = await self.http_client.post(url, json=data, headers=headers)
         return Session.parse_response(response)
