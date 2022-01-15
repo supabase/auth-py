@@ -31,7 +31,7 @@ class SyncGoTrueAPI:
         self.url = url
         self.headers = headers
         self.cookie_options = cookie_options
-        self.http_client = http_client if http_client else SyncClient()
+        self.http_client = http_client or SyncClient()
 
     def __enter__(self) -> SyncGoTrueAPI:
         return self
@@ -238,10 +238,9 @@ class SyncGoTrueAPI:
         error : APIError
             If an error occurs
         """
-        headers = self.headers
-        query_string = "?grant_type=password"
         data = {"phone": phone, "password": password}
-        url = f"{self.url}/token{query_string}"
+        url = f"{self.url}/token?grant_type=password"
+        headers = self.headers
         response = self.http_client.post(url, json=data, headers=headers)
         return Session.parse_response(response)
 
@@ -529,7 +528,7 @@ class SyncGoTrueAPI:
         response = self.http_client.put(url, json=data, headers=headers)
         return User.parse_response(response)
 
-    def delete_user(self, *, uid: str, jwt: str) -> User:
+    def delete_user(self, *, uid: str, jwt: str) -> None:
         """Delete a user. Requires a `service_role` key.
 
         This function should only be called on a server.
@@ -555,7 +554,7 @@ class SyncGoTrueAPI:
         headers = self._create_request_headers(jwt=jwt)
         url = f"{self.url}/admin/users/{uid}"
         response = self.http_client.delete(url, headers=headers)
-        return User.parse_response(response)
+        return check_response(response)
 
     def refresh_access_token(self, *, refresh_token: str) -> Session:
         """Generates a new JWT.
@@ -575,10 +574,9 @@ class SyncGoTrueAPI:
         error : APIError
             If an error occurs
         """
-        headers = self.headers
-        query_string = "?grant_type=refresh_token"
         data = {"refresh_token": refresh_token}
-        url = f"{self.url}/token{query_string}"
+        url = f"{self.url}/token?grant_type=refresh_token"
+        headers = self.headers
         response = self.http_client.post(url, json=data, headers=headers)
         return Session.parse_response(response)
 
