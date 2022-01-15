@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gotrue"
-version = "0.3.4"
+version = "0.3.5"
 description = "Python Client Library for GoTrue"
 authors = ["Joel Lee <joel@joellee.org>"]
 homepage = "https://github.com/supabase-community/gotrue-py"

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-__version__ = "0.3.4"
+__version__ = "0.3.5"
 
 from ._async.api import AsyncGoTrueAPI
 from ._async.client import AsyncGoTrueClient

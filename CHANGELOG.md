@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.5 (2022-01-15)
+### Fix
+* Delete_user returns Exception event if response is Ok ([#68](https://github.com/supabase-community/gotrue-py/issues/68)) ([`23c167e`](https://github.com/supabase-community/gotrue-py/commit/23c167e7082c5ddb4dd64b958aa55065c2b3e468))
+
+**[See all commits in this version](https://github.com/supabase-community/gotrue-py/compare/v0.3.4...v0.3.5)**
+
 ## v0.3.4 (2022-01-13)
 ### Fix
 * String formatting in `delete_user` ([#64](https://github.com/supabase-community/gotrue-py/issues/64)) ([`d783015`](https://github.com/supabase-community/gotrue-py/commit/d783015b5d2472fe95a83f5d42efe97f79331516))
