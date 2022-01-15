@@ -529,7 +529,7 @@ class SyncGoTrueAPI:
         response = self.http_client.put(url, json=data, headers=headers)
         return User.parse_response(response)
 
-    def delete_user(self, *, uid: str, jwt: str) -> User:
+    def delete_user(self, *, uid: str, jwt: str) -> None:
         """Delete a user. Requires a `service_role` key.
 
         This function should only be called on a server.
@@ -555,7 +555,7 @@ class SyncGoTrueAPI:
         headers = self._create_request_headers(jwt=jwt)
         url = f"{self.url}/admin/users/{uid}"
         response = self.http_client.delete(url, headers=headers)
-        return User.parse_response(response)
+        return check_response(response)
 
     def refresh_access_token(self, *, refresh_token: str) -> Session:
         """Generates a new JWT.

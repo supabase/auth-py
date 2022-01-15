@@ -529,7 +529,7 @@ class AsyncGoTrueAPI:
         response = await self.http_client.put(url, json=data, headers=headers)
         return User.parse_response(response)
 
-    async def delete_user(self, *, uid: str, jwt: str) -> User:
+    async def delete_user(self, *, uid: str, jwt: str) -> None:
         """Delete a user. Requires a `service_role` key.
 
         This function should only be called on a server.
@@ -555,7 +555,7 @@ class AsyncGoTrueAPI:
         headers = self._create_request_headers(jwt=jwt)
         url = f"{self.url}/admin/users/{uid}"
         response = await self.http_client.delete(url, headers=headers)
-        return User.parse_response(response)
+        return check_response(response)
 
     async def refresh_access_token(self, *, refresh_token: str) -> Session:
         """Generates a new JWT.

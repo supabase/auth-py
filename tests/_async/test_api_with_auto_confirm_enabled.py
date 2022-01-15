@@ -8,7 +8,7 @@ from gotrue.constants import COOKIE_OPTIONS
 from gotrue.types import CookieOptions, Session, User
 
 GOTRUE_URL = "http://localhost:9998"
-TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwicm9sZSI6InN1cGFiYXNlX2FkbWluIiwiaWF0IjoxNTE2MjM5MDIyfQ.0sOtTSTfPv5oPZxsjvBO249FI4S4p0ymHoIZ6H6z9Y8"  # noqa: E501
+TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic2VydmljZV9yb2xlIiwiaWF0IjoxNjQyMjMyNzUwfQ.TUR8Zu05TtNR25L42soA2trZpc4oBR8-9Pv5r5bvls8"  # noqa: E501
 
 
 @pytest.fixture(name="api")
@@ -50,5 +50,16 @@ async def test_get_user(api: AsyncGoTrueAPI):
         jwt = valid_session.access_token if valid_session else ""
         response = await api.get_user(jwt=jwt)
         assert isinstance(response, User)
+    except Exception as e:
+        assert False, str(e)
+
+
+@pytest.mark.asyncio
+@pytest.mark.depends(on=[test_get_user.__name__])
+async def test_delete_user(api: AsyncGoTrueAPI):
+    try:
+        jwt = valid_session.access_token if valid_session else ""
+        user = await api.get_user(jwt=jwt)
+        await api.delete_user(uid=str(user.id), jwt=TOKEN)
     except Exception as e:
         assert False, str(e)
