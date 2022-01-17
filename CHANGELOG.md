@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.4.0 (2022-01-17)
+### Feature
+* Add notion to enum of providers ([#70](https://github.com/supabase-community/gotrue-py/issues/70)) ([`a8f2c45`](https://github.com/supabase-community/gotrue-py/commit/a8f2c45b25c9d008de7a5e1e6f18cc47a259c73c))
+
+**[See all commits in this version](https://github.com/supabase-community/gotrue-py/compare/v0.3.5...v0.4.0)**
+
 ## v0.3.5 (2022-01-15)
 ### Fix
 * Delete_user returns Exception event if response is Ok ([#68](https://github.com/supabase-community/gotrue-py/issues/68)) ([`23c167e`](https://github.com/supabase-community/gotrue-py/commit/23c167e7082c5ddb4dd64b958aa55065c2b3e468))
