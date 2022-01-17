@@ -138,6 +138,7 @@ class Provider(str, Enum):
     github = "github"
     gitlab = "gitlab"
     google = "google"
+    notion = "notion"
     slack = "slack"
     spotify = "spotify"
     twitter = "twitter"
