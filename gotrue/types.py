@@ -17,9 +17,7 @@ T = TypeVar("T", bound=BaseModel)
 def determine_session_or_user_model_from_response(
     response: Response,
 ) -> Union[Type[Session], Type[User]]:
-    if "access_token" in response.json():
-        return Session
-    return User
+    return Session if "access_token" in response.json() else User
 
 
 class BaseModelFromResponse(BaseModel):
