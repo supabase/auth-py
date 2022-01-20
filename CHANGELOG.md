@@ -2,6 +2,15 @@
 
 <!--next-version-placeholder-->
 
+## v0.5.0 (2022-01-20)
+### Feature
+* Add create user param to sign in ([#75](https://github.com/supabase-community/gotrue-py/issues/75)) ([`57ec6d8`](https://github.com/supabase-community/gotrue-py/commit/57ec6d8efe1233c1b90a8585045e6f85a4a3c17b))
+
+### Documentation
+* Add maintainers file ([`2f5f005`](https://github.com/supabase-community/gotrue-py/commit/2f5f005235e90127cb7effde7396bb55088b815f))
+
+**[See all commits in this version](https://github.com/supabase-community/gotrue-py/compare/v0.4.0...v0.5.0)**
+
 ## v0.4.0 (2022-01-17)
 ### Feature
 * Add notion to enum of providers ([#70](https://github.com/supabase-community/gotrue-py/issues/70)) ([`a8f2c45`](https://github.com/supabase-community/gotrue-py/commit/a8f2c45b25c9d008de7a5e1e6f18cc47a259c73c))
