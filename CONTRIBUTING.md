@@ -9,9 +9,7 @@ In the interest of fostering an open and welcoming environment, please review an
 ## Code and copy reviews
 
 All submissions, including submissions by project members, require review. We
-use GitHub pull requests for this purpose. Consult
-[GitHub Help](https://help.github.com/articles/about-pull-requests) for more
-information on using pull requests.
+use GitHub pull requests for this purpose. After filing a pull request, please tag any two of the [current maintainers](./MAINTAINERS.md) to request a review.
 
 ## Report an issue
 
@@ -27,6 +25,5 @@ When making pull requests to the repository, make sure to follow these guideline
 
 - Before creating a pull request, file a GitHub Issue so that maintainers and the community can discuss the problem and potential solutions before you spend time on an implementation.
 - In your PR's description, link to any related issues or pull requests to give reviewers the full context of your change.
-- For commit messages, follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0) format.
+- For commit messages, follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) format.
   - For example, if you update documentation for a specific extension, your commit message might be: `docs(extension-name) updated installation documentation`.
-diff --git a/CODE_OF_CONDUCT.md b/CODE_OF_CONDUCT.md
