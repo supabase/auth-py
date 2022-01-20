@@ -299,8 +299,7 @@ class AsyncGoTrueClient:
         """
         if not self.current_session:
             raise ValueError("Not logged in.")
-        response = await self._call_refresh_token()
-        return response
+        return await self._call_refresh_token()
 
     async def update(self, *, attributes: UserAttributes) -> User:
         """Updates user data, if there is a logged in user.
@@ -532,12 +531,11 @@ class AsyncGoTrueClient:
         scopes: Optional[str],
     ) -> str:
         """Sign in with provider."""
-        response = await self.api.get_url_for_provider(
+        return await self.api.get_url_for_provider(
             provider=provider,
             redirect_to=redirect_to,
             scopes=scopes,
         )
-        return response
 
     async def _recover_common(self) -> Optional[Tuple[Session, int, int]]:
         """Recover common logic"""
