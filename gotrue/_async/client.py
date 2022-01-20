@@ -71,7 +71,7 @@ class AsyncGoTrueClient:
             "headers": {**empty_or_default_headers, **headers},
             "cookie_options": cookie_options,
         }
-        self.api = api if api else AsyncGoTrueAPI(**args)
+        self.api = api or AsyncGoTrueAPI(**args)
 
     async def __aenter__(self) -> AsyncGoTrueClient:
         return self
@@ -209,7 +209,7 @@ class AsyncGoTrueClient:
             response = await self.api.send_magic_link_email(
                 email=email, create_user=create_user
             )
-        elif email and password:
+        elif email:
             response = await self._handle_email_sign_in(
                 email=email,
                 password=password,
@@ -219,7 +219,7 @@ class AsyncGoTrueClient:
             response = await self.api.send_mobile_otp(
                 phone=phone, create_user=create_user
             )
-        elif phone and password:
+        elif phone:
             response = await self._handle_phone_sign_in(phone=phone, password=password)
         elif refresh_token:
             # current_session and current_user will be updated to latest
@@ -570,15 +570,16 @@ class AsyncGoTrueClient:
         if not result:
             return
         session, expires_at, time_now = result
-        if expires_at < time_now:
-            if self.auto_refresh_token and session.refresh_token:
-                try:
-                    await self._call_refresh_token(refresh_token=session.refresh_token)
-                except APIError:
-                    await self._remove_session()
-            else:
+        if (
+            expires_at < time_now
+            and self.auto_refresh_token
+            and session.refresh_token
+        ):
+            try:
+                await self._call_refresh_token(refresh_token=session.refresh_token)
+            except APIError:
                 await self._remove_session()
-        elif not session or not session.user:
+        elif expires_at < time_now or not session or not session.user:
             await self._remove_session()
         else:
             await self._save_session(session=session)
