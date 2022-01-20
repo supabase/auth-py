@@ -205,22 +205,26 @@ class AsyncGoTrueClient:
             If an error occurs
         """
         await self._remove_session()
-        if email and not password:
-            response = await self.api.send_magic_link_email(
-                email=email, create_user=create_user
-            )
-        elif email:
-            response = await self._handle_email_sign_in(
-                email=email,
-                password=password,
-                redirect_to=redirect_to,
-            )
-        elif phone and not password:
-            response = await self.api.send_mobile_otp(
-                phone=phone, create_user=create_user
-            )
+        if email:
+            if password:
+                response = await self._handle_email_sign_in(
+                    email=email,
+                    password=password,
+                    redirect_to=redirect_to,
+                )
+            else:
+                response = await self.api.send_magic_link_email(
+                    email=email, create_user=create_user
+                )
         elif phone:
-            response = await self._handle_phone_sign_in(phone=phone, password=password)
+            if password:
+                response = await self._handle_phone_sign_in(
+                    phone=phone, password=password
+                )
+            else:
+                response = await self.api.send_mobile_otp(
+                    phone=phone, create_user=create_user
+                )
         elif refresh_token:
             # current_session and current_user will be updated to latest
             # on _call_refresh_token using the passed refresh_token
@@ -570,11 +574,7 @@ class AsyncGoTrueClient:
         if not result:
             return
         session, expires_at, time_now = result
-        if (
-            expires_at < time_now
-            and self.auto_refresh_token
-            and session.refresh_token
-        ):
+        if expires_at < time_now and self.auto_refresh_token and session.refresh_token:
             try:
                 await self._call_refresh_token(refresh_token=session.refresh_token)
             except APIError:

@@ -205,20 +205,24 @@ class SyncGoTrueClient:
             If an error occurs
         """
         self._remove_session()
-        if email and not password:
-            response = self.api.send_magic_link_email(
-                email=email, create_user=create_user
-            )
-        elif email:
-            response = self._handle_email_sign_in(
-                email=email,
-                password=password,
-                redirect_to=redirect_to,
-            )
-        elif phone and not password:
-            response = self.api.send_mobile_otp(phone=phone, create_user=create_user)
+        if email:
+            if password:
+                response = self._handle_email_sign_in(
+                    email=email,
+                    password=password,
+                    redirect_to=redirect_to,
+                )
+            else:
+                response = self.api.send_magic_link_email(
+                    email=email, create_user=create_user
+                )
         elif phone:
-            response = self._handle_phone_sign_in(phone=phone, password=password)
+            if password:
+                response = self._handle_phone_sign_in(phone=phone, password=password)
+            else:
+                response = self.api.send_mobile_otp(
+                    phone=phone, create_user=create_user
+                )
         elif refresh_token:
             # current_session and current_user will be updated to latest
             # on _call_refresh_token using the passed refresh_token
@@ -293,7 +297,8 @@ class SyncGoTrueClient:
         """
         if not self.current_session:
             raise ValueError("Not logged in.")
-        return self._call_refresh_token()
+        response = self._call_refresh_token()
+        return response
 
     def update(self, *, attributes: UserAttributes) -> User:
         """Updates user data, if there is a logged in user.
@@ -525,11 +530,12 @@ class SyncGoTrueClient:
         scopes: Optional[str],
     ) -> str:
         """Sign in with provider."""
-        return self.api.get_url_for_provider(
+        response = self.api.get_url_for_provider(
             provider=provider,
             redirect_to=redirect_to,
             scopes=scopes,
         )
+        return response
 
     def _recover_common(self) -> Optional[Tuple[Session, int, int]]:
         """Recover common logic"""
@@ -566,11 +572,7 @@ class SyncGoTrueClient:
         if not result:
             return
         session, expires_at, time_now = result
-        if (
-            expires_at < time_now
-            and self.auto_refresh_token
-            and session.refresh_token
-        ):
+        if expires_at < time_now and self.auto_refresh_token and session.refresh_token:
             try:
                 self._call_refresh_token(refresh_token=session.refresh_token)
             except APIError:
