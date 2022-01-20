@@ -158,6 +158,7 @@ class AsyncGoTrueClient:
         provider: Optional[Provider] = None,
         redirect_to: Optional[str] = None,
         scopes: Optional[str] = None,
+        create_user: bool = False,
     ) -> Optional[Union[Session, str]]:
         """Log in an existing user, or login via a third-party provider.
         If email and phone are provided, email will be used and phone will be ignored.
@@ -205,7 +206,9 @@ class AsyncGoTrueClient:
         """
         await self._remove_session()
         if email and not password:
-            response = await self.api.send_magic_link_email(email=email)
+            response = await self.api.send_magic_link_email(
+                email=email, create_user=create_user
+            )
         elif email and password:
             response = await self._handle_email_sign_in(
                 email=email,
@@ -213,7 +216,9 @@ class AsyncGoTrueClient:
                 redirect_to=redirect_to,
             )
         elif phone and not password:
-            response = await self.api.send_mobile_otp(phone=phone)
+            response = await self.api.send_mobile_otp(
+                phone=phone, create_user=create_user
+            )
         elif phone and password:
             response = await self._handle_phone_sign_in(phone=phone, password=password)
         elif refresh_token:
