@@ -71,7 +71,7 @@ class AsyncGoTrueClient:
             "headers": {**empty_or_default_headers, **headers},
             "cookie_options": cookie_options,
         }
-        self.api = api if api else AsyncGoTrueAPI(**args)
+        self.api = api or AsyncGoTrueAPI(**args)
 
     async def __aenter__(self) -> AsyncGoTrueClient:
         return self
@@ -158,6 +158,7 @@ class AsyncGoTrueClient:
         provider: Optional[Provider] = None,
         redirect_to: Optional[str] = None,
         scopes: Optional[str] = None,
+        create_user: bool = False,
     ) -> Optional[Union[Session, str]]:
         """Log in an existing user, or login via a third-party provider.
         If email and phone are provided, email will be used and phone will be ignored.
@@ -204,18 +205,26 @@ class AsyncGoTrueClient:
             If an error occurs
         """
         await self._remove_session()
-        if email and not password:
-            response = await self.api.send_magic_link_email(email=email)
-        elif email and password:
-            response = await self._handle_email_sign_in(
-                email=email,
-                password=password,
-                redirect_to=redirect_to,
-            )
-        elif phone and not password:
-            response = await self.api.send_mobile_otp(phone=phone)
-        elif phone and password:
-            response = await self._handle_phone_sign_in(phone=phone, password=password)
+        if email:
+            if password:
+                response = await self._handle_email_sign_in(
+                    email=email,
+                    password=password,
+                    redirect_to=redirect_to,
+                )
+            else:
+                response = await self.api.send_magic_link_email(
+                    email=email, create_user=create_user
+                )
+        elif phone:
+            if password:
+                response = await self._handle_phone_sign_in(
+                    phone=phone, password=password
+                )
+            else:
+                response = await self.api.send_mobile_otp(
+                    phone=phone, create_user=create_user
+                )
         elif refresh_token:
             # current_session and current_user will be updated to latest
             # on _call_refresh_token using the passed refresh_token
@@ -290,8 +299,7 @@ class AsyncGoTrueClient:
         """
         if not self.current_session:
             raise ValueError("Not logged in.")
-        response = await self._call_refresh_token()
-        return response
+        return await self._call_refresh_token()
 
     async def update(self, *, attributes: UserAttributes) -> User:
         """Updates user data, if there is a logged in user.
@@ -523,12 +531,11 @@ class AsyncGoTrueClient:
         scopes: Optional[str],
     ) -> str:
         """Sign in with provider."""
-        response = await self.api.get_url_for_provider(
+        return await self.api.get_url_for_provider(
             provider=provider,
             redirect_to=redirect_to,
             scopes=scopes,
         )
-        return response
 
     async def _recover_common(self) -> Optional[Tuple[Session, int, int]]:
         """Recover common logic"""
@@ -565,15 +572,12 @@ class AsyncGoTrueClient:
         if not result:
             return
         session, expires_at, time_now = result
-        if expires_at < time_now:
-            if self.auto_refresh_token and session.refresh_token:
-                try:
-                    await self._call_refresh_token(refresh_token=session.refresh_token)
-                except APIError:
-                    await self._remove_session()
-            else:
+        if expires_at < time_now and self.auto_refresh_token and session.refresh_token:
+            try:
+                await self._call_refresh_token(refresh_token=session.refresh_token)
+            except APIError:
                 await self._remove_session()
-        elif not session or not session.user:
+        elif expires_at < time_now or not session or not session.user:
             await self._remove_session()
         else:
             await self._save_session(session=session)

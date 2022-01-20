@@ -248,6 +248,7 @@ class AsyncGoTrueAPI:
         self,
         *,
         email: str,
+        create_user: bool,
         redirect_to: Optional[str] = None,
     ) -> None:
         """Sends a magic login link to an email address.
@@ -269,12 +270,12 @@ class AsyncGoTrueAPI:
         if redirect_to:
             redirect_to_encoded = encode_uri_component(redirect_to)
             query_string = f"?redirect_to={redirect_to_encoded}"
-        data = {"email": email}
+        data = {"email": email, "create_user": create_user}
         url = f"{self.url}/magiclink{query_string}"
         response = await self.http_client.post(url, json=data, headers=headers)
         return check_response(response)
 
-    async def send_mobile_otp(self, *, phone: str) -> None:
+    async def send_mobile_otp(self, *, phone: str, create_user: bool) -> None:
         """Sends a mobile OTP via SMS. Will register the account if it doesn't already exist
 
         Parameters
@@ -288,7 +289,7 @@ class AsyncGoTrueAPI:
             If an error occurs
         """
         headers = self.headers
-        data = {"phone": phone}
+        data = {"phone": phone, "create_user": create_user}
         url = f"{self.url}/otp"
         response = await self.http_client.post(url, json=data, headers=headers)
         return check_response(response)
