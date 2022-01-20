@@ -297,8 +297,7 @@ class SyncGoTrueClient:
         """
         if not self.current_session:
             raise ValueError("Not logged in.")
-        response = self._call_refresh_token()
-        return response
+        return self._call_refresh_token()
 
     def update(self, *, attributes: UserAttributes) -> User:
         """Updates user data, if there is a logged in user.
@@ -530,12 +529,11 @@ class SyncGoTrueClient:
         scopes: Optional[str],
     ) -> str:
         """Sign in with provider."""
-        response = self.api.get_url_for_provider(
+        return self.api.get_url_for_provider(
             provider=provider,
             redirect_to=redirect_to,
             scopes=scopes,
         )
-        return response
 
     def _recover_common(self) -> Optional[Tuple[Session, int, int]]:
         """Recover common logic"""
