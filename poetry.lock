@@ -224,7 +224,7 @@ setuptools_scm = "*"
 
 [[package]]
 name = "faker"
-version = "13.3.0"
+version = "13.3.1"
 description = "Faker is a Python package that generates fake data for you."
 category = "dev"
 optional = false
@@ -1183,7 +1183,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "e077c9ddd7b99843571b77fc4154b31fc94f53b95ea385ae30dd8b53effc4c09"
+content-hash = "fc99b480149f9023e707a5b4c422853c0e739799a69c766cf9ba1b7b41174d45"
 
 [metadata.files]
 alabaster = [
@@ -1388,8 +1388,8 @@ dotty-dict = [
     {file = "dotty_dict-1.3.0.tar.gz", hash = "sha256:eb0035a3629ecd84397a68f1f42f1e94abd1c34577a19cd3eacad331ee7cbaf0"},
 ]
 faker = [
-    {file = "Faker-13.3.0-py3-none-any.whl", hash = "sha256:7e878365aaf2f6a3f88a689c5f8209b8b93f45e3e9c991272552553006856637"},
-    {file = "Faker-13.3.0.tar.gz", hash = "sha256:618b140c77475786dbe3a5409ad53521cb76746ab7a5c77b99c663f3ef1b1bc2"},
+    {file = "Faker-13.3.1-py3-none-any.whl", hash = "sha256:c88c8b5ee9376a242deca8fe829f9a3215ffa43c31da6f66d9594531fb344453"},
+    {file = "Faker-13.3.1.tar.gz", hash = "sha256:fa060e331ffffb57cfa4c07f95d54911e339984ed72596ba6a9e7b6fa569d799"},
 ]
 filelock = [
     {file = "filelock-3.4.2-py3-none-any.whl", hash = "sha256:cf0fc6a2f8d26bd900f19bf33915ca70ba4dd8c56903eeb14e1e7a2fd7590146"},
