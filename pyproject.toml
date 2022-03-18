@@ -20,7 +20,7 @@ httpx = ">=0.21.3,<0.23.0"
 pydantic = "^1.9.0"
 
 [tool.poetry.dev-dependencies]
-pytest = "^7.1.0"
+pytest = "^7.1.1"
 Sphinx = "^4.3.2"
 flake8 = "^4.0.1"
 black = "^22.1"
