@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.5.1 (2022-07-04)
+### Fix
+* Upgrade dependencies and fix config tests ([#126](https://github.com/supabase-community/gotrue-py/pull/126))
+
 ## v0.5.0 (2022-01-20)
 ### Feature
 * Add create user param to sign in ([#75](https://github.com/supabase-community/gotrue-py/issues/75)) ([`57ec6d8`](https://github.com/supabase-community/gotrue-py/commit/57ec6d8efe1233c1b90a8585045e6f85a4a3c17b))
@@ -70,7 +74,7 @@
 * error in remove_item of memory storage
 * cycle of references between helpers and types
 * use environ vars only if present
-* reinstate lib __init__.py
+* reinstate lib **init**.py
 * reinstate lib.constants
 * readjust indent in ci.yml
 
@@ -85,13 +89,13 @@
 * add datetime and uuid types
 * add pyupgrade pre-commit hook
 * migrate types to pydantic models
-* unify logic of __recover_session and __recover_and_refresh
+* unify logic of __recover_session and__recover_and_refresh
 * uuid4().hex instead of str(uuid4()) in _sync client
 * uuid4().hex instead of str(uuid4())
 * add --ignore-init-module-imports to .pre-commit-config.yaml
 * add end-of-file-fixer to .pre-commit-config.yaml
 * use asdict of dataclasses for to_dicts
-* use annotations from __future__
+* use annotations from **future**
 * add identities to User
 * use reflection for parsing dataclasses
 * implement and use cli for unasync
