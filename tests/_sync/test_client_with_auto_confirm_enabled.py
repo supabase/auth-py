@@ -254,6 +254,25 @@ def test_update_user(client: SyncGoTrueClient):
 
 
 @pytest.mark.asyncio
+@pytest.mark.depends(on=[test_sign_in.__name__])
+def test_update_user(client: SyncGoTrueClient):
+    try:
+        client.init_recover()
+        response = client.update(attributes={"data":{"hello": "world"}})
+        assert isinstance(response, User)
+        assert response.id
+        assert response.email == email
+        assert response.email_confirmed_at
+        assert response.last_sign_in_at
+        assert response.created_at
+        assert response.updated_at
+        assert response.user_metadata
+        assert response.user_metadata.get("hello") == "world"
+    except Exception as e:
+        assert False, str(e)
+
+
+@pytest.mark.asyncio
 @pytest.mark.depends(on=[test_update_user.__name__])
 def test_get_user_after_update(client: SyncGoTrueClient):
     try:
