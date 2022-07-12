@@ -3,13 +3,14 @@ from __future__ import annotations
 from datetime import datetime
 from enum import Enum
 from time import time
-from typing import Any, Callable, Dict, List, Optional, Type, TypeVar, Union
+from typing import Any, Callable, Dict, List, Optional, Type, TypeVar, Union, TypedDict
 from uuid import UUID
 
 from httpx import Response
 from pydantic import BaseModel, root_validator
 
 from gotrue.helpers import check_response
+
 
 T = TypeVar("T", bound=BaseModel)
 
@@ -150,3 +151,11 @@ class LinkType(str, Enum):
     magiclink = "magiclink"
     recovery = "recovery"
     invite = "invite"
+
+
+class UserAttributesDict(TypedDict):
+    """Dict version of `UserAttributes`"""
+    email: Optional[str]
+    password: Optional[str]
+    email_change_token: Optional[str]
+    data: Optional[Any]

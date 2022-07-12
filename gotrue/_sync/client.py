@@ -18,6 +18,7 @@ from ..types import (
     Subscription,
     User,
     UserAttributes,
+    UserAttributesDict
 )
 from .api import SyncGoTrueAPI
 from .storage import SyncMemoryStorage, SyncSupportedStorage
@@ -299,7 +300,7 @@ class SyncGoTrueClient:
             raise ValueError("Not logged in.")
         return self._call_refresh_token()
 
-    def update(self, *, attributes: UserAttributes) -> User:
+    def update(self, *, attributes: Union[UserAttributesDict, UserAttributes]) -> User:
         """Updates user data, if there is a logged in user.
 
         Parameters
@@ -319,9 +320,15 @@ class SyncGoTrueClient:
         """
         if not self.current_session:
             raise ValueError("Not logged in.")
+
+        if isinstance(attributes, dict):
+            attributes_to_update = UserAttributes(**attributes)
+        else:
+            attributes_to_update = attributes
+
         response = self.api.update_user(
             jwt=self.current_session.access_token,
-            attributes=attributes,
+            attributes=attributes_to_update,
         )
         self.current_session.user = response
         self._save_session(session=self.current_session)
