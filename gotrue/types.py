@@ -17,7 +17,6 @@ from pydantic import BaseModel, root_validator
 
 from gotrue.helpers import check_response
 
-
 T = TypeVar("T", bound=BaseModel)
 
 
@@ -161,6 +160,7 @@ class LinkType(str, Enum):
 
 class UserAttributesDict(TypedDict):
     """Dict version of `UserAttributes`"""
+
     email: Optional[str]
     password: Optional[str]
     email_change_token: Optional[str]
