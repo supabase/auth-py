@@ -4,7 +4,7 @@ import sys
 from datetime import datetime
 from enum import Enum
 from time import time
-from typing import Any, Callable, Dict, List, Optional, Type, TypeVar, Union, TypedDict
+from typing import Any, Callable, Dict, List, Optional, Type, TypeVar, Union
 from uuid import UUID
 
 if sys.version_info >= (3, 8):
