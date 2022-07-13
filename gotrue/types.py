@@ -1,10 +1,16 @@
 from __future__ import annotations
 
+import sys
 from datetime import datetime
 from enum import Enum
 from time import time
 from typing import Any, Callable, Dict, List, Optional, Type, TypeVar, Union, TypedDict
 from uuid import UUID
+
+if sys.version_info >= (3, 8):
+    from typing import TypedDict
+else:
+    from typing_extensions import TypedDict
 
 from httpx import Response
 from pydantic import BaseModel, root_validator
