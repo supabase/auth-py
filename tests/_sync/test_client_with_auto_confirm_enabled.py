@@ -332,10 +332,10 @@ def test_get_update_user_after_sign_out(client: SyncGoTrueClient):
 @pytest.mark.depends(on=[test_get_user_after_sign_out.__name__])
 def test_sign_in_with_the_wrong_password(client: SyncGoTrueClient):
     try:
-        client.sign_in(email=email, password=password + "2")
+        client.sign_in(email=email, password=f"{password}2")
         assert False
     except APIError:
-        assert True
+        pass
     except Exception as e:
         assert False, str(e)
 
@@ -414,8 +414,9 @@ def test_get_session_from_url_errors(client: SyncGoTrueClient):
         error_description = fake.email()
         try:
             client.get_session_from_url(
-                url=dummy_url + f"?error_description={error_description}"
+                url=f"{dummy_url}?error_description={error_description}"
             )
+
             assert False
         except APIError as e:
             assert e.code == 400
