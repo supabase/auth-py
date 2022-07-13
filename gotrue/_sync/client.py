@@ -18,7 +18,7 @@ from ..types import (
     Subscription,
     User,
     UserAttributes,
-    UserAttributesDict
+    UserAttributesDict,
 )
 from .api import SyncGoTrueAPI
 from .storage import SyncMemoryStorage, SyncSupportedStorage

@@ -18,7 +18,7 @@ from ..types import (
     Subscription,
     User,
     UserAttributes,
-    UserAttributesDict
+    UserAttributesDict,
 )
 from .api import AsyncGoTrueAPI
 from .storage import AsyncMemoryStorage, AsyncSupportedStorage
@@ -302,7 +302,9 @@ class AsyncGoTrueClient:
             raise ValueError("Not logged in.")
         return await self._call_refresh_token()
 
-    async def update(self, *, attributes: Union[UserAttributesDict, UserAttributes]) -> User:
+    async def update(
+        self, *, attributes: Union[UserAttributesDict, UserAttributes]
+    ) -> User:
         """Updates user data, if there is a logged in user.
 
         Parameters

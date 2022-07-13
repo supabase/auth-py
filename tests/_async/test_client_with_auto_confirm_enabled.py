@@ -264,9 +264,7 @@ async def test_update_user(client: AsyncGoTrueClient):
 async def test_update_user_dict(client: AsyncGoTrueClient):
     try:
         await client.init_recover()
-        response = await client.update(
-            attributes={"data": {"hello":"world"}}
-        )
+        response = await client.update(attributes={"data": {"hello": "world"}})
         assert isinstance(response, User)
         assert response.id
         assert response.email == email

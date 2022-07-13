@@ -258,7 +258,7 @@ def test_update_user(client: SyncGoTrueClient):
 def test_update_user(client: SyncGoTrueClient):
     try:
         client.init_recover()
-        response = client.update(attributes={"data":{"hello": "world"}})
+        response = client.update(attributes={"data": {"hello": "world"}})
         assert isinstance(response, User)
         assert response.id
         assert response.email == email
