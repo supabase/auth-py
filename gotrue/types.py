@@ -158,7 +158,7 @@ class LinkType(str, Enum):
     invite = "invite"
 
 
-class UserAttributesDict(TypedDict):
+class UserAttributesDict(TypedDict, total=False):
     """Dict version of `UserAttributes`"""
 
     email: Optional[str]

@@ -305,8 +305,8 @@ class SyncGoTrueClient:
 
         Parameters
         ----------
-        attributes : UserAttributes
-            The attributes to update.
+        attributes : UserAttributesDict | UserAttributes
+            Attributes to update, could be: email, password, email_change_token, data
 
         Returns
         -------

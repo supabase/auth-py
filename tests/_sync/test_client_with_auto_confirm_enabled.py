@@ -255,7 +255,7 @@ def test_update_user(client: SyncGoTrueClient):
 
 @pytest.mark.asyncio
 @pytest.mark.depends(on=[test_sign_in.__name__])
-def test_update_user(client: SyncGoTrueClient):
+def test_update_user_dict(client: SyncGoTrueClient):
     try:
         client.init_recover()
         response = client.update(attributes={"data": {"hello": "world"}})
