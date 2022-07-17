@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.5.3 (2022-07-16)
+### Fix
+* Set total false to user attributes typed dict
+
 ## v0.5.2 (2022-07-13)
 ### Feature
 * Change .update method to also allow dictionaries ([#130](https://github.com/supabase-community/gotrue-py/pull/130)) thanks to [@odiseo0](https://github.com/odiseo0)
