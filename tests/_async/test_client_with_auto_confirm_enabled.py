@@ -50,7 +50,6 @@ password = fake.password()
 access_token: Optional[str] = None
 
 
-@pytest.mark.asyncio
 async def test_sign_up(client: AsyncGoTrueClient):
     try:
         response = await client.sign_up(
@@ -80,7 +79,6 @@ async def test_sign_up(client: AsyncGoTrueClient):
         assert False, str(e)
 
 
-@pytest.mark.asyncio
 async def test_set_session_should_return_no_error(
     client_with_session: AsyncGoTrueClient,
 ):
@@ -101,7 +99,6 @@ async def test_set_session_should_return_no_error(
         assert False, str(e)
 
 
-@pytest.mark.asyncio
 @pytest.mark.depends(on=[test_sign_up.__name__])
 async def test_sign_up_the_same_user_twice_should_throw_an_error(
     client: AsyncGoTrueClient,
@@ -119,7 +116,6 @@ async def test_sign_up_the_same_user_twice_should_throw_an_error(
         assert False, str(e)
 
 
-@pytest.mark.asyncio
 @pytest.mark.depends(on=[test_sign_up.__name__])
 async def test_set_auth_should_set_the_auth_headers_on_a_new_client(
     new_client: AsyncGoTrueClient,
@@ -133,7 +129,6 @@ async def test_set_auth_should_set_the_auth_headers_on_a_new_client(
         assert False, str(e)
 
 
-@pytest.mark.asyncio
 @pytest.mark.depends(
     on=[test_set_auth_should_set_the_auth_headers_on_a_new_client.__name__]
 )
@@ -150,7 +145,6 @@ async def test_set_auth_should_set_the_auth_headers_on_a_new_client_and_recover(
         assert False, str(e)
 
 
-@pytest.mark.asyncio
 @pytest.mark.depends(on=[test_sign_up.__name__])
 async def test_sign_in(client: AsyncGoTrueClient):
     try:
@@ -173,7 +167,6 @@ async def test_sign_in(client: AsyncGoTrueClient):
         assert False, str(e)
 
 
-@pytest.mark.asyncio
 async def test_sign_in_with_refresh_token(client_with_session: AsyncGoTrueClient):
     try:
         response = await client_with_session.sign_up(
@@ -203,7 +196,6 @@ async def test_sign_in_with_refresh_token(client_with_session: AsyncGoTrueClient
         assert False, str(e)
 
 
-@pytest.mark.asyncio
 @pytest.mark.depends(on=[test_sign_in.__name__])
 async def test_get_user(client: AsyncGoTrueClient):
     try:
@@ -223,7 +215,6 @@ async def test_get_user(client: AsyncGoTrueClient):
         assert False, str(e)
 
 
-@pytest.mark.asyncio
 @pytest.mark.depends(on=[test_sign_in.__name__])
 async def test_get_session(client: AsyncGoTrueClient):
     try:
@@ -238,7 +229,6 @@ async def test_get_session(client: AsyncGoTrueClient):
         assert False, str(e)
 
 
-@pytest.mark.asyncio
 @pytest.mark.depends(on=[test_sign_in.__name__])
 async def test_update_user(client: AsyncGoTrueClient):
     try:
@@ -259,7 +249,6 @@ async def test_update_user(client: AsyncGoTrueClient):
         assert False, str(e)
 
 
-@pytest.mark.asyncio
 @pytest.mark.depends(on=[test_sign_in.__name__])
 async def test_update_user_dict(client: AsyncGoTrueClient):
     try:
@@ -278,7 +267,6 @@ async def test_update_user_dict(client: AsyncGoTrueClient):
         assert False, str(e)
 
 
-@pytest.mark.asyncio
 @pytest.mark.depends(on=[test_update_user.__name__])
 async def test_get_user_after_update(client: AsyncGoTrueClient):
     try:
@@ -297,7 +285,6 @@ async def test_get_user_after_update(client: AsyncGoTrueClient):
         assert False, str(e)
 
 
-@pytest.mark.asyncio
 @pytest.mark.depends(on=[test_get_user_after_update.__name__])
 async def test_sign_out(client: AsyncGoTrueClient):
     try:
@@ -309,7 +296,6 @@ async def test_sign_out(client: AsyncGoTrueClient):
         assert False, str(e)
 
 
-@pytest.mark.asyncio
 @pytest.mark.depends(on=[test_sign_out.__name__])
 async def test_get_user_after_sign_out(client: AsyncGoTrueClient):
     try:
@@ -320,7 +306,6 @@ async def test_get_user_after_sign_out(client: AsyncGoTrueClient):
         assert False, str(e)
 
 
-@pytest.mark.asyncio
 @pytest.mark.depends(on=[test_sign_out.__name__])
 async def test_get_update_user_after_sign_out(client: AsyncGoTrueClient):
     expected_error_message = "Not logged in."
@@ -334,7 +319,6 @@ async def test_get_update_user_after_sign_out(client: AsyncGoTrueClient):
         assert False, str(e)
 
 
-@pytest.mark.asyncio
 @pytest.mark.depends(on=[test_get_user_after_sign_out.__name__])
 async def test_sign_in_with_the_wrong_password(client: AsyncGoTrueClient):
     try:
@@ -346,7 +330,6 @@ async def test_sign_in_with_the_wrong_password(client: AsyncGoTrueClient):
         assert False, str(e)
 
 
-@pytest.mark.asyncio
 async def test_sign_up_with_password_none(client: AsyncGoTrueClient):
     expected_error_message = "Password must be defined, can't be None."
     try:
@@ -358,7 +341,6 @@ async def test_sign_up_with_password_none(client: AsyncGoTrueClient):
         assert False, str(e)
 
 
-@pytest.mark.asyncio
 async def test_sign_up_with_email_and_phone_none(client: AsyncGoTrueClient):
     expected_error_message = "Email or phone must be defined, both can't be None."
     try:
@@ -370,7 +352,6 @@ async def test_sign_up_with_email_and_phone_none(client: AsyncGoTrueClient):
         assert False, str(e)
 
 
-@pytest.mark.asyncio
 async def test_sign_in_with_all_nones(client: AsyncGoTrueClient):
     expected_error_message = (
         "Email, phone, refresh_token, or provider must be defined, "
@@ -385,7 +366,6 @@ async def test_sign_in_with_all_nones(client: AsyncGoTrueClient):
         assert False, str(e)
 
 
-@pytest.mark.asyncio
 async def test_sign_in_with_magic_link(client: AsyncGoTrueClient):
     try:
         response = await client.sign_in(email=email)
@@ -394,7 +374,6 @@ async def test_sign_in_with_magic_link(client: AsyncGoTrueClient):
         assert False, str(e)
 
 
-@pytest.mark.asyncio
 @pytest.mark.depends(on=[test_sign_up.__name__])
 async def test_get_session_from_url(client: AsyncGoTrueClient):
     try:
@@ -413,7 +392,6 @@ async def test_get_session_from_url(client: AsyncGoTrueClient):
         assert False, str(e)
 
 
-@pytest.mark.asyncio
 async def test_get_session_from_url_errors(client: AsyncGoTrueClient):
     try:
         dummy_url = "https://localhost"
@@ -465,7 +443,6 @@ async def test_get_session_from_url_errors(client: AsyncGoTrueClient):
         assert False, str(e)
 
 
-@pytest.mark.asyncio
 @pytest.mark.depends(on=[test_get_update_user_after_sign_out.__name__])
 async def test_refresh_session(client: AsyncGoTrueClient):
     try:

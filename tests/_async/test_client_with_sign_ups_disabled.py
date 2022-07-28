@@ -38,7 +38,6 @@ email = fake.email().lower()
 password = fake.password()
 
 
-@pytest.mark.asyncio
 async def test_sign_up(client: AsyncGoTrueClient):
     expected_error_message = "Signups not allowed for this instance"
     try:
@@ -53,7 +52,6 @@ async def test_sign_up(client: AsyncGoTrueClient):
 invited_user = fake.email().lower()
 
 
-@pytest.mark.asyncio
 async def test_generate_link_should_be_able_to_generate_multiple_links(
     auth_admin: AsyncGoTrueAPI,
 ):
@@ -105,7 +103,6 @@ async def test_generate_link_should_be_able_to_generate_multiple_links(
 email2 = fake.email().lower()
 
 
-@pytest.mark.asyncio
 async def test_create_user(auth_admin: AsyncGoTrueAPI):
     try:
         attributes = UserAttributes(email=email2)
@@ -120,7 +117,6 @@ async def test_create_user(auth_admin: AsyncGoTrueAPI):
         assert False, str(e)
 
 
-@pytest.mark.asyncio
 def test_default_headers(client: AsyncGoTrueClient):
     """Test client for existing default headers"""
     default_key = "X-Client-Info"

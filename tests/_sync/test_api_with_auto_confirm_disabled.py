@@ -27,7 +27,6 @@ email = f"api_ac_disabled_{fake.email().lower()}"
 password = fake.password()
 
 
-@pytest.mark.asyncio
 def test_sign_up_with_email_and_password(api: SyncGoTrueAPI):
     try:
         response = api.sign_up_with_email(
@@ -45,7 +44,6 @@ email2 = f"api_generate_link_signup_{fake.email().lower()}"
 password2 = fake.password()
 
 
-@pytest.mark.asyncio
 def test_generate_sign_up_link(api: SyncGoTrueAPI):
     try:
         response = api.generate_link(
@@ -63,7 +61,6 @@ def test_generate_sign_up_link(api: SyncGoTrueAPI):
 email3 = f"api_generate_link_signup_{fake.email().lower()}"
 
 
-@pytest.mark.asyncio
 def test_generate_magic_link(api: SyncGoTrueAPI):
     try:
         response = api.generate_link(
@@ -76,7 +73,6 @@ def test_generate_magic_link(api: SyncGoTrueAPI):
         assert False, str(e)
 
 
-@pytest.mark.asyncio
 def test_generate_invite_link(api: SyncGoTrueAPI):
     try:
         response = api.generate_link(
@@ -89,7 +85,6 @@ def test_generate_invite_link(api: SyncGoTrueAPI):
         assert False, str(e)
 
 
-@pytest.mark.asyncio
 @pytest.mark.depends(on=[test_sign_up_with_email_and_password.__name__])
 def test_generate_recovery_link(api: SyncGoTrueAPI):
     try:

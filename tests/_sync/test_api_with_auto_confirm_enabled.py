@@ -28,7 +28,6 @@ password = fake.password()
 valid_session: Optional[Session] = None
 
 
-@pytest.mark.asyncio
 def test_sign_up_with_email(api: SyncGoTrueAPI):
     global valid_session
     try:
@@ -43,7 +42,6 @@ def test_sign_up_with_email(api: SyncGoTrueAPI):
         assert False, str(e)
 
 
-@pytest.mark.asyncio
 @pytest.mark.depends(on=[test_sign_up_with_email.__name__])
 def test_get_user(api: SyncGoTrueAPI):
     try:
@@ -54,7 +52,6 @@ def test_get_user(api: SyncGoTrueAPI):
         assert False, str(e)
 
 
-@pytest.mark.asyncio
 @pytest.mark.depends(on=[test_get_user.__name__])
 def test_delete_user(api: SyncGoTrueAPI):
     try:

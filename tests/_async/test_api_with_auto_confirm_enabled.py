@@ -28,7 +28,6 @@ password = fake.password()
 valid_session: Optional[Session] = None
 
 
-@pytest.mark.asyncio
 async def test_sign_up_with_email(api: AsyncGoTrueAPI):
     global valid_session
     try:
@@ -43,7 +42,6 @@ async def test_sign_up_with_email(api: AsyncGoTrueAPI):
         assert False, str(e)
 
 
-@pytest.mark.asyncio
 @pytest.mark.depends(on=[test_sign_up_with_email.__name__])
 async def test_get_user(api: AsyncGoTrueAPI):
     try:
@@ -54,7 +52,6 @@ async def test_get_user(api: AsyncGoTrueAPI):
         assert False, str(e)
 
 
-@pytest.mark.asyncio
 @pytest.mark.depends(on=[test_get_user.__name__])
 async def test_delete_user(api: AsyncGoTrueAPI):
     try:

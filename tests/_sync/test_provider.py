@@ -18,7 +18,6 @@ def create_client() -> Iterable[SyncGoTrueClient]:
         yield client
 
 
-@pytest.mark.asyncio
 def test_sign_in_with_provider(client: SyncGoTrueClient):
     try:
         response = client.sign_in(provider=Provider.google)
@@ -27,7 +26,6 @@ def test_sign_in_with_provider(client: SyncGoTrueClient):
         assert False, str(e)
 
 
-@pytest.mark.asyncio
 def test_sign_in_with_provider_can_append_a_redirect_url(
     client: SyncGoTrueClient,
 ):
@@ -41,7 +39,6 @@ def test_sign_in_with_provider_can_append_a_redirect_url(
         assert False, str(e)
 
 
-@pytest.mark.asyncio
 def test_sign_in_with_provider_can_append_scopes(client: SyncGoTrueClient):
     try:
         response = client.sign_in(provider=Provider.google, scopes="repo")
@@ -50,7 +47,6 @@ def test_sign_in_with_provider_can_append_scopes(client: SyncGoTrueClient):
         assert False, str(e)
 
 
-@pytest.mark.asyncio
 def test_sign_in_with_provider_can_append_multiple_options(
     client: SyncGoTrueClient,
 ):
