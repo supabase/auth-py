@@ -21,7 +21,7 @@ pydantic = "^1.9.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.1.2"
-flake8 = "^4.0.1"
+flake8 = "^5.0.1"
 black = "^22.6.0"
 isort = "^5.10.1"
 pre-commit = "^2.20.0"
