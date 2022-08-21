@@ -49,7 +49,7 @@ def download_directory(repository: Repository, sha: str, server_path: str) -> No
     contents = repository.get_dir_contents(server_path, ref=sha)
 
     for content in contents:
-        print("Processing %s" % content.path)
+        print(f"Processing {content.path}")
         if content.type == "dir":
             os.makedirs(content.path)
             download_directory(repository, sha, content.path)
@@ -59,11 +59,10 @@ def download_directory(repository: Repository, sha: str, server_path: str) -> No
                 file_content = repository.get_contents(path, ref=sha)
                 if not isinstance(file_content, ContentFile):
                     raise ValueError("Expected ContentFile")
-                file_out = open(content.path, "w+")
-                if file_content.content:
-                    file_data = base64.b64decode(file_content.content)
-                    file_out.write(file_data.decode("utf-8"))
-                file_out.close()
+                with open(content.path, "w+") as file_out:
+                    if file_content.content:
+                        file_data = base64.b64decode(file_content.content)
+                        file_out.write(file_data.decode("utf-8"))
             except (GithubException, IOError, ValueError) as exc:
                 print("Error processing %s: %s", content.path, exc)
 
@@ -82,7 +81,7 @@ def main(argv):
     try:
         opts, _ = getopt.getopt(argv, "r:b:f:", ["repo=", "branch=", "folder="])
     except getopt.GetoptError as err:
-        print(str(err))
+        print(err)
         usage()
         sys.exit(2)
     repo: Optional[str] = None
