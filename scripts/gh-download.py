@@ -63,7 +63,7 @@ def download_directory(repository: Repository, sha: str, server_path: str) -> No
                     if file_content.content:
                         file_data = base64.b64decode(file_content.content)
                         file_out.write(file_data.decode("utf-8"))
-            except (GithubException, IOError, ValueError) as exc:
+            except (GithubException, OSError, ValueError) as exc:
                 print("Error processing %s: %s", content.path, exc)
 
 
