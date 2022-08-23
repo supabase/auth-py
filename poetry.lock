@@ -56,10 +56,10 @@ typed-ast = {version = ">=1.4.2", markers = "python_version < \"3.8\" and implem
 typing-extensions = {version = ">=3.10.0.0", markers = "python_version < \"3.10\""}
 
 [package.extras]
-uvloop = ["uvloop (>=0.15.2)"]
-jupyter = ["tokenize-rt (>=3.2.0)", "ipython (>=7.8.0)"]
-d = ["aiohttp (>=3.7.4)"]
 colorama = ["colorama (>=0.4.3)"]
+d = ["aiohttp (>=3.7.4)"]
+jupyter = ["ipython (>=7.8.0)", "tokenize-rt (>=3.2.0)"]
+uvloop = ["uvloop (>=0.15.2)"]
 
 [[package]]
 name = "bleach"
@@ -74,8 +74,8 @@ six = ">=1.9.0"
 webencodings = "*"
 
 [package.extras]
-dev = ["mypy (==0.961)", "black (==22.3.0)", "wheel (==0.37.1)", "twine (==4.0.1)", "tox (==3.25.0)", "Sphinx (==4.3.2)", "pytest (==7.1.2)", "pip-tools (==6.6.2)", "hashin (==0.17.0)", "flake8 (==4.0.1)", "build (==0.8.0)"]
 css = ["tinycss2 (>=1.1.0,<1.2)"]
+dev = ["build (==0.8.0)", "flake8 (==4.0.1)", "hashin (==0.17.0)", "pip-tools (==6.6.2)", "pytest (==7.1.2)", "Sphinx (==4.3.2)", "tox (==3.25.0)", "twine (==4.0.1)", "wheel (==0.37.1)", "black (==22.3.0)", "mypy (==0.961)"]
 
 [[package]]
 name = "certifi"
@@ -224,8 +224,8 @@ optional = false
 python-versions = ">=3.7"
 
 [package.extras]
-testing = ["pytest-timeout (>=1.4.2)", "pytest-cov", "pytest (>=4)", "coverage (>=4)", "covdefaults (>=1.2.0)"]
-docs = ["sphinx-autodoc-typehints (>=1.12)", "sphinx (>=4.1)", "furo (>=2021.8.17b43)"]
+docs = ["furo (>=2021.8.17b43)", "sphinx (>=4.1)", "sphinx-autodoc-typehints (>=1.12)"]
+testing = ["covdefaults (>=1.2.0)", "coverage (>=4)", "pytest (>=4)", "pytest-cov", "pytest-timeout (>=1.4.2)"]
 
 [[package]]
 name = "flake8"
@@ -630,7 +630,7 @@ pytest = ">=6.1.0"
 typing-extensions = {version = ">=3.7.2", markers = "python_version < \"3.8\""}
 
 [package.extras]
-testing = ["pytest-trio (>=0.7.0)", "mypy (>=0.931)", "flaky (>=3.5.0)", "hypothesis (>=5.7.1)", "coverage (>=6.2)"]
+testing = ["coverage (>=6.2)", "hypothesis (>=5.7.1)", "flaky (>=3.5.0)", "mypy (>=0.931)", "pytest-trio (>=0.7.0)"]
 
 [[package]]
 name = "pytest-cov"
@@ -690,7 +690,7 @@ yaml = ["PyYaml (>=5.2)"]
 
 [[package]]
 name = "python-semantic-release"
-version = "7.31.2"
+version = "7.31.3"
 description = "Automatic Semantic Versioning for Python projects"
 category = "dev"
 optional = false
@@ -710,10 +710,10 @@ tomlkit = ">=0.10.0,<0.11.0"
 twine = ">=3,<4"
 
 [package.extras]
+test = ["mock (==1.3.0)", "coverage (>=5,<6)", "pytest (>=5,<6)", "pytest-xdist (>=1,<2)", "pytest-mock (>=2,<3)", "responses (==0.13.3)"]
 dev = ["tox", "isort", "black"]
 docs = ["Sphinx (==1.3.6)", "Jinja2 (==3.0.3)"]
 mypy = ["mypy", "types-requests"]
-test = ["coverage (>=5,<6)", "pytest (>=5,<6)", "pytest-xdist (>=1,<2)", "pytest-mock (>=2,<3)", "responses (==0.13.3)", "mock (==1.3.0)"]
 
 [[package]]
 name = "pywin32-ctypes"
@@ -1002,7 +1002,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "35b031cd699f9228d50598d2f6e5e3fdd2c8b96e7082c2056675c83e1fa2779d"
+content-hash = "1b358e36a1c92e366c0d4c505177c2a07b8b41b6a1ebf79a2aca964fa0e1a314"
 
 [metadata.files]
 anyio = [
@@ -1417,8 +1417,8 @@ python-gitlab = [
     {file = "python_gitlab-3.6.0-py3-none-any.whl", hash = "sha256:b855c15e106812a4ada7c4d417def61bc211976bbf2ee1c7e0cd48a83eca4e9f"},
 ]
 python-semantic-release = [
-    {file = "python-semantic-release-7.31.2.tar.gz", hash = "sha256:4d6a135ebbdfdb78999ccb0e6d58774e5b2145898a0faf74ca38a0919ff07440"},
-    {file = "python_semantic_release-7.31.2-py3-none-any.whl", hash = "sha256:a0c10dc5f02de270cd7efbed89a7326d40ca9024bde00f2fcf1262c979bb3dee"},
+    {file = "python-semantic-release-7.31.3.tar.gz", hash = "sha256:a21f0a6907b639ff2018ca0a090be1083de81de5a488b253a6ccf01ee036ab94"},
+    {file = "python_semantic_release-7.31.3-py3-none-any.whl", hash = "sha256:c133f0f6c019cdb9c4873e7778fbe5f1280ca4f714e579f05e87592c5be1097c"},
 ]
 pywin32-ctypes = [
     {file = "pywin32-ctypes-0.2.0.tar.gz", hash = "sha256:24ffc3b341d457d48e8922352130cf2644024a4ff09762a2261fd34c36ee5942"},
