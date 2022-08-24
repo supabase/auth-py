@@ -30,7 +30,7 @@ pytest-depends = "^1.0.1"
 pytest-asyncio = "^0.19.0"
 Faker = "^14.1.0"
 unasync-cli = "^0.0.9"
-python-semantic-release = "^7.31.3"
+python-semantic-release = "^7.31.4"
 
 [tool.semantic_release]
 version_variable = "gotrue/__init__.py:__version__"
