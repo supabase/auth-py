@@ -49,7 +49,7 @@ class CookieOptions(BaseModelFromResponse):
 
 
 class Identity(BaseModelFromResponse):
-    id: UUID
+    id: str
     user_id: UUID
     provider: str
     created_at: datetime
