@@ -17,7 +17,7 @@ classifiers = [
 [tool.poetry.dependencies]
 python = "^3.7"
 httpx = "^0.23.0"
-pydantic = "^1.9.2"
+pydantic = "^1.10.0"
 
 [tool.poetry.dev-dependencies]
 black = "^22.6.0"
@@ -30,7 +30,7 @@ pytest = "^7.1.2"
 pytest-asyncio = "^0.19.0"
 pytest-cov = "^3.0.0"
 pytest-depends = "^1.0.1"
-python-semantic-release = "^7.31.2"
+python-semantic-release = "^7.31.4"
 unasync-cli = "^0.0.9"
 
 [tool.semantic_release]
