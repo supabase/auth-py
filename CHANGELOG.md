@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.5.4 (2022-08-31)
+### Fix
+* Use `str` type instead of `UUID` type in `id` property of `Identity` model ([#156](https://github.com/supabase-community/gotrue-py/pull/156)) thanks to [@leynier](https://github.com/leynier)
+
 ## v0.5.3 (2022-07-16)
 ### Fix
 * Set total false to user attributes typed dict
