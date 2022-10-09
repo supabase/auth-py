@@ -276,7 +276,8 @@ class AsyncGoTrueAPI:
         return check_response(response)
 
     async def send_mobile_otp(self, *, phone: str, create_user: bool) -> None:
-        """Sends a mobile OTP via SMS. Will register the account if it doesn't already exist
+        """Sends a mobile OTP via SMS.
+        Will register the account if it doesn't already exist
 
         Parameters
         ----------
