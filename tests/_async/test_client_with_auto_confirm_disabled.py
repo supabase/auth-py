@@ -79,10 +79,7 @@ async def test_sign_in(client: AsyncGoTrueClient):
 async def test_sign_in_with_the_wrong_password(client: AsyncGoTrueClient):
     expected_error_message = "Invalid login credentials"
     try:
-        await client.sign_in(
-            email=email,
-            password=password + "2",
-        )
+        await client.sign_in(email=email, password=f"{password}2")
         assert False
     except APIError as e:
         assert e.msg == expected_error_message

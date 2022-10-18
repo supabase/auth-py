@@ -331,9 +331,11 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
             if current_session.expires_at
             else False
         )
-        if not has_expired:
-            return current_session
-        return self._call_refresh_token(current_session.refresh_token)
+        return (
+            self._call_refresh_token(current_session.refresh_token)
+            if has_expired
+            else current_session
+        )
 
     def get_user(self, jwt: Union[str, None] = None) -> UserResponse:
         """
@@ -582,7 +584,6 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
             self._in_memory_session = session
         expire_at = session.expires_at
         if expire_at:
-            pass
             time_now = round(time())
             expire_in = expire_at - time_now
             refresh_duration_before_expires = (
@@ -648,8 +649,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         except ValueError:
             return None
         try:
-            session = Session.parse_obj(data)
-            return session
+            return Session.parse_obj(data)
         except Exception:
             return None
 
@@ -658,9 +658,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         query_params: Dict[str, List[str]],
         name: str,
     ) -> Union[str, None]:
-        if name in query_params:
-            return query_params[name][0]
-        return None
+        return query_params[name][0] if name in query_params else None
 
     def _is_implicit_grant_flow(self, url: str) -> bool:
         result = urlparse(url)
