@@ -462,7 +462,17 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         """
         Sends a password reset request to an email address.
         """
-        raise NotImplementedError
+        await self._request(
+            "POST",
+            "recover",
+            body={
+                "email": email,
+                "gotrue_meta_security": {
+                    "captcha_token": options.get("captcha_token"),
+                },
+            },
+            redirect_to=options.get("redirect_to"),
+        )
 
     # Private methods
 
