@@ -78,6 +78,8 @@ class AsyncGoTrueBaseAPI:
     ) -> Union[T, None]:
         url = f"{self._url}/{path}"
         headers = {**self._headers, **(headers or {})}
+        if "Content-Type" not in headers:
+            headers["Content-Type"] = "application/json;charset=UTF-8"
         if jwt:
             headers["Authorization"] = f"Bearer {jwt}"
         query = query or {}
