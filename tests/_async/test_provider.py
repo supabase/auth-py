@@ -2,8 +2,8 @@ from typing import AsyncIterable
 
 import pytest
 
-from gotrue import AsyncGoTrueClient
-from gotrue.types import Provider
+from ...gotrue import AsyncGoTrueClient
+from ...gotrue.types import Provider
 
 GOTRUE_URL = "http://localhost:9999"
 

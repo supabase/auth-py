@@ -1,7 +1,7 @@
 import pytest
 
-from gotrue import AsyncGoTrueClient
-from gotrue.types import Subscription
+from ...gotrue import AsyncGoTrueClient
+from ...gotrue.types import Subscription
 
 GOTRUE_URL = "http://localhost:9999"
 

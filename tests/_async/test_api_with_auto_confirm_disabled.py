@@ -3,9 +3,9 @@ from typing import AsyncIterable
 import pytest
 from faker import Faker
 
-from gotrue import AsyncGoTrueAPI
-from gotrue.constants import COOKIE_OPTIONS
-from gotrue.types import CookieOptions, LinkType, User
+from ...gotrue import AsyncGoTrueAPI
+from ...gotrue.constants import COOKIE_OPTIONS
+from ...gotrue.types import CookieOptions, GenerateLinkType, User
 
 GOTRUE_URL = "http://localhost:9999"
 TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwicm9sZSI6InN1cGFiYXNlX2FkbWluIiwiaWF0IjoxNTE2MjM5MDIyfQ.0sOtTSTfPv5oPZxsjvBO249FI4S4p0ymHoIZ6H6z9Y8"  # noqa: E501
@@ -47,7 +47,7 @@ password2 = fake.password()
 async def test_generate_sign_up_link(api: AsyncGoTrueAPI):
     try:
         response = await api.generate_link(
-            type=LinkType.signup,
+            type=GenerateLinkType.signup,
             email=email2,
             password=password2,
             redirect_to="http://localhost:9999/welcome",
@@ -64,7 +64,7 @@ email3 = f"api_generate_link_signup_{fake.email().lower()}"
 async def test_generate_magic_link(api: AsyncGoTrueAPI):
     try:
         response = await api.generate_link(
-            type=LinkType.magiclink,
+            type=GenerateLinkType.magiclink,
             email=email3,
             redirect_to="http://localhost:9999/welcome",
         )
@@ -76,7 +76,7 @@ async def test_generate_magic_link(api: AsyncGoTrueAPI):
 async def test_generate_invite_link(api: AsyncGoTrueAPI):
     try:
         response = await api.generate_link(
-            type=LinkType.invite,
+            type=GenerateLinkType.invite,
             email=email3,
             redirect_to="http://localhost:9999/welcome",
         )
@@ -89,7 +89,7 @@ async def test_generate_invite_link(api: AsyncGoTrueAPI):
 async def test_generate_recovery_link(api: AsyncGoTrueAPI):
     try:
         response = await api.generate_link(
-            type=LinkType.recovery,
+            type=GenerateLinkType.recovery,
             email=email,
             redirect_to="http://localhost:9999/welcome",
         )

@@ -3,9 +3,9 @@ from typing import Iterable, Optional
 import pytest
 from faker import Faker
 
-from gotrue import SyncGoTrueAPI
-from gotrue.constants import COOKIE_OPTIONS
-from gotrue.types import CookieOptions, Session, User
+from ...gotrue import SyncGoTrueAPI
+from ...gotrue.constants import COOKIE_OPTIONS
+from ...gotrue.types import CookieOptions, Session, User
 
 GOTRUE_URL = "http://localhost:9998"
 TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic2VydmljZV9yb2xlIiwiaWF0IjoxNjQyMjMyNzUwfQ.TUR8Zu05TtNR25L42soA2trZpc4oBR8-9Pv5r5bvls8"  # noqa: E501

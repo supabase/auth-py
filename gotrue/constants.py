@@ -1,18 +1,12 @@
 from __future__ import annotations
 
-from gotrue import __version__
+from . import __version__
 
 GOTRUE_URL = "http://localhost:9999"
-AUDIENCE = ""
 DEFAULT_HEADERS = {
     "X-Client-Info": f"gotrue-py/{__version__}",
 }
-EXPIRY_MARGIN = 60 * 1000
+EXPIRY_MARGIN = 10  # seconds
+MAX_RETRIES = 10
+RETRY_INTERVAL = 2  # deciseconds
 STORAGE_KEY = "supabase.auth.token"
-COOKIE_OPTIONS = {
-    "name": "sb:token",
-    "lifetime": 60 * 60 * 8,
-    "domain": "",
-    "path": "/",
-    "same_site": "lax",
-}

@@ -3,9 +3,9 @@ from typing import Iterable
 import pytest
 from faker import Faker
 
-from gotrue import SyncGoTrueClient
-from gotrue.exceptions import APIError
-from gotrue.types import User
+from ...gotrue import SyncGoTrueClient
+from ...gotrue.errors import APIError
+from ...gotrue.types import User
 
 GOTRUE_URL = "http://localhost:9999"
 TEST_TWILIO = False

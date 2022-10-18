@@ -3,10 +3,10 @@ from typing import Iterable
 import pytest
 from faker import Faker
 
-from gotrue import SyncGoTrueAPI, SyncGoTrueClient
-from gotrue.constants import COOKIE_OPTIONS, DEFAULT_HEADERS
-from gotrue.exceptions import APIError
-from gotrue.types import CookieOptions, LinkType, User, UserAttributes
+from ...gotrue import SyncGoTrueAPI, SyncGoTrueClient
+from ...gotrue.constants import COOKIE_OPTIONS, DEFAULT_HEADERS
+from ...gotrue.errors import APIError
+from ...gotrue.types import CookieOptions, GenerateLinkType, User, UserAttributes
 
 GOTRUE_URL = "http://localhost:9997"
 AUTH_ADMIN_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwicm9sZSI6InN1cGFiYXNlX2FkbWluIiwiaWF0IjoxNTE2MjM5MDIyfQ.0sOtTSTfPv5oPZxsjvBO249FI4S4p0ymHoIZ6H6z9Y8"  # noqa: E501
@@ -57,7 +57,7 @@ def test_generate_link_should_be_able_to_generate_multiple_links(
 ):
     try:
         response = auth_admin.generate_link(
-            type=LinkType.invite,
+            type=GenerateLinkType.invite,
             email=invited_user,
             redirect_to="http://localhost:9997",
         )
@@ -77,7 +77,7 @@ def test_generate_link_should_be_able_to_generate_multiple_links(
         assert response.identities == []
         user = response
         response = auth_admin.generate_link(
-            type=LinkType.invite,
+            type=GenerateLinkType.invite,
             email=invited_user,
         )
         assert isinstance(response, User)

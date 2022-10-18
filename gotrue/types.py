@@ -1,111 +1,88 @@
 from __future__ import annotations
 
-import sys
 from datetime import datetime
-from enum import Enum
 from time import time
-from typing import Any, Callable, Dict, List, Optional, Type, TypeVar, Union
-from uuid import UUID
+from typing import Any, Callable, Dict, List, Literal, Union
 
-if sys.version_info >= (3, 8):
-    from typing import TypedDict
-else:
-    from typing_extensions import TypedDict
-
-from httpx import Response
 from pydantic import BaseModel, root_validator
+from typing_extensions import NotRequired, TypedDict
 
-from gotrue.helpers import check_response
+Provider = Literal[
+    "apple",
+    "azure",
+    "bitbucket",
+    "discord",
+    "facebook",
+    "github",
+    "gitlab",
+    "google",
+    "keycloak",
+    "linkedin",
+    "notion",
+    "slack",
+    "spotify",
+    "twitch",
+    "twitter",
+    "workos",
+]
 
-T = TypeVar("T", bound=BaseModel)
-
-
-def determine_session_or_user_model_from_response(
-    response: Response,
-) -> Union[Type[Session], Type[User]]:
-    return Session if "access_token" in response.json() else User
-
-
-class BaseModelFromResponse(BaseModel):
-    @classmethod
-    def parse_response(cls: Type[T], response: Response) -> T:
-        check_response(response)
-        return cls.parse_obj(response.json())
-
-
-class CookieOptions(BaseModelFromResponse):
-    name: str
-    """The name of the cookie. Defaults to `sb:token`."""
-    lifetime: int
-    """The cookie lifetime (expiration) in seconds. Set to 8 hours by default."""
-    domain: str
-    """The cookie domain this should run on.
-    Leave it blank to restrict it to your domain."""
-    path: str
-    same_site: str
-    """SameSite configuration for the session cookie.
-    Defaults to 'lax', but can be changed to 'strict' or 'none'.
-    Set it to false if you want to disable the SameSite setting."""
+AuthChangeEvent = Literal[
+    "PASSWORD_RECOVERY",
+    "SIGNED_IN",
+    "SIGNED_OUT",
+    "TOKEN_REFRESHED",
+    "USER_UPDATED",
+    "USER_DELETED",
+]
 
 
-class Identity(BaseModelFromResponse):
-    id: str
-    user_id: UUID
-    provider: str
-    created_at: datetime
-    updated_at: datetime
-    identity_data: Optional[Dict[str, Any]] = None
-    last_sign_in_at: Optional[datetime] = None
+class Options(TypedDict, total=False):
+    redirect_to: str
+    data: Any
 
 
-class User(BaseModelFromResponse):
-    app_metadata: Dict[str, Any]
-    aud: str
-    """The user's audience. Use audiences to group users."""
-    created_at: datetime
-    id: UUID
-    user_metadata: Dict[str, Any]
-    identities: Optional[List[Identity]] = None
-    confirmation_sent_at: Optional[datetime] = None
-    action_link: Optional[str] = None
-    last_sign_in_at: Optional[datetime] = None
-    phone: Optional[str] = None
-    phone_confirmed_at: Optional[datetime] = None
-    recovery_sent_at: Optional[datetime] = None
-    role: Optional[str] = None
-    updated_at: Optional[datetime] = None
-    email_confirmed_at: Optional[datetime] = None
-    confirmed_at: Optional[datetime] = None
-    invited_at: Optional[datetime] = None
-    email: Optional[str] = None
-    new_email: Optional[str] = None
-    email_change_sent_at: Optional[datetime] = None
-    new_phone: Optional[str] = None
-    phone_change_sent_at: Optional[datetime] = None
+class AuthResponse(BaseModel):
+    user: Union[User, None] = None
+    session: Union[Session, None] = None
 
 
-class UserAttributes(BaseModelFromResponse):
-    email: Optional[str] = None
-    """The user's email."""
-    password: Optional[str] = None
-    """The user's password."""
-    email_change_token: Optional[str] = None
-    """An email change token."""
-    data: Optional[Any] = None
-    """A custom data object. Can be any JSON."""
+class OAuthResponse(BaseModel):
+    provider: Provider
+    url: str
 
 
-class Session(BaseModelFromResponse):
+class UserResponse(BaseModel):
+    user: User
+
+
+class Session(BaseModel):
+    provider_token: Union[str, None] = None
+    """
+    The oauth provider token. If present, this can be used to make external API
+    requests to the oauth provider used.
+    """
+    provider_refresh_token: Union[str, None] = None
+    """
+    The oauth provider refresh token. If present, this can be used to refresh
+    the provider_token via the oauth provider's API.
+
+    Not all oauth providers return a provider refresh token. If the
+    provider_refresh_token is missing, please refer to the oauth provider's
+    documentation for information on how to obtain the provider refresh token.
+    """
     access_token: str
+    refresh_token: str
+    expires_in: int
+    """
+    The number of seconds until the token expires (since it was issued).
+    Returned when a login is confirmed.
+    """
+    expires_at: Union[int, None] = None
+    """
+    A timestamp of when the token will expire. Returned when a login is confirmed.
+    """
     token_type: str
-    expires_at: Optional[int] = None
-    """A timestamp of when the token will expire. Returned when a login is confirmed."""
-    expires_in: Optional[int] = None
-    """The number of seconds until the token expires (since it was issued).
-    Returned when a login is confirmed."""
-    provider_token: Optional[str] = None
-    refresh_token: Optional[str] = None
-    user: Optional[User] = None
+    user: User
 
     @root_validator
     def validator(cls, values: dict) -> dict:
@@ -115,53 +92,280 @@ class Session(BaseModelFromResponse):
         return values
 
 
-class AuthChangeEvent(str, Enum):
-    PASSWORD_RECOVERY = "PASSWORD_RECOVERY"
-    SIGNED_IN = "SIGNED_IN"
-    SIGNED_OUT = "SIGNED_OUT"
-    TOKEN_REFRESHED = "TOKEN_REFRESHED"
-    USER_UPDATED = "USER_UPDATED"
-    USER_DELETED = "USER_DELETED"
+class UserIdentity(BaseModel):
+    id: str
+    user_id: str
+    identity_data: Dict[str, Any]
+    provider: str
+    created_at: datetime
+    last_sign_in_at: datetime
+    updated_at: Union[datetime, None] = None
 
 
-class Subscription(BaseModelFromResponse):
-    id: UUID
-    """The subscriber UUID. This will be set by the client."""
-    callback: Callable[[AuthChangeEvent, Optional[Session]], None]
-    """The function to call every time there is an event."""
+class User(BaseModel):
+    id: str
+    app_metadata: Dict[str, Any]
+    user_metadata: Dict[str, Any]
+    aud: str
+    confirmation_sent_at: Union[datetime, None] = None
+    recovery_sent_at: Union[datetime, None] = None
+    email_change_sent_at: Union[datetime, None] = None
+    new_email: Union[str, None] = None
+    invited_at: Union[datetime, None] = None
+    action_link: Union[str, None] = None
+    email: Union[str, None] = None
+    phone: Union[str, None] = None
+    created_at: datetime
+    confirmed_at: Union[datetime, None] = None
+    email_confirmed_at: Union[datetime, None] = None
+    phone_confirmed_at: Union[datetime, None] = None
+    last_sign_in_at: Union[datetime, None] = None
+    role: Union[str, None] = None
+    updated_at: Union[datetime, None] = None
+    identities: Union[List[UserIdentity], None] = None
+
+
+class UserAttributes(TypedDict, total=False):
+    email: str
+    phone: str
+    password: str
+    data: Any
+
+
+class AdminUserAttributes(UserAttributes, TypedDict, total=False):
+    user_metadata: Any
+    app_metadata: Any
+    email_confirm: bool
+    phone_confirm: bool
+    ban_duration: Union[str, Literal["none"]]
+
+
+class Subscription(BaseModel):
+    id: str
+    """
+    The subscriber UUID. This will be set by the client.
+    """
+    callback: Callable[[AuthChangeEvent, Union[Session, None]], None]
+    """
+    The function to call every time there is an event.
+    """
     unsubscribe: Callable[[], None]
-    """Call this to remove the listener."""
+    """
+    Call this to remove the listener.
+    """
 
 
-class Provider(str, Enum):
-    apple = "apple"
-    azure = "azure"
-    bitbucket = "bitbucket"
-    discord = "discord"
-    facebook = "facebook"
-    github = "github"
-    gitlab = "gitlab"
-    google = "google"
-    notion = "notion"
-    slack = "slack"
-    spotify = "spotify"
-    twitter = "twitter"
-    twitch = "twitch"
+class SignUpWithEmailAndPasswordCredentialsOptions(TypedDict, total=False):
+    email_redirect_to: str
+    data: Any
+    captcha_token: str
 
 
-class LinkType(str, Enum):
-    """The type of link."""
-
-    signup = "signup"
-    magiclink = "magiclink"
-    recovery = "recovery"
-    invite = "invite"
+class SignUpWithEmailAndPasswordCredentials(TypedDict):
+    email: str
+    password: str
+    options: NotRequired[SignUpWithEmailAndPasswordCredentialsOptions]
 
 
-class UserAttributesDict(TypedDict, total=False):
-    """Dict version of `UserAttributes`"""
+class SignUpWithPhoneAndPasswordCredentialsOptions(TypedDict, total=False):
+    data: Any
+    captcha_token: str
 
-    email: Optional[str]
-    password: Optional[str]
-    email_change_token: Optional[str]
-    data: Optional[Any]
+
+class SignUpWithPhoneAndPasswordCredentials(TypedDict):
+    phone: str
+    password: str
+    options: NotRequired[SignUpWithPhoneAndPasswordCredentialsOptions]
+
+
+SignUpWithPasswordCredentials = Union[
+    SignUpWithEmailAndPasswordCredentials,
+    SignUpWithPhoneAndPasswordCredentials,
+]
+
+
+class SignInWithPasswordCredentialsOptions(TypedDict, total=False):
+    captcha_token: str
+
+
+class SignInWithEmailAndPasswordCredentials(TypedDict):
+    email: str
+    password: str
+    options: NotRequired[SignInWithPasswordCredentialsOptions]
+
+
+class SignInWithPhoneAndPasswordCredentials(TypedDict):
+    phone: str
+    password: str
+    options: NotRequired[SignInWithPasswordCredentialsOptions]
+
+
+SignInWithPasswordCredentials = Union[
+    SignInWithEmailAndPasswordCredentials,
+    SignInWithPhoneAndPasswordCredentials,
+]
+
+
+class SignInWithEmailAndPasswordlessCredentialsOptions(TypedDict, total=False):
+    email_redirect_to: str
+    should_create_user: bool
+    data: Any
+    captcha_token: str
+
+
+class SignInWithEmailAndPasswordlessCredentials(TypedDict):
+    email: str
+    options: NotRequired[SignInWithEmailAndPasswordlessCredentialsOptions]
+
+
+class SignInWithPhoneAndPasswordlessCredentialsOptions(TypedDict, total=False):
+    should_create_user: bool
+    data: Any
+    captcha_token: str
+
+
+class SignInWithPhoneAndPasswordlessCredentials(TypedDict):
+    phone: str
+    options: NotRequired[SignInWithPhoneAndPasswordlessCredentialsOptions]
+
+
+SignInWithPasswordlessCredentials = Union[
+    SignInWithEmailAndPasswordlessCredentials,
+    SignInWithPhoneAndPasswordlessCredentials,
+]
+
+
+class SignInWithOAuthCredentialsOptions(TypedDict, total=False):
+    redirect_to: str
+    scopes: str
+    query_params: Dict[str, str]
+
+
+class SignInWithOAuthCredentials(TypedDict):
+    provider: Provider
+    options: NotRequired[SignInWithOAuthCredentialsOptions]
+
+
+class VerifyOtpParamsOptions(TypedDict, total=False):
+    redirect_to: str
+    captcha_token: str
+
+
+class VerifyEmailOtpParams(TypedDict):
+    email: str
+    token: str
+    type: Literal[
+        "signup",
+        "invite",
+        "magiclink",
+        "recovery",
+        "email_change",
+    ]
+    options: NotRequired[VerifyOtpParamsOptions]
+
+
+class VerifyMobileOtpParams(TypedDict):
+    phone: str
+    token: str
+    type: Literal[
+        "sms",
+        "phone_change",
+    ]
+    options: NotRequired[VerifyOtpParamsOptions]
+
+
+VerifyOtpParams = Union[
+    VerifyEmailOtpParams,
+    VerifyMobileOtpParams,
+]
+
+
+class GenerateLinkParamsOptions(TypedDict, total=False):
+    redirect_to: str
+
+
+class GenerateLinkParamsWithDataOptions(
+    GenerateLinkParamsOptions,
+    TypedDict,
+    total=False,
+):
+    data: Any
+
+
+class GenerateSignupLinkParams(TypedDict):
+    type: Literal["signup"]
+    email: str
+    password: str
+    options: NotRequired[GenerateLinkParamsWithDataOptions]
+
+
+class GenerateInviteOrMagiclinkParams(TypedDict):
+    type: Literal["invite", "magiclink"]
+    email: str
+    options: NotRequired[GenerateLinkParamsWithDataOptions]
+
+
+class GenerateRecoveryLinkParams(TypedDict):
+    type: Literal["recovery"]
+    email: str
+    options: NotRequired[GenerateLinkParamsOptions]
+
+
+class GenerateEmailChangeLinkParams(TypedDict):
+    type: Literal["email_change"]
+    email: str
+    new_email: str
+    options: NotRequired[GenerateLinkParamsOptions]
+
+
+GenerateLinkParams = Union[
+    GenerateSignupLinkParams,
+    GenerateInviteOrMagiclinkParams,
+    GenerateRecoveryLinkParams,
+    GenerateEmailChangeLinkParams,
+]
+
+GenerateLinkType = Literal[
+    "signup",
+    "invite",
+    "magiclink",
+    "recovery",
+    "email_change_current",
+    "email_change_new",
+]
+
+
+class GenerateLinkProperties(BaseModel):
+    """
+    The properties related to the email link generated.
+    """
+
+    action_link: str
+    """
+    The email link to send to the user. The action_link follows the following format:
+
+    auth/v1/verify?type={verification_type}&token={hashed_token}&redirect_to={redirect_to}
+    """
+    email_otp: str
+    """
+    The raw email OTP.
+    You should send this in the email if you want your users to verify using an
+    OTP instead of the action link.
+    """
+    hashed_token: str
+    """
+    The hashed token appended to the action link.
+    """
+    redirect_to: str
+    """
+    The URL appended to the action link.
+    """
+    verification_type: GenerateLinkType
+    """
+    The verification type that the email link is associated to.
+    """
+
+
+class GenerateLinkResponse(BaseModel):
+    properties: GenerateLinkProperties
+    user: User

@@ -2,8 +2,8 @@ from typing import Iterable
 
 import pytest
 
-from gotrue import SyncGoTrueClient
-from gotrue.types import Provider
+from ...gotrue import SyncGoTrueClient
+from ...gotrue.types import Provider
 
 GOTRUE_URL = "http://localhost:9999"
 
