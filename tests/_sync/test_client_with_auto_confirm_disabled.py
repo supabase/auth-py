@@ -79,10 +79,7 @@ def test_sign_in(client: SyncGoTrueClient):
 def test_sign_in_with_the_wrong_password(client: SyncGoTrueClient):
     expected_error_message = "Invalid login credentials"
     try:
-        client.sign_in(
-            email=email,
-            password=password + "2",
-        )
+        client.sign_in(email=email, password=f"{password}2")
         assert False
     except APIError as e:
         assert e.msg == expected_error_message
