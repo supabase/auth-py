@@ -26,6 +26,8 @@ Provider = Literal[
     "workos",
 ]
 
+AuthChangeEventMFA = Literal["MFA_CHALLENGE_VERIFIED"]
+
 AuthChangeEvent = Literal[
     "PASSWORD_RECOVERY",
     "SIGNED_IN",
@@ -33,12 +35,32 @@ AuthChangeEvent = Literal[
     "TOKEN_REFRESHED",
     "USER_UPDATED",
     "USER_DELETED",
+    AuthChangeEventMFA,
 ]
 
 
-class Options(TypedDict, total=False):
-    redirect_to: str
-    data: Any
+class AMREntry(BaseModel):
+    """
+    An authentication methord reference (AMR) entry.
+
+    An entry designates what method was used by the user to verify their
+    identity and at what time.
+    """
+
+    method: Union[Literal["password", "otp", "oauth", "mfa/totp"], str]
+    """
+    Authentication method name.
+    """
+    timestamp: int
+    """
+    Timestamp when the method was successfully used. Represents number of
+    seconds since 1st January 1970 (UNIX epoch) in UTC.
+    """
+
+
+class Options(TypedDict):
+    redirect_to: NotRequired[str]
+    data: NotRequired[Any]
 
 
 class AuthResponse(BaseModel):
@@ -102,6 +124,32 @@ class UserIdentity(BaseModel):
     updated_at: Union[datetime, None] = None
 
 
+class Factor(BaseModel):
+    """
+    A MFA factor.
+    """
+
+    id: str
+    """
+    ID of the factor.
+    """
+    friendly_name: Union[str, None] = None
+    """
+    Friendly name of the factor, useful to disambiguate between multiple factors.
+    """
+    factor_type: Union[Literal["totp"], str]
+    """
+    Type of factor. Only `totp` supported with this version but may change in
+    future versions.
+    """
+    status: Literal["verified", "unverified"]
+    """
+    Factor's status.
+    """
+    created_at: datetime
+    updated_at: datetime
+
+
 class User(BaseModel):
     id: str
     app_metadata: Dict[str, Any]
@@ -123,21 +171,22 @@ class User(BaseModel):
     role: Union[str, None] = None
     updated_at: Union[datetime, None] = None
     identities: Union[List[UserIdentity], None] = None
+    factors: Union[List[Factor], None] = None
 
 
-class UserAttributes(TypedDict, total=False):
-    email: str
-    phone: str
-    password: str
-    data: Any
+class UserAttributes(TypedDict):
+    email: NotRequired[str]
+    phone: NotRequired[str]
+    password: NotRequired[str]
+    data: NotRequired[Any]
 
 
-class AdminUserAttributes(UserAttributes, TypedDict, total=False):
-    user_metadata: Any
-    app_metadata: Any
-    email_confirm: bool
-    phone_confirm: bool
-    ban_duration: Union[str, Literal["none"]]
+class AdminUserAttributes(UserAttributes, TypedDict):
+    user_metadata: NotRequired[Any]
+    app_metadata: NotRequired[Any]
+    email_confirm: NotRequired[bool]
+    phone_confirm: NotRequired[bool]
+    ban_duration: NotRequired[Union[str, Literal["none"]]]
 
 
 class Subscription(BaseModel):
@@ -155,10 +204,16 @@ class Subscription(BaseModel):
     """
 
 
-class SignUpWithEmailAndPasswordCredentialsOptions(TypedDict, total=False):
-    email_redirect_to: str
-    data: Any
-    captcha_token: str
+class UpdatableFactorAttributes(TypedDict):
+    friendly_name: str
+
+
+class SignUpWithEmailAndPasswordCredentialsOptions(
+    TypedDict,
+):
+    email_redirect_to: NotRequired[str]
+    data: NotRequired[Any]
+    captcha_token: NotRequired[str]
 
 
 class SignUpWithEmailAndPasswordCredentials(TypedDict):
@@ -167,9 +222,9 @@ class SignUpWithEmailAndPasswordCredentials(TypedDict):
     options: NotRequired[SignUpWithEmailAndPasswordCredentialsOptions]
 
 
-class SignUpWithPhoneAndPasswordCredentialsOptions(TypedDict, total=False):
-    data: Any
-    captcha_token: str
+class SignUpWithPhoneAndPasswordCredentialsOptions(TypedDict):
+    data: NotRequired[Any]
+    captcha_token: NotRequired[str]
 
 
 class SignUpWithPhoneAndPasswordCredentials(TypedDict):
@@ -184,8 +239,8 @@ SignUpWithPasswordCredentials = Union[
 ]
 
 
-class SignInWithPasswordCredentialsOptions(TypedDict, total=False):
-    captcha_token: str
+class SignInWithPasswordCredentialsOptions(TypedDict):
+    captcha_token: NotRequired[str]
 
 
 class SignInWithEmailAndPasswordCredentials(TypedDict):
@@ -206,11 +261,11 @@ SignInWithPasswordCredentials = Union[
 ]
 
 
-class SignInWithEmailAndPasswordlessCredentialsOptions(TypedDict, total=False):
-    email_redirect_to: str
-    should_create_user: bool
-    data: Any
-    captcha_token: str
+class SignInWithEmailAndPasswordlessCredentialsOptions(TypedDict):
+    email_redirect_to: NotRequired[str]
+    should_create_user: NotRequired[bool]
+    data: NotRequired[Any]
+    captcha_token: NotRequired[str]
 
 
 class SignInWithEmailAndPasswordlessCredentials(TypedDict):
@@ -218,10 +273,10 @@ class SignInWithEmailAndPasswordlessCredentials(TypedDict):
     options: NotRequired[SignInWithEmailAndPasswordlessCredentialsOptions]
 
 
-class SignInWithPhoneAndPasswordlessCredentialsOptions(TypedDict, total=False):
-    should_create_user: bool
-    data: Any
-    captcha_token: str
+class SignInWithPhoneAndPasswordlessCredentialsOptions(TypedDict):
+    should_create_user: NotRequired[bool]
+    data: NotRequired[Any]
+    captcha_token: NotRequired[str]
 
 
 class SignInWithPhoneAndPasswordlessCredentials(TypedDict):
@@ -235,10 +290,10 @@ SignInWithPasswordlessCredentials = Union[
 ]
 
 
-class SignInWithOAuthCredentialsOptions(TypedDict, total=False):
-    redirect_to: str
-    scopes: str
-    query_params: Dict[str, str]
+class SignInWithOAuthCredentialsOptions(TypedDict):
+    redirect_to: NotRequired[str]
+    scopes: NotRequired[str]
+    query_params: NotRequired[Dict[str, str]]
 
 
 class SignInWithOAuthCredentials(TypedDict):
@@ -246,9 +301,9 @@ class SignInWithOAuthCredentials(TypedDict):
     options: NotRequired[SignInWithOAuthCredentialsOptions]
 
 
-class VerifyOtpParamsOptions(TypedDict, total=False):
-    redirect_to: str
-    captcha_token: str
+class VerifyOtpParamsOptions(TypedDict):
+    redirect_to: NotRequired[str]
+    captcha_token: NotRequired[str]
 
 
 class VerifyEmailOtpParams(TypedDict):
@@ -280,16 +335,12 @@ VerifyOtpParams = Union[
 ]
 
 
-class GenerateLinkParamsOptions(TypedDict, total=False):
-    redirect_to: str
+class GenerateLinkParamsOptions(TypedDict):
+    redirect_to: NotRequired[str]
 
 
-class GenerateLinkParamsWithDataOptions(
-    GenerateLinkParamsOptions,
-    TypedDict,
-    total=False,
-):
-    data: Any
+class GenerateLinkParamsWithDataOptions(GenerateLinkParamsOptions, TypedDict):
+    data: NotRequired[Any]
 
 
 class GenerateSignupLinkParams(TypedDict):
@@ -335,6 +386,181 @@ GenerateLinkType = Literal[
 ]
 
 
+class MFAEnrollParams(TypedDict):
+    factor_type: Literal["totp"]
+    issuer: NotRequired[str]
+    friendly_name: NotRequired[str]
+
+
+class MFAUnenrollParams(TypedDict):
+    factor_id: str
+    """
+    ID of the factor being unenrolled.
+    """
+
+
+class MFAVerifyParams(TypedDict):
+    factor_id: str
+    """
+    ID of the factor being verified.
+    """
+    challenge_id: str
+    """
+    ID of the challenge being verified.
+    """
+    code: str
+    """
+    Verification code provided by the user.
+    """
+
+
+class MFAChallengeParams(TypedDict):
+    factor_id: str
+    """
+    ID of the factor to be challenged.
+    """
+
+
+class AuthMFAVerifyResponse(BaseModel):
+    access_token: str
+    """
+    New access token (JWT) after successful verification.
+    """
+    token_type: str
+    """
+    Type of token, typically `Bearer`.
+    """
+    expires_in: int
+    """
+    Number of seconds in which the access token will expire.
+    """
+    refresh_token: str
+    """
+    Refresh token you can use to obtain new access tokens when expired.
+    """
+    user: User
+    """
+    Updated user profile.
+    """
+
+
+class AuthMFAEnrollResponseTotp(BaseModel):
+    qr_code: str
+    """
+    Contains a QR code encoding the authenticator URI. You can
+    convert it to a URL by prepending `data:image/svg+xml;utf-8,` to
+    the value. Avoid logging this value to the console.
+    """
+    secret: str
+    """
+    The TOTP secret (also encoded in the QR code). Show this secret
+    in a password-style field to the user, in case they are unable to
+    scan the QR code. Avoid logging this value to the console.
+    """
+    uri: str
+    """
+    The authenticator URI encoded within the QR code, should you need
+    to use it. Avoid loggin this value to the console.
+    """
+
+
+class AuthMFAEnrollResponse(BaseModel):
+    id: str
+    """
+    ID of the factor that was just enrolled (in an unverified state).
+    """
+    type: Literal["totp"]
+    """
+    Type of MFA factor. Only `totp` supported for now.
+    """
+    totp: AuthMFAEnrollResponseTotp
+    """
+    TOTP enrollment information.
+    """
+
+
+class AuthMFAUnenrollResponse(BaseModel):
+    id: str
+    """
+    ID of the factor that was successfully unenrolled.
+    """
+
+
+class AuthMFAChallengeResponse(BaseModel):
+    id: str
+    """
+    ID of the newly created challenge.
+    """
+    expires_at: int
+    """
+    Timestamp in UNIX seconds when this challenge will no longer be usable.
+    """
+
+
+class AuthMFAListFactorsResponse(BaseModel):
+    all: List[Factor]
+    """
+    All available factors (verified and unverified).
+    """
+    totp: List[Factor]
+    """
+    Only verified TOTP factors. (A subset of `all`.)
+    """
+
+
+AuthenticatorAssuranceLevels = Literal["aal1", "aal2"]
+
+
+class AuthMFAGetAuthenticatorAssuranceLevelResponse(BaseModel):
+    current_level: Union[AuthenticatorAssuranceLevels, None] = None
+    """
+    Current AAL level of the session.
+    """
+    next_level: Union[AuthenticatorAssuranceLevels, None] = None
+    """
+    Next possible AAL level for the session. If the next level is higher
+    than the current one, the user should go through MFA.
+    """
+    current_authentication_methods: List[AMREntry]
+    """
+    A list of all authentication methods attached to this session. Use
+    the information here to detect the last time a user verified a
+    factor, for example if implementing a step-up scenario.
+    """
+
+
+class AuthMFAAdminDeleteFactorResponse(BaseModel):
+    id: str
+    """
+    ID of the factor that was successfully deleted.
+    """
+
+
+class AuthMFAAdminDeleteFactorParams(TypedDict):
+    id: str
+    """
+    ID of the MFA factor to delete.
+    """
+    user_id: str
+    """
+    ID of the user whose factor is being deleted.
+    """
+
+
+class AuthMFAAdminListFactorsResponse(BaseModel):
+    factors: List[Factor]
+    """
+    All factors attached to the user.
+    """
+
+
+class AuthMFAAdminListFactorsParams(TypedDict):
+    user_id: str
+    """
+    ID of the user for which to list all MFA factors.
+    """
+
+
 class GenerateLinkProperties(BaseModel):
     """
     The properties related to the email link generated.
@@ -369,3 +595,9 @@ class GenerateLinkProperties(BaseModel):
 class GenerateLinkResponse(BaseModel):
     properties: GenerateLinkProperties
     user: User
+
+
+class DecodedJWTDict(TypedDict):
+    exp: NotRequired[int]
+    aal: NotRequired[Union[AuthenticatorAssuranceLevels, None]]
+    amr: NotRequired[Union[List[AMREntry], None]]

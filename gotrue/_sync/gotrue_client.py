@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from base64 import b64decode
 from json import loads
 from time import time
 from typing import Callable, Dict, List, Tuple, Union
@@ -21,12 +20,24 @@ from ..errors import (
     AuthRetryableError,
     AuthSessionMissingError,
 )
-from ..helpers import parse_auth_response, parse_user_response
+from ..helpers import decode_jwt_payload, parse_auth_response, parse_user_response
 from ..http_clients import SyncClient
 from ..timer import Timer
 from ..types import (
     AuthChangeEvent,
+    AuthenticatorAssuranceLevels,
+    AuthMFAChallengeResponse,
+    AuthMFAEnrollResponse,
+    AuthMFAGetAuthenticatorAssuranceLevelResponse,
+    AuthMFAListFactorsResponse,
+    AuthMFAUnenrollResponse,
+    AuthMFAVerifyResponse,
     AuthResponse,
+    DecodedJWTDict,
+    MFAChallengeParams,
+    MFAEnrollParams,
+    MFAUnenrollParams,
+    MFAVerifyParams,
     OAuthResponse,
     Options,
     Provider,
@@ -42,6 +53,7 @@ from ..types import (
 )
 from .gotrue_admin_api import SyncGoTrueAdminAPI
 from .gotrue_base_api import SyncGoTrueBaseAPI
+from .gotrue_mfa_api import SyncGoTrueMFAAPI
 from .storage import SyncMemoryStorage, SyncSupportedStorage
 
 
@@ -77,6 +89,15 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
             headers=self._headers,
             http_client=self._http_client,
         )
+        self.mfa = SyncGoTrueMFAAPI()
+        self.mfa.challenge = self._challenge
+        self.mfa.enroll = self._enroll
+        self.mfa.get_authenticator_assurance_level = (
+            self._get_authenticator_assurance_level
+        )
+        self.mfa.list_factors = self._list_factors
+        self.mfa.unenroll = self._unenroll
+        self.mfa.verify = self._verify
 
     # Initializations
 
@@ -389,10 +410,10 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         has_expired = True
         session: Union[Session, None] = None
         if access_token and access_token.split(".")[1]:
-            json_raw = b64decode(access_token.split(".")[1] + "===").decode("utf-8")
-            payload = loads(json_raw)
-            if payload.get("exp"):
-                expires_at = int(payload.get("exp"))
+            payload = self._decode_jwt(access_token)
+            exp = payload.get("exp")
+            if exp:
+                expires_at = int(exp)
                 has_expired = expires_at <= time_now
         if has_expired:
             if not refresh_token:
@@ -472,6 +493,94 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
                 },
             },
             redirect_to=options.get("redirect_to"),
+        )
+
+    # MFA methods
+
+    def _enroll(self, params: MFAEnrollParams) -> AuthMFAEnrollResponse:
+        session = self.get_session()
+        if not session:
+            raise AuthSessionMissingError()
+        response = self._request(
+            "POST",
+            "factors",
+            body=params,
+            jwt=session.access_token,
+            xform=AuthMFAEnrollResponse.parse_obj,
+        )
+        if response.totp.qr_code:
+            response.totp.qr_code = f"data:image/svg+xml;utf-8,{response.totp.qr_code}"
+        return response
+
+    def _challenge(self, params: MFAChallengeParams) -> AuthMFAChallengeResponse:
+        session = self.get_session()
+        if not session:
+            raise AuthSessionMissingError()
+        return self._request(
+            "POST",
+            f"factors/{params.get('factor_id')}/challenge",
+            jwt=session.access_token,
+            xform=AuthMFAChallengeResponse.parse_obj,
+        )
+
+    def _verify(self, params: MFAVerifyParams) -> AuthMFAVerifyResponse:
+        session = self.get_session()
+        if not session:
+            raise AuthSessionMissingError()
+        response = self._request(
+            "POST",
+            f"factors/{params.get('factor_id')}/verify",
+            body=params,
+            jwt=session.access_token,
+            xform=AuthMFAVerifyResponse.parse_obj,
+        )
+        session = Session.parse_obj(response.dict())
+        self._save_session(session)
+        self._notify_all_subscribers("MFA_CHALLENGE_VERIFIED", session)
+        return response
+
+    def _unenroll(self, params: MFAUnenrollParams) -> AuthMFAUnenrollResponse:
+        session = self.get_session()
+        if not session:
+            raise AuthSessionMissingError()
+        return self._request(
+            "DELETE",
+            f"factors/{params.get('factor_id')}",
+            jwt=session.access_token,
+            xform=AuthMFAUnenrollResponse.parse_obj,
+        )
+
+    def _list_factors(self) -> AuthMFAListFactorsResponse:
+        response = self.get_user()
+        all = response.user.factors or []
+        totp = [f for f in all if f.factor_type == "totp" and f.status == "verified"]
+        return AuthMFAListFactorsResponse(all=all, totp=totp)
+
+    def _get_authenticator_assurance_level(
+        self,
+    ) -> AuthMFAGetAuthenticatorAssuranceLevelResponse:
+        session = self.get_session()
+        if not session:
+            return AuthMFAGetAuthenticatorAssuranceLevelResponse(
+                current_level=None,
+                next_level=None,
+                current_authentication_methods=[],
+            )
+        payload = self._decode_jwt(session.access_token)
+        current_level: Union[AuthenticatorAssuranceLevels, None] = None
+        if payload.get("aal"):
+            current_level = payload.get("aal")
+        next_level = current_level
+        verified_factors = [
+            f for f in session.user.factors or [] if f.status == "verified"
+        ]
+        if verified_factors:
+            next_level = "aal2"
+        current_authentication_methods = payload.get("amr") or []
+        return AuthMFAGetAuthenticatorAssuranceLevelResponse(
+            current_level=current_level,
+            next_level=next_level,
+            current_authentication_methods=current_authentication_methods,
         )
 
     # Private methods
@@ -685,7 +794,8 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         query = urlencode(params)
         return f"{self._url}/authorize?{query}"
 
-
-def test():
-    client = SyncGoTrueClient()
-    client.initialize()
+    def _decode_jwt(self, jwt: str) -> DecodedJWTDict:
+        """
+        Decodes a JWT (without performing any validation).
+        """
+        return decode_jwt_payload(jwt)

@@ -6,12 +6,17 @@ from ..helpers import parse_link_response, parse_user_response
 from ..http_clients import AsyncClient
 from ..types import (
     AdminUserAttributes,
+    AuthMFAAdminDeleteFactorParams,
+    AuthMFAAdminDeleteFactorResponse,
+    AuthMFAAdminListFactorsParams,
+    AuthMFAAdminListFactorsResponse,
     GenerateLinkParams,
     GenerateLinkResponse,
     Options,
     User,
     UserResponse,
 )
+from .gotrue_admin_mfa_api import AsyncGoTrueAdminMFAAPI
 from .gotrue_base_api import AsyncGoTrueBaseAPI
 
 
@@ -29,6 +34,9 @@ class AsyncGoTrueAdminAPI(AsyncGoTrueBaseAPI):
             headers=headers,
             http_client=http_client,
         )
+        self.mfa = AsyncGoTrueAdminMFAAPI()
+        self.mfa.list_factors = self._list_factors
+        self.mfa.delete_factor = self._delete_factor
 
     async def sign_out(self, jwt: str) -> None:
         """
@@ -141,4 +149,24 @@ class AsyncGoTrueAdminAPI(AsyncGoTrueBaseAPI):
             "DELETE",
             f"admin/users/{id}",
             xform=parse_user_response,
+        )
+
+    async def _list_factors(
+        self,
+        params: AuthMFAAdminListFactorsParams,
+    ) -> AuthMFAAdminListFactorsResponse:
+        return await self._request(
+            "GET",
+            f"admin/users/{params.get('user_id')}/factors",
+            xform=AuthMFAAdminListFactorsResponse.parse_obj,
+        )
+
+    async def _delete_factor(
+        self,
+        params: AuthMFAAdminDeleteFactorParams,
+    ) -> AuthMFAAdminDeleteFactorResponse:
+        return await self._request(
+            "DELETE",
+            f"admin/users/{params.get('user_id')}/factors/{params.get('factor_id')}",
+            xform=AuthMFAAdminDeleteFactorResponse.parse_obj,
         )

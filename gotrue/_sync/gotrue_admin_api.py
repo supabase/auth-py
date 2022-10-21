@@ -6,12 +6,17 @@ from ..helpers import parse_link_response, parse_user_response
 from ..http_clients import SyncClient
 from ..types import (
     AdminUserAttributes,
+    AuthMFAAdminDeleteFactorParams,
+    AuthMFAAdminDeleteFactorResponse,
+    AuthMFAAdminListFactorsParams,
+    AuthMFAAdminListFactorsResponse,
     GenerateLinkParams,
     GenerateLinkResponse,
     Options,
     User,
     UserResponse,
 )
+from .gotrue_admin_mfa_api import SyncGoTrueAdminMFAAPI
 from .gotrue_base_api import SyncGoTrueBaseAPI
 
 
@@ -29,6 +34,9 @@ class SyncGoTrueAdminAPI(SyncGoTrueBaseAPI):
             headers=headers,
             http_client=http_client,
         )
+        self.mfa = SyncGoTrueAdminMFAAPI()
+        self.mfa.list_factors = self._list_factors
+        self.mfa.delete_factor = self._delete_factor
 
     def sign_out(self, jwt: str) -> None:
         """
@@ -141,4 +149,24 @@ class SyncGoTrueAdminAPI(SyncGoTrueBaseAPI):
             "DELETE",
             f"admin/users/{id}",
             xform=parse_user_response,
+        )
+
+    def _list_factors(
+        self,
+        params: AuthMFAAdminListFactorsParams,
+    ) -> AuthMFAAdminListFactorsResponse:
+        return self._request(
+            "GET",
+            f"admin/users/{params.get('user_id')}/factors",
+            xform=AuthMFAAdminListFactorsResponse.parse_obj,
+        )
+
+    def _delete_factor(
+        self,
+        params: AuthMFAAdminDeleteFactorParams,
+    ) -> AuthMFAAdminDeleteFactorResponse:
+        return self._request(
+            "DELETE",
+            f"admin/users/{params.get('user_id')}/factors/{params.get('factor_id')}",
+            xform=AuthMFAAdminDeleteFactorResponse.parse_obj,
         )

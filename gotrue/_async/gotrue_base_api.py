@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import Any, Callable, Dict, Literal, TypeVar, Union, overload
 
+from httpx import Response
 from pydantic import BaseModel
 from typing_extensions import Self
 
@@ -43,7 +44,7 @@ class AsyncGoTrueBaseAPI:
         headers: Union[Dict[str, str], None] = None,
         query: Union[Dict[str, str], None] = None,
         body: Union[Any, None] = None,
-        no_resolve_json: Union[bool, None] = None,
+        no_resolve_json: Literal[False] = False,
         xform: Callable[[Any], T],
     ) -> T:
         ...
@@ -59,7 +60,23 @@ class AsyncGoTrueBaseAPI:
         headers: Union[Dict[str, str], None] = None,
         query: Union[Dict[str, str], None] = None,
         body: Union[Any, None] = None,
-        no_resolve_json: Union[bool, None] = None,
+        no_resolve_json: Literal[True],
+        xform: Callable[[Response], T],
+    ) -> T:
+        ...
+
+    @overload
+    async def _request(
+        self,
+        method: Literal["GET", "OPTIONS", "HEAD", "POST", "PUT", "PATCH", "DELETE"],
+        path: str,
+        *,
+        jwt: Union[str, None] = None,
+        redirect_to: Union[str, None] = None,
+        headers: Union[Dict[str, str], None] = None,
+        query: Union[Dict[str, str], None] = None,
+        body: Union[Any, None] = None,
+        no_resolve_json: bool = False,
     ) -> None:
         ...
 
@@ -73,7 +90,7 @@ class AsyncGoTrueBaseAPI:
         headers: Union[Dict[str, str], None] = None,
         query: Union[Dict[str, str], None] = None,
         body: Union[Any, None] = None,
-        no_resolve_json: Union[bool, None] = None,
+        no_resolve_json: bool = False,
         xform: Union[Callable[[Any], T], None] = None,
     ) -> Union[T, None]:
         url = f"{self._url}/{path}"
