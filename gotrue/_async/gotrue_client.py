@@ -570,12 +570,10 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         current_level: Union[AuthenticatorAssuranceLevels, None] = None
         if payload.get("aal"):
             current_level = payload.get("aal")
-        next_level = current_level
         verified_factors = [
             f for f in session.user.factors or [] if f.status == "verified"
         ]
-        if verified_factors:
-            next_level = "aal2"
+        next_level = "aal2" if verified_factors else current_level
         current_authentication_methods = payload.get("amr") or []
         return AuthMFAGetAuthenticatorAssuranceLevelResponse(
             current_level=current_level,
