@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from base64 import b64decode
+from json import loads
 from typing import Any, Union, cast
 
 from httpx import HTTPStatusError
@@ -74,3 +76,11 @@ def handle_exception(exception: Exception) -> AuthError:
         return AuthApiError(get_error_message(json), error.response.status_code or 500)
     except Exception as e:
         return AuthUnknownError(get_error_message(error), e)
+
+
+def decode_jwt_payload(token: str) -> Any:
+    parts = token.split(".")
+    if len(parts) != 3:
+        raise ValueError("JWT is not valid: not a JWT structure")
+    base64Url = parts[1]
+    return loads(b64decode(base64Url).decode("utf-8"))
