@@ -5,6 +5,7 @@ from ..types import (
     AuthMFAListFactorsResponse,
     AuthMFAUnenrollResponse,
     AuthMFAVerifyResponse,
+    MFAChallengeAndVerifyParams,
     MFAChallengeParams,
     MFAEnrollParams,
     MFAUnenrollParams,
@@ -35,6 +36,17 @@ class SyncGoTrueMFAAPI:
         """
         Prepares a challenge used to verify that a user has access to a MFA
         factor. Provide the challenge ID and verification code by calling `verify`.
+        """
+        raise NotImplementedError()
+
+    def challenge_and_verify(
+        self,
+        params: MFAChallengeAndVerifyParams,
+    ) -> AuthMFAVerifyResponse:
+        """
+        Helper method which creates a challenge and immediately uses the given code
+        to verify against it thereafter. The verification code is provided by the
+        user by entering a code seen in their authenticator app.
         """
         raise NotImplementedError()
 

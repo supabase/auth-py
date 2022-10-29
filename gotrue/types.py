@@ -240,6 +240,7 @@ SignUpWithPasswordCredentials = Union[
 
 
 class SignInWithPasswordCredentialsOptions(TypedDict):
+    data: NotRequired[Any]
     captcha_token: NotRequired[str]
 
 
@@ -418,6 +419,17 @@ class MFAChallengeParams(TypedDict):
     factor_id: str
     """
     ID of the factor to be challenged.
+    """
+
+
+class MFAChallengeAndVerifyParams(TypedDict):
+    factor_id: str
+    """
+    ID of the factor being verified.
+    """
+    code: str
+    """
+    Verification code provided by the user.
     """
 
 

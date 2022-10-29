@@ -34,6 +34,7 @@ from ..types import (
     AuthMFAVerifyResponse,
     AuthResponse,
     DecodedJWTDict,
+    MFAChallengeAndVerifyParams,
     MFAChallengeParams,
     MFAEnrollParams,
     MFAUnenrollParams,
@@ -91,6 +92,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         )
         self.mfa = AsyncGoTrueMFAAPI()
         self.mfa.challenge = self._challenge
+        self.mfa.challenge_and_verify = self._challenge_and_verify
         self.mfa.enroll = self._enroll
         self.mfa.get_authenticator_assurance_level = (
             self._get_authenticator_assurance_level
@@ -137,7 +139,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         password = credentials.get("password")
         options = credentials.get("options", {})
         redirect_to = options.get("redirect_to")
-        data = options.get("data")
+        data = options.get("data") or {}
         captcha_token = options.get("captcha_token")
         if email:
             response = await self._request(
@@ -189,6 +191,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         phone = credentials.get("phone")
         password = credentials.get("password")
         options = credentials.get("options", {})
+        data = options.get("data") or {}
         captcha_token = options.get("captcha_token")
         if email:
             response = await self._request(
@@ -197,6 +200,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
                 body={
                     "email": email,
                     "password": password,
+                    "data": data,
                     "gotrue_meta_security": {
                         "captcha_token": captcha_token,
                     },
@@ -213,6 +217,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
                 body={
                     "phone": phone,
                     "password": password,
+                    "data": data,
                     "gotrue_meta_security": {
                         "captcha_token": captcha_token,
                     },
@@ -436,6 +441,25 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         self._notify_all_subscribers("TOKEN_REFRESHED", session)
         return AuthResponse(session=session, user=response.user)
 
+    async def refresh_session(
+        self, refresh_token: Union[str, None] = None
+    ) -> AuthResponse:
+        """
+        Returns a new session, regardless of expiry status.
+
+        Takes in an optional current session. If not passed in, then refreshSession()
+        will attempt to retrieve it from getSession(). If the current session's
+        refresh token is invalid, an error will be thrown.
+        """
+        if not refresh_token:
+            session = await self.get_session()
+            if session:
+                refresh_token = session.refresh_token
+        if not refresh_token:
+            raise AuthSessionMissingError()
+        session = await self._call_refresh_token(refresh_token)
+        return AuthResponse(session=session, user=session.user)
+
     async def sign_out(self) -> None:
         """
         Inside a browser context, `sign_out` will remove the logged in user from the
@@ -521,6 +545,23 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
             f"factors/{params.get('factor_id')}/challenge",
             jwt=session.access_token,
             xform=AuthMFAChallengeResponse.parse_obj,
+        )
+
+    async def _challenge_and_verify(
+        self,
+        params: MFAChallengeAndVerifyParams,
+    ) -> AuthMFAVerifyResponse:
+        response = await self._challenge(
+            {
+                "factor_id": params.get("factor_id"),
+            }
+        )
+        return await self._verify(
+            {
+                "factor_id": params.get("factor_id"),
+                "challenge_id": response.id,
+                "code": params.get("code"),
+            }
         )
 
     async def _verify(self, params: MFAVerifyParams) -> AuthMFAVerifyResponse:
