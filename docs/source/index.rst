@@ -13,6 +13,7 @@ Welcome to gotrue's documentation!
 
       API Reference </api/index>
       Examples </examples/index>
+      Miscellaneous Modules <modules>
 
 
 

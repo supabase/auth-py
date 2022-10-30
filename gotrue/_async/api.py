@@ -60,8 +60,8 @@ class AsyncGoTrueAPI:
 
         Raises
         ------
-        error : APIError
-            If an error occurs
+        APIError
+            If an error occurs.
         """
         headers = self.headers
         data = attributes.dict()
@@ -82,8 +82,8 @@ class AsyncGoTrueAPI:
 
         Raises
         ------
-        error : APIError
-            If an error occurs
+        APIError
+            If an error occurs.
         """
         headers = self.headers
         url = f"{self.url}/admin/users"
@@ -125,8 +125,8 @@ class AsyncGoTrueAPI:
 
         Raises
         ------
-        error : APIError
-            If an error occurs
+        APIError
+            If an error occurs.
         """
         headers = self.headers
         query_string = ""
@@ -164,8 +164,8 @@ class AsyncGoTrueAPI:
 
         Raises
         ------
-        error : APIError
-            If an error occurs
+        APIError
+            If an error occurs.
         """
         headers = self.headers
         query_string = "?grant_type=password"
@@ -203,8 +203,8 @@ class AsyncGoTrueAPI:
 
         Raises
         ------
-        error : APIError
-            If an error occurs
+        APIError
+            If an error occurs.
         """
         headers = self.headers
         data = {"phone": phone, "password": password, "data": data}
@@ -235,8 +235,8 @@ class AsyncGoTrueAPI:
 
         Raises
         ------
-        error : APIError
-            If an error occurs
+        APIError
+            If an error occurs.
         """
         data = {"phone": phone, "password": password}
         url = f"{self.url}/token?grant_type=password"
@@ -262,8 +262,8 @@ class AsyncGoTrueAPI:
 
         Raises
         ------
-        error : APIError
-            If an error occurs
+        APIError
+            If an error occurs.
         """
         headers = self.headers
         query_string = ""
@@ -285,8 +285,8 @@ class AsyncGoTrueAPI:
 
         Raises
         ------
-        error : APIError
-            If an error occurs
+        APIError
+            If an error occurs.
         """
         headers = self.headers
         data = {"phone": phone, "create_user": create_user}
@@ -320,8 +320,8 @@ class AsyncGoTrueAPI:
 
         Raises
         ------
-        error : APIError
-            If an error occurs
+        APIError
+            If an error occurs.
         """
         headers = self.headers
         data = {
@@ -362,8 +362,8 @@ class AsyncGoTrueAPI:
 
         Raises
         ------
-        error : APIError
-            If an error occurs
+        APIError
+            If an error occurs.
         """
         headers = self.headers
         query_string = ""
@@ -392,8 +392,8 @@ class AsyncGoTrueAPI:
 
         Raises
         ------
-        error : APIError
-            If an error occurs
+        APIError
+            If an error occurs.
         """
         headers = self.headers
         query_string = ""
@@ -463,8 +463,8 @@ class AsyncGoTrueAPI:
 
         Raises
         ------
-        error : APIError
-            If an error occurs
+        APIError
+            If an error occurs.
         """
         url_params = [f"provider={encode_uri_component(provider)}"]
         if redirect_to:
@@ -489,8 +489,8 @@ class AsyncGoTrueAPI:
 
         Raises
         ------
-        error : APIError
-            If an error occurs
+        APIError
+            If an error occurs.
         """
         headers = self._create_request_headers(jwt=jwt)
         url = f"{self.url}/user"
@@ -520,8 +520,8 @@ class AsyncGoTrueAPI:
 
         Raises
         ------
-        error : APIError
-            If an error occurs
+        APIError
+            If an error occurs.
         """
         headers = self._create_request_headers(jwt=jwt)
         data = attributes.dict()
@@ -549,8 +549,8 @@ class AsyncGoTrueAPI:
 
         Raises
         ------
-        error : APIError
-            If an error occurs
+        APIError
+            If an error occurs.
         """
         headers = self._create_request_headers(jwt=jwt)
         url = f"{self.url}/admin/users/{uid}"
@@ -572,8 +572,8 @@ class AsyncGoTrueAPI:
 
         Raises
         ------
-        error : APIError
-            If an error occurs
+        APIError
+            If an error occurs.
         """
         data = {"refresh_token": refresh_token}
         url = f"{self.url}/token?grant_type=refresh_token"
@@ -614,8 +614,8 @@ class AsyncGoTrueAPI:
 
         Raises
         ------
-        error : APIError
-            If an error occurs
+        APIError
+            If an error occurs.
         """
         headers = self.headers
         data = {
