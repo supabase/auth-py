@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from typing import Any, Callable, Dict, Literal, TypeVar, Union, overload
+from typing import Any, Callable, Dict, TypeVar, Union, overload
 
 from httpx import Response
 from pydantic import BaseModel
-from typing_extensions import Self
+from typing_extensions import Literal, Self
 
 from ..helpers import handle_exception
 from ..http_clients import AsyncClient
