@@ -613,3 +613,24 @@ class DecodedJWTDict(TypedDict):
     exp: NotRequired[int]
     aal: NotRequired[Union[AuthenticatorAssuranceLevels, None]]
     amr: NotRequired[Union[List[AMREntry], None]]
+
+
+AMREntry.update_forward_refs()
+AuthResponse.update_forward_refs()
+OAuthResponse.update_forward_refs()
+UserResponse.update_forward_refs()
+Session.update_forward_refs()
+UserIdentity.update_forward_refs()
+Factor.update_forward_refs()
+User.update_forward_refs()
+Subscription.update_forward_refs()
+AuthMFAVerifyResponse.update_forward_refs()
+AuthMFAEnrollResponseTotp.update_forward_refs()
+AuthMFAEnrollResponse.update_forward_refs()
+AuthMFAUnenrollResponse.update_forward_refs()
+AuthMFAChallengeResponse.update_forward_refs()
+AuthMFAListFactorsResponse.update_forward_refs()
+AuthMFAGetAuthenticatorAssuranceLevelResponse.update_forward_refs()
+AuthMFAAdminDeleteFactorResponse.update_forward_refs()
+AuthMFAAdminListFactorsResponse.update_forward_refs()
+GenerateLinkProperties.update_forward_refs()

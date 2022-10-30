@@ -441,9 +441,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         self._notify_all_subscribers("TOKEN_REFRESHED", session)
         return AuthResponse(session=session, user=response.user)
 
-    def refresh_session(
-        self, refresh_token: Union[str, None] = None
-    ) -> AuthResponse:
+    def refresh_session(self, refresh_token: Union[str, None] = None) -> AuthResponse:
         """
         Returns a new session, regardless of expiry status.
 

@@ -6,10 +6,9 @@ from faker import Faker
 from jwt import encode
 from typing_extensions import NotRequired, TypedDict
 
-from ...gotrue.types import User
-from .clients import GOTRUE_JWT_SECRET, service_role_api_client
+from gotrue.types import User
 
-fake = Faker()
+from .clients import GOTRUE_JWT_SECRET, service_role_api_client
 
 
 def mock_access_token() -> str:
@@ -37,6 +36,7 @@ class Credentials(TypedDict):
 def mock_user_credentials(
     options: OptionalCredentials = {},
 ) -> Credentials:
+    fake = Faker()
     rand_numbers = str(time())
     return {
         "email": options.get("email") or fake.email(),
@@ -50,6 +50,7 @@ def mock_verification_otp() -> str:
 
 
 def mock_user_metadata():
+    fake = Faker()
     return {
         "profile_image": fake.url(),
     }
@@ -72,7 +73,7 @@ async def create_new_user_with_email(
             "password": password,
         }
     )
-    response = await service_role_api_client.create_user(
+    response = await service_role_api_client().create_user(
         {
             "email": credentials["email"],
             "password": credentials["password"],

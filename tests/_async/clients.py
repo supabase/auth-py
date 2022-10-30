@@ -1,5 +1,6 @@
-from gotrue import AsyncGoTrueAdminAPI, AsyncGoTrueClient
 from jwt import encode
+
+from gotrue import AsyncGoTrueAdminAPI, AsyncGoTrueClient
 
 SIGNUP_ENABLED_AUTO_CONFIRM_OFF_PORT = 9999
 SIGNUP_ENABLED_AUTO_CONFIRM_ON_PORT = 9998
@@ -25,56 +26,72 @@ AUTH_ADMIN_JWT = encode(
     GOTRUE_JWT_SECRET,
 )
 
-auth_client = AsyncGoTrueClient(
-    url=GOTRUE_URL_SIGNUP_ENABLED_AUTO_CONFIRM_ON,
-    auto_refresh_token=False,
-    persist_session=True,
-)
 
-auth_client_with_session = AsyncGoTrueClient(
-    url=GOTRUE_URL_SIGNUP_ENABLED_AUTO_CONFIRM_ON,
-    auto_refresh_token=False,
-    persist_session=False,
-)
-
-auth_subscription_client = AsyncGoTrueClient(
-    url=GOTRUE_URL_SIGNUP_ENABLED_AUTO_CONFIRM_ON,
-    auto_refresh_token=False,
-    persist_session=True,
-)
+def auth_client():
+    return AsyncGoTrueClient(
+        url=GOTRUE_URL_SIGNUP_ENABLED_AUTO_CONFIRM_ON,
+        auto_refresh_token=False,
+        persist_session=True,
+    )
 
 
-client_api_auto_confirm_enabled_client = AsyncGoTrueClient(
-    url=GOTRUE_URL_SIGNUP_ENABLED_AUTO_CONFIRM_ON,
-    auto_refresh_token=False,
-    persist_session=True,
-)
+def auth_client_with_session():
+    return AsyncGoTrueClient(
+        url=GOTRUE_URL_SIGNUP_ENABLED_AUTO_CONFIRM_ON,
+        auto_refresh_token=False,
+        persist_session=False,
+    )
 
-client_api_auto_confirm_off_signups_enabled_client = AsyncGoTrueClient(
-    url=GOTRUE_URL_SIGNUP_ENABLED_AUTO_CONFIRM_OFF,
-    auto_refresh_token=False,
-    persist_session=True,
-)
 
-client_api_auto_confirm_disabled_client = AsyncGoTrueClient(
-    url=GOTRUE_URL_SIGNUP_DISABLED_AUTO_CONFIRM_OFF,
-    auto_refresh_token=False,
-    persist_session=True,
-)
+def auth_subscription_client():
+    return AsyncGoTrueClient(
+        url=GOTRUE_URL_SIGNUP_ENABLED_AUTO_CONFIRM_ON,
+        auto_refresh_token=False,
+        persist_session=True,
+    )
 
-auth_admin_api_auto_confirm_enabled_client = AsyncGoTrueAdminAPI(
-    url=GOTRUE_URL_SIGNUP_ENABLED_AUTO_CONFIRM_ON,
-    headers={
-        "Authorization": f"Bearer {AUTH_ADMIN_JWT}",
-    },
-)
 
-auth_admin_api_auto_confirm_disabled_client = AsyncGoTrueAdminAPI(
-    url=GOTRUE_URL_SIGNUP_ENABLED_AUTO_CONFIRM_OFF,
-    headers={
-        "Authorization": f"Bearer {AUTH_ADMIN_JWT}",
-    },
-)
+def client_api_auto_confirm_enabled_client():
+    return AsyncGoTrueClient(
+        url=GOTRUE_URL_SIGNUP_ENABLED_AUTO_CONFIRM_ON,
+        auto_refresh_token=False,
+        persist_session=True,
+    )
+
+
+def client_api_auto_confirm_off_signups_enabled_client():
+    return AsyncGoTrueClient(
+        url=GOTRUE_URL_SIGNUP_ENABLED_AUTO_CONFIRM_OFF,
+        auto_refresh_token=False,
+        persist_session=True,
+    )
+
+
+def client_api_auto_confirm_disabled_client():
+    return AsyncGoTrueClient(
+        url=GOTRUE_URL_SIGNUP_DISABLED_AUTO_CONFIRM_OFF,
+        auto_refresh_token=False,
+        persist_session=True,
+    )
+
+
+def auth_admin_api_auto_confirm_enabled_client():
+    return AsyncGoTrueAdminAPI(
+        url=GOTRUE_URL_SIGNUP_ENABLED_AUTO_CONFIRM_ON,
+        headers={
+            "Authorization": f"Bearer {AUTH_ADMIN_JWT}",
+        },
+    )
+
+
+def auth_admin_api_auto_confirm_disabled_client():
+    return AsyncGoTrueAdminAPI(
+        url=GOTRUE_URL_SIGNUP_ENABLED_AUTO_CONFIRM_OFF,
+        headers={
+            "Authorization": f"Bearer {AUTH_ADMIN_JWT}",
+        },
+    )
+
 
 SERVICE_ROLE_JWT = encode(
     {
@@ -83,23 +100,29 @@ SERVICE_ROLE_JWT = encode(
     GOTRUE_JWT_SECRET,
 )
 
-service_role_api_client = AsyncGoTrueAdminAPI(
-    url=GOTRUE_URL_SIGNUP_ENABLED_AUTO_CONFIRM_ON,
-    headers={
-        "Authorization": f"Bearer {SERVICE_ROLE_JWT}",
-    },
-)
 
-service_role_api_client_with_sms = AsyncGoTrueAdminAPI(
-    url=GOTRUE_URL_SIGNUP_ENABLED_AUTO_CONFIRM_OFF,
-    headers={
-        "Authorization": f"Bearer {SERVICE_ROLE_JWT}",
-    },
-)
+def service_role_api_client():
+    return AsyncGoTrueAdminAPI(
+        url=GOTRUE_URL_SIGNUP_ENABLED_AUTO_CONFIRM_ON,
+        headers={
+            "Authorization": f"Bearer {SERVICE_ROLE_JWT}",
+        },
+    )
 
-service_role_api_client_no_sms = AsyncGoTrueAdminAPI(
-    url=GOTRUE_URL_SIGNUP_DISABLED_AUTO_CONFIRM_OFF,
-    headers={
-        "Authorization": f"Bearer {SERVICE_ROLE_JWT}",
-    },
-)
+
+def service_role_api_client_with_sms():
+    return AsyncGoTrueAdminAPI(
+        url=GOTRUE_URL_SIGNUP_ENABLED_AUTO_CONFIRM_OFF,
+        headers={
+            "Authorization": f"Bearer {SERVICE_ROLE_JWT}",
+        },
+    )
+
+
+def service_role_api_client_no_sms():
+    return AsyncGoTrueAdminAPI(
+        url=GOTRUE_URL_SIGNUP_DISABLED_AUTO_CONFIRM_OFF,
+        headers={
+            "Authorization": f"Bearer {SERVICE_ROLE_JWT}",
+        },
+    )
