@@ -167,6 +167,7 @@ class AsyncGoTrueAPI:
         APIError
             If an error occurs.
         """
+
         headers = self.headers
         query_string = "?grant_type=password"
         if redirect_to:
