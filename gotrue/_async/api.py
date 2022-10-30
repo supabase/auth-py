@@ -422,8 +422,7 @@ class AsyncGoTrueAPI:
             The headers required for a successful request statement with the
             supabase backend.
         """
-        headers = {**self.headers}
-        headers["Authorization"] = f"Bearer {jwt}"
+        headers = {**self.headers, "Authorization": f"Bearer {jwt}"}
         return headers
 
     async def sign_out(self, *, jwt: str) -> None:
