@@ -30,9 +30,6 @@ pytest-asyncio = "^0.20.1"
 Faker = "^15.1.1"
 unasync-cli = "^0.0.9"
 python-semantic-release = "^7.32.2"
-
-
-[tool.poetry.group.dev.dependencies]
 ruff = "^0.0.102"
 sphinx = "^5.3.0"
 
