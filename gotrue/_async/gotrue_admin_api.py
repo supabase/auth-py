@@ -104,7 +104,9 @@ class AsyncGoTrueAdminAPI(AsyncGoTrueBaseAPI):
         return await self._request(
             "GET",
             "admin/users",
-            xform=lambda data: [User.parse_obj(user) for user in data],
+            xform=lambda data: [User.parse_obj(user) for user in data["users"]]
+            if "users" in data
+            else [],
         )
 
     async def get_user_by_id(self, uid: str) -> UserResponse:
