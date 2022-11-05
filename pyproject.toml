@@ -32,6 +32,12 @@ Faker = "^15.1.1"
 unasync-cli = "^0.0.9"
 python-semantic-release = "^7.32.2"
 
+[tool.poetry.group.docs]
+optional = true
+
+[tool.poetry.group.docs.dependencies]
+Sphinx="^5.3.0"
+
 [tool.semantic_release]
 version_variable = "gotrue/__init__.py:__version__"
 version_toml = "pyproject.toml:tool.poetry.version"
