@@ -42,7 +42,12 @@ class SyncGoTrueAdminAPI(SyncGoTrueBaseAPI):
         """
         Removes a logged-in session.
         """
-        return self._request("POST", "logout", jwt=jwt)
+        return self._request(
+            "POST",
+            "logout",
+            jwt=jwt,
+            no_resolve_json=True,
+        )
 
     def invite_user_by_email(
         self,
@@ -104,7 +109,9 @@ class SyncGoTrueAdminAPI(SyncGoTrueBaseAPI):
         return self._request(
             "GET",
             "admin/users",
-            xform=lambda data: [User.parse_obj(user) for user in data],
+            xform=lambda data: [User.parse_obj(user) for user in data["users"]]
+            if "users" in data
+            else [],
         )
 
     def get_user_by_id(self, uid: str) -> UserResponse:
@@ -138,18 +145,14 @@ class SyncGoTrueAdminAPI(SyncGoTrueBaseAPI):
             xform=parse_user_response,
         )
 
-    def delete_user(self, id: str) -> UserResponse:
+    def delete_user(self, id: str) -> None:
         """
         Delete a user. Requires a `service_role` key.
 
         This function should only be called on a server.
         Never expose your `service_role` key in the browser.
         """
-        return self._request(
-            "DELETE",
-            f"admin/users/{id}",
-            xform=parse_user_response,
-        )
+        return self._request("DELETE", f"admin/users/{id}")
 
     def _list_factors(
         self,

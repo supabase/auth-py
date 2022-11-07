@@ -18,7 +18,7 @@ class AsyncGoTrueAdminMFAAPI:
         """
         Lists all factors attached to a user.
         """
-        raise NotImplementedError()
+        raise NotImplementedError()  # pragma: no cover
 
     async def delete_factor(
         self,
@@ -29,4 +29,4 @@ class AsyncGoTrueAdminMFAAPI:
         sessions (if the deleted factor was verified). There's no need to delete
         unverified factors.
         """
-        raise NotImplementedError()
+        raise NotImplementedError()  # pragma: no cover

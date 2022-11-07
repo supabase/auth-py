@@ -42,7 +42,12 @@ class AsyncGoTrueAdminAPI(AsyncGoTrueBaseAPI):
         """
         Removes a logged-in session.
         """
-        return await self._request("POST", "logout", jwt=jwt)
+        return await self._request(
+            "POST",
+            "logout",
+            jwt=jwt,
+            no_resolve_json=True,
+        )
 
     async def invite_user_by_email(
         self,
@@ -140,18 +145,14 @@ class AsyncGoTrueAdminAPI(AsyncGoTrueBaseAPI):
             xform=parse_user_response,
         )
 
-    async def delete_user(self, id: str) -> UserResponse:
+    async def delete_user(self, id: str) -> None:
         """
         Delete a user. Requires a `service_role` key.
 
         This function should only be called on a server.
         Never expose your `service_role` key in the browser.
         """
-        return await self._request(
-            "DELETE",
-            f"admin/users/{id}",
-            xform=parse_user_response,
-        )
+        return await self._request("DELETE", f"admin/users/{id}")
 
     async def _list_factors(
         self,

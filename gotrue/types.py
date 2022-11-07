@@ -364,7 +364,7 @@ class GenerateRecoveryLinkParams(TypedDict):
 
 
 class GenerateEmailChangeLinkParams(TypedDict):
-    type: Literal["email_change"]
+    type: Literal["email_change_current", "email_change_new"]
     email: str
     new_email: str
     options: NotRequired[GenerateLinkParamsOptions]

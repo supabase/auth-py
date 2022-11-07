@@ -1,9 +1,17 @@
-from .clients import auth_client_with_session, service_role_api_client
+from gotrue.errors import AuthError
+
+from .clients import (
+    auth_client_with_session,
+    client_api_auto_confirm_disabled_client,
+    client_api_auto_confirm_off_signups_enabled_client,
+    service_role_api_client,
+)
 from .utils import (
     create_new_user_with_email,
     mock_app_metadata,
     mock_user_credentials,
     mock_user_metadata,
+    mock_verification_otp,
 )
 
 
@@ -91,3 +99,175 @@ async def test_get_user_by_id_should_a_registered_user_given_its_user_identifier
     assert user.id
     response = await service_role_api_client().get_user_by_id(user.id)
     assert response.user.email == credentials.get("email")
+
+
+async def test_modify_email_using_update_user_by_id():
+    credentials = mock_user_credentials()
+    user = await create_new_user_with_email(email=credentials.get("email"))
+    response = await service_role_api_client().update_user_by_id(
+        user.id,
+        {
+            "email": f"new_{user.email}",
+        },
+    )
+    assert response.user.email == f"new_{user.email}"
+
+
+async def test_modify_user_metadata_using_update_user_by_id():
+    credentials = mock_user_credentials()
+    user = await create_new_user_with_email(email=credentials.get("email"))
+    user_metadata = {"favorite_color": "yellow"}
+    response = await service_role_api_client().update_user_by_id(
+        user.id,
+        {
+            "user_metadata": user_metadata,
+        },
+    )
+    assert response.user.email == user.email
+    assert response.user.user_metadata == user_metadata
+
+
+async def test_modify_app_metadata_using_update_user_by_id():
+    credentials = mock_user_credentials()
+    user = await create_new_user_with_email(email=credentials.get("email"))
+    app_metadata = {"roles": ["admin", "publisher"]}
+    response = await service_role_api_client().update_user_by_id(
+        user.id,
+        {
+            "app_metadata": app_metadata,
+        },
+    )
+    assert response.user.email == user.email
+    assert "roles" in response.user.app_metadata
+
+
+async def test_modify_confirm_email_using_update_user_by_id():
+    credentials = mock_user_credentials()
+    response = await client_api_auto_confirm_off_signups_enabled_client().sign_up(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+        }
+    )
+    assert response.user
+    assert not response.user.email_confirmed_at
+    response = await service_role_api_client().update_user_by_id(
+        response.user.id,
+        {
+            "email_confirm": True,
+        },
+    )
+    assert response.user.email_confirmed_at
+
+
+async def test_delete_user_should_be_able_delete_an_existing_user():
+    credentials = mock_user_credentials()
+    user = await create_new_user_with_email(email=credentials.get("email"))
+    await service_role_api_client().delete_user(user.id)
+    users = await service_role_api_client().list_users()
+    emails = [user.email for user in users]
+    assert credentials.get("email") not in emails
+
+
+async def test_generate_link_supports_sign_up_with_generate_confirmation_signup_link():
+    credentials = mock_user_credentials()
+    redirect_to = "http://localhost:9999/welcome"
+    user_metadata = {"status": "alpha"}
+    response = await service_role_api_client().generate_link(
+        {
+            "type": "signup",
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+            "options": {
+                "data": user_metadata,
+                "redirect_to": redirect_to,
+            },
+        },
+    )
+    assert response.user.user_metadata == user_metadata
+
+
+async def test_generate_link_supports_updating_emails_with_generate_email_change_links():  # noqa: E501
+    credentials = mock_user_credentials()
+    user = await create_new_user_with_email(email=credentials.get("email"))
+    assert user.email
+    assert user.email == credentials.get("email")
+    credentials = mock_user_credentials()
+    redirect_to = "http://localhost:9999/welcome"
+    response = await service_role_api_client().generate_link(
+        {
+            "type": "email_change_current",
+            "email": user.email,
+            "new_email": credentials.get("email"),
+            "options": {
+                "redirect_to": redirect_to,
+            },
+        },
+    )
+    assert response.user.new_email == credentials.get("email")
+
+
+async def test_invite_user_by_email_creates_a_new_user_with_an_invited_at_timestamp():
+    credentials = mock_user_credentials()
+    redirect_to = "http://localhost:9999/welcome"
+    user_metadata = {"status": "alpha"}
+    response = await service_role_api_client().invite_user_by_email(
+        credentials.get("email"),
+        {
+            "data": user_metadata,
+            "redirect_to": redirect_to,
+        },
+    )
+    assert response.user.invited_at
+
+
+async def test_sign_out_with_an_valid_access_token():
+    credentials = mock_user_credentials()
+    response = await auth_client_with_session().sign_up(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+        },
+    )
+    assert response.session
+    response = await service_role_api_client().sign_out(response.session.access_token)
+
+
+async def test_sign_out_with_an_invalid_access_token():
+    try:
+        await service_role_api_client().sign_out("this-is-a-bad-token")
+        assert False
+    except AuthError:
+        pass
+
+
+async def test_verify_otp_with_non_existent_phone_number():
+    credentials = mock_user_credentials()
+    otp = mock_verification_otp()
+    try:
+        await client_api_auto_confirm_disabled_client().verify_otp(
+            {
+                "phone": credentials.get("phone"),
+                "token": otp,
+                "type": "sms",
+            },
+        )
+        assert False
+    except AuthError as e:
+        assert e.message == "User not found"
+
+
+async def test_verify_otp_with_invalid_phone_number():
+    credentials = mock_user_credentials()
+    otp = mock_verification_otp()
+    try:
+        await client_api_auto_confirm_disabled_client().verify_otp(
+            {
+                "phone": f"{credentials.get('phone')}-invalid",
+                "token": otp,
+                "type": "sms",
+            },
+        )
+        assert False
+    except AuthError as e:
+        assert e.message == "Invalid phone number format"

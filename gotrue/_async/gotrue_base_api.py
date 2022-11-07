@@ -47,7 +47,7 @@ class AsyncGoTrueBaseAPI:
         no_resolve_json: Literal[False] = False,
         xform: Callable[[Any], T],
     ) -> T:
-        ...
+        ...  # pragma: no cover
 
     @overload
     async def _request(
@@ -63,7 +63,7 @@ class AsyncGoTrueBaseAPI:
         no_resolve_json: Literal[True],
         xform: Callable[[Response], T],
     ) -> T:
-        ...
+        ...  # pragma: no cover
 
     @overload
     async def _request(
@@ -78,7 +78,7 @@ class AsyncGoTrueBaseAPI:
         body: Union[Any, None] = None,
         no_resolve_json: bool = False,
     ) -> None:
-        ...
+        ...  # pragma: no cover
 
     async def _request(
         self,

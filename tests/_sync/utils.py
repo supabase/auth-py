@@ -37,7 +37,7 @@ def mock_user_credentials(
     options: OptionalCredentials = {},
 ) -> Credentials:
     fake = Faker()
-    rand_numbers = str(time())
+    rand_numbers = str(int(time()))
     return {
         "email": options.get("email") or fake.email(),
         "phone": options.get("phone") or f"1{rand_numbers[-11:]}",
