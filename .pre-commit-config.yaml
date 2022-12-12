@@ -23,10 +23,16 @@ repos:
             "--line-width=88",
           ]
 
-  - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.0.100
+  - repo: https://github.com/myint/autoflake.git
+    rev: v1.4
     hooks:
-      - id: ruff
+      - id: autoflake
+        args:
+          [
+            "--in-place",
+            "--remove-all-unused-imports",
+            "--ignore-init-module-imports",
+          ]
 
   - repo: https://github.com/ambv/black
     rev: 22.6.0
