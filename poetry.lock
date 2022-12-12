@@ -806,14 +806,6 @@ idna = {version = "*", optional = true, markers = "extra == \"idna2008\""}
 idna2008 = ["idna"]
 
 [[package]]
-name = "ruff"
-version = "0.0.102"
-description = "An extremely fast Python linter, written in Rust."
-category = "dev"
-optional = false
-python-versions = ">=3.7"
-
-[[package]]
 name = "secretstorage"
 version = "3.3.3"
 description = "Python bindings to FreeDesktop.org Secret Service API"
@@ -1049,7 +1041,7 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "c4774f4caed040246c26a3964eb66fe4056620ae9d004e07d2b086bc5761dd3c"
+content-hash = "1c2df4f88a302f4702ab6a3c6011798b1033cdbafa039a92729e1714e1dc722f"
 
 [metadata.files]
 anyio = [
@@ -1523,24 +1515,6 @@ requests-toolbelt = [
 rfc3986 = [
     {file = "rfc3986-1.5.0-py2.py3-none-any.whl", hash = "sha256:a86d6e1f5b1dc238b218b012df0aa79409667bb209e58da56d0b94704e712a97"},
     {file = "rfc3986-1.5.0.tar.gz", hash = "sha256:270aaf10d87d0d4e095063c65bf3ddbc6ee3d0b226328ce21e036f946e421835"},
-]
-ruff = [
-    {file = "ruff-0.0.102-py3-none-macosx_10_7_x86_64.whl", hash = "sha256:c9440d80299c0c24f56d567c06b83cb87342b86f50422b1d3c2ef56cf5830f19"},
-    {file = "ruff-0.0.102-py3-none-macosx_10_9_x86_64.macosx_11_0_arm64.macosx_10_9_universal2.whl", hash = "sha256:e79cfc337058cd55a86d355e93267ea905b1bbabb9f17e1afba5108d17ad2942"},
-    {file = "ruff-0.0.102-py3-none-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:92edc2ed52375869daa94b1e030fdc7c4858435f96111fe6a313bdf91a456199"},
-    {file = "ruff-0.0.102-py3-none-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:125c2b2dfaa96fb629eb653be59be2c4a12e70ea02f835ac65374dcb8fe4c840"},
-    {file = "ruff-0.0.102-py3-none-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:5b853c9cd0894b876e39dbb34cb1300a7fb9714a815e4088b4d4e53d304242f8"},
-    {file = "ruff-0.0.102-py3-none-manylinux_2_17_ppc64.manylinux2014_ppc64.whl", hash = "sha256:88cb48b2346e49b04dc30fd2e86a8370335cf4377080a55e2a0639e3f5b79c57"},
-    {file = "ruff-0.0.102-py3-none-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:86e78babc79ff9d09e4d142d48942c76e9ffb75355060518d3861dc19ee30fdc"},
-    {file = "ruff-0.0.102-py3-none-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:dff859703216a7027ead50b24b87cbfe01f48d1afaea8d526a52101ce3d1a1ab"},
-    {file = "ruff-0.0.102-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:8bd8c553afbf7a4232586b321d6edfb451fb511232bbcd5aa941ee326ea7cc84"},
-    {file = "ruff-0.0.102-py3-none-musllinux_1_2_aarch64.whl", hash = "sha256:85bbe1585d3bad83bda32469182e1fe43b6692b94f366ce1b2bb6b8ce7d0fcc7"},
-    {file = "ruff-0.0.102-py3-none-musllinux_1_2_armv7l.whl", hash = "sha256:62cf519f542fe3d69bffe2e143d27628afc771c906e1c6ea2d9b16ab157891bc"},
-    {file = "ruff-0.0.102-py3-none-musllinux_1_2_i686.whl", hash = "sha256:622ba1ad151ae6601c281642a5b3076b29869735b7b2ec9594cb0e8100a9249c"},
-    {file = "ruff-0.0.102-py3-none-musllinux_1_2_x86_64.whl", hash = "sha256:28a298c9883052097f0262003a5212e6cbf17322e7a86c32a954b7cccfccf042"},
-    {file = "ruff-0.0.102-py3-none-win32.whl", hash = "sha256:a885cd7f129f914f4cb3446d5fde5f48eec7c431e727c00bf2d4a8e111d2ab0f"},
-    {file = "ruff-0.0.102-py3-none-win_amd64.whl", hash = "sha256:c9eee2c281ad93c443f72e30707331ae0267a519102fa6db7f6ca31eb6efe6b6"},
-    {file = "ruff-0.0.102.tar.gz", hash = "sha256:c94462b4d552a011a7645e9cd9ab5ef0854b67a2a3be8c1fa4000a0523c4dc66"},
 ]
 secretstorage = [
     {file = "SecretStorage-3.3.3-py3-none-any.whl", hash = "sha256:f356e6628222568e3af06f2eba8df495efa13b3b63081dafd4f7d9a7b7bc9f99"},
