@@ -1,3 +1,4 @@
+from ..http_clients import AsyncClient
 from ..types import (
     AuthMFAChallengeResponse,
     AuthMFAEnrollResponse,
@@ -18,6 +19,19 @@ class AsyncGoTrueMFAAPI:
     Contains the full multi-factor authentication API.
     """
 
+    def __init__(
+        self,
+        *,
+        url: str,
+        headers: Dict[str, str],
+        cookie_options: CookieOptions,
+        http_client: Optional[AsyncClient] = None
+    ):
+        self.url = url
+        self.headers = headers
+        self.cookie_options = cookie_options
+        self.http_client = http_client or AsyncClient()
+
     async def enroll(self, params: MFAEnrollParams) -> AuthMFAEnrollResponse:
         """
         Starts the enrollment process for a new Multi-Factor Authentication
@@ -30,6 +44,9 @@ class AsyncGoTrueMFAAPI:
         factor. All other sessions are logged out and the current one gets an
         `aal2` authenticator level.
         """
+        headers = self.headers
+        data = {}
+
         raise NotImplementedError()  # pragma: no cover
 
     async def challenge(self, params: MFAChallengeParams) -> AuthMFAChallengeResponse:
