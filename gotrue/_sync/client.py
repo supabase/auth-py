@@ -121,8 +121,8 @@ class SyncGoTrueClient:
 
         Raises
         ------
-        error : APIError
-            If an error occurs
+        APIError
+            If an error occurs.
         """
         self._remove_session()
 
@@ -202,8 +202,8 @@ class SyncGoTrueClient:
 
         Raises
         ------
-        error : APIError
-            If an error occurs
+        APIError
+            If an error occurs.
         """
         self._remove_session()
         if email:
@@ -268,8 +268,8 @@ class SyncGoTrueClient:
 
         Raises
         ------
-        error : APIError
-            If an error occurs
+        APIError
+            If an error occurs.
         """
         self._remove_session()
         response = self.api.verify_mobile_otp(
@@ -315,8 +315,8 @@ class SyncGoTrueClient:
 
         Raises
         ------
-        error : APIError
-            If an error occurs
+        APIError
+            If an error occurs.
         """
         if not self.current_session:
             raise ValueError("Not logged in.")
@@ -350,8 +350,8 @@ class SyncGoTrueClient:
 
         Raises
         ------
-        error : APIError
-            If an error occurs
+        APIError
+            If an error occurs.
         """
         response = self.api.refresh_access_token(refresh_token=refresh_token)
         self._save_session(session=response)
@@ -374,8 +374,8 @@ class SyncGoTrueClient:
 
         Raises
         ------
-        error : APIError
-            If an error occurs
+        APIError
+            If an error occurs.
         """
         session = Session(
             access_token=access_token,
@@ -416,8 +416,8 @@ class SyncGoTrueClient:
 
         Raises
         ------
-        error : APIError
-            If an error occurs
+        APIError
+            If an error occurs.
         """
         data = urlparse(url)
         query = parse_qs(data.query)
@@ -492,8 +492,8 @@ class SyncGoTrueClient:
 
         Raises
         ------
-        error : APIError
-            If an error occurs
+        APIError
+            If an error occurs.
         """
         unique_id = uuid4()
         subscription = Subscription(
