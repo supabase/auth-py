@@ -417,8 +417,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         session: Union[Session, None] = None
         if access_token and access_token.split(".")[1]:
             payload = self._decode_jwt(access_token)
-            exp = payload.get("exp")
-            if exp:
+            if exp := payload.get("exp"):
                 expires_at = int(exp)
                 has_expired = expires_at <= time_now
         if has_expired:
@@ -642,8 +641,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
             raise AuthImplicitGrantRedirectError("Not a valid implicit grant flow url.")
         result = urlparse(url)
         params = parse_qs(result.query)
-        error_description = self._get_param(params, "error_description")
-        if error_description:
+        if error_description := self._get_param(params, "error_description"):
             error_code = self._get_param(params, "error_code")
             error = self._get_param(params, "error")
             if not error_code:
@@ -741,8 +739,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
     async def _save_session(self, session: Session) -> None:
         if not self._persist_session:
             self._in_memory_session = session
-        expire_at = session.expires_at
-        if expire_at:
+        if expire_at := session.expires_at:
             time_now = round(time())
             expire_in = expire_at - time_now
             refresh_duration_before_expires = (
