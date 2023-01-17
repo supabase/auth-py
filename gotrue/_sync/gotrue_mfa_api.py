@@ -1,3 +1,4 @@
+from ..http_clients import SyncClient
 from ..types import (
     AuthMFAChallengeResponse,
     AuthMFAEnrollResponse,
@@ -18,6 +19,19 @@ class SyncGoTrueMFAAPI:
     Contains the full multi-factor authentication API.
     """
 
+    def __init__(
+        self,
+        *,
+        url: str,
+        headers: Dict[str, str],
+        cookie_options: CookieOptions,
+        http_client: Optional[SyncClient] = None
+    ):
+        self.url = url
+        self.headers = headers
+        self.cookie_options = cookie_options
+        self.http_client = http_client or SyncClient()
+
     def enroll(self, params: MFAEnrollParams) -> AuthMFAEnrollResponse:
         """
         Starts the enrollment process for a new Multi-Factor Authentication
@@ -30,14 +44,22 @@ class SyncGoTrueMFAAPI:
         factor. All other sessions are logged out and the current one gets an
         `aal2` authenticator level.
         """
-        raise NotImplementedError()  # pragma: no cover
+        headers = self.headers
+        response = self.http_client.post(url, json=params, headers=headers)
+
+        return check_response(response)  # pragma: no cover
 
     def challenge(self, params: MFAChallengeParams) -> AuthMFAChallengeResponse:
         """
         Prepares a challenge used to verify that a user has access to a MFA
         factor. Provide the challenge ID and verification code by calling `verify`.
         """
-        raise NotImplementedError()  # pragma: no cover
+
+        # TODO(joel): fetch session
+        headers = self.headers
+
+        response = self.http_client.post(url, json=params, headers=headers)
+        return check_response(response)  # pragma: no cover
 
     def challenge_and_verify(
         self,

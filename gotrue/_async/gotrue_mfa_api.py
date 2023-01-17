@@ -45,16 +45,21 @@ class AsyncGoTrueMFAAPI:
         `aal2` authenticator level.
         """
         headers = self.headers
-        data = {}
+        response = await self.http_client.post(url, json=params, headers=headers)
 
-        raise NotImplementedError()  # pragma: no cover
+        return check_response(response)  # pragma: no cover
 
     async def challenge(self, params: MFAChallengeParams) -> AuthMFAChallengeResponse:
         """
         Prepares a challenge used to verify that a user has access to a MFA
         factor. Provide the challenge ID and verification code by calling `verify`.
         """
-        raise NotImplementedError()  # pragma: no cover
+
+        # TODO(joel): fetch session
+        headers = self.headers
+
+        response = await self.http_client.post(url, json=params, headers=headers)
+        return check_response(response)  # pragma: no cover
 
     async def challenge_and_verify(
         self,
