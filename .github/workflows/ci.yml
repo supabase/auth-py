@@ -20,7 +20,7 @@ jobs:
       - name: Set up Poetry
         uses: abatilo/actions-poetry@v2.1.6
         with:
-          poetry-version: 1.2.2
+          poetry-version: 1.3.2
       - name: Run Tests
         run: make run_tests
       - name: Upload Coverage
