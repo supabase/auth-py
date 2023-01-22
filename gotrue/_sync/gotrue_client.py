@@ -372,7 +372,8 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         `get_user()` will attempt to get the `jwt` from the current session.
         """
         if not jwt:
-            if session := self.get_session():
+            session = self.get_session()
+            if session:
                 jwt = session.access_token
         return self._request("GET", "user", jwt=jwt, xform=parse_user_response)
 
@@ -534,15 +535,15 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         return response
 
     def _challenge(self, params: MFAChallengeParams) -> AuthMFAChallengeResponse:
-        if session := self.get_session():
-            return self._request(
-                "POST",
-                f"factors/{params.get('factor_id')}/challenge",
-                jwt=session.access_token,
-                xform=AuthMFAChallengeResponse.parse_obj,
-            )
-        else:
+        session = self.get_session()
+        if not session:
             raise AuthSessionMissingError()
+        return self._request(
+            "POST",
+            f"factors/{params.get('factor_id')}/challenge",
+            jwt=session.access_token,
+            xform=AuthMFAChallengeResponse.parse_obj,
+        )
 
     def _challenge_and_verify(
         self,
@@ -578,15 +579,15 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         return response
 
     def _unenroll(self, params: MFAUnenrollParams) -> AuthMFAUnenrollResponse:
-        if session := self.get_session():
-            return self._request(
-                "DELETE",
-                f"factors/{params.get('factor_id')}",
-                jwt=session.access_token,
-                xform=AuthMFAUnenrollResponse.parse_obj,
-            )
-        else:
+        session = self.get_session()
+        if not session:
             raise AuthSessionMissingError()
+        return self._request(
+            "DELETE",
+            f"factors/{params.get('factor_id')}",
+            jwt=session.access_token,
+            xform=AuthMFAUnenrollResponse.parse_obj,
+        )
 
     def _list_factors(self) -> AuthMFAListFactorsResponse:
         response = self.get_user()
