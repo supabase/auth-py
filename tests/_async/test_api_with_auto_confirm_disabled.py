@@ -3,7 +3,7 @@ from typing import AsyncIterable
 import pytest
 from faker import Faker
 
-from gotrue import AsyncGoTrueAPI
+from gotrue import AsycnGoTrueAdminAPI
 from gotrue.constants import COOKIE_OPTIONS
 from gotrue.types import CookieOptions, LinkType, User
 
@@ -12,8 +12,8 @@ TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwicm9sZS
 
 
 @pytest.fixture(name="api")
-async def create_api() -> AsyncIterable[AsyncGoTrueAPI]:
-    async with AsyncGoTrueAPI(
+async def create_api() -> AsyncIterable[AsycnGoTrueAdminAPI]:
+    async with AsycnGoTrueAdminAPI(
         url=GOTRUE_URL,
         headers={"Authorization": f"Bearer {TOKEN}"},
         cookie_options=CookieOptions.parse_obj(COOKIE_OPTIONS),
@@ -27,7 +27,7 @@ email = f"api_ac_disabled_{fake.email().lower()}"
 password = fake.password()
 
 
-async def test_sign_up_with_email_and_password(api: AsyncGoTrueAPI):
+async def test_sign_up_with_email_and_password(api: AsycnGoTrueAdminAPI):
     try:
         response = await api.sign_up_with_email(
             email=email,
@@ -44,7 +44,7 @@ email2 = f"api_generate_link_signup_{fake.email().lower()}"
 password2 = fake.password()
 
 
-async def test_generate_sign_up_link(api: AsyncGoTrueAPI):
+async def test_generate_sign_up_link(api: AsycnGoTrueAdminAPI):
     try:
         response = await api.generate_link(
             type=LinkType.signup,
@@ -61,7 +61,7 @@ async def test_generate_sign_up_link(api: AsyncGoTrueAPI):
 email3 = f"api_generate_link_signup_{fake.email().lower()}"
 
 
-async def test_generate_magic_link(api: AsyncGoTrueAPI):
+async def test_generate_magic_link(api: AsycnGoTrueAdminAPI):
     try:
         response = await api.generate_link(
             type=LinkType.magiclink,
@@ -73,7 +73,7 @@ async def test_generate_magic_link(api: AsyncGoTrueAPI):
         assert False, str(e)
 
 
-async def test_generate_invite_link(api: AsyncGoTrueAPI):
+async def test_generate_invite_link(api: AsycnGoTrueAdminAPI):
     try:
         response = await api.generate_link(
             type=LinkType.invite,
@@ -86,7 +86,7 @@ async def test_generate_invite_link(api: AsyncGoTrueAPI):
 
 
 @pytest.mark.depends(on=[test_sign_up_with_email_and_password.__name__])
-async def test_generate_recovery_link(api: AsyncGoTrueAPI):
+async def test_generate_recovery_link(api: AsycnGoTrueAdminAPI):
     try:
         response = await api.generate_link(
             type=LinkType.recovery,

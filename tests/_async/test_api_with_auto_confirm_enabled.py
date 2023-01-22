@@ -3,7 +3,6 @@ from typing import AsyncIterable, Optional
 import pytest
 from faker import Faker
 
-from gotrue import AsyncGoTrueAPI
 from gotrue.constants import COOKIE_OPTIONS
 from gotrue.types import CookieOptions, Session, User
 
@@ -12,8 +11,8 @@ TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic2VydmljZV9yb2xlIiwiaW
 
 
 @pytest.fixture(name="api")
-async def create_api() -> AsyncIterable[AsyncGoTrueAPI]:
-    async with AsyncGoTrueAPI(
+async def create_api() -> AsyncIterable[AsyncGoTrueAdminAPI]:
+    async with AsyncGoTrueAdminAPI(
         url=GOTRUE_URL,
         headers={"Authorization": f"Bearer {TOKEN}"},
         cookie_options=CookieOptions.parse_obj(COOKIE_OPTIONS),
@@ -28,7 +27,7 @@ password = fake.password()
 valid_session: Optional[Session] = None
 
 
-async def test_sign_up_with_email(api: AsyncGoTrueAPI):
+async def test_sign_up_with_email(api: AsyncGoTrueAdminAPI):
     global valid_session
     try:
         response = await api.sign_up_with_email(
@@ -43,7 +42,7 @@ async def test_sign_up_with_email(api: AsyncGoTrueAPI):
 
 
 @pytest.mark.depends(on=[test_sign_up_with_email.__name__])
-async def test_get_user(api: AsyncGoTrueAPI):
+async def test_get_user(api: AsyncGoTrueAdminAPI):
     try:
         jwt = valid_session.access_token if valid_session else ""
         response = await api.get_user(jwt=jwt)
@@ -53,7 +52,7 @@ async def test_get_user(api: AsyncGoTrueAPI):
 
 
 @pytest.mark.depends(on=[test_get_user.__name__])
-async def test_delete_user(api: AsyncGoTrueAPI):
+async def test_delete_user(api: AsyncGoTrueAdminAPI):
     try:
         jwt = valid_session.access_token if valid_session else ""
         user = await api.get_user(jwt=jwt)

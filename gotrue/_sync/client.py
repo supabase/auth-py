@@ -20,7 +20,7 @@ from ..types import (
     UserAttributes,
     UserAttributesDict,
 )
-from .api import SyncGoTrueAPI
+from .api import AsycnGoTrueAdminAPI
 from .storage import SyncMemoryStorage, SyncSupportedStorage
 
 
@@ -34,7 +34,7 @@ class SyncGoTrueClient:
         persist_session: bool = True,
         local_storage: SyncSupportedStorage = SyncMemoryStorage(),
         cookie_options: CookieOptions = CookieOptions.parse_obj(COOKIE_OPTIONS),
-        api: Optional[SyncGoTrueAPI] = None,
+        api: Optional[AsycnGoTrueAdminAPI] = None,
         replace_default_headers: bool = False,
     ) -> None:
         """Create a new client
@@ -72,7 +72,7 @@ class SyncGoTrueClient:
             "headers": {**empty_or_default_headers, **headers},
             "cookie_options": cookie_options,
         }
-        self.api = api or SyncGoTrueAPI(**args)
+        self.api = api or SyncGoTrueAdminAPI(**args)
 
     def __enter__(self) -> SyncGoTrueClient:
         return self
@@ -458,6 +458,9 @@ class SyncGoTrueClient:
             if recovery_mode and recovery_mode[0] == "recovery":
                 self._notify_all_subscribers(event=AuthChangeEvent.PASSWORD_RECOVERY)
         return session
+
+    def get_session(self) -> None:
+        return None
 
     def sign_out(self) -> None:
         """Log the user out."""

@@ -3,7 +3,7 @@ from typing import AsyncIterable
 import pytest
 from faker import Faker
 
-from gotrue import AsyncGoTrueAPI, AsyncGoTrueClient
+from gotrue import AsycnGoTrueAdminAPI, AsyncGoTrueClient
 from gotrue.constants import COOKIE_OPTIONS, DEFAULT_HEADERS
 from gotrue.exceptions import APIError
 from gotrue.types import CookieOptions, LinkType, User, UserAttributes
@@ -13,8 +13,8 @@ AUTH_ADMIN_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODk
 
 
 @pytest.fixture(name="auth_admin")
-async def create_auth_admin() -> AsyncIterable[AsyncGoTrueAPI]:
-    async with AsyncGoTrueAPI(
+async def create_auth_admin() -> AsyncIterable[AsycnGoTrueAdminAPI]:
+    async with AsycnGoTrueAdminAPI(
         url=GOTRUE_URL,
         headers={"Authorization": f"Bearer {AUTH_ADMIN_TOKEN}"},
         cookie_options=CookieOptions.parse_obj(COOKIE_OPTIONS),
@@ -53,7 +53,7 @@ invited_user = fake.email().lower()
 
 
 async def test_generate_link_should_be_able_to_generate_multiple_links(
-    auth_admin: AsyncGoTrueAPI,
+    auth_admin: AsycnGoTrueAdminAPI,
 ):
     try:
         response = await auth_admin.generate_link(
@@ -103,7 +103,7 @@ async def test_generate_link_should_be_able_to_generate_multiple_links(
 email2 = fake.email().lower()
 
 
-async def test_create_user(auth_admin: AsyncGoTrueAPI):
+async def test_create_user(auth_admin: AsycnGoTrueAdminAPI):
     try:
         attributes = UserAttributes(email=email2)
         response = await auth_admin.create_user(attributes=attributes)

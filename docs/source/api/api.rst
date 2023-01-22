@@ -1,5 +1,5 @@
 API
 ======
 
-.. autoclass:: gotrue._async.api.AsyncGoTrueAPI
+.. autoclass:: gotrue._async.api.AsycnGoTrueAdminAPI
     :inherited-members:

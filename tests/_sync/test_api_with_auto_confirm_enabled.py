@@ -3,7 +3,6 @@ from typing import Iterable, Optional
 import pytest
 from faker import Faker
 
-from gotrue import SyncGoTrueAPI
 from gotrue.constants import COOKIE_OPTIONS
 from gotrue.types import CookieOptions, Session, User
 
@@ -12,8 +11,8 @@ TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic2VydmljZV9yb2xlIiwiaW
 
 
 @pytest.fixture(name="api")
-def create_api() -> Iterable[SyncGoTrueAPI]:
-    with SyncGoTrueAPI(
+def create_api() -> Iterable[SyncGoTrueAdminAPI]:
+    with SyncGoTrueAdminAPI(
         url=GOTRUE_URL,
         headers={"Authorization": f"Bearer {TOKEN}"},
         cookie_options=CookieOptions.parse_obj(COOKIE_OPTIONS),
@@ -28,7 +27,7 @@ password = fake.password()
 valid_session: Optional[Session] = None
 
 
-def test_sign_up_with_email(api: SyncGoTrueAPI):
+def test_sign_up_with_email(api: SyncGoTrueAdminAPI):
     global valid_session
     try:
         response = api.sign_up_with_email(
@@ -43,7 +42,7 @@ def test_sign_up_with_email(api: SyncGoTrueAPI):
 
 
 @pytest.mark.depends(on=[test_sign_up_with_email.__name__])
-def test_get_user(api: SyncGoTrueAPI):
+def test_get_user(api: SyncGoTrueAdminAPI):
     try:
         jwt = valid_session.access_token if valid_session else ""
         response = api.get_user(jwt=jwt)
@@ -53,7 +52,7 @@ def test_get_user(api: SyncGoTrueAPI):
 
 
 @pytest.mark.depends(on=[test_get_user.__name__])
-def test_delete_user(api: SyncGoTrueAPI):
+def test_delete_user(api: SyncGoTrueAdminAPI):
     try:
         jwt = valid_session.access_token if valid_session else ""
         user = api.get_user(jwt=jwt)

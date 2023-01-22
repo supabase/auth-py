@@ -20,7 +20,7 @@ from ..types import (
     UserAttributes,
     UserAttributesDict,
 )
-from .api import AsyncGoTrueAPI
+from .api import AsycnGoTrueAdminAPI
 from .storage import AsyncMemoryStorage, AsyncSupportedStorage
 
 
@@ -34,7 +34,7 @@ class AsyncGoTrueClient:
         persist_session: bool = True,
         local_storage: AsyncSupportedStorage = AsyncMemoryStorage(),
         cookie_options: CookieOptions = CookieOptions.parse_obj(COOKIE_OPTIONS),
-        api: Optional[AsyncGoTrueAPI] = None,
+        api: Optional[AsycnGoTrueAdminAPI] = None,
         replace_default_headers: bool = False,
     ) -> None:
         """Create a new client
@@ -72,7 +72,7 @@ class AsyncGoTrueClient:
             "headers": {**empty_or_default_headers, **headers},
             "cookie_options": cookie_options,
         }
-        self.api = api or AsyncGoTrueAPI(**args)
+        self.api = api or AsyncGoTrueAdminAPI(**args)
 
     async def __aenter__(self) -> AsyncGoTrueClient:
         return self
@@ -462,6 +462,9 @@ class AsyncGoTrueClient:
             if recovery_mode and recovery_mode[0] == "recovery":
                 self._notify_all_subscribers(event=AuthChangeEvent.PASSWORD_RECOVERY)
         return session
+
+    async def get_session(self) -> None:
+        return None
 
     async def sign_out(self) -> None:
         """Log the user out."""

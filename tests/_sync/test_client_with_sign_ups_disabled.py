@@ -3,7 +3,7 @@ from typing import Iterable
 import pytest
 from faker import Faker
 
-from gotrue import SyncGoTrueAPI, SyncGoTrueClient
+from gotrue import AsycnGoTrueAdminAPI, SyncGoTrueClient
 from gotrue.constants import COOKIE_OPTIONS, DEFAULT_HEADERS
 from gotrue.exceptions import APIError
 from gotrue.types import CookieOptions, LinkType, User, UserAttributes
@@ -13,8 +13,8 @@ AUTH_ADMIN_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODk
 
 
 @pytest.fixture(name="auth_admin")
-def create_auth_admin() -> Iterable[SyncGoTrueAPI]:
-    with SyncGoTrueAPI(
+def create_auth_admin() -> Iterable[AsycnGoTrueAdminAPI]:
+    with AsycnGoTrueAdminAPI(
         url=GOTRUE_URL,
         headers={"Authorization": f"Bearer {AUTH_ADMIN_TOKEN}"},
         cookie_options=CookieOptions.parse_obj(COOKIE_OPTIONS),
@@ -53,7 +53,7 @@ invited_user = fake.email().lower()
 
 
 def test_generate_link_should_be_able_to_generate_multiple_links(
-    auth_admin: SyncGoTrueAPI,
+    auth_admin: AsycnGoTrueAdminAPI,
 ):
     try:
         response = auth_admin.generate_link(
@@ -103,7 +103,7 @@ def test_generate_link_should_be_able_to_generate_multiple_links(
 email2 = fake.email().lower()
 
 
-def test_create_user(auth_admin: SyncGoTrueAPI):
+def test_create_user(auth_admin: AsycnGoTrueAdminAPI):
     try:
         attributes = UserAttributes(email=email2)
         response = auth_admin.create_user(attributes=attributes)
