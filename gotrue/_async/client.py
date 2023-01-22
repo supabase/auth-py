@@ -20,7 +20,7 @@ from ..types import (
     UserAttributes,
     UserAttributesDict,
 )
-from .api import AsycnGoTrueAdminAPI
+from .gotrue_admin_api import AsycnGoTrueAdminAPI
 from .storage import AsyncMemoryStorage, AsyncSupportedStorage
 
 
