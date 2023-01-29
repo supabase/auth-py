@@ -11,8 +11,9 @@ Welcome to gotrue's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   usage/client
-   usage/admin
+      API Reference </api/index>
+      Examples </examples/index>
+      Miscellaneous Modules <modules>
 
 
 
