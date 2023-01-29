@@ -31,7 +31,9 @@ pytest-asyncio = "^0.20.3"
 Faker = "^16.6.1"
 unasync-cli = "^0.0.9"
 python-semantic-release = "^7.32.2"
-PyGithub = "^1.57"
+
+[tool.poetry.group.dev.dependencies]
+pygithub = "^1.57"
 
 [tool.semantic_release]
 version_variable = "gotrue/__init__.py:__version__"
