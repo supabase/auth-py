@@ -614,7 +614,7 @@ class SyncGoTrueClient:
             expire_in = session.expires_at - time_now
             refresh_duration_before_expires = 60 if expire_in > 60 else 0.5
             self._start_auto_refresh_token(
-                value=(expire_in - refresh_duration_before_expires) * 1000
+                value=(expire_in - refresh_duration_before_expires)
             )
         if self.persist_session and session.expires_at:
             self._persist_session(session=session)
