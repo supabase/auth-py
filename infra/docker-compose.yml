@@ -1,8 +1,7 @@
 # docker-compose.yml
 version: '3'
 services:
-  gotrue:
-    # Signup enabled, autoconfirm off
+  gotrue: # Signup enabled, autoconfirm off
     image: supabase/gotrue:latest
     ports:
       - '9999:9999'
@@ -42,8 +41,7 @@ services:
     depends_on:
       - db
     restart: on-failure
-  autoconfirm:
-    # Signup enabled, autoconfirm on
+  autoconfirm: # Signup enabled, autoconfirm on
     image: supabase/gotrue:latest
     ports:
       - '9998:9998'
@@ -72,8 +70,7 @@ services:
     depends_on:
       - db
     restart: on-failure
-  disabled:
-    # Signup disabled
+  disabled: # Signup disabled
     image: supabase/gotrue:latest
     ports:
       - '9997:9997'
@@ -112,6 +109,7 @@ services:
     image: supabase/postgres:14.1.0
     ports:
       - '5432:5432'
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
     volumes:
       - ./db:/docker-entrypoint-initdb.d/
     environment:

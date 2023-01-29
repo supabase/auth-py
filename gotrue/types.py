@@ -1,111 +1,110 @@
 from __future__ import annotations
 
-import sys
 from datetime import datetime
-from enum import Enum
 from time import time
-from typing import Any, Callable, Dict, List, Optional, Type, TypeVar, Union
-from uuid import UUID
+from typing import Any, Callable, Dict, List, Union
 
-if sys.version_info >= (3, 8):
-    from typing import TypedDict
-else:
-    from typing_extensions import TypedDict
-
-from httpx import Response
 from pydantic import BaseModel, root_validator
+from typing_extensions import Literal, NotRequired, TypedDict
 
-from gotrue.helpers import check_response
+Provider = Literal[
+    "apple",
+    "azure",
+    "bitbucket",
+    "discord",
+    "facebook",
+    "github",
+    "gitlab",
+    "google",
+    "keycloak",
+    "linkedin",
+    "notion",
+    "slack",
+    "spotify",
+    "twitch",
+    "twitter",
+    "workos",
+]
 
-T = TypeVar("T", bound=BaseModel)
+AuthChangeEventMFA = Literal["MFA_CHALLENGE_VERIFIED"]
 
-
-def determine_session_or_user_model_from_response(
-    response: Response,
-) -> Union[Type[Session], Type[User]]:
-    return Session if "access_token" in response.json() else User
-
-
-class BaseModelFromResponse(BaseModel):
-    @classmethod
-    def parse_response(cls: Type[T], response: Response) -> T:
-        check_response(response)
-        return cls.parse_obj(response.json())
-
-
-class CookieOptions(BaseModelFromResponse):
-    name: str
-    """The name of the cookie. Defaults to `sb:token`."""
-    lifetime: int
-    """The cookie lifetime (expiration) in seconds. Set to 8 hours by default."""
-    domain: str
-    """The cookie domain this should run on.
-    Leave it blank to restrict it to your domain."""
-    path: str
-    same_site: str
-    """SameSite configuration for the session cookie.
-    Defaults to 'lax', but can be changed to 'strict' or 'none'.
-    Set it to false if you want to disable the SameSite setting."""
-
-
-class Identity(BaseModelFromResponse):
-    id: str
-    user_id: UUID
-    provider: str
-    created_at: datetime
-    updated_at: datetime
-    identity_data: Optional[Dict[str, Any]] = None
-    last_sign_in_at: Optional[datetime] = None
+AuthChangeEvent = Literal[
+    "PASSWORD_RECOVERY",
+    "SIGNED_IN",
+    "SIGNED_OUT",
+    "TOKEN_REFRESHED",
+    "USER_UPDATED",
+    "USER_DELETED",
+    AuthChangeEventMFA,
+]
 
 
-class User(BaseModelFromResponse):
-    app_metadata: Dict[str, Any]
-    aud: str
-    """The user's audience. Use audiences to group users."""
-    created_at: datetime
-    id: UUID
-    user_metadata: Dict[str, Any]
-    identities: Optional[List[Identity]] = None
-    confirmation_sent_at: Optional[datetime] = None
-    action_link: Optional[str] = None
-    last_sign_in_at: Optional[datetime] = None
-    phone: Optional[str] = None
-    phone_confirmed_at: Optional[datetime] = None
-    recovery_sent_at: Optional[datetime] = None
-    role: Optional[str] = None
-    updated_at: Optional[datetime] = None
-    email_confirmed_at: Optional[datetime] = None
-    confirmed_at: Optional[datetime] = None
-    invited_at: Optional[datetime] = None
-    email: Optional[str] = None
-    new_email: Optional[str] = None
-    email_change_sent_at: Optional[datetime] = None
-    new_phone: Optional[str] = None
-    phone_change_sent_at: Optional[datetime] = None
+class AMREntry(BaseModel):
+    """
+    An authentication methord reference (AMR) entry.
+
+    An entry designates what method was used by the user to verify their
+    identity and at what time.
+    """
+
+    method: Union[Literal["password", "otp", "oauth", "mfa/totp"], str]
+    """
+    Authentication method name.
+    """
+    timestamp: int
+    """
+    Timestamp when the method was successfully used. Represents number of
+    seconds since 1st January 1970 (UNIX epoch) in UTC.
+    """
 
 
-class UserAttributes(BaseModelFromResponse):
-    email: Optional[str] = None
-    """The user's email."""
-    password: Optional[str] = None
-    """The user's password."""
-    email_change_token: Optional[str] = None
-    """An email change token."""
-    data: Optional[Any] = None
-    """A custom data object. Can be any JSON."""
+class Options(TypedDict):
+    redirect_to: NotRequired[str]
+    data: NotRequired[Any]
 
 
-class Session(BaseModelFromResponse):
+class AuthResponse(BaseModel):
+    user: Union[User, None] = None
+    session: Union[Session, None] = None
+
+
+class OAuthResponse(BaseModel):
+    provider: Provider
+    url: str
+
+
+class UserResponse(BaseModel):
+    user: User
+
+
+class Session(BaseModel):
+    provider_token: Union[str, None] = None
+    """
+    The oauth provider token. If present, this can be used to make external API
+    requests to the oauth provider used.
+    """
+    provider_refresh_token: Union[str, None] = None
+    """
+    The oauth provider refresh token. If present, this can be used to refresh
+    the provider_token via the oauth provider's API.
+
+    Not all oauth providers return a provider refresh token. If the
+    provider_refresh_token is missing, please refer to the oauth provider's
+    documentation for information on how to obtain the provider refresh token.
+    """
     access_token: str
+    refresh_token: str
+    expires_in: int
+    """
+    The number of seconds until the token expires (since it was issued).
+    Returned when a login is confirmed.
+    """
+    expires_at: Union[int, None] = None
+    """
+    A timestamp of when the token will expire. Returned when a login is confirmed.
+    """
     token_type: str
-    expires_at: Optional[int] = None
-    """A timestamp of when the token will expire. Returned when a login is confirmed."""
-    expires_in: Optional[int] = None
-    """The number of seconds until the token expires (since it was issued).
-    Returned when a login is confirmed."""
-    provider_token: Optional[str] = None
-    refresh_token: Optional[str] = None
-    user: Optional[User] = None
+    user: User
 
     @root_validator
     def validator(cls, values: dict) -> dict:
@@ -115,53 +114,523 @@ class Session(BaseModelFromResponse):
         return values
 
 
-class AuthChangeEvent(str, Enum):
-    PASSWORD_RECOVERY = "PASSWORD_RECOVERY"
-    SIGNED_IN = "SIGNED_IN"
-    SIGNED_OUT = "SIGNED_OUT"
-    TOKEN_REFRESHED = "TOKEN_REFRESHED"
-    USER_UPDATED = "USER_UPDATED"
-    USER_DELETED = "USER_DELETED"
+class UserIdentity(BaseModel):
+    id: str
+    user_id: str
+    identity_data: Dict[str, Any]
+    provider: str
+    created_at: datetime
+    last_sign_in_at: datetime
+    updated_at: Union[datetime, None] = None
 
 
-class Subscription(BaseModelFromResponse):
-    id: UUID
-    """The subscriber UUID. This will be set by the client."""
-    callback: Callable[[AuthChangeEvent, Optional[Session]], None]
-    """The function to call every time there is an event."""
+class Factor(BaseModel):
+    """
+    A MFA factor.
+    """
+
+    id: str
+    """
+    ID of the factor.
+    """
+    friendly_name: Union[str, None] = None
+    """
+    Friendly name of the factor, useful to disambiguate between multiple factors.
+    """
+    factor_type: Union[Literal["totp"], str]
+    """
+    Type of factor. Only `totp` supported with this version but may change in
+    future versions.
+    """
+    status: Literal["verified", "unverified"]
+    """
+    Factor's status.
+    """
+    created_at: datetime
+    updated_at: datetime
+
+
+class User(BaseModel):
+    id: str
+    app_metadata: Dict[str, Any]
+    user_metadata: Dict[str, Any]
+    aud: str
+    confirmation_sent_at: Union[datetime, None] = None
+    recovery_sent_at: Union[datetime, None] = None
+    email_change_sent_at: Union[datetime, None] = None
+    new_email: Union[str, None] = None
+    invited_at: Union[datetime, None] = None
+    action_link: Union[str, None] = None
+    email: Union[str, None] = None
+    phone: Union[str, None] = None
+    created_at: datetime
+    confirmed_at: Union[datetime, None] = None
+    email_confirmed_at: Union[datetime, None] = None
+    phone_confirmed_at: Union[datetime, None] = None
+    last_sign_in_at: Union[datetime, None] = None
+    role: Union[str, None] = None
+    updated_at: Union[datetime, None] = None
+    identities: Union[List[UserIdentity], None] = None
+    factors: Union[List[Factor], None] = None
+
+
+class UserAttributes(TypedDict):
+    email: NotRequired[str]
+    phone: NotRequired[str]
+    password: NotRequired[str]
+    data: NotRequired[Any]
+
+
+class AdminUserAttributes(UserAttributes, TypedDict):
+    user_metadata: NotRequired[Any]
+    app_metadata: NotRequired[Any]
+    email_confirm: NotRequired[bool]
+    phone_confirm: NotRequired[bool]
+    ban_duration: NotRequired[Union[str, Literal["none"]]]
+
+
+class Subscription(BaseModel):
+    id: str
+    """
+    The subscriber UUID. This will be set by the client.
+    """
+    callback: Callable[[AuthChangeEvent, Union[Session, None]], None]
+    """
+    The function to call every time there is an event.
+    """
     unsubscribe: Callable[[], None]
-    """Call this to remove the listener."""
+    """
+    Call this to remove the listener.
+    """
 
 
-class Provider(str, Enum):
-    apple = "apple"
-    azure = "azure"
-    bitbucket = "bitbucket"
-    discord = "discord"
-    facebook = "facebook"
-    github = "github"
-    gitlab = "gitlab"
-    google = "google"
-    notion = "notion"
-    slack = "slack"
-    spotify = "spotify"
-    twitter = "twitter"
-    twitch = "twitch"
+class UpdatableFactorAttributes(TypedDict):
+    friendly_name: str
 
 
-class LinkType(str, Enum):
-    """The type of link."""
+class SignUpWithEmailAndPasswordCredentialsOptions(
+    TypedDict,
+):
+    email_redirect_to: NotRequired[str]
+    data: NotRequired[Any]
+    captcha_token: NotRequired[str]
 
-    signup = "signup"
-    magiclink = "magiclink"
-    recovery = "recovery"
-    invite = "invite"
+
+class SignUpWithEmailAndPasswordCredentials(TypedDict):
+    email: str
+    password: str
+    options: NotRequired[SignUpWithEmailAndPasswordCredentialsOptions]
 
 
-class UserAttributesDict(TypedDict, total=False):
-    """Dict version of `UserAttributes`"""
+class SignUpWithPhoneAndPasswordCredentialsOptions(TypedDict):
+    data: NotRequired[Any]
+    captcha_token: NotRequired[str]
 
-    email: Optional[str]
-    password: Optional[str]
-    email_change_token: Optional[str]
-    data: Optional[Any]
+
+class SignUpWithPhoneAndPasswordCredentials(TypedDict):
+    phone: str
+    password: str
+    options: NotRequired[SignUpWithPhoneAndPasswordCredentialsOptions]
+
+
+SignUpWithPasswordCredentials = Union[
+    SignUpWithEmailAndPasswordCredentials,
+    SignUpWithPhoneAndPasswordCredentials,
+]
+
+
+class SignInWithPasswordCredentialsOptions(TypedDict):
+    data: NotRequired[Any]
+    captcha_token: NotRequired[str]
+
+
+class SignInWithEmailAndPasswordCredentials(TypedDict):
+    email: str
+    password: str
+    options: NotRequired[SignInWithPasswordCredentialsOptions]
+
+
+class SignInWithPhoneAndPasswordCredentials(TypedDict):
+    phone: str
+    password: str
+    options: NotRequired[SignInWithPasswordCredentialsOptions]
+
+
+SignInWithPasswordCredentials = Union[
+    SignInWithEmailAndPasswordCredentials,
+    SignInWithPhoneAndPasswordCredentials,
+]
+
+
+class SignInWithEmailAndPasswordlessCredentialsOptions(TypedDict):
+    email_redirect_to: NotRequired[str]
+    should_create_user: NotRequired[bool]
+    data: NotRequired[Any]
+    captcha_token: NotRequired[str]
+
+
+class SignInWithEmailAndPasswordlessCredentials(TypedDict):
+    email: str
+    options: NotRequired[SignInWithEmailAndPasswordlessCredentialsOptions]
+
+
+class SignInWithPhoneAndPasswordlessCredentialsOptions(TypedDict):
+    should_create_user: NotRequired[bool]
+    data: NotRequired[Any]
+    captcha_token: NotRequired[str]
+
+
+class SignInWithPhoneAndPasswordlessCredentials(TypedDict):
+    phone: str
+    options: NotRequired[SignInWithPhoneAndPasswordlessCredentialsOptions]
+
+
+SignInWithPasswordlessCredentials = Union[
+    SignInWithEmailAndPasswordlessCredentials,
+    SignInWithPhoneAndPasswordlessCredentials,
+]
+
+
+class SignInWithOAuthCredentialsOptions(TypedDict):
+    redirect_to: NotRequired[str]
+    scopes: NotRequired[str]
+    query_params: NotRequired[Dict[str, str]]
+
+
+class SignInWithOAuthCredentials(TypedDict):
+    provider: Provider
+    options: NotRequired[SignInWithOAuthCredentialsOptions]
+
+
+class VerifyOtpParamsOptions(TypedDict):
+    redirect_to: NotRequired[str]
+    captcha_token: NotRequired[str]
+
+
+class VerifyEmailOtpParams(TypedDict):
+    email: str
+    token: str
+    type: Literal[
+        "signup",
+        "invite",
+        "magiclink",
+        "recovery",
+        "email_change",
+    ]
+    options: NotRequired[VerifyOtpParamsOptions]
+
+
+class VerifyMobileOtpParams(TypedDict):
+    phone: str
+    token: str
+    type: Literal[
+        "sms",
+        "phone_change",
+    ]
+    options: NotRequired[VerifyOtpParamsOptions]
+
+
+VerifyOtpParams = Union[
+    VerifyEmailOtpParams,
+    VerifyMobileOtpParams,
+]
+
+
+class GenerateLinkParamsOptions(TypedDict):
+    redirect_to: NotRequired[str]
+
+
+class GenerateLinkParamsWithDataOptions(GenerateLinkParamsOptions, TypedDict):
+    data: NotRequired[Any]
+
+
+class GenerateSignupLinkParams(TypedDict):
+    type: Literal["signup"]
+    email: str
+    password: str
+    options: NotRequired[GenerateLinkParamsWithDataOptions]
+
+
+class GenerateInviteOrMagiclinkParams(TypedDict):
+    type: Literal["invite", "magiclink"]
+    email: str
+    options: NotRequired[GenerateLinkParamsWithDataOptions]
+
+
+class GenerateRecoveryLinkParams(TypedDict):
+    type: Literal["recovery"]
+    email: str
+    options: NotRequired[GenerateLinkParamsOptions]
+
+
+class GenerateEmailChangeLinkParams(TypedDict):
+    type: Literal["email_change_current", "email_change_new"]
+    email: str
+    new_email: str
+    options: NotRequired[GenerateLinkParamsOptions]
+
+
+GenerateLinkParams = Union[
+    GenerateSignupLinkParams,
+    GenerateInviteOrMagiclinkParams,
+    GenerateRecoveryLinkParams,
+    GenerateEmailChangeLinkParams,
+]
+
+GenerateLinkType = Literal[
+    "signup",
+    "invite",
+    "magiclink",
+    "recovery",
+    "email_change_current",
+    "email_change_new",
+]
+
+
+class MFAEnrollParams(TypedDict):
+    factor_type: Literal["totp"]
+    issuer: NotRequired[str]
+    friendly_name: NotRequired[str]
+
+
+class MFAUnenrollParams(TypedDict):
+    factor_id: str
+    """
+    ID of the factor being unenrolled.
+    """
+
+
+class MFAVerifyParams(TypedDict):
+    factor_id: str
+    """
+    ID of the factor being verified.
+    """
+    challenge_id: str
+    """
+    ID of the challenge being verified.
+    """
+    code: str
+    """
+    Verification code provided by the user.
+    """
+
+
+class MFAChallengeParams(TypedDict):
+    factor_id: str
+    """
+    ID of the factor to be challenged.
+    """
+
+
+class MFAChallengeAndVerifyParams(TypedDict):
+    factor_id: str
+    """
+    ID of the factor being verified.
+    """
+    code: str
+    """
+    Verification code provided by the user.
+    """
+
+
+class AuthMFAVerifyResponse(BaseModel):
+    access_token: str
+    """
+    New access token (JWT) after successful verification.
+    """
+    token_type: str
+    """
+    Type of token, typically `Bearer`.
+    """
+    expires_in: int
+    """
+    Number of seconds in which the access token will expire.
+    """
+    refresh_token: str
+    """
+    Refresh token you can use to obtain new access tokens when expired.
+    """
+    user: User
+    """
+    Updated user profile.
+    """
+
+
+class AuthMFAEnrollResponseTotp(BaseModel):
+    qr_code: str
+    """
+    Contains a QR code encoding the authenticator URI. You can
+    convert it to a URL by prepending `data:image/svg+xml;utf-8,` to
+    the value. Avoid logging this value to the console.
+    """
+    secret: str
+    """
+    The TOTP secret (also encoded in the QR code). Show this secret
+    in a password-style field to the user, in case they are unable to
+    scan the QR code. Avoid logging this value to the console.
+    """
+    uri: str
+    """
+    The authenticator URI encoded within the QR code, should you need
+    to use it. Avoid loggin this value to the console.
+    """
+
+
+class AuthMFAEnrollResponse(BaseModel):
+    id: str
+    """
+    ID of the factor that was just enrolled (in an unverified state).
+    """
+    type: Literal["totp"]
+    """
+    Type of MFA factor. Only `totp` supported for now.
+    """
+    totp: AuthMFAEnrollResponseTotp
+    """
+    TOTP enrollment information.
+    """
+
+
+class AuthMFAUnenrollResponse(BaseModel):
+    id: str
+    """
+    ID of the factor that was successfully unenrolled.
+    """
+
+
+class AuthMFAChallengeResponse(BaseModel):
+    id: str
+    """
+    ID of the newly created challenge.
+    """
+    expires_at: int
+    """
+    Timestamp in UNIX seconds when this challenge will no longer be usable.
+    """
+
+
+class AuthMFAListFactorsResponse(BaseModel):
+    all: List[Factor]
+    """
+    All available factors (verified and unverified).
+    """
+    totp: List[Factor]
+    """
+    Only verified TOTP factors. (A subset of `all`.)
+    """
+
+
+AuthenticatorAssuranceLevels = Literal["aal1", "aal2"]
+
+
+class AuthMFAGetAuthenticatorAssuranceLevelResponse(BaseModel):
+    current_level: Union[AuthenticatorAssuranceLevels, None] = None
+    """
+    Current AAL level of the session.
+    """
+    next_level: Union[AuthenticatorAssuranceLevels, None] = None
+    """
+    Next possible AAL level for the session. If the next level is higher
+    than the current one, the user should go through MFA.
+    """
+    current_authentication_methods: List[AMREntry]
+    """
+    A list of all authentication methods attached to this session. Use
+    the information here to detect the last time a user verified a
+    factor, for example if implementing a step-up scenario.
+    """
+
+
+class AuthMFAAdminDeleteFactorResponse(BaseModel):
+    id: str
+    """
+    ID of the factor that was successfully deleted.
+    """
+
+
+class AuthMFAAdminDeleteFactorParams(TypedDict):
+    id: str
+    """
+    ID of the MFA factor to delete.
+    """
+    user_id: str
+    """
+    ID of the user whose factor is being deleted.
+    """
+
+
+class AuthMFAAdminListFactorsResponse(BaseModel):
+    factors: List[Factor]
+    """
+    All factors attached to the user.
+    """
+
+
+class AuthMFAAdminListFactorsParams(TypedDict):
+    user_id: str
+    """
+    ID of the user for which to list all MFA factors.
+    """
+
+
+class GenerateLinkProperties(BaseModel):
+    """
+    The properties related to the email link generated.
+    """
+
+    action_link: str
+    """
+    The email link to send to the user. The action_link follows the following format:
+
+    auth/v1/verify?type={verification_type}&token={hashed_token}&redirect_to={redirect_to}
+    """
+    email_otp: str
+    """
+    The raw email OTP.
+    You should send this in the email if you want your users to verify using an
+    OTP instead of the action link.
+    """
+    hashed_token: str
+    """
+    The hashed token appended to the action link.
+    """
+    redirect_to: str
+    """
+    The URL appended to the action link.
+    """
+    verification_type: GenerateLinkType
+    """
+    The verification type that the email link is associated to.
+    """
+
+
+class GenerateLinkResponse(BaseModel):
+    properties: GenerateLinkProperties
+    user: User
+
+
+class DecodedJWTDict(TypedDict):
+    exp: NotRequired[int]
+    aal: NotRequired[Union[AuthenticatorAssuranceLevels, None]]
+    amr: NotRequired[Union[List[AMREntry], None]]
+
+
+AMREntry.update_forward_refs()
+AuthResponse.update_forward_refs()
+OAuthResponse.update_forward_refs()
+UserResponse.update_forward_refs()
+Session.update_forward_refs()
+UserIdentity.update_forward_refs()
+Factor.update_forward_refs()
+User.update_forward_refs()
+Subscription.update_forward_refs()
+AuthMFAVerifyResponse.update_forward_refs()
+AuthMFAEnrollResponseTotp.update_forward_refs()
+AuthMFAEnrollResponse.update_forward_refs()
+AuthMFAUnenrollResponse.update_forward_refs()
+AuthMFAChallengeResponse.update_forward_refs()
+AuthMFAListFactorsResponse.update_forward_refs()
+AuthMFAGetAuthenticatorAssuranceLevelResponse.update_forward_refs()
+AuthMFAAdminDeleteFactorResponse.update_forward_refs()
+AuthMFAAdminListFactorsResponse.update_forward_refs()
+GenerateLinkProperties.update_forward_refs()
