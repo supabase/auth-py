@@ -352,9 +352,8 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
             current_session = self._in_memory_session
         if not current_session:
             return None
-        time_now = round(time())
         has_expired = (
-            current_session.expires_at <= time_now + EXPIRY_MARGIN
+            current_session.expires_at <= time()
             if current_session.expires_at
             else False
         )
