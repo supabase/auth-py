@@ -15,6 +15,7 @@ from ..constants import (
     STORAGE_KEY,
 )
 from ..errors import (
+    AuthApiError,
     AuthImplicitGrantRedirectError,
     AuthInvalidCredentialsError,
     AuthRetryableError,
@@ -531,7 +532,11 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         session = await self.get_session()
         access_token = session.access_token if session else None
         if access_token:
-            await self.admin.sign_out(access_token)
+            try:
+                await self.admin.sign_out(access_token)
+            except AuthApiError as error:
+                if error.status not in [401, 404]:
+                    raise error
         await self._remove_session()
         self._notify_all_subscribers("SIGNED_OUT", None)
 
