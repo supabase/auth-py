@@ -311,7 +311,6 @@ class SignInWithOAuthCredentials(TypedDict):
 
 class VerifyOtpParamsOptions(TypedDict):
     redirect_to: NotRequired[str]
-    captcha_token: NotRequired[str]
 
 
 MobileOtpType = Literal["sms", "phone_change"]
