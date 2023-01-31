@@ -46,7 +46,9 @@ from ..types import (
     SignInWithOAuthCredentials,
     SignInWithPasswordCredentials,
     SignInWithPasswordlessCredentials,
+    SignInWithSSOParams,
     SignUpWithPasswordCredentials,
+    SSOResponse,
     Subscription,
     UserAttributes,
     UserResponse,
@@ -334,6 +336,60 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
             await self._save_session(response.session)
             self._notify_all_subscribers("SIGNED_IN", response.session)
         return response
+
+    async def sign_in_with_sso(self, params: SignInWithSSOParams) -> SSOResponse:
+        """
+        Attempts a single-sign on using an enterprise Identity Provider. A
+        successful SSO attempt will redirect the current page to the identity
+        provider authorization page. The redirect URL is implementation and SSO
+        protocol specific.
+
+        You can use it by providing a SSO domain. Typically you can extract this
+        domain by asking users for their email address. If this domain is
+        registered on the Auth instance the redirect will use that organization's
+        currently active SSO Identity Provider for the login.
+
+        If you have built an organization-specific login page, you can use the
+        organization's SSO Identity Provider UUID directly instead.
+
+        This API is experimental and availability is conditional on correct
+        settings on the Auth service.
+        """
+        await self._remove_session()
+        return await self._request(
+            "POST",
+            "sso",
+            body={
+                **(
+                    {
+                        "provider_id": params.get("options", {}).get("provider_id"),
+                    }
+                    if params.get("options", {}).get("provider_id")
+                    else {}
+                ),
+                **(
+                    {
+                        "domain": params.get("options", {}).get("domain"),
+                    }
+                    if params.get("options", {}).get("domain")
+                    else {}
+                ),
+                "redirect_to": params.get("options", {}).get("redirect_to"),
+                **(
+                    {
+                        "gotrue_meta_security": {
+                            "captcha_token": params.get("options", {}).get(
+                                "captcha_token"
+                            ),
+                        }
+                    }
+                    if params.get("options", {}).get("captcha_token")
+                    else {}
+                ),
+                "skip_http_redirect": True,  # fetch does not handle redirects
+            },
+            xform=SSOResponse.parse_obj,
+        )
 
     async def get_session(self) -> Union[Session, None]:
         """

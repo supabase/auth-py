@@ -73,6 +73,13 @@ class OAuthResponse(BaseModel):
     url: str
 
 
+class SSOResponse(BaseModel):
+    url: str
+    """
+    URL to take the user to (in a browser) to complete SSO.
+    """
+
+
 class UserResponse(BaseModel):
     user: User
 
@@ -307,32 +314,79 @@ class VerifyOtpParamsOptions(TypedDict):
     captcha_token: NotRequired[str]
 
 
+MobileOtpType = Literal["sms", "phone_change"]
+EmailOtpType = Literal[
+    "signup",
+    "invite",
+    "magiclink",
+    "recovery",
+    "email_change",
+]
+
+
 class VerifyEmailOtpParams(TypedDict):
     email: str
     token: str
-    type: Literal[
-        "signup",
-        "invite",
-        "magiclink",
-        "recovery",
-        "email_change",
-    ]
+    type: EmailOtpType
     options: NotRequired[VerifyOtpParamsOptions]
 
 
 class VerifyMobileOtpParams(TypedDict):
     phone: str
     token: str
-    type: Literal[
-        "sms",
-        "phone_change",
-    ]
+    type: MobileOtpType
     options: NotRequired[VerifyOtpParamsOptions]
 
 
 VerifyOtpParams = Union[
     VerifyEmailOtpParams,
     VerifyMobileOtpParams,
+]
+
+
+class SignInWithSSOOptions(TypedDict):
+    redirect_to: NotRequired[str]
+    """
+    A URL to send the user to after they have signed-in.
+    """
+    captcha_token: NotRequired[str]
+    """
+    Verification token received when the user completes the captcha on the site.
+    """
+
+
+class SignInWithSSOProviderId(TypedDict):
+    options: NotRequired[SignInWithSSOOptions]
+    provider_id: str
+    """
+    UUID of the SSO provider to invoke single-sign on to.
+    """
+
+
+class SignInWithSSODomain(TypedDict):
+    options: NotRequired[SignInWithSSOOptions]
+    domain: str
+    """
+    Domain name of the organization for which to invoke single-sign on.
+    """
+
+
+class SignInWithSSOBoth(TypedDict):
+    options: NotRequired[SignInWithSSOOptions]
+    provider_id: str
+    """
+    UUID of the SSO provider to invoke single-sign on to.
+    """
+    domain: str
+    """
+    Domain name of the organization for which to invoke single-sign on.
+    """
+
+
+SignInWithSSOParams = Union[
+    SignInWithSSOProviderId,
+    SignInWithSSODomain,
+    SignInWithSSOBoth,
 ]
 
 
@@ -618,6 +672,7 @@ class DecodedJWTDict(TypedDict):
 AMREntry.update_forward_refs()
 AuthResponse.update_forward_refs()
 OAuthResponse.update_forward_refs()
+SSOResponse.update_forward_refs()
 UserResponse.update_forward_refs()
 Session.update_forward_refs()
 UserIdentity.update_forward_refs()
