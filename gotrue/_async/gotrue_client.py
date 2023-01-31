@@ -458,32 +458,25 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         is expired, `set_session` will take care of refreshing it to obtain a
         new session.
 
-        If the refresh token in the current session is invalid and the current
-        session has expired, an error will be thrown.
-
-        If the current session does not contain at `expires_at` field,
-        `set_session` will use the exp claim defined in the access token.
+        If the refresh token or access token in the current session is invalid,
+        an error will be thrown.
 
         The current session that minimally contains an access token,
         refresh token and a user.
         """
+        if not access_token or not refresh_token:
+            raise AuthSessionMissingError()
         time_now = round(time())
         expires_at = time_now
         has_expired = True
         session: Union[Session, None] = None
-        if access_token and access_token.split(".")[1]:
-            payload = self._decode_jwt(access_token)
-            exp = payload.get("exp")
-            if exp:
-                expires_at = int(exp)
-                has_expired = expires_at <= time_now
+        payload = decode_jwt_payload(access_token)
+        exp = payload.get("exp")
+        if exp:
+            expires_at = int(exp)
+            has_expired = expires_at <= time_now
         if has_expired:
-            if not refresh_token:
-                raise AuthSessionMissingError()
-            response = await self._refresh_access_token(refresh_token)
-            if not response.session:
-                return AuthResponse()
-            session = response.session
+            session = await self._call_refresh_token(refresh_token)
         else:
             response = await self.get_user(access_token)
             session = Session(
@@ -494,9 +487,8 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
                 expires_in=expires_at - time_now,
                 expires_at=expires_at,
             )
-        await self._save_session(session)
-        self._notify_all_subscribers("TOKEN_REFRESHED", session)
-        return AuthResponse(session=session, user=response.user)
+            await self._save_session(session)
+        return AuthResponse(session=session, user=session.user)
 
     async def refresh_session(
         self, refresh_token: Union[str, None] = None

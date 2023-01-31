@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from base64 import b64decode
 from json import loads
 from typing import Any, Union, cast
@@ -80,8 +81,11 @@ def handle_exception(exception: Exception) -> AuthError:
 
 
 def decode_jwt_payload(token: str) -> Any:
+    base64_url_regex = r"/^([a-z0-9_-]{4})*($|[a-z0-9_-]{3}=?$|[a-z0-9_-]{2}(==)?$)$/i"
     parts = token.split(".")
     if len(parts) != 3:
         raise ValueError("JWT is not valid: not a JWT structure")
+    if not re.match(base64_url_regex, parts[1]):
+        raise ValueError("JWT is not valid: payload is not in base64url format")
     base64Url = parts[1]
     return loads(b64decode(base64Url).decode("utf-8"))
