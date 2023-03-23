@@ -85,5 +85,5 @@ def decode_jwt_payload(token: str) -> Any:
     base64Url = parts[1]
     # Addding padding otherwise the following error happens:
     # binascii.Error: Incorrect padding
-    base64UrlWithPadding = base64Url + '=' * (-len(base64Url) % 4)
+    base64UrlWithPadding = base64Url + "=" * (-len(base64Url) % 4)
     return loads(b64decode(base64UrlWithPadding).decode("utf-8"))
