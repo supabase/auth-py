@@ -83,4 +83,7 @@ def decode_jwt_payload(token: str) -> Any:
     if len(parts) != 3:
         raise ValueError("JWT is not valid: not a JWT structure")
     base64Url = parts[1]
-    return loads(b64decode(base64Url).decode("utf-8"))
+    # Addding padding otherwise the following error happens:
+    # binascii.Error: Incorrect padding
+    base64UrlWithPadding = base64Url + "=" * (-len(base64Url) % 4)
+    return loads(b64decode(base64UrlWithPadding).decode("utf-8"))
