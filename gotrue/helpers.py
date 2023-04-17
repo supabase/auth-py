@@ -28,7 +28,7 @@ def parse_auth_response(data: Any) -> AuthResponse:
         and data["expires_in"]
     ):
         session = Session.parse_obj(data)
-    user = User.parse_obj(data["user"]) if "user" in data else User.parse_obj(data)
+    user = User.parse_obj(data["user"]) if "user" in data else None
     return AuthResponse(session=session, user=user)
 
 
