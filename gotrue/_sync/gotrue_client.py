@@ -827,8 +827,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         provider: Provider,
         params: Dict[str, str],
     ) -> str:
-        params = {k: quote(v) for k, v in params.items()}
-        params["provider"] = quote(provider)
+        params["provider"] = provider
         query = urlencode(params)
         return f"{self._url}/authorize?{query}"
 
