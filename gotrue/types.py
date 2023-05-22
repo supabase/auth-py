@@ -120,7 +120,7 @@ class UserIdentity(BaseModel):
     identity_data: Dict[str, Any]
     provider: str
     created_at: datetime
-    last_sign_in_at: datetime
+    last_sign_in_at: Union[datetime, None] = None
     updated_at: Union[datetime, None] = None
 
 
