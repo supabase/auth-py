@@ -3,7 +3,7 @@ from __future__ import annotations
 from json import loads
 from time import time
 from typing import Callable, Dict, List, Tuple, Union
-from urllib.parse import parse_qs, quote, urlencode, urlparse
+from urllib.parse import parse_qs, urlencode, urlparse
 from uuid import uuid4
 
 from ..constants import (
@@ -829,8 +829,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         provider: Provider,
         params: Dict[str, str],
     ) -> str:
-        params = {k: quote(v) for k, v in params.items()}
-        params["provider"] = quote(provider)
+        params["provider"] = provider
         query = urlencode(params)
         return f"{self._url}/authorize?{query}"
 
