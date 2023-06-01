@@ -55,13 +55,13 @@ Also, the `gotrue` library for Python parses the date-time string into `datetime
 To instantiate the client, you'll need the URL and any request headers at a minimum.
 
 ```python
-from gotrue import Client
+from gotrue import SyncGoTrueClient
 
 headers = {
     "apiKey": "my-mega-awesome-api-key",
     # ... any other headers you might need.
 }
-client: Client = Client(url="www.genericauthwebsite.com", headers=headers)
+client: SyncGoTrueClient = SyncGoTrueClient(url="www.genericauthwebsite.com", headers=headers)
 ```
 
 To send a magic email link to the user, just provide the email kwarg to the `sign_in` method:
@@ -96,6 +96,3 @@ assert client.session() is not None
 ## Contributions
 
 We would be immensely grateful for any contributions to this project. In particular are the following items:
-
-- Add documentation
-- Update `README.md`
