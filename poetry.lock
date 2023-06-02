@@ -1278,14 +1278,14 @@ yaml = ["PyYaml (>=5.2)"]
 
 [[package]]
 name = "python-semantic-release"
-version = "7.33.2"
+version = "7.34.3"
 description = "Automatic Semantic Versioning for Python projects"
 category = "dev"
 optional = false
 python-versions = "*"
 files = [
-    {file = "python-semantic-release-7.33.2.tar.gz", hash = "sha256:c23b4bb746e9ddbe1ba7497c48f7d81403e67a14ceb37928ef667c1fbee5e324"},
-    {file = "python_semantic_release-7.33.2-py3-none-any.whl", hash = "sha256:9e4990cc0a4dc37482ac5ec7fe6f70f71681228f68f0fa39370415701fdcf632"},
+    {file = "python-semantic-release-7.34.3.tar.gz", hash = "sha256:ac62990d6c5510ae41abcae34c775ced7cba7b3ed9176578b7954eb956537dbb"},
+    {file = "python_semantic_release-7.34.3-py3-none-any.whl", hash = "sha256:c3de866c4c00af45de0813efa2d37fc0a822946ce9111a3f059d011df06b6510"},
 ]
 
 [package.dependencies]
@@ -1304,7 +1304,7 @@ wheel = "*"
 
 [package.extras]
 dev = ["black", "isort", "tox"]
-docs = ["Jinja2 (==3.0.3)", "Sphinx (==1.3.6)"]
+docs = ["Jinja2 (==3.0.3)", "Sphinx (==1.8.6)"]
 mypy = ["mypy", "types-requests"]
 test = ["coverage (>=5,<6)", "mock (==1.3.0)", "pytest (>=7,<8)", "pytest-mock (>=2,<3)", "pytest-xdist (>=1,<2)", "responses (==0.13.3)"]
 
@@ -1811,4 +1811,4 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "8369bc310eb1330eb3cd9244b8aae3e6fbab51555a2317eab836cdc9759cdbd4"
+content-hash = "2dacf6fb2f23ce33b328f30875065a2c9f2f569fa39081a7806f1bce9d902324"
