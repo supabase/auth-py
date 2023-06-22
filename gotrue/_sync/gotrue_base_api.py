@@ -7,7 +7,7 @@ from pydantic import BaseModel
 from typing_extensions import Literal, Self
 
 from ..helpers import handle_exception
-from ..http_clients import SyncClient
+from supabase_client import SupaSyncClient
 
 T = TypeVar("T")
 
@@ -18,11 +18,11 @@ class SyncGoTrueBaseAPI:
         *,
         url: str,
         headers: Dict[str, str],
-        http_client: Union[SyncClient, None],
+        http_client: Union[SupaSyncClient, None],
     ):
         self._url = url
         self._headers = headers
-        self._http_client = http_client or SyncClient()
+        self._http_client = http_client or SupaSyncClient()
 
     def __enter__(self) -> Self:
         return self

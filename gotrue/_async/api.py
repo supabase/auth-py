@@ -6,14 +6,11 @@ from pydantic import parse_obj_as
 
 from ..exceptions import APIError
 from ..helpers import check_response, encode_uri_component
-from ..http_clients import AsyncClient
+from supabase_client import SupaAsyncClient, Session, User, UserAttributes
 from ..types import (
     CookieOptions,
     LinkType,
     Provider,
-    Session,
-    User,
-    UserAttributes,
     determine_session_or_user_model_from_response,
 )
 
@@ -25,13 +22,13 @@ class AsyncGoTrueAPI:
         url: str,
         headers: Dict[str, str],
         cookie_options: CookieOptions,
-        http_client: Optional[AsyncClient] = None,
+        http_client: Optional[SupaAsyncClient] = None,
     ) -> None:
         """Initialise API class."""
         self.url = url
         self.headers = headers
         self.cookie_options = cookie_options
-        self.http_client = http_client or AsyncClient()
+        self.http_client = http_client or SupaAsyncClient()
 
     async def __aenter__(self) -> AsyncGoTrueAPI:
         return self

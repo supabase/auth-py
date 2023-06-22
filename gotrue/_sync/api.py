@@ -6,17 +6,13 @@ from pydantic import parse_obj_as
 
 from ..exceptions import APIError
 from ..helpers import check_response, encode_uri_component
-from ..http_clients import SyncClient
+from supabase_client import SupaSyncClient, Session, User, UserAttributes
 from ..types import (
     CookieOptions,
     LinkType,
     Provider,
-    Session,
-    User,
-    UserAttributes,
     determine_session_or_user_model_from_response,
 )
-
 
 class SyncGoTrueAPI:
     def __init__(
@@ -25,13 +21,13 @@ class SyncGoTrueAPI:
         url: str,
         headers: Dict[str, str],
         cookie_options: CookieOptions,
-        http_client: Optional[SyncClient] = None,
+        http_client: Optional[SupaSyncClient] = None,
     ) -> None:
         """Initialise API class."""
         self.url = url
         self.headers = headers
         self.cookie_options = cookie_options
-        self.http_client = http_client or SyncClient()
+        self.http_client = http_client or SupaSyncClient()
 
     def __enter__(self) -> SyncGoTrueAPI:
         return self

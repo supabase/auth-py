@@ -21,7 +21,7 @@ from ..errors import (
     AuthSessionMissingError,
 )
 from ..helpers import decode_jwt_payload, parse_auth_response, parse_user_response
-from ..http_clients import SyncClient
+from supabase_client import SupaSyncClient
 from ..timer import Timer
 from ..types import (
     AuthChangeEvent,
@@ -68,7 +68,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         auto_refresh_token: bool = True,
         persist_session: bool = True,
         storage: Union[SyncSupportedStorage, None] = None,
-        http_client: Union[SyncClient, None] = None,
+        http_client: Union[SupaSyncClient, None] = None,
     ) -> None:
         SyncGoTrueBaseAPI.__init__(
             self,

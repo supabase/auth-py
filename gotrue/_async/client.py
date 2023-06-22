@@ -10,14 +10,12 @@ from uuid import uuid4
 
 from ..constants import COOKIE_OPTIONS, DEFAULT_HEADERS, GOTRUE_URL, STORAGE_KEY
 from ..exceptions import APIError
+from supabase_client import Session, User, UserAttributes
 from ..types import (
     AuthChangeEvent,
     CookieOptions,
     Provider,
-    Session,
     Subscription,
-    User,
-    UserAttributes,
     UserAttributesDict,
 )
 from .api import AsyncGoTrueAPI

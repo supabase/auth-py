@@ -7,7 +7,7 @@ from pydantic import BaseModel
 from typing_extensions import Literal, Self
 
 from ..helpers import handle_exception
-from ..http_clients import AsyncClient
+from supabase_client import SupaAsyncClient
 
 T = TypeVar("T")
 
@@ -18,11 +18,11 @@ class AsyncGoTrueBaseAPI:
         *,
         url: str,
         headers: Dict[str, str],
-        http_client: Union[AsyncClient, None],
+        http_client: Union[SupaAsyncClient, None],
     ):
         self._url = url
         self._headers = headers
-        self._http_client = http_client or AsyncClient()
+        self._http_client = http_client or SupaAsyncClient()
 
     async def __aenter__(self) -> Self:
         return self

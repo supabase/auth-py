@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Dict, List, Union
 
 from ..helpers import parse_link_response, parse_user_response
-from ..http_clients import SyncClient
+from supabase_client import SupaSyncClient
 from ..types import (
     AdminUserAttributes,
     AuthMFAAdminDeleteFactorParams,
@@ -26,7 +26,7 @@ class SyncGoTrueAdminAPI(SyncGoTrueBaseAPI):
         *,
         url: str = "",
         headers: Dict[str, str] = {},
-        http_client: Union[SyncClient, None] = None,
+        http_client: Union[SupaSyncClient, None] = None,
     ) -> None:
         SyncGoTrueBaseAPI.__init__(
             self,

@@ -21,7 +21,7 @@ from ..errors import (
     AuthSessionMissingError,
 )
 from ..helpers import decode_jwt_payload, parse_auth_response, parse_user_response
-from ..http_clients import AsyncClient
+from supabase_client import SupaAsyncClient
 from ..timer import Timer
 from ..types import (
     AuthChangeEvent,
@@ -68,7 +68,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         auto_refresh_token: bool = True,
         persist_session: bool = True,
         storage: Union[AsyncSupportedStorage, None] = None,
-        http_client: Union[AsyncClient, None] = None,
+        http_client: Union[SupaAsyncClient, None] = None,
     ) -> None:
         AsyncGoTrueBaseAPI.__init__(
             self,
