@@ -10,7 +10,7 @@ from uuid import uuid4
 
 from ..constants import COOKIE_OPTIONS, DEFAULT_HEADERS, GOTRUE_URL, STORAGE_KEY
 from ..exceptions import APIError
-from supabase_client import Session, User, UserAttributes
+from supabase_client import Session, User, UserAttributes, SupaAsyncClient
 from ..types import (
     AuthChangeEvent,
     CookieOptions,
@@ -65,10 +65,12 @@ class AsyncGoTrueClient:
         self.persist_session = persist_session
         self.local_storage = local_storage
         empty_or_default_headers = {} if replace_default_headers else DEFAULT_HEADERS
+        self.http_client = SupaAsyncClient()
         args = {
             "url": url,
             "headers": {**empty_or_default_headers, **headers},
             "cookie_options": cookie_options,
+            "http_client": self.http_client,
         }
         self.api = api or AsyncGoTrueAPI(**args)
 
@@ -614,6 +616,7 @@ class AsyncGoTrueClient:
     async def _save_session(self, *, session: Session) -> None:
         """Save session to client."""
         self.current_session = session
+        SupaAsyncClient.session = session
         self.current_user = session.user
         if session.expires_at:
             time_now = round(time())

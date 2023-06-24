@@ -1448,14 +1448,16 @@ description = ""
 optional = false
 python-versions = "^3.8"
 files = []
-develop = true
+develop = false
 
 [package.dependencies]
 httpx = "^0.24.1"
 
 [package.source]
-type = "directory"
-url = "../supabase-client"
+type = "git"
+url = "git@github.com:danhdevelop/supabase-client.git"
+reference = "HEAD"
+resolved_reference = "6debe65760db50b19cf71151a10567b78ad4e344"
 
 [[package]]
 name = "tomli"
@@ -1744,4 +1746,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "b96fcf893514abe85cb4152a4e3112ed6d3f7da5f9b7a7c4b6bc7182c954d58e"
+content-hash = "23d4ebdce8e05f4cad6d7753806d2f65391d4ddb6aa26598b07a1dc3462ae9fa"

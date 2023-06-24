@@ -19,13 +19,11 @@ class SyncGoTrueAPI:
         self,
         *,
         url: str,
-        headers: Dict[str, str],
         cookie_options: CookieOptions,
         http_client: Optional[SupaSyncClient] = None,
     ) -> None:
         """Initialise API class."""
         self.url = url
-        self.headers = headers
         self.cookie_options = cookie_options
         self.http_client = http_client or SupaSyncClient()
 
@@ -59,10 +57,9 @@ class SyncGoTrueAPI:
         APIError
             If an error occurs.
         """
-        headers = self.headers
         data = attributes.dict()
         url = f"{self.url}/admin/users"
-        response = self.http_client.post(url, json=data, headers=headers)
+        response = self.http_client.post(url, json=data)
         return User.parse_response(response)
 
     def list_users(self) -> List[User]:
@@ -81,9 +78,8 @@ class SyncGoTrueAPI:
         APIError
             If an error occurs.
         """
-        headers = self.headers
         url = f"{self.url}/admin/users"
-        response = self.http_client.get(url, headers=headers)
+        response = self.http_client.get(url)
         check_response(response)
         users = response.json().get("users")
         if users is None:
@@ -124,14 +120,13 @@ class SyncGoTrueAPI:
         APIError
             If an error occurs.
         """
-        headers = self.headers
         query_string = ""
         if redirect_to:
             redirect_to_encoded = encode_uri_component(redirect_to)
             query_string = f"?redirect_to={redirect_to_encoded}"
         data = {"email": email, "password": password, "data": data}
         url = f"{self.url}/signup{query_string}"
-        response = self.http_client.post(url, json=data, headers=headers)
+        response = self.http_client.post(url, json=data)
         SessionOrUserModel = determine_session_or_user_model_from_response(response)
         return SessionOrUserModel.parse_response(response)
 
@@ -164,14 +159,13 @@ class SyncGoTrueAPI:
             If an error occurs.
         """
 
-        headers = self.headers
         query_string = "?grant_type=password"
         if redirect_to:
             redirect_to_encoded = encode_uri_component(redirect_to)
             query_string += f"&redirect_to={redirect_to_encoded}"
         data = {"email": email, "password": password}
         url = f"{self.url}/token{query_string}"
-        response = self.http_client.post(url, json=data, headers=headers)
+        response = self.http_client.post(url, json=data)
         return Session.parse_response(response)
 
     def sign_up_with_phone(
@@ -203,10 +197,9 @@ class SyncGoTrueAPI:
         APIError
             If an error occurs.
         """
-        headers = self.headers
         data = {"phone": phone, "password": password, "data": data}
         url = f"{self.url}/signup"
-        response = self.http_client.post(url, json=data, headers=headers)
+        response = self.http_client.post(url, json=data)
         SessionOrUserModel = determine_session_or_user_model_from_response(response)
         return SessionOrUserModel.parse_response(response)
 
@@ -237,8 +230,7 @@ class SyncGoTrueAPI:
         """
         data = {"phone": phone, "password": password}
         url = f"{self.url}/token?grant_type=password"
-        headers = self.headers
-        response = self.http_client.post(url, json=data, headers=headers)
+        response = self.http_client.post(url, json=data)
         return Session.parse_response(response)
 
     def send_magic_link_email(
@@ -262,14 +254,13 @@ class SyncGoTrueAPI:
         APIError
             If an error occurs.
         """
-        headers = self.headers
         query_string = ""
         if redirect_to:
             redirect_to_encoded = encode_uri_component(redirect_to)
             query_string = f"?redirect_to={redirect_to_encoded}"
         data = {"email": email, "create_user": create_user}
         url = f"{self.url}/magiclink{query_string}"
-        response = self.http_client.post(url, json=data, headers=headers)
+        response = self.http_client.post(url, json=data)
         return check_response(response)
 
     def send_mobile_otp(self, *, phone: str, create_user: bool) -> None:
@@ -285,10 +276,9 @@ class SyncGoTrueAPI:
         APIError
             If an error occurs.
         """
-        headers = self.headers
         data = {"phone": phone, "create_user": create_user}
         url = f"{self.url}/otp"
-        response = self.http_client.post(url, json=data, headers=headers)
+        response = self.http_client.post(url, json=data)
         return check_response(response)
 
     def verify_mobile_otp(
@@ -320,7 +310,6 @@ class SyncGoTrueAPI:
         APIError
             If an error occurs.
         """
-        headers = self.headers
         data = {
             "phone": phone,
             "token": token,
@@ -330,7 +319,7 @@ class SyncGoTrueAPI:
             redirect_to_encoded = encode_uri_component(redirect_to)
             data["redirect_to"] = redirect_to_encoded
         url = f"{self.url}/verify"
-        response = self.http_client.post(url, json=data, headers=headers)
+        response = self.http_client.post(url, json=data)
         SessionOrUserModel = determine_session_or_user_model_from_response(response)
         return SessionOrUserModel.parse_response(response)
 
@@ -362,14 +351,13 @@ class SyncGoTrueAPI:
         APIError
             If an error occurs.
         """
-        headers = self.headers
         query_string = ""
         if redirect_to:
             redirect_to_encoded = encode_uri_component(redirect_to)
             query_string = f"?redirect_to={redirect_to_encoded}"
         data = {"email": email, "data": data}
         url = f"{self.url}/invite{query_string}"
-        response = self.http_client.post(url, json=data, headers=headers)
+        response = self.http_client.post(url, json=data)
         return User.parse_response(response)
 
     def reset_password_for_email(
@@ -392,47 +380,18 @@ class SyncGoTrueAPI:
         APIError
             If an error occurs.
         """
-        headers = self.headers
         query_string = ""
         if redirect_to:
             redirect_to_encoded = encode_uri_component(redirect_to)
             query_string = f"?redirect_to={redirect_to_encoded}"
         data = {"email": email}
         url = f"{self.url}/recover{query_string}"
-        response = self.http_client.post(url, json=data, headers=headers)
+        response = self.http_client.post(url, json=data)
         return check_response(response)
 
-    def _create_request_headers(self, *, jwt: str) -> Dict[str, str]:
-        """Create temporary object.
-
-        Create a temporary object with all configured headers and adds the
-        Authorization token to be used on request methods.
-
-        Parameters
-        ----------
-        jwt : str
-            A valid, logged-in JWT.
-
-        Returns
-        -------
-        headers : dict of str
-            The headers required for a successful request statement with the
-            supabase backend.
-        """
-        headers = {**self.headers, "Authorization": f"Bearer {jwt}"}
-        return headers
-
     def sign_out(self, *, jwt: str) -> None:
-        """Removes a logged-in session.
-
-        Parameters
-        ----------
-        jwt : str
-            A valid, logged-in JWT.
-        """
-        headers = self._create_request_headers(jwt=jwt)
         url = f"{self.url}/logout"
-        self.http_client.post(url, headers=headers)
+        self.http_client.post(url)
 
     def get_url_for_provider(
         self,
@@ -488,9 +447,8 @@ class SyncGoTrueAPI:
         APIError
             If an error occurs.
         """
-        headers = self._create_request_headers(jwt=jwt)
         url = f"{self.url}/user"
-        response = self.http_client.get(url, headers=headers)
+        response = self.http_client.get(url)
         return User.parse_response(response)
 
     def update_user(
@@ -519,10 +477,9 @@ class SyncGoTrueAPI:
         APIError
             If an error occurs.
         """
-        headers = self._create_request_headers(jwt=jwt)
         data = attributes.dict()
         url = f"{self.url}/user"
-        response = self.http_client.put(url, json=data, headers=headers)
+        response = self.http_client.put(url, json=data)
         return User.parse_response(response)
 
     def delete_user(self, *, uid: str, jwt: str) -> None:
@@ -548,9 +505,8 @@ class SyncGoTrueAPI:
         APIError
             If an error occurs.
         """
-        headers = self._create_request_headers(jwt=jwt)
         url = f"{self.url}/admin/users/{uid}"
-        response = self.http_client.delete(url, headers=headers)
+        response = self.http_client.delete(url)
         return check_response(response)
 
     def refresh_access_token(self, *, refresh_token: str) -> Session:
@@ -573,8 +529,7 @@ class SyncGoTrueAPI:
         """
         data = {"refresh_token": refresh_token}
         url = f"{self.url}/token?grant_type=refresh_token"
-        headers = self.headers
-        response = self.http_client.post(url, json=data, headers=headers)
+        response = self.http_client.post(url, json=data)
         return Session.parse_response(response)
 
     def generate_link(
@@ -613,7 +568,6 @@ class SyncGoTrueAPI:
         APIError
             If an error occurs.
         """
-        headers = self.headers
         data = {
             "type": type,
             "email": email,
@@ -625,7 +579,7 @@ class SyncGoTrueAPI:
             redirect_to_encoded = encode_uri_component(redirect_to)
             data["redirect_to"] = redirect_to_encoded
         url = f"{self.url}/admin/generate_link"
-        response = self.http_client.post(url, json=data, headers=headers)
+        response = self.http_client.post(url, json=data)
         SessionOrUserModel = determine_session_or_user_model_from_response(response)
         return SessionOrUserModel.parse_response(response)
 

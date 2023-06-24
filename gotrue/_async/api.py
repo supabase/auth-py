@@ -20,13 +20,11 @@ class AsyncGoTrueAPI:
         self,
         *,
         url: str,
-        headers: Dict[str, str],
         cookie_options: CookieOptions,
         http_client: Optional[SupaAsyncClient] = None,
     ) -> None:
         """Initialise API class."""
         self.url = url
-        self.headers = headers
         self.cookie_options = cookie_options
         self.http_client = http_client or SupaAsyncClient()
 
@@ -60,10 +58,9 @@ class AsyncGoTrueAPI:
         APIError
             If an error occurs.
         """
-        headers = self.headers
         data = attributes.dict()
         url = f"{self.url}/admin/users"
-        response = await self.http_client.post(url, json=data, headers=headers)
+        response = await self.http_client.post(url, json=data)
         return User.parse_response(response)
 
     async def list_users(self) -> List[User]:
@@ -82,9 +79,8 @@ class AsyncGoTrueAPI:
         APIError
             If an error occurs.
         """
-        headers = self.headers
         url = f"{self.url}/admin/users"
-        response = await self.http_client.get(url, headers=headers)
+        response = await self.http_client.get(url)
         check_response(response)
         users = response.json().get("users")
         if users is None:
@@ -125,14 +121,13 @@ class AsyncGoTrueAPI:
         APIError
             If an error occurs.
         """
-        headers = self.headers
         query_string = ""
         if redirect_to:
             redirect_to_encoded = encode_uri_component(redirect_to)
             query_string = f"?redirect_to={redirect_to_encoded}"
         data = {"email": email, "password": password, "data": data}
         url = f"{self.url}/signup{query_string}"
-        response = await self.http_client.post(url, json=data, headers=headers)
+        response = await self.http_client.post(url, json=data)
         SessionOrUserModel = determine_session_or_user_model_from_response(response)
         return SessionOrUserModel.parse_response(response)
 
@@ -165,14 +160,13 @@ class AsyncGoTrueAPI:
             If an error occurs.
         """
 
-        headers = self.headers
         query_string = "?grant_type=password"
         if redirect_to:
             redirect_to_encoded = encode_uri_component(redirect_to)
             query_string += f"&redirect_to={redirect_to_encoded}"
         data = {"email": email, "password": password}
         url = f"{self.url}/token{query_string}"
-        response = await self.http_client.post(url, json=data, headers=headers)
+        response = await self.http_client.post(url, json=data)
         return Session.parse_response(response)
 
     async def sign_up_with_phone(
@@ -204,10 +198,9 @@ class AsyncGoTrueAPI:
         APIError
             If an error occurs.
         """
-        headers = self.headers
         data = {"phone": phone, "password": password, "data": data}
         url = f"{self.url}/signup"
-        response = await self.http_client.post(url, json=data, headers=headers)
+        response = await self.http_client.post(url, json=data)
         SessionOrUserModel = determine_session_or_user_model_from_response(response)
         return SessionOrUserModel.parse_response(response)
 
@@ -238,8 +231,7 @@ class AsyncGoTrueAPI:
         """
         data = {"phone": phone, "password": password}
         url = f"{self.url}/token?grant_type=password"
-        headers = self.headers
-        response = await self.http_client.post(url, json=data, headers=headers)
+        response = await self.http_client.post(url, json=data)
         return Session.parse_response(response)
 
     async def send_magic_link_email(
@@ -263,14 +255,13 @@ class AsyncGoTrueAPI:
         APIError
             If an error occurs.
         """
-        headers = self.headers
         query_string = ""
         if redirect_to:
             redirect_to_encoded = encode_uri_component(redirect_to)
             query_string = f"?redirect_to={redirect_to_encoded}"
         data = {"email": email, "create_user": create_user}
         url = f"{self.url}/magiclink{query_string}"
-        response = await self.http_client.post(url, json=data, headers=headers)
+        response = await self.http_client.post(url, json=data)
         return check_response(response)
 
     async def send_mobile_otp(self, *, phone: str, create_user: bool) -> None:
@@ -286,10 +277,9 @@ class AsyncGoTrueAPI:
         APIError
             If an error occurs.
         """
-        headers = self.headers
         data = {"phone": phone, "create_user": create_user}
         url = f"{self.url}/otp"
-        response = await self.http_client.post(url, json=data, headers=headers)
+        response = await self.http_client.post(url, json=data)
         return check_response(response)
 
     async def verify_mobile_otp(
@@ -321,7 +311,6 @@ class AsyncGoTrueAPI:
         APIError
             If an error occurs.
         """
-        headers = self.headers
         data = {
             "phone": phone,
             "token": token,
@@ -331,7 +320,7 @@ class AsyncGoTrueAPI:
             redirect_to_encoded = encode_uri_component(redirect_to)
             data["redirect_to"] = redirect_to_encoded
         url = f"{self.url}/verify"
-        response = await self.http_client.post(url, json=data, headers=headers)
+        response = await self.http_client.post(url, json=data)
         SessionOrUserModel = determine_session_or_user_model_from_response(response)
         return SessionOrUserModel.parse_response(response)
 
@@ -363,14 +352,13 @@ class AsyncGoTrueAPI:
         APIError
             If an error occurs.
         """
-        headers = self.headers
         query_string = ""
         if redirect_to:
             redirect_to_encoded = encode_uri_component(redirect_to)
             query_string = f"?redirect_to={redirect_to_encoded}"
         data = {"email": email, "data": data}
         url = f"{self.url}/invite{query_string}"
-        response = await self.http_client.post(url, json=data, headers=headers)
+        response = await self.http_client.post(url, json=data)
         return User.parse_response(response)
 
     async def reset_password_for_email(
@@ -393,35 +381,14 @@ class AsyncGoTrueAPI:
         APIError
             If an error occurs.
         """
-        headers = self.headers
         query_string = ""
         if redirect_to:
             redirect_to_encoded = encode_uri_component(redirect_to)
             query_string = f"?redirect_to={redirect_to_encoded}"
         data = {"email": email}
         url = f"{self.url}/recover{query_string}"
-        response = await self.http_client.post(url, json=data, headers=headers)
+        response = await self.http_client.post(url, json=data)
         return check_response(response)
-
-    def _create_request_headers(self, *, jwt: str) -> Dict[str, str]:
-        """Create temporary object.
-
-        Create a temporary object with all configured headers and adds the
-        Authorization token to be used on request methods.
-
-        Parameters
-        ----------
-        jwt : str
-            A valid, logged-in JWT.
-
-        Returns
-        -------
-        headers : dict of str
-            The headers required for a successful request statement with the
-            supabase backend.
-        """
-        headers = {**self.headers, "Authorization": f"Bearer {jwt}"}
-        return headers
 
     async def sign_out(self, *, jwt: str) -> None:
         """Removes a logged-in session.
@@ -431,9 +398,8 @@ class AsyncGoTrueAPI:
         jwt : str
             A valid, logged-in JWT.
         """
-        headers = self._create_request_headers(jwt=jwt)
         url = f"{self.url}/logout"
-        await self.http_client.post(url, headers=headers)
+        await self.http_client.post(url)
 
     async def get_url_for_provider(
         self,
@@ -489,9 +455,8 @@ class AsyncGoTrueAPI:
         APIError
             If an error occurs.
         """
-        headers = self._create_request_headers(jwt=jwt)
         url = f"{self.url}/user"
-        response = await self.http_client.get(url, headers=headers)
+        response = await self.http_client.get(url)
         return User.parse_response(response)
 
     async def update_user(
@@ -520,10 +485,9 @@ class AsyncGoTrueAPI:
         APIError
             If an error occurs.
         """
-        headers = self._create_request_headers(jwt=jwt)
         data = attributes.dict()
         url = f"{self.url}/user"
-        response = await self.http_client.put(url, json=data, headers=headers)
+        response = await self.http_client.put(url, json=data)
         return User.parse_response(response)
 
     async def delete_user(self, *, uid: str, jwt: str) -> None:
@@ -549,9 +513,8 @@ class AsyncGoTrueAPI:
         APIError
             If an error occurs.
         """
-        headers = self._create_request_headers(jwt=jwt)
         url = f"{self.url}/admin/users/{uid}"
-        response = await self.http_client.delete(url, headers=headers)
+        response = await self.http_client.delete(url)
         return check_response(response)
 
     async def refresh_access_token(self, *, refresh_token: str) -> Session:
@@ -574,8 +537,7 @@ class AsyncGoTrueAPI:
         """
         data = {"refresh_token": refresh_token}
         url = f"{self.url}/token?grant_type=refresh_token"
-        headers = self.headers
-        response = await self.http_client.post(url, json=data, headers=headers)
+        response = await self.http_client.post(url, json=data)
         return Session.parse_response(response)
 
     async def generate_link(
@@ -614,7 +576,6 @@ class AsyncGoTrueAPI:
         APIError
             If an error occurs.
         """
-        headers = self.headers
         data = {
             "type": type,
             "email": email,
@@ -626,7 +587,7 @@ class AsyncGoTrueAPI:
             redirect_to_encoded = encode_uri_component(redirect_to)
             data["redirect_to"] = redirect_to_encoded
         url = f"{self.url}/admin/generate_link"
-        response = await self.http_client.post(url, json=data, headers=headers)
+        response = await self.http_client.post(url, json=data)
         SessionOrUserModel = determine_session_or_user_model_from_response(response)
         return SessionOrUserModel.parse_response(response)
 
