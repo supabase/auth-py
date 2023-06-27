@@ -737,6 +737,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         )
 
     def _save_session(self, session: Session) -> None:
+        self._http_client.setSession(session=session)
         if not self._persist_session:
             self._in_memory_session = session
         expire_at = session.expires_at

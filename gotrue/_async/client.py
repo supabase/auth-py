@@ -455,6 +455,7 @@ class AsyncGoTrueClient:
             refresh_token=refresh_token[0],
             provider_token=provider_token[0] if provider_token else None,
         )
+        self.http_client.setSession(session=session)
         if store_session:
             await self._save_session(session=session)
             recovery_mode = query.get("type")
@@ -616,7 +617,7 @@ class AsyncGoTrueClient:
     async def _save_session(self, *, session: Session) -> None:
         """Save session to client."""
         self.current_session = session
-        SupaAsyncClient.session = session
+        self.http_client.auth(session=session)
         self.current_user = session.user
         if session.expires_at:
             time_now = round(time())

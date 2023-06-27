@@ -451,6 +451,7 @@ class SyncGoTrueClient:
             refresh_token=refresh_token[0],
             provider_token=provider_token[0] if provider_token else None,
         )
+        self.http_client.setSession(session=session)
         if store_session:
             self._save_session(session=session)
             recovery_mode = query.get("type")
@@ -609,7 +610,7 @@ class SyncGoTrueClient:
         """Save session to client."""
         self.current_session = session
         self.current_user = session.user
-        SupaSyncClient.session = session
+        self.http_client.auth(session=session)
         if session.expires_at:
             time_now = round(time())
             expire_in = session.expires_at - time_now
