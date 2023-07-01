@@ -30,7 +30,7 @@ pytest-depends = "^1.0.1"
 pytest-asyncio = "^0.20.3"
 Faker = "^18.3.1"
 unasync-cli = "^0.0.9"
-python-semantic-release = "^7.33.2"
+python-semantic-release = "^7.34.6"
 
 [tool.poetry.group.dev.dependencies]
 pygithub = "^1.57"
