@@ -564,8 +564,8 @@ smmap = ">=3.0.1,<6"
 
 [[package]]
 name = "gitpython"
-version = "3.1.31"
-description = "GitPython is a Python library used to interact with Git repositories"
+version = "3.1.30"
+description = "GitPython is a python library used to interact with Git repositories"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -627,7 +627,7 @@ sniffio = "*"
 
 [package.extras]
 brotli = ["brotli", "brotlicffi"]
-cli = ["click (==8.*)", "pygments (==2.*)", "rich (>=10,<13)"]
+cli = ["click (==8.*)", "pygments (==2.*)", "rich (>=10,<14)"]
 http2 = ["h2 (>=3,<5)"]
 socks = ["socksio (==1.*)"]
 
@@ -813,8 +813,8 @@ files = [
 
 [[package]]
 name = "mypy-extensions"
-version = "1.0.0"
-description = "Type system extensions for programs checked with the mypy type checker."
+version = "0.4.3"
+description = "Experimental type system extensions for programs checked with the mypy typechecker."
 optional = false
 python-versions = ">=3.5"
 files = [
@@ -1241,8 +1241,8 @@ test = ["coverage (>=5,<6)", "mock (==1.3.0)", "pytest (>=7,<8)", "pytest-mock (
 
 [[package]]
 name = "pywin32-ctypes"
-version = "0.2.2"
-description = "A (partial) reimplementation of pywin32 using ctypes/cffi"
+version = "0.2.0"
+description = ""
 optional = false
 python-versions = ">=3.6"
 files = [
@@ -1749,4 +1749,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "23d4ebdce8e05f4cad6d7753806d2f65391d4ddb6aa26598b07a1dc3462ae9fa"
+content-hash = "cc5654344b76226f585fceb73526c9b30c82162fd9a365e5ff4e6760b0a1044e"
