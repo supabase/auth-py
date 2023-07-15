@@ -261,6 +261,9 @@ celerybeat-schedule
 # SageMath parsed files
 *.sage.py
 
+# Poetry
+poetry.lock
+
 # Environments
 .env
 .venv
