@@ -21,6 +21,8 @@ jobs:
         uses: abatilo/actions-poetry@v2.3.0
         with:
           poetry-version:  1.3.2
+      - name: Install dependencies
+        run: poetry lock && poetry install
       - name: Run Tests
         run: make run_tests
       - name: Upload Coverage
