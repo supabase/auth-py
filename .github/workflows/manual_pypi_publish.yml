@@ -25,6 +25,6 @@ jobs:
         with:
           poetry-version: 1.1.13
       - name: Install dependencies
-        run: poetry lock && poetry install
+        run: poetry install
       - name: Publish to PyPi
         run: poetry publish --build -u ${{ github.event.inputs.username }} -p ${{ github.event.inputs.password }}
