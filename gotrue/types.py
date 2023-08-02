@@ -4,7 +4,7 @@ from datetime import datetime
 from time import time
 from typing import Any, Callable, Dict, List, Union
 
-from pydantic import BaseModel, root_validator
+from pydantic import BaseModel, model_validator
 from typing_extensions import Literal, NotRequired, TypedDict
 
 Provider = Literal[
@@ -106,7 +106,7 @@ class Session(BaseModel):
     token_type: str
     user: User
 
-    @root_validator
+    @model_validator
     def validator(cls, values: dict) -> dict:
         expires_in = values.get("expires_in")
         if expires_in and not values.get("expires_at"):
