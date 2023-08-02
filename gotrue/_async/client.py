@@ -560,7 +560,7 @@ class AsyncGoTrueClient:
             and session_raw
             and isinstance(session_raw, dict)
         ):
-            session = Session.parse_obj(session_raw)
+            session = Session.model_validate(session_raw)
             expires_at = int(expires_at_raw)
             time_now = round(time())
             return session, expires_at, time_now
@@ -628,7 +628,7 @@ class AsyncGoTrueClient:
             await self._persist_session(session=session)
 
     async def _persist_session(self, *, session: Session) -> None:
-        data = {"session": session.dict(), "expires_at": session.expires_at}
+        data = {"session": session.model_dump(), "expires_at": session.expires_at}
         await self.local_storage.set_item(STORAGE_KEY, dumps(data, default=str))
 
     async def _remove_session(self) -> None:

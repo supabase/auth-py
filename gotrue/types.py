@@ -4,7 +4,7 @@ from datetime import datetime
 from time import time
 from typing import Any, Callable, Dict, List, Union
 
-from pydantic import BaseModel, root_validator
+from pydantic import BaseModel, model_validator
 from typing_extensions import Literal, NotRequired, TypedDict
 
 Provider = Literal[
@@ -106,7 +106,7 @@ class Session(BaseModel):
     token_type: str
     user: User
 
-    @root_validator
+    @model_validator(mode="before")
     def validator(cls, values: dict) -> dict:
         expires_in = values.get("expires_in")
         if expires_in and not values.get("expires_at"):
@@ -615,22 +615,22 @@ class DecodedJWTDict(TypedDict):
     amr: NotRequired[Union[List[AMREntry], None]]
 
 
-AMREntry.update_forward_refs()
-AuthResponse.update_forward_refs()
-OAuthResponse.update_forward_refs()
-UserResponse.update_forward_refs()
-Session.update_forward_refs()
-UserIdentity.update_forward_refs()
-Factor.update_forward_refs()
-User.update_forward_refs()
-Subscription.update_forward_refs()
-AuthMFAVerifyResponse.update_forward_refs()
-AuthMFAEnrollResponseTotp.update_forward_refs()
-AuthMFAEnrollResponse.update_forward_refs()
-AuthMFAUnenrollResponse.update_forward_refs()
-AuthMFAChallengeResponse.update_forward_refs()
-AuthMFAListFactorsResponse.update_forward_refs()
-AuthMFAGetAuthenticatorAssuranceLevelResponse.update_forward_refs()
-AuthMFAAdminDeleteFactorResponse.update_forward_refs()
-AuthMFAAdminListFactorsResponse.update_forward_refs()
-GenerateLinkProperties.update_forward_refs()
+AMREntry.model_rebuild()
+AuthResponse.model_rebuild()
+OAuthResponse.model_rebuild()
+UserResponse.model_rebuild()
+Session.model_rebuild()
+UserIdentity.model_rebuild()
+Factor.model_rebuild()
+User.model_rebuild()
+Subscription.model_rebuild()
+AuthMFAVerifyResponse.model_rebuild()
+AuthMFAEnrollResponseTotp.model_rebuild()
+AuthMFAEnrollResponse.model_rebuild()
+AuthMFAUnenrollResponse.model_rebuild()
+AuthMFAChallengeResponse.model_rebuild()
+AuthMFAListFactorsResponse.model_rebuild()
+AuthMFAGetAuthenticatorAssuranceLevelResponse.model_rebuild()
+AuthMFAAdminDeleteFactorResponse.model_rebuild()
+AuthMFAAdminListFactorsResponse.model_rebuild()
+GenerateLinkProperties.model_rebuild()

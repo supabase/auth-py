@@ -529,7 +529,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
             "factors",
             body=params,
             jwt=session.access_token,
-            xform=AuthMFAEnrollResponse.parse_obj,
+            xform=AuthMFAEnrollResponse.model_validate,
         )
         if response.totp.qr_code:
             response.totp.qr_code = f"data:image/svg+xml;utf-8,{response.totp.qr_code}"
@@ -543,7 +543,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
             "POST",
             f"factors/{params.get('factor_id')}/challenge",
             jwt=session.access_token,
-            xform=AuthMFAChallengeResponse.parse_obj,
+            xform=AuthMFAChallengeResponse.model_validate,
         )
 
     def _challenge_and_verify(
@@ -572,9 +572,9 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
             f"factors/{params.get('factor_id')}/verify",
             body=params,
             jwt=session.access_token,
-            xform=AuthMFAVerifyResponse.parse_obj,
+            xform=AuthMFAVerifyResponse.model_validate,
         )
-        session = Session.parse_obj(response.dict())
+        session = Session.model_validate(response.model_dump())
         self._save_session(session)
         self._notify_all_subscribers("MFA_CHALLENGE_VERIFIED", session)
         return response
@@ -587,7 +587,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
             "DELETE",
             f"factors/{params.get('factor_id')}",
             jwt=session.access_token,
-            xform=AuthMFAUnenrollResponse.parse_obj,
+            xform=AuthMFAUnenrollResponse.model_validate,
         )
 
     def _list_factors(self) -> AuthMFAListFactorsResponse:
@@ -806,7 +806,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         except ValueError:
             return None
         try:
-            return Session.parse_obj(data)
+            return Session.model_validate(data)
         except Exception:
             return None
 

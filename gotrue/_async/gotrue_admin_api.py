@@ -109,7 +109,7 @@ class AsyncGoTrueAdminAPI(AsyncGoTrueBaseAPI):
         return await self._request(
             "GET",
             "admin/users",
-            xform=lambda data: [User.parse_obj(user) for user in data["users"]]
+            xform=lambda data: [User.model_validate(user) for user in data["users"]]
             if "users" in data
             else [],
         )
@@ -161,7 +161,7 @@ class AsyncGoTrueAdminAPI(AsyncGoTrueBaseAPI):
         return await self._request(
             "GET",
             f"admin/users/{params.get('user_id')}/factors",
-            xform=AuthMFAAdminListFactorsResponse.parse_obj,
+            xform=AuthMFAAdminListFactorsResponse.model_validate,
         )
 
     async def _delete_factor(
@@ -171,5 +171,5 @@ class AsyncGoTrueAdminAPI(AsyncGoTrueBaseAPI):
         return await self._request(
             "DELETE",
             f"admin/users/{params.get('user_id')}/factors/{params.get('factor_id')}",
-            xform=AuthMFAAdminDeleteFactorResponse.parse_obj,
+            xform=AuthMFAAdminDeleteFactorResponse.model_validate,
         )

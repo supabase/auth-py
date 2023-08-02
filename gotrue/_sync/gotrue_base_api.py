@@ -108,7 +108,7 @@ class SyncGoTrueBaseAPI:
                 url,
                 headers=headers,
                 params=query,
-                json=body.dict() if isinstance(body, BaseModel) else body,
+                json=body.model_dump() if isinstance(body, BaseModel) else body,
             )
             response.raise_for_status()
             result = response if no_resolve_json else response.json()
