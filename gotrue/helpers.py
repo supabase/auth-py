@@ -41,7 +41,9 @@ def parse_link_response(data: Any) -> GenerateLinkResponse:
         redirect_to=data.get("redirect_to"),
         verification_type=data.get("verification_type"),
     )
-    user = User.model_validate({k: v for k, v in data.items() if k not in properties.model_dump()})
+    user = User.model_validate(
+        {k: v for k, v in data.items() if k not in properties.model_dump()}
+    )
     return GenerateLinkResponse(properties=properties, user=user)
 
 
