@@ -27,9 +27,9 @@ def parse_auth_response(data: Any) -> AuthResponse:
         and data["refresh_token"]
         and data["expires_in"]
     ):
-        session = Session.parse_obj(data)
+        session = Session.model_validate(data)
     user_data = data.get("user", data)
-    user = User.parse_obj(user_data) if user_data else None
+    user = User.model_validate(user_data) if user_data else None
     return AuthResponse(session=session, user=user)
 
 
@@ -41,14 +41,14 @@ def parse_link_response(data: Any) -> GenerateLinkResponse:
         redirect_to=data.get("redirect_to"),
         verification_type=data.get("verification_type"),
     )
-    user = User.parse_obj({k: v for k, v in data.items() if k not in properties.dict()})
+    user = User.model_validate({k: v for k, v in data.items() if k not in properties.model_dump()})
     return GenerateLinkResponse(properties=properties, user=user)
 
 
 def parse_user_response(data: Any) -> UserResponse:
     if "user" not in data:
         data = {"user": data}
-    return UserResponse.parse_obj(data)
+    return UserResponse.model_validate(data)
 
 
 def get_error_message(error: Any) -> str:
