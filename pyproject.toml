@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gotrue"
-version = "1.0.2"
+version = "1.0.3"
 description = "Python Client Library for GoTrue"
 authors = ["Joel Lee <joel@joellee.org>"]
 homepage = "https://github.com/supabase-community/gotrue-py"
@@ -30,7 +30,7 @@ pytest-depends = "^1.0.1"
 pytest-asyncio = "^0.21.1"
 Faker = "^18.3.1"
 unasync-cli = "^0.0.9"
-python-semantic-release = "^7.34.6"
+python-semantic-release = "^8.0.4"
 
 [tool.poetry.group.dev.dependencies]
 pygithub = "^1.57"
