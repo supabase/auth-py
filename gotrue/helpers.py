@@ -2,9 +2,10 @@ from __future__ import annotations
 
 from base64 import b64decode
 from json import loads
-from typing import Any, Union, cast
+from typing import Any, Dict, Type, TypeVar, Union, cast
 
 from httpx import HTTPStatusError
+from pydantic import BaseModel
 
 from .errors import AuthApiError, AuthError, AuthRetryableError, AuthUnknownError
 from .types import (
@@ -15,6 +16,39 @@ from .types import (
     User,
     UserResponse,
 )
+
+TBaseModel = TypeVar("TBaseModel", bound=BaseModel)
+
+
+def model_validate(model: Type[TBaseModel], contents) -> TBaseModel:
+    """Compatibility layer between pydantic 1 and 2 for parsing an instance
+    of a BaseModel from varied"""
+    try:
+        # pydantic > 2
+        return model.model_validate(contents)
+    except AttributeError:
+        # pydantic < 2
+        return model.parse_obj(contents)
+
+
+def model_dump(model: BaseModel) -> Dict[str, Any]:
+    """Compatibility layer between pydantic 1 and 2 for dumping a model's contents as a dict"""
+    try:
+        # pydantic > 2
+        return model.model_dump()
+    except AttributeError:
+        # pydantic < 2
+        return model.dict()
+
+
+def model_dump_json(model: BaseModel) -> str:
+    """Compatibility layer between pydantic 1 and 2 for dumping a model's contents as json"""
+    try:
+        # pydantic > 2
+        return model.model_dump_json()
+    except AttributeError:
+        # pydantic < 2
+        return model.json()
 
 
 def parse_auth_response(data: Any) -> AuthResponse:
@@ -27,9 +61,9 @@ def parse_auth_response(data: Any) -> AuthResponse:
         and data["refresh_token"]
         and data["expires_in"]
     ):
-        session = Session.model_validate(data)
+        session = model_validate(Session, data)
     user_data = data.get("user", data)
-    user = User.model_validate(user_data) if user_data else None
+    user = model_validate(User, user_data) if user_data else None
     return AuthResponse(session=session, user=user)
 
 
@@ -41,8 +75,8 @@ def parse_link_response(data: Any) -> GenerateLinkResponse:
         redirect_to=data.get("redirect_to"),
         verification_type=data.get("verification_type"),
     )
-    user = User.model_validate(
-        {k: v for k, v in data.items() if k not in properties.model_dump()}
+    user = model_validate(
+        User, {k: v for k, v in data.items() if k not in model_dump(properties)}
     )
     return GenerateLinkResponse(properties=properties, user=user)
 
@@ -50,7 +84,7 @@ def parse_link_response(data: Any) -> GenerateLinkResponse:
 def parse_user_response(data: Any) -> UserResponse:
     if "user" not in data:
         data = {"user": data}
-    return UserResponse.model_validate(data)
+    return model_validate(UserResponse, data)
 
 
 def get_error_message(error: Any) -> str:

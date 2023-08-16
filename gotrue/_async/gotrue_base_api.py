@@ -6,7 +6,7 @@ from httpx import Response
 from pydantic import BaseModel
 from typing_extensions import Literal, Self
 
-from ..helpers import handle_exception
+from ..helpers import handle_exception, model_dump
 from ..http_clients import AsyncClient
 
 T = TypeVar("T")
@@ -108,7 +108,7 @@ class AsyncGoTrueBaseAPI:
                 url,
                 headers=headers,
                 params=query,
-                json=body.model_dump() if isinstance(body, BaseModel) else body,
+                json=model_dump(body) if isinstance(body, BaseModel) else body,
             )
             response.raise_for_status()
             result = response if no_resolve_json else response.json()

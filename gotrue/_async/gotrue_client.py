@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from functools import partial
 from json import loads
 from time import time
 from typing import Callable, Dict, List, Tuple, Union
@@ -20,7 +21,14 @@ from ..errors import (
     AuthRetryableError,
     AuthSessionMissingError,
 )
-from ..helpers import decode_jwt_payload, parse_auth_response, parse_user_response
+from ..helpers import (
+    decode_jwt_payload,
+    model_dump,
+    model_dump_json,
+    model_validate,
+    parse_auth_response,
+    parse_user_response,
+)
 from ..http_clients import AsyncClient
 from ..timer import Timer
 from ..types import (
@@ -531,7 +539,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
             "factors",
             body=params,
             jwt=session.access_token,
-            xform=AuthMFAEnrollResponse.model_validate,
+            xform=partial(model_validate, AuthMFAEnrollResponse),
         )
         if response.totp.qr_code:
             response.totp.qr_code = f"data:image/svg+xml;utf-8,{response.totp.qr_code}"
@@ -545,7 +553,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
             "POST",
             f"factors/{params.get('factor_id')}/challenge",
             jwt=session.access_token,
-            xform=AuthMFAChallengeResponse.model_validate,
+            xform=partial(model_validate, AuthMFAChallengeResponse),
         )
 
     async def _challenge_and_verify(
@@ -574,9 +582,9 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
             f"factors/{params.get('factor_id')}/verify",
             body=params,
             jwt=session.access_token,
-            xform=AuthMFAVerifyResponse.model_validate,
+            xform=partial(model_validate, AuthMFAVerifyResponse),
         )
-        session = Session.model_validate(response.model_dump())
+        session = model_validate(Session, model_dump(response))
         await self._save_session(session)
         self._notify_all_subscribers("MFA_CHALLENGE_VERIFIED", session)
         return response
@@ -589,7 +597,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
             "DELETE",
             f"factors/{params.get('factor_id')}",
             jwt=session.access_token,
-            xform=AuthMFAUnenrollResponse.model_validate,
+            xform=partial(AuthMFAUnenrollResponse, model_validate),
         )
 
     async def _list_factors(self) -> AuthMFAListFactorsResponse:
@@ -751,7 +759,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
             value = (expire_in - refresh_duration_before_expires) * 1000
             await self._start_auto_refresh_token(value)
         if self._persist_session and session.expires_at:
-            await self._storage.set_item(self._storage_key, session.model_dump_json())
+            await self._storage.set_item(self._storage_key, model_dump_json(session))
 
     async def _start_auto_refresh_token(self, value: float) -> None:
         if self._refresh_token_timer:
@@ -808,7 +816,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         except ValueError:
             return None
         try:
-            return Session.model_validate(data)
+            return model_validate(Session, data)
         except Exception:
             return None
 
