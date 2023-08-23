@@ -29,12 +29,16 @@ jobs:
         run: |
           pip install pydantic==1.10.12
           make tests_only
-
   publish:
     needs: test
     if: ${{ !startsWith(github.event.head_commit.message, 'bump') && !startsWith(github.event.head_commit.message, 'chore') && github.ref == 'refs/heads/main' && github.event_name == 'push' && github.repository_owner == 'supabase-community' }}
     runs-on: ubuntu-latest
     name: "Bump version, create changelog and publish"
+    environment:
+      name: pypi
+      url: https://pypi.org/p/gotrue
+    permissions:
+      id-token: write # IMPORTANT: this permission is mandatory for trusted publishing
     steps:
       - name: Clone Repository
         uses: actions/checkout@v3
