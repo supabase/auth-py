@@ -28,7 +28,7 @@ pre-commit = "^3.2.2"
 pytest-cov = "^4.0.0"
 pytest-depends = "^1.0.1"
 pytest-asyncio = "^0.21.1"
-Faker = "^19.2.0"
+Faker = "^19.3.0"
 unasync-cli = "^0.0.9"
 python-semantic-release = "^7.34.6"
 
