@@ -38,7 +38,7 @@ Provider = Literal[
     "twitch",
     "twitter",
     "workos",
-    "zoom"
+    "zoom",
 ]
 
 AuthChangeEventMFA = Literal["MFA_CHALLENGE_VERIFIED"]
