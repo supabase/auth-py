@@ -25,9 +25,11 @@ Provider = Literal[
     "bitbucket",
     "discord",
     "facebook",
+    "figma",
     "github",
     "gitlab",
     "google",
+    "kakao",
     "keycloak",
     "linkedin",
     "notion",
@@ -36,6 +38,7 @@ Provider = Literal[
     "twitch",
     "twitter",
     "workos",
+    "zoom"
 ]
 
 AuthChangeEventMFA = Literal["MFA_CHALLENGE_VERIFIED"]
