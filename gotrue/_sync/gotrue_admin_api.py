@@ -1,8 +1,9 @@
 from __future__ import annotations
 
+from functools import partial
 from typing import Dict, List, Union
 
-from ..helpers import parse_link_response, parse_user_response
+from ..helpers import model_validate, parse_link_response, parse_user_response
 from ..http_clients import SyncClient
 from ..types import (
     AdminUserAttributes,
@@ -109,7 +110,7 @@ class SyncGoTrueAdminAPI(SyncGoTrueBaseAPI):
         return self._request(
             "GET",
             "admin/users",
-            xform=lambda data: [User.model_validate(user) for user in data["users"]]
+            xform=lambda data: [model_validate(User, user) for user in data["users"]]
             if "users" in data
             else [],
         )
@@ -161,7 +162,7 @@ class SyncGoTrueAdminAPI(SyncGoTrueBaseAPI):
         return self._request(
             "GET",
             f"admin/users/{params.get('user_id')}/factors",
-            xform=AuthMFAAdminListFactorsResponse.model_validate,
+            xform=partial(model_validate, AuthMFAAdminListFactorsResponse),
         )
 
     def _delete_factor(
@@ -171,5 +172,5 @@ class SyncGoTrueAdminAPI(SyncGoTrueBaseAPI):
         return self._request(
             "DELETE",
             f"admin/users/{params.get('user_id')}/factors/{params.get('factor_id')}",
-            xform=AuthMFAAdminDeleteFactorResponse.model_validate,
+            xform=partial(model_validate, AuthMFAAdminDeleteFactorResponse),
         )

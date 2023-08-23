@@ -4,7 +4,19 @@ from datetime import datetime
 from time import time
 from typing import Any, Callable, Dict, List, Union
 
-from pydantic import BaseModel, model_validator
+from pydantic import BaseModel
+
+try:
+    # > 2
+    from pydantic import model_validator
+
+    model_validator_v1_v2_compat = model_validator(mode="before")
+except ImportError:
+    # < 2
+    from pydantic import root_validator
+
+    model_validator_v1_v2_compat = root_validator
+
 from typing_extensions import Literal, NotRequired, TypedDict
 
 Provider = Literal[
@@ -106,7 +118,7 @@ class Session(BaseModel):
     token_type: str
     user: User
 
-    @model_validator(mode="before")
+    @model_validator_v1_v2_compat
     def validator(cls, values: dict) -> dict:
         expires_in = values.get("expires_in")
         if expires_in and not values.get("expires_at"):
@@ -615,22 +627,30 @@ class DecodedJWTDict(TypedDict):
     amr: NotRequired[Union[List[AMREntry], None]]
 
 
-AMREntry.model_rebuild()
-AuthResponse.model_rebuild()
-OAuthResponse.model_rebuild()
-UserResponse.model_rebuild()
-Session.model_rebuild()
-UserIdentity.model_rebuild()
-Factor.model_rebuild()
-User.model_rebuild()
-Subscription.model_rebuild()
-AuthMFAVerifyResponse.model_rebuild()
-AuthMFAEnrollResponseTotp.model_rebuild()
-AuthMFAEnrollResponse.model_rebuild()
-AuthMFAUnenrollResponse.model_rebuild()
-AuthMFAChallengeResponse.model_rebuild()
-AuthMFAListFactorsResponse.model_rebuild()
-AuthMFAGetAuthenticatorAssuranceLevelResponse.model_rebuild()
-AuthMFAAdminDeleteFactorResponse.model_rebuild()
-AuthMFAAdminListFactorsResponse.model_rebuild()
-GenerateLinkProperties.model_rebuild()
+for model in [
+    AMREntry,
+    AuthResponse,
+    OAuthResponse,
+    UserResponse,
+    Session,
+    UserIdentity,
+    Factor,
+    User,
+    Subscription,
+    AuthMFAVerifyResponse,
+    AuthMFAEnrollResponseTotp,
+    AuthMFAEnrollResponse,
+    AuthMFAUnenrollResponse,
+    AuthMFAChallengeResponse,
+    AuthMFAListFactorsResponse,
+    AuthMFAGetAuthenticatorAssuranceLevelResponse,
+    AuthMFAAdminDeleteFactorResponse,
+    AuthMFAAdminListFactorsResponse,
+    GenerateLinkProperties,
+]:
+    try:
+        # pydantic > 2
+        model.rebuild_model()
+    except AttributeError:
+        # pydantic < 2
+        model.update_forward_refs()

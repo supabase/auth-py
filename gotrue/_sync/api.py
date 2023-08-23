@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Optional, Union
 
-from pydantic import TypeAdapter
+from pydantic import parse_obj_as
 
 from ..exceptions import APIError
 from ..helpers import check_response, encode_uri_component
@@ -94,7 +94,7 @@ class SyncGoTrueAPI:
             raise APIError("No users found in response", 400)
         if not isinstance(users, list):
             raise APIError("Expected a list of users", 400)
-        return TypeAdapter(List[User]).validate_python(users)
+        return parse_obj_as(List[User], users)
 
     def sign_up_with_email(
         self,
