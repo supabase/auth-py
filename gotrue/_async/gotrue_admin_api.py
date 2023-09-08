@@ -100,7 +100,7 @@ class AsyncGoTrueAdminAPI(AsyncGoTrueBaseAPI):
             xform=parse_user_response,
         )
 
-    async def list_users(self) -> List[User]:
+    async def list_users(self, page: int = None, per_page: int = None) -> List[User]:
         """
         Get a list of users.
 
@@ -110,6 +110,7 @@ class AsyncGoTrueAdminAPI(AsyncGoTrueBaseAPI):
         return await self._request(
             "GET",
             "admin/users",
+            query={"page": page, "per_page": per_page},
             xform=lambda data: [model_validate(User, user) for user in data["users"]]
             if "users" in data
             else [],
