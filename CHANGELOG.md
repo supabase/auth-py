@@ -2,6 +2,66 @@
 
 
 
+## v1.1.0 (2023-09-08)
+
+### Chore
+
+* chore(deps): bump actions/checkout from 3 to 4
+
+Bumps [actions/checkout](https://github.com/actions/checkout) from 3 to 4.
+- [Release notes](https://github.com/actions/checkout/releases)
+- [Changelog](https://github.com/actions/checkout/blob/main/CHANGELOG.md)
+- [Commits](https://github.com/actions/checkout/compare/v3...v4)
+
+---
+updated-dependencies:
+- dependency-name: actions/checkout
+  dependency-type: direct:production
+  update-type: version-update:semver-major
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`2a51fff`](https://github.com/supabase-community/gotrue-py/commit/2a51fff932e6eb9773614cf4cd5a72400c9c2aef))
+
+* chore(deps-dev): bump gitpython from 3.1.32 to 3.1.35
+
+Bumps [gitpython](https://github.com/gitpython-developers/GitPython) from 3.1.32 to 3.1.35.
+- [Release notes](https://github.com/gitpython-developers/GitPython/releases)
+- [Changelog](https://github.com/gitpython-developers/GitPython/blob/main/CHANGES)
+- [Commits](https://github.com/gitpython-developers/GitPython/compare/3.1.32...3.1.35)
+
+---
+updated-dependencies:
+- dependency-name: gitpython
+  dependency-type: indirect
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`7b0fb17`](https://github.com/supabase-community/gotrue-py/commit/7b0fb1711c030697cc724900034e504ca97dc324))
+
+* chore: run formatting on CHANGELOG to correct for mix line endings ([`3f47338`](https://github.com/supabase-community/gotrue-py/commit/3f47338c81c95cc89d349b73d4e080eebf708cfa))
+
+### Feature
+
+* feat: support pagination for admin list_users ([`e7cbd9f`](https://github.com/supabase-community/gotrue-py/commit/e7cbd9f17a3c5690d77954b2b57c267ea5382afd))
+
+### Unknown
+
+* Merge pull request #307 from supabase-community/dependabot/github_actions/main/actions/checkout-4
+
+chore(deps): bump actions/checkout from 3 to 4 ([`64c0c66`](https://github.com/supabase-community/gotrue-py/commit/64c0c66f452f5d149fcbe61dc88c74baf9056584))
+
+* Merge pull request #312 from supabase-community/dependabot/pip/gitpython-3.1.35
+
+chore(deps-dev): bump gitpython from 3.1.32 to 3.1.35 ([`9b62e68`](https://github.com/supabase-community/gotrue-py/commit/9b62e6861d579ea437f450065a456c3a0a8eacab))
+
+* Merge pull request #304 from connorlurring/admin-list-users-pagination
+
+feat: support pagination for auth admin list_users ([`1b88c51`](https://github.com/supabase-community/gotrue-py/commit/1b88c51bf29f69dc066377f94fe38dadb66b12cb))
+
+* Merge pull request #311 from supabase-community/j0/lint_changelog
+
+chore: run formatting on CHANGELOG to correct for mix line endings ([`8684125`](https://github.com/supabase-community/gotrue-py/commit/86841257aefbbbc986e6ec4779a2c9373cf61c85))
+
+
 ## v1.0.4 (2023-08-23)
 
 ### Chore
