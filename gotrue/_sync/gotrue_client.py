@@ -382,6 +382,8 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
             session = self.get_session()
             if session:
                 jwt = session.access_token
+            else:
+                return None
         return self._request("GET", "user", jwt=jwt, xform=parse_user_response)
 
     def update_user(self, attributes: UserAttributes) -> UserResponse:

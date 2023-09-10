@@ -383,6 +383,8 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
             session = await self.get_session()
             if session:
                 jwt = session.access_token
+            else:
+                return None
         return await self._request("GET", "user", jwt=jwt, xform=parse_user_response)
 
     async def update_user(self, attributes: UserAttributes) -> UserResponse:
