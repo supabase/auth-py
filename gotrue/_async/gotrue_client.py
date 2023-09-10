@@ -372,7 +372,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
             else current_session
         )
 
-    async def get_user(self, jwt: Union[str, None] = None) -> UserResponse:
+    async def get_user(self, jwt: Union[str, None] = None) -> Union[UserResponse, None]:
         """
         Gets the current user details if there is an existing session.
 
