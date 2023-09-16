@@ -24,6 +24,7 @@ from ..errors import (
 from ..helpers import (
     decode_jwt_payload,
     model_dump,
+    model_dump_json,
     model_validate,
     parse_auth_response,
     parse_user_response,
@@ -596,7 +597,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
             "DELETE",
             f"factors/{params.get('factor_id')}",
             jwt=session.access_token,
-            xform=partial(model_validate, AuthMFAUnenrollResponse),
+            xform=partial(AuthMFAUnenrollResponse, model_validate),
         )
 
     def _list_factors(self) -> AuthMFAListFactorsResponse:
@@ -758,7 +759,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
             value = (expire_in - refresh_duration_before_expires) * 1000
             self._start_auto_refresh_token(value)
         if self._persist_session and session.expires_at:
-            self._storage.set_item(self._storage_key, session.json())
+            self._storage.set_item(self._storage_key, model_dump_json(session))
 
     def _start_auto_refresh_token(self, value: float) -> None:
         if self._refresh_token_timer:
