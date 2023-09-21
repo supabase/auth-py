@@ -42,12 +42,7 @@ Provider = Literal[
 ]
 
 EmailOtpType = Literal[
-    "signup",
-    "invite",
-    "magiclink",
-    "recovery",
-    "email_change",
-    "email"
+    "signup", "invite", "magiclink", "recovery", "email_change", "email"
 ]
 
 AuthChangeEventMFA = Literal["MFA_CHALLENGE_VERIFIED"]
@@ -347,15 +342,15 @@ class VerifyMobileOtpParams(TypedDict):
     ]
     options: NotRequired[VerifyOtpParamsOptions]
 
+
 class VerifyTokenHashParams(TypedDict):
     token_hash: str
     type: EmailOtpType
     options: NotRequired[VerifyOtpParamsOptions]
 
+
 VerifyOtpParams = Union[
-    VerifyEmailOtpParams,
-    VerifyMobileOtpParams,
-    VerifyTokenHashParams
+    VerifyEmailOtpParams, VerifyMobileOtpParams, VerifyTokenHashParams
 ]
 
 
