@@ -2,6 +2,141 @@
 
 
 
+## v1.1.1 (2023-09-22)
+
+### Chore
+
+* chore(deps): bump python-semantic-release/python-semantic-release
+
+Bumps [python-semantic-release/python-semantic-release](https://github.com/python-semantic-release/python-semantic-release) from 8.0.0 to 8.0.8.
+- [Release notes](https://github.com/python-semantic-release/python-semantic-release/releases)
+- [Changelog](https://github.com/python-semantic-release/python-semantic-release/blob/master/CHANGELOG.md)
+- [Commits](https://github.com/python-semantic-release/python-semantic-release/compare/v8.0.0...v8.0.8)
+
+---
+updated-dependencies:
+- dependency-name: python-semantic-release/python-semantic-release
+  dependency-type: direct:production
+  update-type: version-update:semver-patch
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`8f094df`](https://github.com/supabase-community/gotrue-py/commit/8f094df3e6d8ba21f2c429b8c8c208c42e18f68c))
+
+* chore(deps-dev): bump pytest from 7.4.0 to 7.4.2
+
+Bumps [pytest](https://github.com/pytest-dev/pytest) from 7.4.0 to 7.4.2.
+- [Release notes](https://github.com/pytest-dev/pytest/releases)
+- [Changelog](https://github.com/pytest-dev/pytest/blob/main/CHANGELOG.rst)
+- [Commits](https://github.com/pytest-dev/pytest/compare/7.4.0...7.4.2)
+
+---
+updated-dependencies:
+- dependency-name: pytest
+  dependency-type: direct:development
+  update-type: version-update:semver-patch
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`cb41e8b`](https://github.com/supabase-community/gotrue-py/commit/cb41e8ba11c913411a4fd5ce19ec597ef04ff3d5))
+
+* chore(deps-dev): bump pre-commit from 3.3.3 to 3.4.0
+
+Bumps [pre-commit](https://github.com/pre-commit/pre-commit) from 3.3.3 to 3.4.0.
+- [Release notes](https://github.com/pre-commit/pre-commit/releases)
+- [Changelog](https://github.com/pre-commit/pre-commit/blob/main/CHANGELOG.md)
+- [Commits](https://github.com/pre-commit/pre-commit/compare/v3.3.3...v3.4.0)
+
+---
+updated-dependencies:
+- dependency-name: pre-commit
+  dependency-type: direct:development
+  update-type: version-update:semver-minor
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`133eca2`](https://github.com/supabase-community/gotrue-py/commit/133eca2d76c8e69d5be439a2f0067a767377b83a))
+
+* chore(deps-dev): bump black from 23.7.0 to 23.9.1
+
+Bumps [black](https://github.com/psf/black) from 23.7.0 to 23.9.1.
+- [Release notes](https://github.com/psf/black/releases)
+- [Changelog](https://github.com/psf/black/blob/main/CHANGES.md)
+- [Commits](https://github.com/psf/black/compare/23.7.0...23.9.1)
+
+---
+updated-dependencies:
+- dependency-name: black
+  dependency-type: direct:development
+  update-type: version-update:semver-minor
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`5617a6a`](https://github.com/supabase-community/gotrue-py/commit/5617a6a8443db03aa829ae8ba4129b7341d11442))
+
+* chore(deps-dev): bump faker from 19.3.0 to 19.6.1
+
+Bumps [faker](https://github.com/joke2k/faker) from 19.3.0 to 19.6.1.
+- [Release notes](https://github.com/joke2k/faker/releases)
+- [Changelog](https://github.com/joke2k/faker/blob/master/CHANGELOG.md)
+- [Commits](https://github.com/joke2k/faker/compare/v19.3.0...v19.6.1)
+
+---
+updated-dependencies:
+- dependency-name: faker
+  dependency-type: direct:development
+  update-type: version-update:semver-minor
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`ab39f66`](https://github.com/supabase-community/gotrue-py/commit/ab39f668f3128810baef1d7db49ad6f0cfaa8521))
+
+### Fix
+
+* fix: add verify token hash ([`da51e8e`](https://github.com/supabase-community/gotrue-py/commit/da51e8ea262fa113da7bd77c4e67ba14c7262851))
+
+### Refactor
+
+* refactor: remove unused v1 files ([`e9005e4`](https://github.com/supabase-community/gotrue-py/commit/e9005e4c3ee4e4a9a344993c6e3120dc30832eac))
+
+### Unknown
+
+* Merge pull request #328 from supabase-community/feat/add-verify-token-hash
+
+fix: add verify token hash ([`ccb2173`](https://github.com/supabase-community/gotrue-py/commit/ccb2173eb694622be100eec36942ec8a69b151a7))
+
+* Fixed formatting ([`82a04aa`](https://github.com/supabase-community/gotrue-py/commit/82a04aaee7c6cb1047091789007f6366bbe1a535))
+
+* Merge pull request #303 from supabase-community/dependabot/github_actions/main/python-semantic-release/python-semantic-release-8.0.8
+
+chore(deps): bump python-semantic-release/python-semantic-release from 8.0.0 to 8.0.8 ([`cb6abab`](https://github.com/supabase-community/gotrue-py/commit/cb6abab03286a9305e480c1754c4ddfcde649196))
+
+* Merge pull request #310 from supabase-community/dependabot/pip/main/pytest-7.4.2
+
+chore(deps-dev): bump pytest from 7.4.0 to 7.4.2 ([`1df12a7`](https://github.com/supabase-community/gotrue-py/commit/1df12a7d5078b5ffb8bf611ae14e18da0609e9f6))
+
+* Merge pull request #323 from supabase-community/j0/remove_unused_v1
+
+refactor: remove unused v1 files ([`817fafb`](https://github.com/supabase-community/gotrue-py/commit/817fafb2720f4f201f940cf37f6e4262743241e8))
+
+* Merge pull request #305 from supabase-community/dependabot/pip/main/pre-commit-3.4.0
+
+chore(deps-dev): bump pre-commit from 3.3.3 to 3.4.0 ([`687c52d`](https://github.com/supabase-community/gotrue-py/commit/687c52daa2ef2aa4dd35348eaff83e6891f98750))
+
+* Merge pull request #317 from supabase-community/dependabot/pip/main/black-23.9.1
+
+chore(deps-dev): bump black from 23.7.0 to 23.9.1 ([`b0144ef`](https://github.com/supabase-community/gotrue-py/commit/b0144ef0ab12e07eea5526822a5cd0a7a3548097))
+
+* Merge pull request #318 from supabase-community/dependabot/pip/main/faker-19.6.1
+
+chore(deps-dev): bump faker from 19.3.0 to 19.6.1 ([`2cc68f9`](https://github.com/supabase-community/gotrue-py/commit/2cc68f944e03c61962d4da559da174f592717f18))
+
+* Merge pull request #315 from jantznick/main
+
+fix get_user calls fail when no session or jwt is available ([`2a562a7`](https://github.com/supabase-community/gotrue-py/commit/2a562a749c12866c42dc16c9783e8b36823b253b))
+
+* changelog changed from precommit hooks ([`5cf279e`](https://github.com/supabase-community/gotrue-py/commit/5cf279e6711c4e235e4b83dea874fa1eea2a6695))
+
+* update return type for get_user calls ([`ddeb595`](https://github.com/supabase-community/gotrue-py/commit/ddeb5951cb5a8f7b2fc8c5157d74feb1f339be3d))
+
+* return None when no session or jwt on get_user calls ([`50fa8b0`](https://github.com/supabase-community/gotrue-py/commit/50fa8b00000d1a4dd54506fba4dc6c90cd893006))
+
+
 ## v1.1.0 (2023-09-08)
 
 ### Chore
