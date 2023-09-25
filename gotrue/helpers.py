@@ -137,10 +137,7 @@ def generate_pkce_verifier(length=64):
     # Define characters that can be used in the PKCE verifier
     charset = string.ascii_letters + string.digits + "-._~"
 
-    # Generate a random PKCE verifier using the secrets module
-    verifier = "".join(secrets.choice(charset) for _ in range(length))
-
-    return verifier
+    return "".join(secrets.choice(charset) for _ in range(length))
 
 
 def generate_pkce_challenge(code_verifier):
@@ -149,7 +146,4 @@ def generate_pkce_challenge(code_verifier):
     verifier_bytes = verifier.encode("utf-8")
     sha256_hash = hashlib.sha256(verifier_bytes).digest()
 
-    # Encode the hash as URL-safe base64
-    base64_encoded = base64.urlsafe_b64encode(sha256_hash).rstrip(b"=").decode("utf-8")
-
-    return base64_encoded
+    return base64.urlsafe_b64encode(sha256_hash).rstrip(b"=").decode("utf-8")
