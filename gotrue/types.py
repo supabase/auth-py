@@ -47,6 +47,8 @@ EmailOtpType = Literal[
 
 AuthChangeEventMFA = Literal["MFA_CHALLENGE_VERIFIED"]
 
+AuthFlowType = Literal["pkce", "implicit"]
+
 AuthChangeEvent = Literal[
     "PASSWORD_RECOVERY",
     "SIGNED_IN",

@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import base64
+import hashlib
+import secrets
 from base64 import b64decode
 from json import loads
 from typing import Any, Dict, Type, TypeVar, Union, cast
@@ -124,3 +127,29 @@ def decode_jwt_payload(token: str) -> Any:
     # binascii.Error: Incorrect padding
     base64UrlWithPadding = base64Url + "=" * (-len(base64Url) % 4)
     return loads(b64decode(base64UrlWithPadding).decode("utf-8"))
+
+
+def generate_pkce_verifier(length=64):
+    """Generate a random PKCE verifier of the specified length."""
+    if length < 43 or length > 128:
+        raise ValueError("PKCE verifier length must be between 43 and 128 characters")
+
+    # Define characters that can be used in the PKCE verifier
+    charset = string.ascii_letters + string.digits + "-._~"
+
+    # Generate a random PKCE verifier using the secrets module
+    verifier = "".join(secrets.choice(charset) for _ in range(length))
+
+    return verifier
+
+
+def generate_pkce_challenge(code_verifier):
+    """Generate a code challenge from a PKCE verifier."""
+    # Hash the verifier using SHA-256
+    verifier_bytes = verifier.encode("utf-8")
+    sha256_hash = hashlib.sha256(verifier_bytes).digest()
+
+    # Encode the hash as URL-safe base64
+    base64_encoded = base64.urlsafe_b64encode(sha256_hash).rstrip(b"=").decode("utf-8")
+
+    return base64_encoded
