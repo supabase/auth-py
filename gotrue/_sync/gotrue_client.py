@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from contextlib import suppress
 from functools import partial
 from json import loads
 from time import time
@@ -482,15 +483,12 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         There is no way to revoke a user's access token jwt until it expires.
         It is recommended to set a shorter expiry on the jwt for this reason.
         """
-        try:
+        with suppress(AuthApiError):
             session = self.get_session()
             access_token = session.access_token if session else None
             if access_token:
                 self.admin.sign_out(access_token)
-        except AuthApiError:
-            pass
-        except Exception:
-            raise
+
         self._remove_session()
         self._notify_all_subscribers("SIGNED_OUT", None)
 
