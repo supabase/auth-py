@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from base64 import b64decode
+from base64 import urlsafe_b64decode
 from json import loads
 from typing import Any, Dict, Type, TypeVar, Union, cast
 
@@ -123,4 +123,4 @@ def decode_jwt_payload(token: str) -> Any:
     # Addding padding otherwise the following error happens:
     # binascii.Error: Incorrect padding
     base64UrlWithPadding = base64Url + "=" * (-len(base64Url) % 4)
-    return loads(b64decode(base64UrlWithPadding).decode("utf-8"))
+    return loads(urlsafe_b64decode(base64UrlWithPadding).decode("utf-8"))
