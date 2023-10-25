@@ -33,7 +33,7 @@ unasync-cli = "^0.0.9"
 python-semantic-release = "^7.34.6"
 
 [tool.poetry.group.dev.dependencies]
-pygithub = "^1.57"
+pygithub = ">=1.57,<3.0"
 
 [tool.semantic_release]
 version_variables = ["gotrue/__init__.py:__version__"]
