@@ -253,6 +253,32 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
             self._notify_all_subscribers("SIGNED_IN", response.session)
         return response
 
+    async def sign_in_with_sso(self, credentials: SignInWithSSOCredentials):
+        await self._remove_session()
+        provider_id = credentials.get("provider_id")
+        domain = credentials.get("domain")
+        options = credentials.get("options", {})
+        redirect_to = options.get("redirect_to")
+        captcha_token = options.get("captcha_token")
+        if domain:
+            return await self._request(
+                "POST",
+                "sso",
+                body={"domain": domain},
+                redirect_to=redirect_to,
+                xform=parse_auth_response,
+            )
+        if provider_id:
+            return await self._request(
+                "POST" "sso",
+                body={"provider_id": provider_id},
+                redirect_to=redirect_to,
+                xform=parse_auth_response,
+            )
+        raise AuthInvalidCredentialsError(
+            "You must provide either a domain or provider_id"
+        )
+
     async def sign_in_with_oauth(
         self,
         credentials: SignInWithOAuthCredentials,

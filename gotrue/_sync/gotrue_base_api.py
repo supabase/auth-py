@@ -112,6 +112,7 @@ class SyncGoTrueBaseAPI:
             )
             response.raise_for_status()
             result = response if no_resolve_json else response.json()
+            print(response)
             if xform:
                 return xform(result)
         except Exception as e:

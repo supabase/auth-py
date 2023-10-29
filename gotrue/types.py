@@ -323,6 +323,17 @@ class SignInWithOAuthCredentials(TypedDict):
     options: NotRequired[SignInWithOAuthCredentialsOptions]
 
 
+class SignInWithSSOCredentials(TypedDict):
+    provider_id: NotRequired[str]
+    domain: NotRequired[str]
+    options: NotRequired[SignInWithSSOOptions]
+
+
+class SignInWithSSOOptions(TypedDict):
+    redirect_to: NotRequired[str]
+    captcha_token: NotRequired[str]
+
+
 class VerifyOtpParamsOptions(TypedDict):
     redirect_to: NotRequired[str]
     captcha_token: NotRequired[str]
