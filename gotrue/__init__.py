@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-__version__ = "1.1.0"
+__version__ = "1.2.0"
 
 from ._async.gotrue_admin_api import AsyncGoTrueAdminAPI  # type: ignore # noqa: F401
 from ._async.gotrue_client import AsyncGoTrueClient  # type: ignore # noqa: F401
