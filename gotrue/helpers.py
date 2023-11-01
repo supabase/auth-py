@@ -3,6 +3,7 @@ from __future__ import annotations
 import base64
 import hashlib
 import secrets
+import string
 from base64 import b64decode
 from json import loads
 from typing import Any, Dict, Type, TypeVar, Union, cast
@@ -143,7 +144,7 @@ def generate_pkce_verifier(length=64):
 def generate_pkce_challenge(code_verifier):
     """Generate a code challenge from a PKCE verifier."""
     # Hash the verifier using SHA-256
-    verifier_bytes = verifier.encode("utf-8")
+    verifier_bytes = code_verifier.encode("utf-8")
     sha256_hash = hashlib.sha256(verifier_bytes).digest()
 
     return base64.urlsafe_b64encode(sha256_hash).rstrip(b"=").decode("utf-8")

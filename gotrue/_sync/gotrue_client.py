@@ -23,6 +23,8 @@ from ..errors import (
 )
 from ..helpers import (
     decode_jwt_payload,
+    generate_pkce_challenge,
+    generate_pkce_verifier,
     model_dump,
     model_dump_json,
     model_validate,
@@ -841,7 +843,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         provider: Provider,
         params: Dict[str, str],
     ) -> str:
-        if self.flow_type == "pkce":
+        if self._flow_type == "pkce":
             code_verifier = generate_pkce_verifier()
             code_challenge = generate_pkce_challenge(code_verifier)
             self._storage.set_item(f"{self._storage_key}-code-verifier", code_verifier)
