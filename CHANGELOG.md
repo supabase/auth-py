@@ -2,11 +2,123 @@
 
 
 
+## v1.3.0 (2023-11-01)
+
+### Chore
+
+* chore: update CI config with PAT (#361) ([`fbddd6d`](https://github.com/supabase-community/gotrue-py/commit/fbddd6dbbeb67895f6d804f6a9fd804247ccf0c4))
+
+* chore: update CI config with PAT ([`1fffc1f`](https://github.com/supabase-community/gotrue-py/commit/1fffc1fdebca39c35a9e69ea3d25240e13eb73b7))
+
+* chore(deps-dev): bump pygithub from 1.59.1 to 2.1.1 (#337) ([`160b671`](https://github.com/supabase-community/gotrue-py/commit/160b671de0ecab9d40a6caf4c6553d8808974b1f))
+
+* chore: update dependencies (#357) ([`a5d4a81`](https://github.com/supabase-community/gotrue-py/commit/a5d4a812d1cc4bb8624a33853088a1710b1a501d))
+
+* chore: update dependencies ([`dc67de1`](https://github.com/supabase-community/gotrue-py/commit/dc67de1b9e56fd7d07e98cba73969ec458ce4d3c))
+
+* chore(deps-dev): bump urllib3 from 2.0.4 to 2.0.7 (#350) ([`4ea73e4`](https://github.com/supabase-community/gotrue-py/commit/4ea73e42892f63a3065e3fc9cc059ae940cefdc1))
+
+* chore(deps-dev): bump pygithub from 1.59.1 to 2.1.1
+
+Bumps [pygithub](https://github.com/pygithub/pygithub) from 1.59.1 to 2.1.1.
+- [Release notes](https://github.com/pygithub/pygithub/releases)
+- [Changelog](https://github.com/PyGithub/PyGithub/blob/main/doc/changes.rst)
+- [Commits](https://github.com/pygithub/pygithub/compare/v1.59.1...v2.1.1)
+
+---
+updated-dependencies:
+- dependency-name: pygithub
+  dependency-type: direct:development
+  update-type: version-update:semver-major
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`264e773`](https://github.com/supabase-community/gotrue-py/commit/264e77314e5a50e0b325d906e11998be933339d2))
+
+* chore(deps): bump python-semantic-release/python-semantic-release from 8.0.8 to 8.3.0 (#354) ([`a385575`](https://github.com/supabase-community/gotrue-py/commit/a385575e960426090c5aa6b8395c43c706015f72))
+
+* chore(deps): bump python-semantic-release/python-semantic-release
+
+Bumps [python-semantic-release/python-semantic-release](https://github.com/python-semantic-release/python-semantic-release) from 8.0.8 to 8.3.0.
+- [Release notes](https://github.com/python-semantic-release/python-semantic-release/releases)
+- [Changelog](https://github.com/python-semantic-release/python-semantic-release/blob/master/CHANGELOG.md)
+- [Commits](https://github.com/python-semantic-release/python-semantic-release/compare/v8.0.8...v8.3.0)
+
+---
+updated-dependencies:
+- dependency-name: python-semantic-release/python-semantic-release
+  dependency-type: direct:production
+  update-type: version-update:semver-minor
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`3fbe6fc`](https://github.com/supabase-community/gotrue-py/commit/3fbe6fcbefde561833a45c07df565ad00c448669))
+
+* chore(deps-dev): bump urllib3 from 2.0.4 to 2.0.7
+
+Bumps [urllib3](https://github.com/urllib3/urllib3) from 2.0.4 to 2.0.7.
+- [Release notes](https://github.com/urllib3/urllib3/releases)
+- [Changelog](https://github.com/urllib3/urllib3/blob/main/CHANGES.rst)
+- [Commits](https://github.com/urllib3/urllib3/compare/2.0.4...2.0.7)
+
+---
+updated-dependencies:
+- dependency-name: urllib3
+  dependency-type: indirect
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`2400229`](https://github.com/supabase-community/gotrue-py/commit/240022942e7513b67e5db3e26e4f9a9be77f7f83))
+
+### Feature
+
+* feat: add OAuth PKCE (#331) ([`8fe633e`](https://github.com/supabase-community/gotrue-py/commit/8fe633e5cfff20d748e8eb5dfdb82c2cbd9390fd))
+
+* feat: allow dev to pass in code_verifier ([`f33bf3e`](https://github.com/supabase-community/gotrue-py/commit/f33bf3ed43b930f8ef43756693c3af514ddfaa62))
+
+### Fix
+
+* fix: add latest semantic-release dependency (#360) ([`81e63ea`](https://github.com/supabase-community/gotrue-py/commit/81e63ea56b2b0a611852609c03abee79e2bda6ef))
+
+* fix: add latest semantic-release dependency ([`251a4f4`](https://github.com/supabase-community/gotrue-py/commit/251a4f49f85a9489362833c02f932dad06f4d8ec))
+
+* fix: fix typo ([`72ee18d`](https://github.com/supabase-community/gotrue-py/commit/72ee18db05b8d1ea2b916a4bfea074459df9ecf0))
+
+* fix: update imports ([`66759da`](https://github.com/supabase-community/gotrue-py/commit/66759da715a1d1511cf2518b5a1119bdfa205088))
+
+* fix: patch imports ([`3b61aff`](https://github.com/supabase-community/gotrue-py/commit/3b61aff1574a6adbbc49cd9ef81e86ff3b35535d))
+
+* fix: run pre-commit ([`754c7ab`](https://github.com/supabase-community/gotrue-py/commit/754c7abe6f30d429d2606a24b3f63667fc96c530))
+
+### Unknown
+
+* patch: read from storage ([`364292c`](https://github.com/supabase-community/gotrue-py/commit/364292c0bb1c8362f6da4a198ea6a2fe2d98fd8e))
+
+* Merge branch &#39;j0/pkce&#39; of github.com:supabase-community/gotrue-py into j0/pkce ([`1c40ed7`](https://github.com/supabase-community/gotrue-py/commit/1c40ed76ddeb1916278bb7b4827d8631b7749066))
+
+* Merge branch &#39;main&#39; into j0/pkce ([`4c44238`](https://github.com/supabase-community/gotrue-py/commit/4c4423859375b2d796f6527689e1ebace36860e3))
+
+* Merge pull request #325 from supabase-community/dependabot/pip/main/httpx-0.25.0
+
+chore(deps): bump httpx from 0.24.1 to 0.25.0 ([`89019fb`](https://github.com/supabase-community/gotrue-py/commit/89019fb8ecf2d7b1609bf4d0114b552ec9062e6d))
+
+* Merge pull request #352 from fbeutel/urlsafe_b64decode
+
+Use urlsafe_b64decode to properly handle URL-encoded JWTs ([`7541ade`](https://github.com/supabase-community/gotrue-py/commit/7541ade5e09349b477d64afc5a80774fd4be0f07))
+
+* Use urlsafe_b64decode to properly handle URL-encoded JWTs ([`0034af1`](https://github.com/supabase-community/gotrue-py/commit/0034af1816b54c043079ef251df6ac2f76d5b41b))
+
+
 ## v1.2.0 (2023-10-05)
+
+### Chore
+
+* chore(release): bump version to v1.2.0 ([`8da1032`](https://github.com/supabase-community/gotrue-py/commit/8da10323c27adf9976c1eaab4ac82aca560ee578))
 
 ### Feature
 
 * feat: Add exception to handle API errors on signout ([`59b90d5`](https://github.com/supabase-community/gotrue-py/commit/59b90d545f59cb00b08b3a5c02edcd9a4a229538))
+
+### Fix
+
+* fix: add pkce ([`02f7c05`](https://github.com/supabase-community/gotrue-py/commit/02f7c05c24c656d079c4be149d98140411445c37))
 
 ### Unknown
 
@@ -23,6 +135,12 @@ Add correct variables for semantic release ([`5155312`](https://github.com/supab
 * Get pre-commit to ignore changelog ([`738602e`](https://github.com/supabase-community/gotrue-py/commit/738602ea6ba013ff9071115ee65842c26f4098cf))
 
 * Add correct variables for semantic release ([`80b0e30`](https://github.com/supabase-community/gotrue-py/commit/80b0e30cc5ddf510f2ea1891aab247bde7c01ccc))
+
+* Merge pull request #332 from supabase-community/sourcery/j0/pkce
+
+feat: add OAuth PKCE (Sourcery refactored) ([`b331d04`](https://github.com/supabase-community/gotrue-py/commit/b331d043ce056a9a09355e14989e036e86db9c59))
+
+* &#39;Refactored by Sourcery&#39; ([`af4f842`](https://github.com/supabase-community/gotrue-py/commit/af4f842d8fdf59fcef04b853660627b6b24a18a4))
 
 * Merge pull request #330 from supabase-community/dependabot/pip/cryptography-41.0.4
 
@@ -46,6 +164,22 @@ updated-dependencies:
 ...
 
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`4aa7224`](https://github.com/supabase-community/gotrue-py/commit/4aa7224e414df9c7ddc822d29d79e0db777dd7d3))
+
+* chore(deps): bump httpx from 0.24.1 to 0.25.0
+
+Bumps [httpx](https://github.com/encode/httpx) from 0.24.1 to 0.25.0.
+- [Release notes](https://github.com/encode/httpx/releases)
+- [Changelog](https://github.com/encode/httpx/blob/master/CHANGELOG.md)
+- [Commits](https://github.com/encode/httpx/compare/0.24.1...0.25.0)
+
+---
+updated-dependencies:
+- dependency-name: httpx
+  dependency-type: direct:production
+  update-type: version-update:semver-minor
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`a5b2f85`](https://github.com/supabase-community/gotrue-py/commit/a5b2f85c68a4157c41eec606fcd041f89969b08e))
 
 * chore(deps): bump python-semantic-release/python-semantic-release
 
