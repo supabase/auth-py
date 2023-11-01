@@ -5,6 +5,7 @@ import hashlib
 import secrets
 import string
 from base64 import b64decode
+from base64 import urlsafe_b64decode, b64decode
 from json import loads
 from typing import Any, Dict, Type, TypeVar, Union, cast
 
@@ -127,7 +128,7 @@ def decode_jwt_payload(token: str) -> Any:
     # Addding padding otherwise the following error happens:
     # binascii.Error: Incorrect padding
     base64UrlWithPadding = base64Url + "=" * (-len(base64Url) % 4)
-    return loads(b64decode(base64UrlWithPadding).decode("utf-8"))
+    return loads(urlsafe_b64decode(base64UrlWithPadding).decode("utf-8"))
 
 
 def generate_pkce_verifier(length=64):
@@ -148,3 +149,4 @@ def generate_pkce_challenge(code_verifier):
     sha256_hash = hashlib.sha256(verifier_bytes).digest()
 
     return base64.urlsafe_b64encode(sha256_hash).rstrip(b"=").decode("utf-8")
+

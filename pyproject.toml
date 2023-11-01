@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gotrue"
-version = "1.1.1"
+version = "1.2.0"
 description = "Python Client Library for GoTrue"
 authors = ["Joel Lee <joel@joellee.org>"]
 homepage = "https://github.com/supabase-community/gotrue-py"
@@ -16,7 +16,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.8"
-httpx = ">=0.23,<0.25"
+httpx = ">=0.23,<0.26"
 pydantic = ">=1.10,<3"
 
 [tool.poetry.dev-dependencies]
@@ -33,13 +33,13 @@ unasync-cli = "^0.0.9"
 python-semantic-release = "^7.34.6"
 
 [tool.poetry.group.dev.dependencies]
-pygithub = "^1.57"
+pygithub = ">=1.57,<3.0"
 
 [tool.semantic_release]
-version_variable = "gotrue/__init__.py:__version__"
+version_variables = ["gotrue/__init__.py:__version__"]
 version_toml = ["pyproject.toml:tool.poetry.version"]
 major_on_zero = false
-commit_subject = "chore(release): bump version to v{version}"
+commit_message = "chore(release): bump version to v{version}"
 build_command = "curl -sSL https://install.python-poetry.org | python - && export PATH=\"/github/home/.local/bin:$PATH\" && poetry install && poetry build"
 upload_to_vcs_release = true
 branch = "main"
