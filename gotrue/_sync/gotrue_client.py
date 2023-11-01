@@ -82,7 +82,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         persist_session: bool = True,
         storage: Union[SyncSupportedStorage, None] = None,
         http_client: Union[SyncClient, None] = None,
-        flow_type: AuthFlowType = "pkce",
+        flow_type: AuthFlowType = "implicit",
     ) -> None:
         SyncGoTrueBaseAPI.__init__(
             self,
@@ -868,7 +868,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         return decode_jwt_payload(jwt)
 
     def exchange_code_for_session(self, params: CodeExchangeParams):
-        code_verifier = params.get("code_verifier") or get_item(
+        code_verifier = params.get("code_verifier") or self._storage.get_item(
             f"{self._storage_key}-code-verifier"
         )
         response = self._request(

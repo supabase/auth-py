@@ -870,7 +870,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         return decode_jwt_payload(jwt)
 
     def exchange_code_for_session(self, params: CodeExchangeParams):
-        code_verifier = params.get("code_verifier") or get_item(
+        code_verifier = params.get("code_verifier") or self._storage.get_item(
             f"{self._storage_key}-code-verifier"
         )
         response = self._request(
