@@ -873,7 +873,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
             "POST",
             "token?grant_type=pkce",
             body={
-                "auth_code": email,
+                "auth_code": auth_code,
                 "code_verifier": code_verifier,
             },
             redirect_to=redirect_to,
