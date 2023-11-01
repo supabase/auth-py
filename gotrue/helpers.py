@@ -4,8 +4,7 @@ import base64
 import hashlib
 import secrets
 import string
-from base64 import b64decode
-from base64 import urlsafe_b64decode, b64decode
+from base64 import urlsafe_b64decode
 from json import loads
 from typing import Any, Dict, Type, TypeVar, Union, cast
 
@@ -149,4 +148,3 @@ def generate_pkce_challenge(code_verifier):
     sha256_hash = hashlib.sha256(verifier_bytes).digest()
 
     return base64.urlsafe_b64encode(sha256_hash).rstrip(b"=").decode("utf-8")
-
