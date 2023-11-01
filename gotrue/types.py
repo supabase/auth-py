@@ -420,6 +420,21 @@ class MFAUnenrollParams(TypedDict):
     """
 
 
+class CodeExchangeParams(TypedDict):
+    code_verifier: str
+    """
+    Randomly generated string
+    """
+    auth_code: str
+    """
+    Code returned after completing one of the authorization flows
+    """
+    redirect_to: str
+    """
+    The URL to route to after a session is successfully obtained
+    """
+
+
 class MFAVerifyParams(TypedDict):
     factor_id: str
     """
