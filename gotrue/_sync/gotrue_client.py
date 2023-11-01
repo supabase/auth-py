@@ -25,6 +25,8 @@ from ..errors import (
 )
 from ..helpers import (
     decode_jwt_payload,
+    generate_pkce_challenge,
+    generate_pkce_verifier,
     model_dump,
     model_dump_json,
     model_validate,
@@ -36,6 +38,7 @@ from ..timer import Timer
 from ..types import (
     AuthChangeEvent,
     AuthenticatorAssuranceLevels,
+    AuthFlowType,
     AuthMFAChallengeResponse,
     AuthMFAEnrollResponse,
     AuthMFAGetAuthenticatorAssuranceLevelResponse,
@@ -79,6 +82,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         persist_session: bool = True,
         storage: Union[SyncSupportedStorage, None] = None,
         http_client: Union[SyncClient, None] = None,
+        flow_type: AuthFlowType = "implicit",
     ) -> None:
         SyncGoTrueBaseAPI.__init__(
             self,
@@ -94,6 +98,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         self._refresh_token_timer: Union[Timer, None] = None
         self._network_retries = 0
         self._state_change_emitters: Dict[str, Subscription] = {}
+        self._flow_type = flow_type
 
         self.admin = SyncGoTrueAdminAPI(
             url=self._url,
@@ -254,6 +259,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         Log in an existing user via a third-party provider.
         """
         self._remove_session()
+
         provider = credentials.get("provider")
         options = credentials.get("options", {})
         redirect_to = options.get("redirect_to")
@@ -841,6 +847,16 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         provider: Provider,
         params: Dict[str, str],
     ) -> str:
+        if self._flow_type == "pkce":
+            code_verifier = generate_pkce_verifier()
+            code_challenge = generate_pkce_challenge(code_verifier)
+            self._storage.set_item(f"{self._storage_key}-code-verifier", code_verifier)
+            code_challenge_method = (
+                "plain" if code_verifier == code_challenge else "s256"
+            )
+            params["code_challenge"] = code_challenge
+            params["code_challenge_method"] = code_challenge_method
+
         params["provider"] = provider
         query = urlencode(params)
         return f"{self._url}/authorize?{query}"
@@ -850,3 +866,23 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         Decodes a JWT (without performing any validation).
         """
         return decode_jwt_payload(jwt)
+
+    def exchange_code_for_session(self, params: CodeExchangeParams):
+        code_verifier = params.get("code_verifier") or self._storage.get_item(
+            f"{self._storage_key}-code-verifier"
+        )
+        response = self._request(
+            "POST",
+            "token?grant_type=pkce",
+            body={
+                "auth_code": params.get("auth_code"),
+                "code_verifier": code_verifier,
+            },
+            redirect_to=params.get("redirect_to"),
+            xform=parse_auth_response,
+        )
+        self._storage.remove_item(f"{self._storage_key}-code-verifier")
+        if response.session:
+            self._save_session(response.session)
+            self._notify_all_subscribers("SIGNED_IN", response.session)
+        return response
