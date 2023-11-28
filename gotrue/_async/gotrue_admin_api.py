@@ -147,14 +147,15 @@ class AsyncGoTrueAdminAPI(AsyncGoTrueBaseAPI):
             xform=parse_user_response,
         )
 
-    async def delete_user(self, id: str) -> None:
+    async def delete_user(self, id: str, should_soft_delete: bool = False) -> None:
         """
         Delete a user. Requires a `service_role` key.
 
         This function should only be called on a server.
         Never expose your `service_role` key in the browser.
         """
-        return await self._request("DELETE", f"admin/users/{id}")
+        body = {"should_soft_delete": should_soft_delete}
+        return await self._request("DELETE", f"admin/users/{id}", body=body)
 
     async def _list_factors(
         self,
