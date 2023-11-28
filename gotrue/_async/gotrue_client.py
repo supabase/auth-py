@@ -500,7 +500,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         await self._remove_session()
         self._notify_all_subscribers("SIGNED_OUT", None)
 
-    async def on_auth_state_change(
+    def on_auth_state_change(
         self,
         callback: Callable[[AuthChangeEvent, Union[Session, None]], None],
     ) -> Subscription:
