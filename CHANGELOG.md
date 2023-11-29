@@ -2,9 +2,25 @@
 
 
 
+## v1.3.1 (2023-11-29)
+
+### Fix
+
+* fix: remove unnecessary async to on_auth_state_change (#374) ([`574c739`](https://github.com/supabase-community/gotrue-py/commit/574c739500dd304aa6d09c69122373b6e4a5be01))
+
+* fix: remove unnecessary async to on_auth_state_change
+
+Somehow this got reverted on a refactor (https://github.com/supabase-community/gotrue-py/commit/e7ebc64112d970673265c7b314a1e8820fc0f7e1)
+
+This causes problems when using the supabase client, since it&#39;s not being awaited:
+https://github.com/supabase-community/supabase-py/blob/main/supabase/_async/client.py#L90 ([`7548d02`](https://github.com/supabase-community/gotrue-py/commit/7548d0290199bdb1053564b953932c53aabdea29))
+
+
 ## v1.3.0 (2023-11-01)
 
 ### Chore
+
+* chore(release): bump version to v1.3.0 ([`abe3e2a`](https://github.com/supabase-community/gotrue-py/commit/abe3e2a871d97df4a91f2c4ae3a3c05e56e6e083))
 
 * chore: update CI config with PAT (#361) ([`fbddd6d`](https://github.com/supabase-community/gotrue-py/commit/fbddd6dbbeb67895f6d804f6a9fd804247ccf0c4))
 
