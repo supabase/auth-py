@@ -147,14 +147,15 @@ class SyncGoTrueAdminAPI(SyncGoTrueBaseAPI):
             xform=parse_user_response,
         )
 
-    def delete_user(self, id: str) -> None:
+    def delete_user(self, id: str, should_soft_delete: bool = False) -> None:
         """
         Delete a user. Requires a `service_role` key.
 
         This function should only be called on a server.
         Never expose your `service_role` key in the browser.
         """
-        return self._request("DELETE", f"admin/users/{id}")
+        body = {"should_soft_delete": should_soft_delete}
+        return self._request("DELETE", f"admin/users/{id}", body=body)
 
     def _list_factors(
         self,

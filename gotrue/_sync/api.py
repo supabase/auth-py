@@ -529,7 +529,9 @@ class SyncGoTrueAPI:
         response = self.http_client.put(url, json=data, headers=headers)
         return User.parse_response(response)
 
-    def delete_user(self, *, uid: str, jwt: str) -> None:
+    def delete_user(
+        self, *, uid: str, jwt: str, should_soft_delete: bool = False
+    ) -> None:
         """Delete a user. Requires a `service_role` key.
 
         This function should only be called on a server.
@@ -541,6 +543,8 @@ class SyncGoTrueAPI:
             The user uid you want to remove.
         jwt : str
             A valid, logged-in JWT.
+        should_soft_delete : bool
+            If true, then the user will be soft-deleted from the auth schema.
 
         Returns
         -------
@@ -554,7 +558,10 @@ class SyncGoTrueAPI:
         """
         headers = self._create_request_headers(jwt=jwt)
         url = f"{self.url}/admin/users/{uid}"
-        response = self.http_client.delete(url, headers=headers)
+        body = {
+            "should_soft_delete": should_soft_delete,
+        }
+        response = self.http_client.delete(url, json=body, headers=headers)
         return check_response(response)
 
     def refresh_access_token(self, *, refresh_token: str) -> Session:
