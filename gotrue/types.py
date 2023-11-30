@@ -673,7 +673,7 @@ for model in [
 ]:
     try:
         # pydantic > 2
-        model.rebuild_model()
+        model.model_rebuild()
     except AttributeError:
         # pydantic < 2
         model.update_forward_refs()
