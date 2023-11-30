@@ -2,7 +2,48 @@
 
 
 
+## v2.0.0 (2023-11-30)
+
+### Breaking
+
+* feat: exchange code for session now fully async
+
+BREAKING CHANGE: change async method on_auth_state_change to sync only. ([`a249ba0`](https://github.com/supabase-community/gotrue-py/commit/a249ba03cc7d99b2d1805480ca89ee457ad865f1))
+
+### Chore
+
+* chore(deps-dev): bump cryptography from 41.0.5 to 41.0.6 (#377) ([`e6b3d46`](https://github.com/supabase-community/gotrue-py/commit/e6b3d46fba5f24631fdd5fdb1b8d1688a1087053))
+
+### Feature
+
+* feat: exchange code for session now fully async (#378) ([`c294568`](https://github.com/supabase-community/gotrue-py/commit/c2945684a8ad4d8710ca72428b4ec16aab87bad1))
+
+### Unknown
+
+* bug fix: use pydantic v2 model.model_rebuild (#373) ([`fd94314`](https://github.com/supabase-community/gotrue-py/commit/fd94314c4412d49610acf8d3166abe660f6a4ee4))
+
+* add soft delete support to &#34;delete user&#34; (#376) ([`08bada3`](https://github.com/supabase-community/gotrue-py/commit/08bada3692f230cf1bd793a7eb60a12d62fec0c6))
+
+
 ## v1.3.1 (2023-11-29)
+
+### Chore
+
+* chore(release): bump version to v1.3.1 ([`ede20fe`](https://github.com/supabase-community/gotrue-py/commit/ede20fea097fd900df2efc6231c14ea86f486087))
+
+* chore(deps-dev): bump cryptography from 41.0.5 to 41.0.6
+
+Bumps [cryptography](https://github.com/pyca/cryptography) from 41.0.5 to 41.0.6.
+- [Changelog](https://github.com/pyca/cryptography/blob/main/CHANGELOG.rst)
+- [Commits](https://github.com/pyca/cryptography/compare/41.0.5...41.0.6)
+
+---
+updated-dependencies:
+- dependency-name: cryptography
+  dependency-type: indirect
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`424a5df`](https://github.com/supabase-community/gotrue-py/commit/424a5df56f91ac30fab056bd9128d4dac004c565))
 
 ### Fix
 
@@ -14,6 +55,12 @@ Somehow this got reverted on a refactor (https://github.com/supabase-community/g
 
 This causes problems when using the supabase client, since it&#39;s not being awaited:
 https://github.com/supabase-community/supabase-py/blob/main/supabase/_async/client.py#L90 ([`7548d02`](https://github.com/supabase-community/gotrue-py/commit/7548d0290199bdb1053564b953932c53aabdea29))
+
+### Unknown
+
+* add soft delete support to &#34;delete user&#34; ([`5471167`](https://github.com/supabase-community/gotrue-py/commit/54711675533ce58fdf3017f250e92a88db719aad))
+
+* bug fix: use pydantic v2 model.model_rebuild not rebuild_model ([`9d723df`](https://github.com/supabase-community/gotrue-py/commit/9d723df7637fb501f83aad3562a49e2ed24bb9a2))
 
 
 ## v1.3.0 (2023-11-01)
