@@ -46,6 +46,7 @@ from ..types import (
     AuthMFAUnenrollResponse,
     AuthMFAVerifyResponse,
     AuthResponse,
+    CodeExchangeParams,
     DecodedJWTDict,
     MFAChallengeAndVerifyParams,
     MFAChallengeParams,
@@ -269,7 +270,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
             params["redirect_to"] = redirect_to
         if scopes:
             params["scopes"] = scopes
-        url = self._get_url_for_provider(provider, params)
+        url = await self._get_url_for_provider(provider, params)
         return OAuthResponse(provider=provider, url=url)
 
     async def sign_in_with_otp(
@@ -844,7 +845,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         params = parse_qs(result.query)
         return "access_token" in params or "error_description" in params
 
-    def _get_url_for_provider(
+    async def _get_url_for_provider(
         self,
         provider: Provider,
         params: Dict[str, str],
@@ -852,7 +853,9 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         if self._flow_type == "pkce":
             code_verifier = generate_pkce_verifier()
             code_challenge = generate_pkce_challenge(code_verifier)
-            self._storage.set_item(f"{self._storage_key}-code-verifier", code_verifier)
+            await self._storage.set_item(
+                f"{self._storage_key}-code-verifier", code_verifier
+            )
             code_challenge_method = (
                 "plain" if code_verifier == code_challenge else "s256"
             )
@@ -869,11 +872,11 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         """
         return decode_jwt_payload(jwt)
 
-    def exchange_code_for_session(self, params: CodeExchangeParams):
-        code_verifier = params.get("code_verifier") or self._storage.get_item(
+    async def exchange_code_for_session(self, params: CodeExchangeParams):
+        code_verifier = params.get("code_verifier") or await self._storage.get_item(
             f"{self._storage_key}-code-verifier"
         )
-        response = self._request(
+        response = await self._request(
             "POST",
             "token?grant_type=pkce",
             body={
@@ -883,8 +886,8 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
             redirect_to=params.get("redirect_to"),
             xform=parse_auth_response,
         )
-        self._storage.remove_item(f"{self._storage_key}-code-verifier")
+        await self._storage.remove_item(f"{self._storage_key}-code-verifier")
         if response.session:
-            self._save_session(response.session)
+            await self._save_session(response.session)
             self._notify_all_subscribers("SIGNED_IN", response.session)
         return response
