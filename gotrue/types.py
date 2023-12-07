@@ -650,6 +650,13 @@ class DecodedJWTDict(TypedDict):
     amr: NotRequired[Union[List[AMREntry], None]]
 
 
+SignOutScope = Literal["global", "local", "others"]
+
+
+class SignOutOptions(TypedDict):
+    scope: NotRequired[SignOutScope]
+
+
 for model in [
     AMREntry,
     AuthResponse,
