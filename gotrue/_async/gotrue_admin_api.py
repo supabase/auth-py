@@ -46,7 +46,8 @@ class AsyncGoTrueAdminAPI(AsyncGoTrueBaseAPI):
         """
         return await self._request(
             "POST",
-            f"logout?scope={scope}",
+            "logout",
+            query={"scope": scope},
             jwt=jwt,
             no_resolve_json=True,
         )
