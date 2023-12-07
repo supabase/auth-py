@@ -2,6 +2,19 @@
 
 
 
+## v2.1.0 (2023-12-07)
+
+### Feature
+
+* feat: add sign_out() scope option (#381) ([`4ec8842`](https://github.com/supabase-community/gotrue-py/commit/4ec884227c57da32774dc107a2469d36befe4e8d))
+
+* feat: add sign_out() scope option ([`3818dba`](https://github.com/supabase-community/gotrue-py/commit/3818dba635705d747b7da84fe8ab4dc2c5dcc9ab))
+
+### Unknown
+
+* Update to use query property of the request method ([`34a3ddf`](https://github.com/supabase-community/gotrue-py/commit/34a3ddfe8b9343c15b6959338a353aeb5e530b70))
+
+
 ## v2.0.0 (2023-11-30)
 
 ### Breaking
@@ -11,6 +24,8 @@
 BREAKING CHANGE: change async method on_auth_state_change to sync only. ([`a249ba0`](https://github.com/supabase-community/gotrue-py/commit/a249ba03cc7d99b2d1805480ca89ee457ad865f1))
 
 ### Chore
+
+* chore(release): bump version to v2.0.0 ([`1440dd6`](https://github.com/supabase-community/gotrue-py/commit/1440dd6099cb5c7f8220223ea3a0e4d966e8ce60))
 
 * chore(deps-dev): bump cryptography from 41.0.5 to 41.0.6 (#377) ([`e6b3d46`](https://github.com/supabase-community/gotrue-py/commit/e6b3d46fba5f24631fdd5fdb1b8d1688a1087053))
 
