@@ -14,6 +14,7 @@ from ..types import (
     GenerateLinkParams,
     GenerateLinkResponse,
     Options,
+    SignOutScope,
     User,
     UserResponse,
 )
@@ -39,13 +40,13 @@ class SyncGoTrueAdminAPI(SyncGoTrueBaseAPI):
         self.mfa.list_factors = self._list_factors
         self.mfa.delete_factor = self._delete_factor
 
-    def sign_out(self, jwt: str) -> None:
+    def sign_out(self, jwt: str, scope: SignOutScope = "global") -> None:
         """
         Removes a logged-in session.
         """
         return self._request(
             "POST",
-            "logout",
+            f"logout?scope={scope}",
             jwt=jwt,
             no_resolve_json=True,
         )

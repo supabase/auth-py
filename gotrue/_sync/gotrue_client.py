@@ -60,6 +60,7 @@ from ..types import (
     SignInWithOAuthCredentials,
     SignInWithPasswordCredentials,
     SignInWithPasswordlessCredentials,
+    SignOutOptions,
     SignUpWithPasswordCredentials,
     Subscription,
     UserAttributes,
@@ -478,7 +479,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         session = self._call_refresh_token(refresh_token)
         return AuthResponse(session=session, user=session.user)
 
-    def sign_out(self) -> None:
+    def sign_out(self, options: SignOutOptions = {"scope": "global"}) -> None:
         """
         Inside a browser context, `sign_out` will remove the logged in user from the
         browser session and log them out - removing all items from localstorage and
@@ -494,10 +495,11 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
             session = self.get_session()
             access_token = session.access_token if session else None
             if access_token:
-                self.admin.sign_out(access_token)
+                self.admin.sign_out(access_token, options["scope"])
 
-        self._remove_session()
-        self._notify_all_subscribers("SIGNED_OUT", None)
+            if options["scope"] != "others":
+                self._remove_session()
+                self._notify_all_subscribers("SIGNED_OUT", None)
 
     def on_auth_state_change(
         self,

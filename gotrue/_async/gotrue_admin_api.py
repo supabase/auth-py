@@ -14,6 +14,7 @@ from ..types import (
     GenerateLinkParams,
     GenerateLinkResponse,
     Options,
+    SignOutScope,
     User,
     UserResponse,
 )
@@ -39,13 +40,13 @@ class AsyncGoTrueAdminAPI(AsyncGoTrueBaseAPI):
         self.mfa.list_factors = self._list_factors
         self.mfa.delete_factor = self._delete_factor
 
-    async def sign_out(self, jwt: str) -> None:
+    async def sign_out(self, jwt: str, scope: SignOutScope = "global") -> None:
         """
         Removes a logged-in session.
         """
         return await self._request(
             "POST",
-            "logout",
+            f"logout?scope={scope}",
             jwt=jwt,
             no_resolve_json=True,
         )
