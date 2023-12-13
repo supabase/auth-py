@@ -1,4 +1,4 @@
-# gotrue-py
+# Auth-py
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?label=license)](https://opensource.org/licenses/MIT)
 [![CI](https://github.com/supabase-community/gotrue-py/actions/workflows/ci.yml/badge.svg)](https://github.com/supabase-community/gotrue-py/actions/workflows/ci.yml)
@@ -12,7 +12,7 @@
 [![Github Watchers](https://img.shields.io/github/watchers/supabase-community/gotrue-py?style=flat&logo=github)](https://github.com/supabase-community/gotrue-py)
 [![GitHub contributors](https://img.shields.io/github/contributors/supabase-community/gotrue-py)](https://github.com/supabase-community/gotrue-py/graphs/contributors)
 
-This is a Python port of the [supabase js gotrue client](https://github.com/supabase/gotrue-js). The current state is that there is a features parity but with small differences that are mentioned in the section **Differences to the JS client**.
+This is a Python port of the [supabase js gotrue client](https://github.com/supabase/gotrue-js). The current state is that there is a features parity but with small differences that are mentioned in the section **Differences to the JS client**. As of December 14th, we renamed to repo to `auth-py` to mirror the changes in the JavaScript library.
 
 ## Installation
 
@@ -95,4 +95,4 @@ assert client.session() is not None
 
 ## Contributions
 
-We would be immensely grateful for any contributions to this project. In particular are the following items:
+We would be immensely grateful for any contributions to this project. 
