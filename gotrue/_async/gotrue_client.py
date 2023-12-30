@@ -274,6 +274,25 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         url = await self._get_url_for_provider(provider, params)
         return OAuthResponse(provider=provider, url=url)
 
+    async def link_identity(credentials):
+        redirect_to = options.get("redirect_to")
+        scopes = options.get("scopes")
+        params = options.get("query_params", {})
+        if redirect_to:
+            params["redirect_to"] = redirect_to
+        if scopes:
+            params["scopes"] = scopes
+        params["skip_browser_redirect"] = True
+
+        url = await self._get_url_for_provider(provider, params)
+        return OAuthResponse(provider=provider, url=url)
+
+    async def unlink_identity(identity):
+        return await self._request(
+            "POST",
+            f"/user/identities/{identity.identity_id}",
+        )
+
     async def sign_in_with_otp(
         self,
         credentials: SignInWithPasswordlessCredentials,
