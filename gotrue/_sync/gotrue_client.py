@@ -274,6 +274,25 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         url = self._get_url_for_provider(provider, params)
         return OAuthResponse(provider=provider, url=url)
 
+    def link_identity(credentials):
+        redirect_to = options.get("redirect_to")
+        scopes = options.get("scopes")
+        params = options.get("query_params", {})
+        if redirect_to:
+            params["redirect_to"] = redirect_to
+        if scopes:
+            params["scopes"] = scopes
+        params["skip_browser_redirect"] = True
+
+        url = self._get_url_for_provider(provider, params)
+        return OAuthResponse(provider=provider, url=url)
+
+    def unlink_identity(identity):
+        return self._request(
+            "POST",
+            f"/user/identities/{identity.identity_id}",
+        )
+
     def sign_in_with_otp(
         self,
         credentials: SignInWithPasswordlessCredentials,
