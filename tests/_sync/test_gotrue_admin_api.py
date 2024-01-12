@@ -270,4 +270,4 @@ def test_verify_otp_with_invalid_phone_number():
         )
         assert False
     except AuthError as e:
-        assert e.message == "Invalid phone number format"
+        assert e.message == "Invalid phone number format (E.164 required)"
