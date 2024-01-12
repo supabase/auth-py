@@ -274,7 +274,9 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         url = await self._get_url_for_provider(provider, params)
         return OAuthResponse(provider=provider, url=url)
 
-    async def link_identity(credentials):
+    async def link_identity(self, credentials):
+        provider = credentials.get("provider")
+        options = credentials.get("options", {})
         redirect_to = options.get("redirect_to")
         scopes = options.get("scopes")
         params = options.get("query_params", {})
@@ -287,7 +289,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         url = await self._get_url_for_provider(provider, params)
         return OAuthResponse(provider=provider, url=url)
 
-    async def unlink_identity(identity):
+    async def unlink_identity(self, identity):
         return await self._request(
             "POST",
             f"/user/identities/{identity.identity_id}",
