@@ -2,9 +2,34 @@
 
 
 
+## v2.3.0 (2024-01-12)
+
+### Chore
+
+* chore: update to pull auth instead of gotrue ([`38977a6`](https://github.com/supabase-community/auth-py/commit/38977a6596f426805cf5fb106e7fdbbae311394c))
+
+* chore: pull latest postgres image instead ([`e1877b2`](https://github.com/supabase-community/auth-py/commit/e1877b230f960d5eda7b1ad6b11b8a87a7513487))
+
+### Feature
+
+* feat: pin version ([`5a90fff`](https://github.com/supabase-community/auth-py/commit/5a90fff802ff2c4860694d472243d69e8bedce1e))
+
+### Fix
+
+* fix: fix build by updating error message in test (#404) ([`ac94c60`](https://github.com/supabase-community/auth-py/commit/ac94c60529984d7cf82b422f0c65bc3b01e43732))
+
+* fix: update error message in tests ([`6718dcd`](https://github.com/supabase-community/auth-py/commit/6718dcd19f3707647077ccd5cfa413bcbe718fd4))
+
+### Unknown
+
+* Update MAINTAINERS.md ([`5681011`](https://github.com/supabase-community/auth-py/commit/568101128a27280600da86780590fce62025410e))
+
+
 ## v2.2.0 (2023-12-13)
 
 ### Chore
+
+* chore(release): bump version to v2.2.0 ([`6db7cc2`](https://github.com/supabase-community/auth-py/commit/6db7cc25cbca86e9908d2f268a46fd5f066aa5e3))
 
 * chore(deps): bump actions/setup-python from 4 to 5 (#382) ([`55c04e2`](https://github.com/supabase-community/auth-py/commit/55c04e2121948b26ecd6af63c07e643892f05b45))
 
