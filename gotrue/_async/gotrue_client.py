@@ -289,6 +289,12 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         url = await self._get_url_for_provider(provider, params)
         return OAuthResponse(provider=provider, url=url)
 
+    async def get_user_identities(self):
+        response = self.get_user()
+        user = response.get("user")
+        identities = user.get("identities", []) if user else []
+        return {"data": {"identities": identities}}
+
     async def unlink_identity(self, identity):
         return await self._request(
             "POST",

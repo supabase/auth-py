@@ -289,6 +289,12 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         url = self._get_url_for_provider(provider, params)
         return OAuthResponse(provider=provider, url=url)
 
+    def get_user_identities(self):
+        response = self.get_user()
+        user = response.get("user")
+        identities = user.get("identities", []) if user else []
+        return {"data": {"identities": identities}}
+
     def unlink_identity(self, identity):
         return self._request(
             "POST",
