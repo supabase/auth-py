@@ -326,6 +326,7 @@ class SignInWithOAuthCredentials(TypedDict):
 class SignInWithSSOCredentials(TypedDict):
     provider_id: NotRequired[str]
     domain: NotRequired[str]
+    skip_http_redirect: NotRequired[str]
     options: NotRequired[SignInWithSSOOptions]
 
 

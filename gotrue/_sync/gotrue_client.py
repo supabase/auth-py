@@ -260,6 +260,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         options = credentials.get("options", {})
         redirect_to = options.get("redirect_to")
         captcha_token = options.get("captcha_token")
+        skip_http_redirects = options.get("skip_http_redirects", True)
         if domain:
             return self._request(
                 "POST",
@@ -271,7 +272,10 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         if provider_id:
             return self._request(
                 "POST" "sso",
-                body={"provider_id": provider_id},
+                body={
+                    "provider_id": provider_id,
+                    "skip_http_redirect": skip_http_redirects,
+                },
                 redirect_to=redirect_to,
                 xform=parse_auth_response,
             )
