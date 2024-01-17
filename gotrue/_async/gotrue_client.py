@@ -254,6 +254,19 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         return response
 
     async def sign_in_with_sso(self, credentials: SignInWithSSOCredentials):
+        """
+        Attempts a single-sign on using an enterprise Identity Provider. A
+        successful SSO attempt will redirect the current page to the identity
+        provider authorization page. The redirect URL is implementation and SSO
+        protocol specific.
+
+        You can use it by providing a SSO domain. Typically you can extract this
+        domain by asking users for their email address. If this domain is
+        registered on the Auth instance the redirect will use that organization's
+        currently active SSO Identity Provider for the login.
+        If you have built an organization-specific login page, you can use the
+        organization's SSO Identity Provider UUID directly instead.
+        """
         await self._remove_session()
         provider_id = credentials.get("provider_id")
         domain = credentials.get("domain")
