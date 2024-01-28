@@ -98,6 +98,10 @@ class SSOResponse(BaseModel):
     url: str
 
 
+class IdentitiesResponse(BaseModel):
+    identities: List[UserIdentity]
+
+
 class UserResponse(BaseModel):
     user: User
 

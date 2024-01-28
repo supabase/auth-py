@@ -49,6 +49,7 @@ from ..types import (
     AuthResponse,
     CodeExchangeParams,
     DecodedJWTDict,
+    IdentitiesResponse,
     MFAChallengeAndVerifyParams,
     MFAChallengeParams,
     MFAEnrollParams,
@@ -331,6 +332,35 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
             params["scopes"] = scopes
         url = self._get_url_for_provider(provider, params)
         return OAuthResponse(provider=provider, url=url)
+
+    def link_identity(self, credentials):
+        provider = credentials.get("provider")
+        options = credentials.get("options", {})
+        redirect_to = options.get("redirect_to")
+        scopes = options.get("scopes")
+        params = options.get("query_params", {})
+        if redirect_to:
+            params["redirect_to"] = redirect_to
+        if scopes:
+            params["scopes"] = scopes
+        params["skip_browser_redirect"] = True
+
+        url = self._get_url_for_provider(provider, params)
+        return OAuthResponse(provider=provider, url=url)
+
+    def get_user_identities(self):
+        response = self.get_user()
+        return (
+            IdentitiesResponse(identities=response.user.identities)
+            if response.user
+            else AuthSessionMissingError()
+        )
+
+    def unlink_identity(self, identity):
+        return self._request(
+            "POST",
+            f"/user/identities/{identity.id}",
+        )
 
     def sign_in_with_otp(
         self,
