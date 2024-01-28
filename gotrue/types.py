@@ -94,6 +94,10 @@ class OAuthResponse(BaseModel):
     url: str
 
 
+class SSOResponse(BaseModel):
+    url: str
+
+
 class UserResponse(BaseModel):
     user: User
 

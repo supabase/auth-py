@@ -31,6 +31,7 @@ from ..helpers import (
     model_dump_json,
     model_validate,
     parse_auth_response,
+    parse_sso_response,
     parse_user_response,
 )
 from ..http_clients import AsyncClient
@@ -267,30 +268,38 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         If you have built an organization-specific login page, you can use the
         organization's SSO Identity Provider UUID directly instead.
         """
-        await self._remove_session()
+        self._remove_session()
         provider_id = credentials.get("provider_id")
         domain = credentials.get("domain")
         options = credentials.get("options", {})
         redirect_to = options.get("redirect_to")
         captcha_token = options.get("captcha_token")
-        skip_http_redirects = options.get("skip_http_redirects", True)
+        # HTTPX currently does not follow redirects: https://www.python-httpx.org/compatibility/
+        # Additionally, unlike the JS client, Python is a server side language and it's not possible
+        # to automatically redirect in browser for hte user
+        skip_http_redirect = options.get("skip_http_redirect", True)
+
         if domain:
-            return await self._request(
+            return self._request(
                 "POST",
                 "sso",
-                body={"domain": domain},
-                redirect_to=redirect_to,
-                xform=parse_auth_response,
-            )
-        if provider_id:
-            return await self._request(
-                "POST" "sso",
                 body={
-                    "provider_id": provider_id,
-                    "skip_http_redirect": skip_http_redirects,
+                    "domain": domain,
+                    "skip_http_redirect": skip_http_redirect,
                 },
                 redirect_to=redirect_to,
-                xform=parse_auth_response,
+                xform=parse_sso_response,
+            )
+        if provider_id:
+            return self._request(
+                "POST",
+                "sso",
+                body={
+                    "provider_id": provider_id,
+                    "skip_http_redirect": skip_http_redirect,
+                },
+                redirect_to=redirect_to,
+                xform=parse_sso_response,
             )
         raise AuthInvalidCredentialsError(
             "You must provide either a domain or provider_id"

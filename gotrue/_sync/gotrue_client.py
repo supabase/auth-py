@@ -31,6 +31,7 @@ from ..helpers import (
     model_dump_json,
     model_validate,
     parse_auth_response,
+    parse_sso_response,
     parse_user_response,
 )
 from ..http_clients import SyncClient
@@ -254,30 +255,51 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         return response
 
     def sign_in_with_sso(self, credentials: SignInWithSSOCredentials):
+        """
+        Attempts a single-sign on using an enterprise Identity Provider. A
+        successful SSO attempt will redirect the current page to the identity
+        provider authorization page. The redirect URL is implementation and SSO
+        protocol specific.
+
+        You can use it by providing a SSO domain. Typically you can extract this
+        domain by asking users for their email address. If this domain is
+        registered on the Auth instance the redirect will use that organization's
+        currently active SSO Identity Provider for the login.
+        If you have built an organization-specific login page, you can use the
+        organization's SSO Identity Provider UUID directly instead.
+        """
         self._remove_session()
         provider_id = credentials.get("provider_id")
         domain = credentials.get("domain")
         options = credentials.get("options", {})
         redirect_to = options.get("redirect_to")
         captcha_token = options.get("captcha_token")
-        skip_http_redirects = options.get("skip_http_redirects", True)
+        # HTTPX currently does not follow redirects: https://www.python-httpx.org/compatibility/
+        # Additionally, unlike the JS client, Python is a server side language and it's not possible
+        # to automatically redirect in browser for hte user
+        skip_http_redirect = options.get("skip_http_redirect", True)
+
         if domain:
             return self._request(
                 "POST",
                 "sso",
-                body={"domain": domain},
+                body={
+                    "domain": domain,
+                    "skip_http_redirect": skip_http_redirect,
+                },
                 redirect_to=redirect_to,
-                xform=parse_auth_response,
+                xform=parse_sso_response,
             )
         if provider_id:
             return self._request(
-                "POST" "sso",
+                "POST",
+                "sso",
                 body={
                     "provider_id": provider_id,
-                    "skip_http_redirect": skip_http_redirects,
+                    "skip_http_redirect": skip_http_redirect,
                 },
                 redirect_to=redirect_to,
-                xform=parse_auth_response,
+                xform=parse_sso_response,
             )
         raise AuthInvalidCredentialsError(
             "You must provide either a domain or provider_id"

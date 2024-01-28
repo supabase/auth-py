@@ -17,6 +17,7 @@ from .types import (
     GenerateLinkProperties,
     GenerateLinkResponse,
     Session,
+    SSOResponse,
     User,
     UserResponse,
 )
@@ -89,6 +90,10 @@ def parse_user_response(data: Any) -> UserResponse:
     if "user" not in data:
         data = {"user": data}
     return model_validate(UserResponse, data)
+
+
+def parse_sso_response(data: Any) -> SSOResponse:
+    return model_validate(SSOResponse, data)
 
 
 def get_error_message(error: Any) -> str:
