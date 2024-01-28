@@ -48,6 +48,7 @@ from ..types import (
     AuthResponse,
     CodeExchangeParams,
     DecodedJWTDict,
+    IdentitiesResponse,
     MFAChallengeAndVerifyParams,
     MFAChallengeParams,
     MFAEnrollParams,
@@ -291,14 +292,16 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
 
     def get_user_identities(self):
         response = self.get_user()
-        user = response.get("user")
-        identities = user.get("identities", []) if user else []
-        return {"data": {"identities": identities}}
+        return (
+            IdentitiesResponse(identities=response.user.identities)
+            if response.user
+            else AuthSessionMissingError()
+        )
 
     def unlink_identity(self, identity):
         return self._request(
             "POST",
-            f"/user/identities/{identity.identity_id}",
+            f"/user/identities/{identity.id}",
         )
 
     def sign_in_with_otp(
