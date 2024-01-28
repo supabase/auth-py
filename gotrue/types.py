@@ -94,6 +94,10 @@ class OAuthResponse(BaseModel):
     url: str
 
 
+class SSOResponse(BaseModel):
+    url: str
+
+
 class UserResponse(BaseModel):
     user: User
 
@@ -321,6 +325,17 @@ class SignInWithOAuthCredentialsOptions(TypedDict):
 class SignInWithOAuthCredentials(TypedDict):
     provider: Provider
     options: NotRequired[SignInWithOAuthCredentialsOptions]
+
+
+class SignInWithSSOCredentials(TypedDict):
+    provider_id: NotRequired[str]
+    domain: NotRequired[str]
+    options: NotRequired[SignInWithSSOOptions]
+
+
+class SignInWithSSOOptions(TypedDict):
+    redirect_to: NotRequired[str]
+    skip_http_redirect: NotRequired[bool]
 
 
 class VerifyOtpParamsOptions(TypedDict):
