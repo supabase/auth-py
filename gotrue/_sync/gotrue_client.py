@@ -286,6 +286,9 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
                 body={
                     "domain": domain,
                     "skip_http_redirect": skip_http_redirect,
+                    "gotrue_meta_security": {
+                        "captcha_token": captcha_token,
+                    },
                 },
                 redirect_to=redirect_to,
                 xform=parse_sso_response,
@@ -297,6 +300,9 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
                 body={
                     "provider_id": provider_id,
                     "skip_http_redirect": skip_http_redirect,
+                    "gotrue_meta_security": {
+                        "captcha_token": captcha_token,
+                    },
                 },
                 redirect_to=redirect_to,
                 xform=parse_sso_response,

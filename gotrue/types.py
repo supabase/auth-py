@@ -335,8 +335,7 @@ class SignInWithSSOCredentials(TypedDict):
 
 class SignInWithSSOOptions(TypedDict):
     redirect_to: NotRequired[str]
-    captcha_token: NotRequired[str]
-    skip_http_redirect: NotRequired[str]
+    skip_http_redirect: NotRequired[bool]
 
 
 class VerifyOtpParamsOptions(TypedDict):
