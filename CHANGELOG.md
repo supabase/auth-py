@@ -2,9 +2,86 @@
 
 
 
+## v2.4.0 (2024-01-31)
+
+### Chore
+
+* chore(deps-dev): bump jinja2 from 3.1.2 to 3.1.3 (#403) ([`0d58002`](https://github.com/supabase-community/auth-py/commit/0d580021af269a2e18e4a7864a88462c37334ecd))
+
+* chore(deps-dev): bump jinja2 from 3.1.2 to 3.1.3
+
+Bumps [jinja2](https://github.com/pallets/jinja) from 3.1.2 to 3.1.3.
+- [Release notes](https://github.com/pallets/jinja/releases)
+- [Changelog](https://github.com/pallets/jinja/blob/main/CHANGES.rst)
+- [Commits](https://github.com/pallets/jinja/compare/3.1.2...3.1.3)
+
+---
+updated-dependencies:
+- dependency-name: jinja2
+  dependency-type: indirect
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`f439d3f`](https://github.com/supabase-community/auth-py/commit/f439d3f4baf4edb301fa0e66c40b350dc2112597))
+
+* chore(deps-dev): bump gitpython from 3.1.40 to 3.1.41 (#401) ([`8c8cd65`](https://github.com/supabase-community/auth-py/commit/8c8cd65ae7506c32d0fd040ea146c8cd2a15c73e))
+
+### Feature
+
+* feat: add new identity linking methods release in LWX (#395) ([`96d18be`](https://github.com/supabase-community/auth-py/commit/96d18becda00478bacd08f32b61e75adc07d48fe))
+
+* feat: add pydantic type ([`1308119`](https://github.com/supabase-community/auth-py/commit/1308119b80b3685852a20ec322fd8bea4315fd75))
+
+* feat: add sso (#358) ([`c250f93`](https://github.com/supabase-community/auth-py/commit/c250f93cf5e50049629e5bb8f7d6b5c3fd408a42))
+
+* feat: add docstring ([`dba16fb`](https://github.com/supabase-community/auth-py/commit/dba16fbc2a3ec688587abb75bad541da8055c016))
+
+* feat: move skip_http_redirect to options ([`0547a2a`](https://github.com/supabase-community/auth-py/commit/0547a2a740bbf7620331cf371b12f42a3dacc801))
+
+* feat: skip http redirects ([`8dca4a5`](https://github.com/supabase-community/auth-py/commit/8dca4a555718f463c54dba22aa77f77b748dc472))
+
+* feat: add sso ([`99c9409`](https://github.com/supabase-community/auth-py/commit/99c9409ef2398b10bb7563ca3cbde0b0204ec88d))
+
+* feat: add get_user_identities ([`2de717a`](https://github.com/supabase-community/auth-py/commit/2de717aa1785585ff872e4f94df891673b16858a))
+
+* feat: link and unlink ([`6103511`](https://github.com/supabase-community/auth-py/commit/6103511a459d13713b55713161f634df30a40ca4))
+
+### Fix
+
+* fix: run black ([`89bcd15`](https://github.com/supabase-community/auth-py/commit/89bcd155c560ac404bc9f5e649027d3873661b0f))
+
+* fix: apply sourcery suggestions ([`e225504`](https://github.com/supabase-community/auth-py/commit/e22550464d209e817118259caa06a06e3c494a42))
+
+* fix: update types ([`51566e4`](https://github.com/supabase-community/auth-py/commit/51566e420002f965e29bcc9bf71510a144aa7e3c))
+
+### Unknown
+
+* Merge branch &#39;main&#39; into j0/add_linking_methods ([`ed9edab`](https://github.com/supabase-community/auth-py/commit/ed9edab57179fcf0e9a4cb11d615f6c137e9e8da))
+
+* Update gotrue/_async/gotrue_base_api.py ([`72eeb1e`](https://github.com/supabase-community/auth-py/commit/72eeb1ebd2fbe6d7b66a7fccd08d5b538b742508))
+
+* Merge branch &#39;main&#39; of github.com:supabase-community/gotrue-py into j0/add_linking_methods ([`851e523`](https://github.com/supabase-community/auth-py/commit/851e5233070b96dd022cc2a78c074fb0789f3c11))
+
+
 ## v2.3.0 (2024-01-12)
 
 ### Chore
+
+* chore(release): bump version to v2.3.0 ([`17fa5d2`](https://github.com/supabase-community/auth-py/commit/17fa5d23daab9344c1f1b47b30c69e62803f7e06))
+
+* chore(deps-dev): bump gitpython from 3.1.40 to 3.1.41
+
+Bumps [gitpython](https://github.com/gitpython-developers/GitPython) from 3.1.40 to 3.1.41.
+- [Release notes](https://github.com/gitpython-developers/GitPython/releases)
+- [Changelog](https://github.com/gitpython-developers/GitPython/blob/main/CHANGES)
+- [Commits](https://github.com/gitpython-developers/GitPython/compare/3.1.40...3.1.41)
+
+---
+updated-dependencies:
+- dependency-name: gitpython
+  dependency-type: indirect
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`a60428c`](https://github.com/supabase-community/auth-py/commit/a60428ca97985a0b1210a08eee0866e8eca24fe2))
 
 * chore: update to pull auth instead of gotrue ([`38977a6`](https://github.com/supabase-community/auth-py/commit/38977a6596f426805cf5fb106e7fdbbae311394c))
 
@@ -12,15 +89,25 @@
 
 ### Feature
 
+* feat: add sync methods ([`280dc40`](https://github.com/supabase-community/auth-py/commit/280dc406c4e031b6c4681c56a36a9c9ddefd15d9))
+
 * feat: pin version ([`5a90fff`](https://github.com/supabase-community/auth-py/commit/5a90fff802ff2c4860694d472243d69e8bedce1e))
 
+* feat: add sync methods ([`7c9f642`](https://github.com/supabase-community/auth-py/commit/7c9f642c9a6448707683fe6b54d3be4102aa8506))
+
 ### Fix
+
+* fix: add linking methods ([`a29083a`](https://github.com/supabase-community/auth-py/commit/a29083a840200d984e9b969569eeb16185e5b598))
 
 * fix: fix build by updating error message in test (#404) ([`ac94c60`](https://github.com/supabase-community/auth-py/commit/ac94c60529984d7cf82b422f0c65bc3b01e43732))
 
 * fix: update error message in tests ([`6718dcd`](https://github.com/supabase-community/auth-py/commit/6718dcd19f3707647077ccd5cfa413bcbe718fd4))
 
+* fix: add linking methods ([`987adf2`](https://github.com/supabase-community/auth-py/commit/987adf2c112398be252d1fd9563cc8763dfc0b6f))
+
 ### Unknown
+
+* Merge branch &#39;j0/add_linking_methods&#39; of github.com:supabase-community/gotrue-py into j0/add_linking_methods ([`fa834cf`](https://github.com/supabase-community/auth-py/commit/fa834cfaca27cadcc7e536ee41d68702c6ae33b5))
 
 * Update MAINTAINERS.md ([`5681011`](https://github.com/supabase-community/auth-py/commit/568101128a27280600da86780590fce62025410e))
 
