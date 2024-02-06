@@ -14,9 +14,9 @@ from pydantic import BaseModel
 from .errors import AuthApiError, AuthError, AuthRetryableError, AuthUnknownError
 from .types import (
     AuthResponse,
+    AuthOtpResponse,
     GenerateLinkProperties,
     GenerateLinkResponse,
-    Session,
     SSOResponse,
     User,
     UserResponse,
@@ -57,19 +57,11 @@ def model_dump_json(model: BaseModel) -> str:
 
 
 def parse_auth_response(data: Any) -> AuthResponse:
-    session: Union[Session, None] = None
-    if (
-        "access_token" in data
-        and "refresh_token" in data
-        and "expires_in" in data
-        and data["access_token"]
-        and data["refresh_token"]
-        and data["expires_in"]
-    ):
-        session = model_validate(Session, data)
-    user_data = data.get("user", data)
-    user = model_validate(User, user_data) if user_data else None
-    return AuthResponse(session=session, user=user)
+    return model_validate(AuthResponse, data)
+
+
+def parse_auth_otp_response(data: Any) -> AuthOtpResponse:
+    return model_validate(AuthOtpResponse, data)
 
 
 def parse_link_response(data: Any) -> GenerateLinkResponse:
