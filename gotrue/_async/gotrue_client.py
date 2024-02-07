@@ -31,6 +31,7 @@ from ..helpers import (
     model_dump_json,
     model_validate,
     parse_auth_response,
+    parse_auth_otp_response,
     parse_sso_response,
     parse_user_response,
 )
@@ -47,6 +48,7 @@ from ..types import (
     AuthMFAUnenrollResponse,
     AuthMFAVerifyResponse,
     AuthResponse,
+    AuthOtpResponse,
     CodeExchangeParams,
     DecodedJWTDict,
     IdentitiesResponse,
@@ -365,7 +367,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
     async def sign_in_with_otp(
         self,
         credentials: SignInWithPasswordlessCredentials,
-    ) -> AuthResponse:
+    ) -> AuthOtpResponse:
         """
         Log in a user using magiclink or a one-time password (OTP).
 
@@ -399,7 +401,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
                     },
                 },
                 redirect_to=email_redirect_to,
-                xform=parse_auth_response,
+                xform=parse_auth_otp_response,
             )
         if phone:
             return await self._request(
@@ -413,7 +415,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
                         "captcha_token": captcha_token,
                     },
                 },
-                xform=parse_auth_response,
+                xform=parse_auth_otp_response,
             )
         raise AuthInvalidCredentialsError(
             "You must provide either an email or phone number"
