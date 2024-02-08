@@ -13,12 +13,12 @@ from pydantic import BaseModel
 
 from .errors import AuthApiError, AuthError, AuthRetryableError, AuthUnknownError
 from .types import (
-    AuthResponse,
     AuthOtpResponse,
+    AuthResponse,
     GenerateLinkProperties,
     GenerateLinkResponse,
-    SSOResponse,
     Session,
+    SSOResponse,
     User,
     UserResponse,
 )
