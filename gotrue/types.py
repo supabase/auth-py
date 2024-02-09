@@ -89,6 +89,12 @@ class AuthResponse(BaseModel):
     session: Union[Session, None] = None
 
 
+class AuthOtpResponse(BaseModel):
+    user: None = None
+    session: None = None
+    message_id: Union[str, None] = None
+
+
 class OAuthResponse(BaseModel):
     provider: Provider
     url: str

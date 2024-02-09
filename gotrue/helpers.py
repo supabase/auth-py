@@ -13,6 +13,7 @@ from pydantic import BaseModel
 
 from .errors import AuthApiError, AuthError, AuthRetryableError, AuthUnknownError
 from .types import (
+    AuthOtpResponse,
     AuthResponse,
     GenerateLinkProperties,
     GenerateLinkResponse,
@@ -70,6 +71,10 @@ def parse_auth_response(data: Any) -> AuthResponse:
     user_data = data.get("user", data)
     user = model_validate(User, user_data) if user_data else None
     return AuthResponse(session=session, user=user)
+
+
+def parse_auth_otp_response(data: Any) -> AuthOtpResponse:
+    return model_validate(AuthOtpResponse, data)
 
 
 def parse_link_response(data: Any) -> GenerateLinkResponse:
