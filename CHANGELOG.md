@@ -2,9 +2,46 @@
 
 
 
+## v2.4.1 (2024-02-09)
+
+### Chore
+
+* chore(deps-dev): bump cryptography from 41.0.6 to 42.0.0 (#416) ([`f03e518`](https://github.com/supabase-community/auth-py/commit/f03e5182a850607000717944bfb390b181294080))
+
+* chore(deps-dev): bump cryptography from 41.0.6 to 42.0.0
+
+Bumps [cryptography](https://github.com/pyca/cryptography) from 41.0.6 to 42.0.0.
+- [Changelog](https://github.com/pyca/cryptography/blob/main/CHANGELOG.rst)
+- [Commits](https://github.com/pyca/cryptography/compare/41.0.6...42.0.0)
+
+---
+updated-dependencies:
+- dependency-name: cryptography
+  dependency-type: indirect
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`7d91ca2`](https://github.com/supabase-community/auth-py/commit/7d91ca2c612a29ccbcfc16d4ff8b030aa5e72d05))
+
+### Fix
+
+* fix: add AuthOtpResponse (#419) ([`130bdb1`](https://github.com/supabase-community/auth-py/commit/130bdb1ba47f8e18800ee052cb1d1e1538482ed4))
+
+* fix: move changes to _async ([`7810bbd`](https://github.com/supabase-community/auth-py/commit/7810bbd868f202adf2bef1e0a8573973f8b415be))
+
+* fix: add AuthOtpResponse ([`8d64ca4`](https://github.com/supabase-community/auth-py/commit/8d64ca450b37f7063b7fc701ee3156d1677d4fc3))
+
+### Unknown
+
+* formatting ([`97c4713`](https://github.com/supabase-community/auth-py/commit/97c47138215ee04af14478d913300032964f7a8e))
+
+* revert changes to parse_auth_response ([`face521`](https://github.com/supabase-community/auth-py/commit/face52175ce75bcb074680c9a464fbb0ee320ae5))
+
+
 ## v2.4.0 (2024-01-31)
 
 ### Chore
+
+* chore(release): bump version to v2.4.0 ([`640d0c1`](https://github.com/supabase-community/auth-py/commit/640d0c1cf37edca0b69a189c2b4b637c09b047d0))
 
 * chore(deps-dev): bump jinja2 from 3.1.2 to 3.1.3 (#403) ([`0d58002`](https://github.com/supabase-community/auth-py/commit/0d580021af269a2e18e4a7864a88462c37334ecd))
 
