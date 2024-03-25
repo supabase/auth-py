@@ -43,13 +43,15 @@ jobs:
     needs: test
     if: ${{ !startsWith(github.event.head_commit.message, 'bump') && !startsWith(github.event.head_commit.message, 'chore') && github.ref == 'refs/heads/main' && contains(fromJSON('["push", "workflow_dispatch"]'), github.event_name) && github.repository_owner == 'supabase-community' }}
     runs-on: ubuntu-latest
-    name: "Bump version, create changelog and publish"
+    name: "supabase_auth: Bump version, create changelog and publish"
     environment:
       name: pypi
-      url: https://pypi.org/p/gotrue
+      url: https://pypi.org/p/supabase_auth
     permissions:
       id-token: write # IMPORTANT: this permission is mandatory for trusted publishing
       contents: write # needed for dependabot to write to repo
+    outputs:
+      is-released: ${{ steps.release.outputs.released }}
     steps:
       - name: Clone Repository
         uses: actions/checkout@v4
@@ -75,3 +77,49 @@ jobs:
         if: steps.release.outputs.released == 'true'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+  publish_legacy:
+    needs: publish
+    if: ${{ !startsWith(github.event.head_commit.message, 'bump') && !startsWith(github.event.head_commit.message, 'chore') && github.ref == 'refs/heads/main' && contains(fromJSON('["push", "workflow_dispatch"]'), github.event_name) && github.repository_owner == 'supabase-community' }}
+    runs-on: ubuntu-latest
+    name: "gotrue: Bump version and publish"
+    environment:
+      name: pypi
+      url: https://pypi.org/p/gotrue
+    permissions:
+      id-token: write # IMPORTANT: this permission is mandatory for trusted publishing
+      contents: write # needed for github actions bot to write to repo
+    steps:
+      - name: Clone Repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 0
+          token: ${{ secrets.SILENTWORKS_PAT }}
+
+      - name: Rename Project
+        id: rename_project
+        run: make rename_project
+
+      - name: Install poetry
+        uses: abatilo/actions-poetry@v2
+      - name: Setup a local virtual environment (if no poetry.toml file)
+        run: |
+          poetry config virtualenvs.create true --local
+          poetry config virtualenvs.in-project true --local
+      - uses: actions/cache@v3
+        name: Define a cache for the virtual environment based on the dependencies lock file
+        with:
+          path: ./.venv
+          key: venv-${{ hashFiles('poetry.lock') }}
+      - name: Install the project dependencies
+        run: poetry install
+
+      - name: Build package distribution directory
+        id: build_dist
+        run: make build_package
+
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        # NOTE: DO NOT wrap the conditional in ${{ }} as it will always evaluate to true.
+        # See https://github.com/actions/runner/issues/1173
+        if: needs.publish.outputs.is-released == 'true'

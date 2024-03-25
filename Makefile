@@ -28,10 +28,21 @@ sync_infra:
 run_tests: run_infra sleep tests
 
 build_sync:
-	poetry run unasync gotrue tests
+	poetry run unasync supabase_auth tests
 
 build_run_tests: build_sync run_tests
 	echo "Done"
 
 sleep:
 	sleep 20
+
+rename_project: rename_package_dir rename_package
+
+rename_package_dir:
+	mv supabase_auth gotrue
+
+rename_package:
+	sed -i 's/supabase_auth/gotrue/g' pyproject.toml tests/_async/clients.py tests/_sync/clients.py tests/_async/test_gotrue_admin_api.py tests/_sync/test_gotrue_admin_api.py tests/_async/test_utils.py tests/_sync/test_utils.py tests/_async/utils.py tests/_sync/utils.py README.md
+
+build_package:
+	poetry build
