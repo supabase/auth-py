@@ -1,6 +1,6 @@
 from jwt import encode
 
-from gotrue import AsyncGoTrueAdminAPI, AsyncGoTrueClient
+from supabase_auth import AsyncGoTrueAdminAPI, AsyncGoTrueClient
 
 SIGNUP_ENABLED_AUTO_CONFIRM_OFF_PORT = 9999
 SIGNUP_ENABLED_AUTO_CONFIRM_ON_PORT = 9998

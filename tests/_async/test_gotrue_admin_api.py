@@ -1,4 +1,4 @@
-from gotrue.errors import AuthError
+from supabase_auth.errors import AuthError
 
 from .clients import (
     auth_client_with_session,

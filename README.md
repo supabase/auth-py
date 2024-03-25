@@ -16,18 +16,18 @@ This is a Python port of the [supabase js gotrue client](https://github.com/supa
 
 ## Installation
 
-We are still working on making the `gotrue` python library more user-friendly. For now here are some sparse notes on how to install the module.
+We are still working on making the `supabase_auth` python library more user-friendly. For now here are some sparse notes on how to install the module.
 
 ### Poetry
 
 ```bash
-poetry add gotrue
+poetry add supabase_auth
 ```
 
 ### Pip
 
 ```bash
-pip install gotrue
+pip install supabase_auth
 ```
 
 ## Differences to the JS client
@@ -46,7 +46,7 @@ const { data, error } = client.sign_up(...)
 
 The other key difference is we do not use pascalCase to encode variable and method names. Instead we use the snake_case convention adopted in the Python language.
 
-Also, the `gotrue` library for Python parses the date-time string into `datetime` Python objects. The [JS client](https://github.com/supabase/gotrue-js) keeps the date-time as strings.
+Also, the `supabase_auth` library for Python parses the date-time string into `datetime` Python objects. The [JS client](https://github.com/supabase/gotrue-js) keeps the date-time as strings.
 
 ## Usage (outdated)
 
@@ -55,7 +55,7 @@ Also, the `gotrue` library for Python parses the date-time string into `datetime
 To instantiate the client, you'll need the URL and any request headers at a minimum.
 
 ```python
-from gotrue import SyncGoTrueClient
+from supabase_auth import SyncGoTrueClient
 
 headers = {
     "apiKey": "my-mega-awesome-api-key",
