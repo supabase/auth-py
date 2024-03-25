@@ -1,11 +1,11 @@
 [tool.poetry]
 name = "gotrue"
 version = "2.4.1"
-description = "Python Client Library for GoTrue"
+description = "Python Client Library for Supabase Auth"
 authors = ["Joel Lee <joel@joellee.org>"]
-homepage = "https://github.com/supabase-community/gotrue-py"
-repository = "https://github.com/supabase-community/gotrue-py"
-documentation = "https://github.com/supabase-community/gotrue-py"
+homepage = "https://github.com/supabase-community/auth-py"
+repository = "https://github.com/supabase-community/auth-py"
+documentation = "https://github.com/supabase-community/auth-py"
 readme = "README.md"
 license = "MIT"
 classifiers = [

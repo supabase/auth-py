@@ -25,7 +25,7 @@ repos:
           ]
 
   - repo: https://github.com/myint/autoflake.git
-    rev: v1.4
+    rev: v2.2.1
     hooks:
       - id: autoflake
         args:

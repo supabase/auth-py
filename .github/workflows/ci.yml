@@ -1,6 +1,16 @@
 name: CI/CD
 
-on: [pull_request, push, workflow_dispatch]
+on:
+  push:
+    paths-ignore:
+      - '.github/**'
+      - '.devcontainer/**'
+      - 'CHANGELOG.md'
+      - 'MAINTAINERS.md'
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
 
 jobs:
   test:
@@ -8,7 +18,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        python-version: [3.8, 3.9, "3.10", "3.11"]
+        python-version: [3.8, 3.9, "3.10", "3.11", "3.12"]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Clone Repository
@@ -31,7 +41,7 @@ jobs:
           make tests_only
   publish:
     needs: test
-    if: ${{ !startsWith(github.event.head_commit.message, 'bump') && !startsWith(github.event.head_commit.message, 'chore') && github.ref == 'refs/heads/main' && github.event_name == 'push' && github.repository_owner == 'supabase-community' }}
+    if: ${{ !startsWith(github.event.head_commit.message, 'bump') && !startsWith(github.event.head_commit.message, 'chore') && github.ref == 'refs/heads/main' && contains(fromJSON('["push", "workflow_dispatch"]'), github.event_name) && github.repository_owner == 'supabase-community' }}
     runs-on: ubuntu-latest
     name: "Bump version, create changelog and publish"
     environment:
