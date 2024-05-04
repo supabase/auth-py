@@ -6,16 +6,13 @@ from typing import Dict, Optional
 
 class SyncSupportedStorage(ABC):
     @abstractmethod
-    def get_item(self, key: str) -> Optional[str]:
-        ...  # pragma: no cover
+    def get_item(self, key: str) -> Optional[str]: ...  # pragma: no cover
 
     @abstractmethod
-    def set_item(self, key: str, value: str) -> None:
-        ...  # pragma: no cover
+    def set_item(self, key: str, value: str) -> None: ...  # pragma: no cover
 
     @abstractmethod
-    def remove_item(self, key: str) -> None:
-        ...  # pragma: no cover
+    def remove_item(self, key: str) -> None: ...  # pragma: no cover
 
 
 class SyncMemoryStorage(SyncSupportedStorage):
