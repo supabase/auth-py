@@ -103,8 +103,8 @@ def parse_sso_response(data: Any) -> SSOResponse:
 
 def get_error_message(error: Any) -> str:
     props = ["msg", "message", "error_description", "error"]
-    filter = (
-        lambda prop: prop in error if isinstance(error, dict) else hasattr(error, prop)
+    filter = lambda prop: (
+        prop in error if isinstance(error, dict) else hasattr(error, prop)
     )
     return next((error[prop] for prop in props if filter(prop)), str(error))
 

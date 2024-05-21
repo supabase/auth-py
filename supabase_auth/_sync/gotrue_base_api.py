@@ -46,8 +46,7 @@ class SyncGoTrueBaseAPI:
         body: Union[Any, None] = None,
         no_resolve_json: Literal[False] = False,
         xform: Callable[[Any], T],
-    ) -> T:
-        ...  # pragma: no cover
+    ) -> T: ...  # pragma: no cover
 
     @overload
     def _request(
@@ -62,8 +61,7 @@ class SyncGoTrueBaseAPI:
         body: Union[Any, None] = None,
         no_resolve_json: Literal[True],
         xform: Callable[[Response], T],
-    ) -> T:
-        ...  # pragma: no cover
+    ) -> T: ...  # pragma: no cover
 
     @overload
     def _request(
@@ -77,8 +75,7 @@ class SyncGoTrueBaseAPI:
         query: Union[Dict[str, str], None] = None,
         body: Union[Any, None] = None,
         no_resolve_json: bool = False,
-    ) -> None:
-        ...  # pragma: no cover
+    ) -> None: ...  # pragma: no cover
 
     def _request(
         self,
