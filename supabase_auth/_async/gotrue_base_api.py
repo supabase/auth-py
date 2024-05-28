@@ -19,10 +19,11 @@ class AsyncGoTrueBaseAPI:
         url: str,
         headers: Dict[str, str],
         http_client: Union[AsyncClient, None],
+        verify: bool = True,
     ):
         self._url = url
         self._headers = headers
-        self._http_client = http_client or AsyncClient()
+        self._http_client = http_client or AsyncClient(verify=bool(verify))
 
     async def __aenter__(self) -> Self:
         return self
