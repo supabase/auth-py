@@ -89,12 +89,14 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         storage: Union[AsyncSupportedStorage, None] = None,
         http_client: Union[AsyncClient, None] = None,
         flow_type: AuthFlowType = "implicit",
+        verify: bool = True,
     ) -> None:
         AsyncGoTrueBaseAPI.__init__(
             self,
             url=url or GOTRUE_URL,
             headers=headers or DEFAULT_HEADERS,
             http_client=http_client,
+            verify=verify,
         )
         self._storage_key = storage_key or STORAGE_KEY
         self._auto_refresh_token = auto_refresh_token
