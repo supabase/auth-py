@@ -22,7 +22,7 @@ class SyncGoTrueBaseAPI:
     ):
         self._url = url
         self._headers = headers
-        self._http_client = http_client or SyncClient()
+        self._http_client = http_client or SyncClient(follow_redirects=True)
 
     def __enter__(self) -> Self:
         return self
