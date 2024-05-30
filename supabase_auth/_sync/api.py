@@ -31,7 +31,7 @@ class SyncGoTrueAPI:
         self.url = url
         self.headers = headers
         self.cookie_options = cookie_options
-        self.http_client = http_client or SyncClient()
+        self.http_client = http_client or SyncClient(follow_redirects=True)
 
     def __enter__(self) -> SyncGoTrueAPI:
         return self
