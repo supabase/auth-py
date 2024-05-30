@@ -22,7 +22,7 @@ class AsyncGoTrueBaseAPI:
     ):
         self._url = url
         self._headers = headers
-        self._http_client = http_client or AsyncClient()
+        self._http_client = http_client or AsyncClient(follow_redirects=True)
 
     async def __aenter__(self) -> Self:
         return self
