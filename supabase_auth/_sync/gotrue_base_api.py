@@ -19,10 +19,11 @@ class SyncGoTrueBaseAPI:
         url: str,
         headers: Dict[str, str],
         http_client: Union[SyncClient, None],
+        verify: bool = True,
     ):
         self._url = url
         self._headers = headers
-        self._http_client = http_client or SyncClient()
+        self._http_client = http_client or SyncClient(verify=bool(verify))
 
     def __enter__(self) -> Self:
         return self

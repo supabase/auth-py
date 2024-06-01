@@ -26,12 +26,13 @@ class SyncGoTrueAPI:
         headers: Dict[str, str],
         cookie_options: CookieOptions,
         http_client: Optional[SyncClient] = None,
+        verify: bool = True,
     ) -> None:
         """Initialise API class."""
         self.url = url
         self.headers = headers
         self.cookie_options = cookie_options
-        self.http_client = http_client or SyncClient()
+        self.http_client = http_client or SyncClient(verify=bool(verify))
 
     def __enter__(self) -> SyncGoTrueAPI:
         return self
