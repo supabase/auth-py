@@ -37,6 +37,7 @@ class SyncGoTrueClient:
         cookie_options: CookieOptions = CookieOptions.parse_obj(COOKIE_OPTIONS),
         api: Optional[SyncGoTrueAPI] = None,
         replace_default_headers: bool = False,
+        verify: bool = True,
     ) -> None:
         """Create a new client
 
@@ -54,6 +55,8 @@ class SyncGoTrueClient:
             The storage engine to use for persisting the session.
         cookie_options : CookieOptions
             The options for the cookie.
+        verify: bool
+            Verify SSL, True by default, False disables verification.
         """
         if url.startswith("http://"):
             print(
@@ -72,6 +75,7 @@ class SyncGoTrueClient:
             "url": url,
             "headers": {**empty_or_default_headers, **headers},
             "cookie_options": cookie_options,
+            "verify": verify,
         }
         self.api = api or SyncGoTrueAPI(**args)
 

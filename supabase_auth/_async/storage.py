@@ -6,16 +6,13 @@ from typing import Dict, Optional
 
 class AsyncSupportedStorage(ABC):
     @abstractmethod
-    async def get_item(self, key: str) -> Optional[str]:
-        ...  # pragma: no cover
+    async def get_item(self, key: str) -> Optional[str]: ...  # pragma: no cover
 
     @abstractmethod
-    async def set_item(self, key: str, value: str) -> None:
-        ...  # pragma: no cover
+    async def set_item(self, key: str, value: str) -> None: ...  # pragma: no cover
 
     @abstractmethod
-    async def remove_item(self, key: str) -> None:
-        ...  # pragma: no cover
+    async def remove_item(self, key: str) -> None: ...  # pragma: no cover
 
 
 class AsyncMemoryStorage(AsyncSupportedStorage):

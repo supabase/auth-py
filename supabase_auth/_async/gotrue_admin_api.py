@@ -29,12 +29,14 @@ class AsyncGoTrueAdminAPI(AsyncGoTrueBaseAPI):
         url: str = "",
         headers: Dict[str, str] = {},
         http_client: Union[AsyncClient, None] = None,
+        verify: bool = True,
     ) -> None:
         AsyncGoTrueBaseAPI.__init__(
             self,
             url=url,
             headers=headers,
             http_client=http_client,
+            verify=verify,
         )
         self.mfa = AsyncGoTrueAdminMFAAPI()
         self.mfa.list_factors = self._list_factors
@@ -113,9 +115,11 @@ class AsyncGoTrueAdminAPI(AsyncGoTrueBaseAPI):
             "GET",
             "admin/users",
             query={"page": page, "per_page": per_page},
-            xform=lambda data: [model_validate(User, user) for user in data["users"]]
-            if "users" in data
-            else [],
+            xform=lambda data: (
+                [model_validate(User, user) for user in data["users"]]
+                if "users" in data
+                else []
+            ),
         )
 
     async def get_user_by_id(self, uid: str) -> UserResponse:

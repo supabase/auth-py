@@ -19,10 +19,11 @@ class AsyncGoTrueBaseAPI:
         url: str,
         headers: Dict[str, str],
         http_client: Union[AsyncClient, None],
+        verify: bool = True,
     ):
         self._url = url
         self._headers = headers
-        self._http_client = http_client or AsyncClient(follow_redirects=True)
+        self._http_client = http_client or AsyncClient(verify=bool(verify), follow_redirects=True)
 
     async def __aenter__(self) -> Self:
         return self
@@ -46,8 +47,7 @@ class AsyncGoTrueBaseAPI:
         body: Union[Any, None] = None,
         no_resolve_json: Literal[False] = False,
         xform: Callable[[Any], T],
-    ) -> T:
-        ...  # pragma: no cover
+    ) -> T: ...  # pragma: no cover
 
     @overload
     async def _request(
@@ -62,8 +62,7 @@ class AsyncGoTrueBaseAPI:
         body: Union[Any, None] = None,
         no_resolve_json: Literal[True],
         xform: Callable[[Response], T],
-    ) -> T:
-        ...  # pragma: no cover
+    ) -> T: ...  # pragma: no cover
 
     @overload
     async def _request(
@@ -77,8 +76,7 @@ class AsyncGoTrueBaseAPI:
         query: Union[Dict[str, str], None] = None,
         body: Union[Any, None] = None,
         no_resolve_json: bool = False,
-    ) -> None:
-        ...  # pragma: no cover
+    ) -> None: ...  # pragma: no cover
 
     async def _request(
         self,

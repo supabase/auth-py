@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "supabase_auth"
-version = "2.4.2"
+version = "2.4.3"
 description = "Python Client Library for Supabase Auth"
 authors = ["Joel Lee <joel@joellee.org>"]
 homepage = "https://github.com/supabase-community/auth-py"
@@ -20,17 +20,17 @@ httpx = ">=0.23,<0.28"
 pydantic = ">=1.10,<3"
 
 [tool.poetry.dev-dependencies]
-pytest = "^8.1.0"
+pytest = "^8.2.1"
 flake8 = "^5.0.4"
 black = "^24.4.2"
 isort = "^5.12.0"
 pre-commit = "^3.4.0"
 pytest-cov = "^5.0.0"
 pytest-depends = "^1.0.1"
-pytest-asyncio = "^0.23.5"
-Faker = "^24.14.1"
+pytest-asyncio = "^0.23.7"
+Faker = "^25.3.0"
 unasync-cli = "^0.0.9"
-python-semantic-release = "^9.5.0"
+python-semantic-release = "^9.8.0"
 
 [tool.poetry.group.dev.dependencies]
 pygithub = ">=1.57,<3.0"

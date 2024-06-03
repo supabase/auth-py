@@ -26,12 +26,13 @@ class SyncGoTrueAPI:
         headers: Dict[str, str],
         cookie_options: CookieOptions,
         http_client: Optional[SyncClient] = None,
+        verify: bool = True,
     ) -> None:
         """Initialise API class."""
         self.url = url
         self.headers = headers
         self.cookie_options = cookie_options
-        self.http_client = http_client or SyncClient(follow_redirects=True)
+        self.http_client = http_client or SyncClient(verify=bool(verify), follow_redirects=True)
 
     def __enter__(self) -> SyncGoTrueAPI:
         return self
@@ -136,8 +137,8 @@ class SyncGoTrueAPI:
         data = {"email": email, "password": password, "data": data}
         url = f"{self.url}/signup{query_string}"
         response = self.http_client.post(url, json=data, headers=headers)
-        SessionOrUserModel = determine_session_or_user_model_from_response(response)
-        return SessionOrUserModel.parse_response(response)
+        session_or_user_model = determine_session_or_user_model_from_response(response)
+        return session_or_user_model.parse_response(response)
 
     def sign_in_with_email(
         self,
@@ -211,8 +212,8 @@ class SyncGoTrueAPI:
         data = {"phone": phone, "password": password, "data": data}
         url = f"{self.url}/signup"
         response = self.http_client.post(url, json=data, headers=headers)
-        SessionOrUserModel = determine_session_or_user_model_from_response(response)
-        return SessionOrUserModel.parse_response(response)
+        session_or_user_model = determine_session_or_user_model_from_response(response)
+        return session_or_user_model.parse_response(response)
 
     def sign_in_with_phone(
         self,
@@ -335,8 +336,8 @@ class SyncGoTrueAPI:
             data["redirect_to"] = redirect_to_encoded
         url = f"{self.url}/verify"
         response = self.http_client.post(url, json=data, headers=headers)
-        SessionOrUserModel = determine_session_or_user_model_from_response(response)
-        return SessionOrUserModel.parse_response(response)
+        session_or_user_model = determine_session_or_user_model_from_response(response)
+        return session_or_user_model.parse_response(response)
 
     def invite_user_by_email(
         self,
@@ -637,8 +638,8 @@ class SyncGoTrueAPI:
             data["redirect_to"] = redirect_to_encoded
         url = f"{self.url}/admin/generate_link"
         response = self.http_client.post(url, json=data, headers=headers)
-        SessionOrUserModel = determine_session_or_user_model_from_response(response)
-        return SessionOrUserModel.parse_response(response)
+        session_or_user_model = determine_session_or_user_model_from_response(response)
+        return session_or_user_model.parse_response(response)
 
     def set_auth_cookie(self, *, req, res):
         """Stub for parity with JS api."""

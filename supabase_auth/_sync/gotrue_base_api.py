@@ -19,10 +19,11 @@ class SyncGoTrueBaseAPI:
         url: str,
         headers: Dict[str, str],
         http_client: Union[SyncClient, None],
+        verify: bool = True,
     ):
         self._url = url
         self._headers = headers
-        self._http_client = http_client or SyncClient(follow_redirects=True)
+        self._http_client = http_client or SyncClient(verify=bool(verify), follow_redirects=True)
 
     def __enter__(self) -> Self:
         return self
@@ -46,8 +47,7 @@ class SyncGoTrueBaseAPI:
         body: Union[Any, None] = None,
         no_resolve_json: Literal[False] = False,
         xform: Callable[[Any], T],
-    ) -> T:
-        ...  # pragma: no cover
+    ) -> T: ...  # pragma: no cover
 
     @overload
     def _request(
@@ -62,8 +62,7 @@ class SyncGoTrueBaseAPI:
         body: Union[Any, None] = None,
         no_resolve_json: Literal[True],
         xform: Callable[[Response], T],
-    ) -> T:
-        ...  # pragma: no cover
+    ) -> T: ...  # pragma: no cover
 
     @overload
     def _request(
@@ -77,8 +76,7 @@ class SyncGoTrueBaseAPI:
         query: Union[Dict[str, str], None] = None,
         body: Union[Any, None] = None,
         no_resolve_json: bool = False,
-    ) -> None:
-        ...  # pragma: no cover
+    ) -> None: ...  # pragma: no cover
 
     def _request(
         self,

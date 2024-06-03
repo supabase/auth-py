@@ -103,8 +103,8 @@ def parse_sso_response(data: Any) -> SSOResponse:
 
 def get_error_message(error: Any) -> str:
     props = ["msg", "message", "error_description", "error"]
-    filter = (
-        lambda prop: prop in error if isinstance(error, dict) else hasattr(error, prop)
+    filter = lambda prop: (
+        prop in error if isinstance(error, dict) else hasattr(error, prop)
     )
     return next((error[prop] for prop in props if filter(prop)), str(error))
 
@@ -133,11 +133,11 @@ def decode_jwt_payload(token: str) -> Any:
     parts = token.split(".")
     if len(parts) != 3:
         raise ValueError("JWT is not valid: not a JWT structure")
-    base64Url = parts[1]
+    base64url = parts[1]
     # Addding padding otherwise the following error happens:
     # binascii.Error: Incorrect padding
-    base64UrlWithPadding = base64Url + "=" * (-len(base64Url) % 4)
-    return loads(urlsafe_b64decode(base64UrlWithPadding).decode("utf-8"))
+    base64url_with_padding = base64url + "=" * (-len(base64url) % 4)
+    return loads(urlsafe_b64decode(base64url_with_padding).decode("utf-8"))
 
 
 def generate_pkce_verifier(length=64):
