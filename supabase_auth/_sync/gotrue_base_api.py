@@ -23,7 +23,9 @@ class SyncGoTrueBaseAPI:
     ):
         self._url = url
         self._headers = headers
-        self._http_client = http_client or SyncClient(verify=bool(verify))
+        self._http_client = http_client or SyncClient(
+            verify=bool(verify), follow_redirects=True
+        )
 
     def __enter__(self) -> Self:
         return self
