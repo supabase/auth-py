@@ -2,13 +2,88 @@
 
 
 
+## v2.4.4 (2024-06-04)
+
+### Chore
+
+* chore(deps): bump pydantic from 2.7.2 to 2.7.3 (#513) ([`4a5e21e`](https://github.com/supabase-community/auth-py/commit/4a5e21e93f14a76d9a46b218163a2e9538537440))
+
+* chore(deps-dev): bump faker from 25.3.0 to 25.4.0 (#512) ([`daafb74`](https://github.com/supabase-community/auth-py/commit/daafb74a4970a6fcbd9dc36ef757079616d1f150))
+
+* chore(deps): bump pydantic from 2.7.2 to 2.7.3
+
+Bumps [pydantic](https://github.com/pydantic/pydantic) from 2.7.2 to 2.7.3.
+- [Release notes](https://github.com/pydantic/pydantic/releases)
+- [Changelog](https://github.com/pydantic/pydantic/blob/main/HISTORY.md)
+- [Commits](https://github.com/pydantic/pydantic/compare/v2.7.2...v2.7.3)
+
+---
+updated-dependencies:
+- dependency-name: pydantic
+  dependency-type: direct:production
+  update-type: version-update:semver-patch
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`7b5269c`](https://github.com/supabase-community/auth-py/commit/7b5269c4254d598a41507f45ec4893cfa20a14ac))
+
+* chore(deps-dev): bump faker from 25.3.0 to 25.4.0
+
+Bumps [faker](https://github.com/joke2k/faker) from 25.3.0 to 25.4.0.
+- [Release notes](https://github.com/joke2k/faker/releases)
+- [Changelog](https://github.com/joke2k/faker/blob/master/CHANGELOG.md)
+- [Commits](https://github.com/joke2k/faker/compare/v25.3.0...v25.4.0)
+
+---
+updated-dependencies:
+- dependency-name: faker
+  dependency-type: direct:development
+  update-type: version-update:semver-minor
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`35a8b14`](https://github.com/supabase-community/auth-py/commit/35a8b14dc5f6657e63d21de29dd2b60a29f07eed))
+
+* chore(deps-dev): bump faker from 25.2.0 to 25.3.0 (#510) ([`e7fdc2d`](https://github.com/supabase-community/auth-py/commit/e7fdc2d978c95638dfc7a27676aabcba44d2a80d))
+
+### Fix
+
+* fix: follow redirects ([`1fa7fd2`](https://github.com/supabase-community/auth-py/commit/1fa7fd24c84594a6d63322a685aeccdc4e301af1))
+
+### Unknown
+
+* Fix code style ([`4a18e21`](https://github.com/supabase-community/auth-py/commit/4a18e212fd5f9b9f25e516735ab92232bf49e5d7))
+
+* Fix code style ([`55a415b`](https://github.com/supabase-community/auth-py/commit/55a415b993e503bed5a564b8db1490a26e6ad51f))
+
+* Fix code style ([`645560d`](https://github.com/supabase-community/auth-py/commit/645560d940243bee5f2b15e59a3b50cd0ca11c5c))
+
+* ReSync, fix merges ([`96129b6`](https://github.com/supabase-community/auth-py/commit/96129b65d3c5438aac5a67852978a7f7cf0b20dd))
+
+
 ## v2.4.3 (2024-06-01)
 
 ### Chore
 
+* chore(release): bump version to v2.4.3 ([`7316cf5`](https://github.com/supabase-community/auth-py/commit/7316cf56dce5db188690c58f8a30e0cd4568105b))
+
 * chore(deps): bump pydantic from 2.7.1 to 2.7.2 (#509) ([`5d433fe`](https://github.com/supabase-community/auth-py/commit/5d433fe665fcc08dad5dc49c4225a0d53b5fa7e6))
 
 * chore(ci): bump python-semantic-release/python-semantic-release from 9.7.3 to 9.8.0 (#508) ([`a3037d9`](https://github.com/supabase-community/auth-py/commit/a3037d94cdfe0b419b2d8b3785783f36c843196c))
+
+* chore(deps-dev): bump faker from 25.2.0 to 25.3.0
+
+Bumps [faker](https://github.com/joke2k/faker) from 25.2.0 to 25.3.0.
+- [Release notes](https://github.com/joke2k/faker/releases)
+- [Changelog](https://github.com/joke2k/faker/blob/master/CHANGELOG.md)
+- [Commits](https://github.com/joke2k/faker/compare/v25.2.0...v25.3.0)
+
+---
+updated-dependencies:
+- dependency-name: faker
+  dependency-type: direct:development
+  update-type: version-update:semver-minor
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`0e55988`](https://github.com/supabase-community/auth-py/commit/0e55988f74c908c0fee5b629939a8fab3305052c))
 
 * chore(deps-dev): bump python-semantic-release from 9.7.3 to 9.8.0 (#507) ([`fe033c5`](https://github.com/supabase-community/auth-py/commit/fe033c5b803a64637acc819d84a83be939cbfffd))
 
@@ -443,6 +518,12 @@ Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`10b44fe`](https://g
 * fix: add &#34;verify&#34; flag to the creation of client ([`12f2396`](https://github.com/supabase-community/auth-py/commit/12f239668a5e49723e6fc92f4f1b07cf7d8f0c87))
 
 ### Unknown
+
+* Add follow_redirects=True ([`fab26ac`](https://github.com/supabase-community/auth-py/commit/fab26ac5bd8eca3d2aa5a3413943bfbb4aca6417))
+
+* Add follow_redirects=True ([`5eea191`](https://github.com/supabase-community/auth-py/commit/5eea191bcb26a7faf2b5c3496eabd00ccb3ae1c8))
+
+* Add follow_redirects=True ([`7b38f75`](https://github.com/supabase-community/auth-py/commit/7b38f7544b090029b6105a51f5099eee7de59d61))
 
 * Fix #320 ([`e3862b9`](https://github.com/supabase-community/auth-py/commit/e3862b951cb16dd7c80617925f93febf7be57cd8))
 
