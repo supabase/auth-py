@@ -588,9 +588,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         self._notify_all_subscribers("TOKEN_REFRESHED", session)
         return AuthResponse(session=session, user=response.user)
 
-    def refresh_session(
-        self, refresh_token: Union[str, None] = None
-    ) -> AuthResponse:
+    def refresh_session(self, refresh_token: Union[str, None] = None) -> AuthResponse:
         """
         Returns a new session, regardless of expiry status.
 
@@ -981,9 +979,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         if self._flow_type == "pkce":
             code_verifier = generate_pkce_verifier()
             code_challenge = generate_pkce_challenge(code_verifier)
-            self._storage.set_item(
-                f"{self._storage_key}-code-verifier", code_verifier
-            )
+            self._storage.set_item(f"{self._storage_key}-code-verifier", code_verifier)
             code_challenge_method = (
                 "plain" if code_verifier == code_challenge else "s256"
             )
