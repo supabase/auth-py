@@ -193,6 +193,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         options = credentials.get("options", {})
         redirect_to = options.get("redirect_to")
         data = options.get("data") or {}
+        channel = options.get("channel", "sms")
         captcha_token = options.get("captcha_token")
         if email:
             response = self._request(
@@ -217,6 +218,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
                     "phone": phone,
                     "password": password,
                     "data": data,
+                    "channel": channel,
                     "gotrue_meta_security": {
                         "captcha_token": captcha_token,
                     },
@@ -419,6 +421,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         email_redirect_to = options.get("email_redirect_to")
         should_create_user = options.get("create_user", True)
         data = options.get("data")
+        channel = options.get("channel", "sms")
         captcha_token = options.get("captcha_token")
         if email:
             return self._request(
@@ -443,6 +446,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
                     "phone": phone,
                     "data": data,
                     "create_user": should_create_user,
+                    "channel": channel,
                     "gotrue_meta_security": {
                         "captcha_token": captcha_token,
                     },
