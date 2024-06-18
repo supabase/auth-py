@@ -69,7 +69,7 @@ from ..types import (
     Subscription,
     UserAttributes,
     UserResponse,
-    VerifyOtpParams,
+    VerifyOtpParams, SignInAnonymouslyCredentials,
 )
 from .gotrue_admin_api import SyncGoTrueAdminAPI
 from .gotrue_base_api import SyncGoTrueBaseAPI
@@ -336,6 +336,29 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
             params["scopes"] = scopes
         url = self._get_url_for_provider(provider, params)
         return OAuthResponse(provider=provider, url=url)
+
+    def sign_in_anonymously(self, credentials: Union[SignInAnonymouslyCredentials]) -> AuthResponse:
+        """
+        Creates a new anonymous user.
+        """
+        self._remove_session()
+        options = credentials.get("options", {})
+        data = options.get("data") or {}
+        captcha_token = options.get("captcha_token")
+        response = self._request(
+            "POST",
+            "signup",
+            body={
+                "data": data,
+                "gotrue_meta_security": {
+                    "captcha_token": captcha_token,
+                },
+            }
+        )
+        if response.session:
+            self._save_session(response.session)
+            self._notify_all_subscribers("SIGNED_IN", response.session)
+        return response
 
     def link_identity(self, credentials):
         provider = credentials.get("provider")
