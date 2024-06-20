@@ -260,6 +260,7 @@ class SignUpWithEmailAndPasswordCredentials(TypedDict):
 class SignUpWithPhoneAndPasswordCredentialsOptions(TypedDict):
     data: NotRequired[Any]
     captcha_token: NotRequired[str]
+    channel: NotRequired[Literal["sms", "whatsapp"]]
 
 
 class SignUpWithPhoneAndPasswordCredentials(TypedDict):
@@ -313,6 +314,7 @@ class SignInWithPhoneAndPasswordlessCredentialsOptions(TypedDict):
     should_create_user: NotRequired[bool]
     data: NotRequired[Any]
     captcha_token: NotRequired[str]
+    channel: NotRequired[Literal["sms", "whatsapp"]]
 
 
 class SignInWithPhoneAndPasswordlessCredentials(TypedDict):
