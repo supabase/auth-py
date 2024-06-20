@@ -106,7 +106,7 @@ services:
       - '9000:9000' # web interface
       - '1100:1100' # POP3
   db:
-    image: supabase/postgres:latest
+    image: supabase/postgres:15.1.1.66
     ports:
       - '5432:5432'
     command: postgres -c config_file=/etc/postgresql/postgresql.conf

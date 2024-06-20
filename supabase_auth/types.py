@@ -348,6 +348,15 @@ class SignInWithSSOOptions(TypedDict):
     skip_http_redirect: NotRequired[bool]
 
 
+class SignInAnonymouslyCredentials(TypedDict):
+    options: NotRequired[SignInAnonymouslyCredentialsOptions]
+
+
+class SignInAnonymouslyCredentialsOptions(TypedDict):
+    data: NotRequired[Any]
+    captcha_token: NotRequired[str]
+
+
 class VerifyOtpParamsOptions(TypedDict):
     redirect_to: NotRequired[str]
     captcha_token: NotRequired[str]
