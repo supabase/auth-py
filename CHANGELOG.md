@@ -2,9 +2,64 @@
 
 
 
+## v2.5.0 (2024-06-20)
+
+### Chore
+
+* chore(deps-dev): bump python-semantic-release from 9.8.0 to 9.8.1 (#515) ([`98006ed`](https://github.com/supabase-community/auth-py/commit/98006ed08d07bb2414b261ba3c926f29c0de3645))
+
+* chore(deps): bump python-semantic-release/python-semantic-release from 9.8.0 to 9.8.1 (#514) ([`4458982`](https://github.com/supabase-community/auth-py/commit/445898229a3c504324a33a67d2bd9709bb8048ea))
+
+* chore(deps-dev): bump python-semantic-release from 9.8.0 to 9.8.1
+
+Bumps [python-semantic-release](https://github.com/python-semantic-release/python-semantic-release) from 9.8.0 to 9.8.1.
+- [Release notes](https://github.com/python-semantic-release/python-semantic-release/releases)
+- [Changelog](https://github.com/python-semantic-release/python-semantic-release/blob/master/CHANGELOG.md)
+- [Commits](https://github.com/python-semantic-release/python-semantic-release/compare/v9.8.0...v9.8.1)
+
+---
+updated-dependencies:
+- dependency-name: python-semantic-release
+  dependency-type: direct:development
+  update-type: version-update:semver-patch
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`f28f6a2`](https://github.com/supabase-community/auth-py/commit/f28f6a29175a4af0dd00963b9718c65eda5d937a))
+
+* chore(deps): bump python-semantic-release/python-semantic-release
+
+Bumps [python-semantic-release/python-semantic-release](https://github.com/python-semantic-release/python-semantic-release) from 9.8.0 to 9.8.1.
+- [Release notes](https://github.com/python-semantic-release/python-semantic-release/releases)
+- [Changelog](https://github.com/python-semantic-release/python-semantic-release/blob/master/CHANGELOG.md)
+- [Commits](https://github.com/python-semantic-release/python-semantic-release/compare/v9.8.0...v9.8.1)
+
+---
+updated-dependencies:
+- dependency-name: python-semantic-release/python-semantic-release
+  dependency-type: direct:production
+  update-type: version-update:semver-patch
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`960d593`](https://github.com/supabase-community/auth-py/commit/960d593f28be3cca582812a07d1fcfda6a3bb911))
+
+### Feature
+
+* feat: add anonymous sign in ([`2406d7d`](https://github.com/supabase-community/auth-py/commit/2406d7d90394cf69bf772916c2232ae8aa8afe13))
+
+### Unknown
+
+* update postgres version for infra ([`ad2179b`](https://github.com/supabase-community/auth-py/commit/ad2179b1c042c8faf1b1cdc322d8c9f9d5aae9e7))
+
+* update async client and type naming ([`85f94f2`](https://github.com/supabase-community/auth-py/commit/85f94f27320af3438748fe261a752a29b03a2c24))
+
+* Add Anonymous login ([`f3d35c7`](https://github.com/supabase-community/auth-py/commit/f3d35c72d3dc334d5963d4f9a57137eeacdff873))
+
+
 ## v2.4.4 (2024-06-04)
 
 ### Chore
+
+* chore(release): bump version to v2.4.4 ([`1ed3dd7`](https://github.com/supabase-community/auth-py/commit/1ed3dd7389499ff2f8793f70adf51250cfe55964))
 
 * chore(deps): bump pydantic from 2.7.2 to 2.7.3 (#513) ([`4a5e21e`](https://github.com/supabase-community/auth-py/commit/4a5e21e93f14a76d9a46b218163a2e9538537440))
 
