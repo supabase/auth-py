@@ -349,10 +349,10 @@ class SignInWithSSOOptions(TypedDict):
 
 
 class SignInAnonymouslyCredentials(TypedDict):
-    options: NotRequired[SignInAnonymouslySSOOptions]
+    options: NotRequired[SignInAnonymouslyCredentialsOptions]
 
 
-class SignInAnonymouslySSOOptions(TypedDict):
+class SignInAnonymouslyCredentialsOptions(TypedDict):
     data: NotRequired[Any]
     captcha_token: NotRequired[str]
 
