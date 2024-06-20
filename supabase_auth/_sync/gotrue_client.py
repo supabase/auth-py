@@ -191,7 +191,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         phone = credentials.get("phone")
         password = credentials.get("password")
         options = credentials.get("options", {})
-        redirect_to = options.get("redirct_to") or options.get("email_redirect_to")
+        redirect_to = options.get("redirect_to") or options.get("email_redirect_to")
         data = options.get("data") or {}
         channel = options.get("channel", "sms")
         captcha_token = options.get("captcha_token")
