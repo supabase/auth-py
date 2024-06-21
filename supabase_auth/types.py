@@ -104,6 +104,10 @@ class SSOResponse(BaseModel):
     url: str
 
 
+class LinkIdentityResponse(BaseModel):
+    url: str
+
+
 class IdentitiesResponse(BaseModel):
     identities: List[UserIdentity]
 
@@ -151,6 +155,7 @@ class Session(BaseModel):
 
 class UserIdentity(BaseModel):
     id: str
+    identity_id: str
     user_id: str
     identity_data: Dict[str, Any]
     provider: str
