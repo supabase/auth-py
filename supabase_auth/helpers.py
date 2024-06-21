@@ -17,6 +17,7 @@ from .types import (
     AuthResponse,
     GenerateLinkProperties,
     GenerateLinkResponse,
+    LinkIdentityResponse,
     Session,
     SSOResponse,
     User,
@@ -75,6 +76,10 @@ def parse_auth_response(data: Any) -> AuthResponse:
 
 def parse_auth_otp_response(data: Any) -> AuthOtpResponse:
     return model_validate(AuthOtpResponse, data)
+
+
+def parse_link_identity_response(data: Any) -> LinkIdentityResponse:
+    return model_validate(LinkIdentityResponse, data)
 
 
 def parse_link_response(data: Any) -> GenerateLinkResponse:

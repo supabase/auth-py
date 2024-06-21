@@ -32,6 +32,7 @@ from ..helpers import (
     model_validate,
     parse_auth_otp_response,
     parse_auth_response,
+    parse_link_identity_response,
     parse_sso_response,
     parse_user_response,
 )
@@ -70,6 +71,7 @@ from ..types import (
     SignUpWithPasswordCredentials,
     Subscription,
     UserAttributes,
+    UserIdentity,
     UserResponse,
     VerifyOtpParams,
 )
@@ -366,10 +368,14 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
             params["redirect_to"] = redirect_to
         if scopes:
             params["scopes"] = scopes
-        url = await self._get_url_for_provider(provider, params)
+        url = await self._get_url_for_provider(
+            f"{self._url}/authorize", provider, params
+        )
         return OAuthResponse(provider=provider, url=url)
 
-    async def link_identity(self, credentials):
+    async def link_identity(
+        self, credentials: SignInWithOAuthCredentials
+    ) -> OAuthResponse:
         provider = credentials.get("provider")
         options = credentials.get("options", {})
         redirect_to = options.get("redirect_to")
@@ -379,23 +385,40 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
             params["redirect_to"] = redirect_to
         if scopes:
             params["scopes"] = scopes
-        params["skip_browser_redirect"] = True
+        params["skip_http_redirect"] = "true"
+        url = await self._get_url_for_provider(
+            "user/identities/authorize", provider, params
+        )
 
-        url = await self._get_url_for_provider(provider, params)
-        return OAuthResponse(provider=provider, url=url)
+        session = await self.get_session()
+        if not session:
+            raise AuthSessionMissingError()
+
+        response = await self._request(
+            method="GET",
+            path=url,
+            jwt=session.access_token,
+            xform=parse_link_identity_response,
+        )
+        return OAuthResponse(provider=provider, url=response.url)
 
     async def get_user_identities(self):
-        response = self.get_user()
+        response = await self.get_user()
         return (
             IdentitiesResponse(identities=response.user.identities)
             if response.user
             else AuthSessionMissingError()
         )
 
-    async def unlink_identity(self, identity):
+    async def unlink_identity(self, identity: UserIdentity):
+        session = await self.get_session()
+        if not session:
+            raise AuthSessionMissingError()
+
         return await self._request(
-            "POST",
-            f"/user/identities/{identity.id}",
+            "DELETE",
+            f"user/identities/{identity.identity_id}",
+            jwt=session.access_token,
         )
 
     async def sign_in_with_otp(
@@ -975,6 +998,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
 
     async def _get_url_for_provider(
         self,
+        url: str,
         provider: Provider,
         params: Dict[str, str],
     ) -> str:
@@ -992,7 +1016,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
 
         params["provider"] = provider
         query = urlencode(params)
-        return f"{self._url}/authorize?{query}"
+        return f"{url}?{query}"
 
     def _decode_jwt(self, jwt: str) -> DecodedJWTDict:
         """

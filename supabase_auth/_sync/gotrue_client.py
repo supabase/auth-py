@@ -32,6 +32,7 @@ from ..helpers import (
     model_validate,
     parse_auth_otp_response,
     parse_auth_response,
+    parse_link_identity_response,
     parse_sso_response,
     parse_user_response,
 )
@@ -70,6 +71,7 @@ from ..types import (
     SignUpWithPasswordCredentials,
     Subscription,
     UserAttributes,
+    UserIdentity,
     UserResponse,
     VerifyOtpParams,
 )
@@ -366,10 +368,10 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
             params["redirect_to"] = redirect_to
         if scopes:
             params["scopes"] = scopes
-        url = self._get_url_for_provider(provider, params)
+        url = self._get_url_for_provider(f"{self._url}/authorize", provider, params)
         return OAuthResponse(provider=provider, url=url)
 
-    def link_identity(self, credentials):
+    def link_identity(self, credentials: SignInWithOAuthCredentials) -> OAuthResponse:
         provider = credentials.get("provider")
         options = credentials.get("options", {})
         redirect_to = options.get("redirect_to")
@@ -379,10 +381,20 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
             params["redirect_to"] = redirect_to
         if scopes:
             params["scopes"] = scopes
-        params["skip_browser_redirect"] = True
+        params["skip_http_redirect"] = "true"
+        url = self._get_url_for_provider("user/identities/authorize", provider, params)
 
-        url = self._get_url_for_provider(provider, params)
-        return OAuthResponse(provider=provider, url=url)
+        session = self.get_session()
+        if not session:
+            raise AuthSessionMissingError()
+
+        response = self._request(
+            method="GET",
+            path=url,
+            jwt=session.access_token,
+            xform=parse_link_identity_response,
+        )
+        return OAuthResponse(provider=provider, url=response.url)
 
     def get_user_identities(self):
         response = self.get_user()
@@ -392,10 +404,15 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
             else AuthSessionMissingError()
         )
 
-    def unlink_identity(self, identity):
+    def unlink_identity(self, identity: UserIdentity):
+        session = self.get_session()
+        if not session:
+            raise AuthSessionMissingError()
+
         return self._request(
-            "POST",
-            f"/user/identities/{identity.id}",
+            "DELETE",
+            f"user/identities/{identity.identity_id}",
+            jwt=session.access_token,
         )
 
     def sign_in_with_otp(
@@ -973,6 +990,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
 
     def _get_url_for_provider(
         self,
+        url: str,
         provider: Provider,
         params: Dict[str, str],
     ) -> str:
@@ -988,7 +1006,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
 
         params["provider"] = provider
         query = urlencode(params)
-        return f"{self._url}/authorize?{query}"
+        return f"{url}?{query}"
 
     def _decode_jwt(self, jwt: str) -> DecodedJWTDict:
         """
