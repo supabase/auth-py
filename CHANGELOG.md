@@ -1,8 +1,40 @@
 # CHANGELOG
 
+## v2.5.2 (2024-06-21)
+
+### Chore
+
+* chore(deps-dev): bump faker from 25.8.0 to 25.9.1 (#529) ([`c530238`](https://github.com/supabase-community/auth-py/commit/c530238b2574921545980fc0bf170b21b6bef20c))
+
+* chore(deps-dev): bump faker from 25.8.0 to 25.9.1
+
+Bumps [faker](https://github.com/joke2k/faker) from 25.8.0 to 25.9.1.
+- [Release notes](https://github.com/joke2k/faker/releases)
+- [Changelog](https://github.com/joke2k/faker/blob/master/CHANGELOG.md)
+- [Commits](https://github.com/joke2k/faker/compare/v25.8.0...v25.9.1)
+
+---
+updated-dependencies:
+- dependency-name: faker
+  dependency-type: direct:development
+  update-type: version-update:semver-minor
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`1651b74`](https://github.com/supabase-community/auth-py/commit/1651b74b63b61511ddd0a473002cf438c07285b5))
+
+### Fix
+
+* fix: link identity methods now working ([`2e95db8`](https://github.com/supabase-community/auth-py/commit/2e95db8bcf0ba323b330ef56f1928f72523e0b0e))
+
+### Unknown
+
+* fix all link identity methods ([`3570ace`](https://github.com/supabase-community/auth-py/commit/3570aced5ebcb22f448e987d4a157e7b6d2f0b29))
+
 ## v2.5.1 (2024-06-20)
 
 ### Chore
+
+* chore(release): bump version to v2.5.1 ([`6563daf`](https://github.com/supabase-community/auth-py/commit/6563daf5bd249718a73872a33421b773076e05e7))
 
 * chore(deps-dev): bump python-semantic-release from 9.8.1 to 9.8.3 (#526) ([`b7d5755`](https://github.com/supabase-community/auth-py/commit/b7d5755318c3a7929c057ef8a4ce0f9ac765389c))
 
