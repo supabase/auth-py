@@ -436,7 +436,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         phone = credentials.get("phone")
         options = credentials.get("options", {})
         email_redirect_to = options.get("email_redirect_to")
-        should_create_user = options.get("create_user", True)
+        should_create_user = options.get("should_create_user", True)
         data = options.get("data")
         channel = options.get("channel", "sms")
         captcha_token = options.get("captcha_token")
