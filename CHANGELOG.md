@@ -1,6 +1,24 @@
 # CHANGELOG
 
+## v2.5.4 (2024-06-23)
+
+### Fix
+
+* fix: add await to async call for anonymous sign in request (#532) ([`45cfe25`](https://github.com/supabase-community/auth-py/commit/45cfe25f10cb63134cd297b34bae419687cb64b6))
+
+### Unknown
+
+* add missing await ([`412449a`](https://github.com/supabase-community/auth-py/commit/412449ac83d72ad05415cbfb63f91821555ed997))
+
+* add await ([`5520ad8`](https://github.com/supabase-community/auth-py/commit/5520ad839ea8071801e00e5c10294958b31dd3e4))
+
+* add await to async call for anonymous sign in request ([`4734d0d`](https://github.com/supabase-community/auth-py/commit/4734d0df974d2a24a8cd9f468584343d5f7ea9c3))
+
 ## v2.5.3 (2024-06-23)
+
+### Chore
+
+* chore(release): bump version to v2.5.3 ([`b194f07`](https://github.com/supabase-community/auth-py/commit/b194f07c5cbe5e7b813e968a928e99cc5c6070e0))
 
 ### Fix
 
