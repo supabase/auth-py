@@ -159,13 +159,13 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         """
         Creates a new anonymous user.
         """
-        self._remove_session()
+        await self._remove_session()
         if credentials is None:
             credentials = {"options": {}}
         options = credentials.get("options", {})
         data = options.get("data") or {}
         captcha_token = options.get("captcha_token")
-        response = self._request(
+        response = await self._request(
             "POST",
             "signup",
             body={
@@ -177,7 +177,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
             xform=parse_auth_response,
         )
         if response.session:
-            self._save_session(response.session)
+            await self._save_session(response.session)
             self._notify_all_subscribers("SIGNED_IN", response.session)
         return response
 
