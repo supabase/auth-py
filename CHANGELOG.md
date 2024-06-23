@@ -1,8 +1,20 @@
 # CHANGELOG
 
+## v2.5.3 (2024-06-23)
+
+### Fix
+
+* fix: update property name for should_create_user (#531) ([`388fcba`](https://github.com/supabase-community/auth-py/commit/388fcbac63bc96119c3c3ece91f28578e384a38b))
+
+### Unknown
+
+* update peoperty name for should_create_user ([`4bc09ef`](https://github.com/supabase-community/auth-py/commit/4bc09ef2f61ec55e01485dfa606a9d6631e607a5))
+
 ## v2.5.2 (2024-06-21)
 
 ### Chore
+
+* chore(release): bump version to v2.5.2 ([`00a04c6`](https://github.com/supabase-community/auth-py/commit/00a04c6637ccd2fb84700cea13dd4aaf705cc443))
 
 * chore(deps-dev): bump faker from 25.8.0 to 25.9.1 (#529) ([`c530238`](https://github.com/supabase-community/auth-py/commit/c530238b2574921545980fc0bf170b21b6bef20c))
 
