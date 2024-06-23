@@ -177,7 +177,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
             xform=parse_auth_response,
         )
         if response.session:
-            self._save_session(response.session)
+            await self._save_session(response.session)
             self._notify_all_subscribers("SIGNED_IN", response.session)
         return response
 
