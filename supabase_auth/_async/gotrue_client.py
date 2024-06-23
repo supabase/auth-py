@@ -159,7 +159,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         """
         Creates a new anonymous user.
         """
-        self._remove_session()
+        await self._remove_session()
         if credentials is None:
             credentials = {"options": {}}
         options = credentials.get("options", {})
