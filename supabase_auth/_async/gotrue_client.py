@@ -165,7 +165,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         options = credentials.get("options", {})
         data = options.get("data") or {}
         captcha_token = options.get("captcha_token")
-        response = self._request(
+        response = await self._request(
             "POST",
             "signup",
             body={
