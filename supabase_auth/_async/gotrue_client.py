@@ -511,7 +511,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         """
         current_session: Union[Session, None] = None
         if self._persist_session:
-            maybe_session = await self._storage.get_item(self._storage_key)
+            maybe_session = self._storage.get_item(self._storage_key)
             current_session = self._get_valid_session(maybe_session)
             if not current_session:
                 await self._remove_session()
@@ -799,7 +799,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
 
     async def _remove_session(self) -> None:
         if self._persist_session:
-            await self._storage.remove_item(self._storage_key)
+            self._storage.remove_item(self._storage_key)
         else:
             self._in_memory_session = None
         if self._refresh_token_timer:
@@ -857,7 +857,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         return session, redirect_type
 
     async def _recover_and_refresh(self) -> None:
-        raw_session = await self._storage.get_item(self._storage_key)
+        raw_session = self._storage.get_item(self._storage_key)
         current_session = self._get_valid_session(raw_session)
         if not current_session:
             if raw_session:
@@ -923,7 +923,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
             value = (expire_in - refresh_duration_before_expires) * 1000
             await self._start_auto_refresh_token(value)
         if self._persist_session and session.expires_at:
-            await self._storage.set_item(self._storage_key, model_dump_json(session))
+            self._storage.set_item(self._storage_key, model_dump_json(session))
 
     async def _start_auto_refresh_token(self, value: float) -> None:
         if self._refresh_token_timer:
@@ -1005,7 +1005,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         if self._flow_type == "pkce":
             code_verifier = generate_pkce_verifier()
             code_challenge = generate_pkce_challenge(code_verifier)
-            await self._storage.set_item(
+            self._storage.set_item(
                 f"{self._storage_key}-code-verifier", code_verifier
             )
             code_challenge_method = (
@@ -1025,7 +1025,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         return decode_jwt_payload(jwt)
 
     async def exchange_code_for_session(self, params: CodeExchangeParams):
-        code_verifier = params.get("code_verifier") or await self._storage.get_item(
+        code_verifier = params.get("code_verifier") or self._storage.get_item(
             f"{self._storage_key}-code-verifier"
         )
         response = await self._request(
@@ -1038,7 +1038,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
             redirect_to=params.get("redirect_to"),
             xform=parse_auth_response,
         )
-        await self._storage.remove_item(f"{self._storage_key}-code-verifier")
+        self._storage.remove_item(f"{self._storage_key}-code-verifier")
         if response.session:
             await self._save_session(response.session)
             self._notify_all_subscribers("SIGNED_IN", response.session)
