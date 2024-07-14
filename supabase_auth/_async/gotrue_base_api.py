@@ -24,7 +24,9 @@ class AsyncGoTrueBaseAPI:
         self._url = url
         self._headers = headers
         self._http_client = http_client or AsyncClient(
-            verify=bool(verify), follow_redirects=True
+            verify=bool(verify),
+            follow_redirects=True,
+            http2=True,
         )
 
     async def __aenter__(self) -> Self:
