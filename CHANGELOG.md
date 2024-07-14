@@ -1,6 +1,122 @@
 # CHANGELOG
 
+## v2.5.5 (2024-07-14)
+
+### Chore
+
+* chore(deps-dev): bump zipp from 3.18.1 to 3.19.1 (#546) ([`1c807cb`](https://github.com/supabase-community/auth-py/commit/1c807cb21ebc88cb95c98c8c12ca9b4e71c6da9d))
+
+* chore(deps-dev): bump zipp from 3.18.1 to 3.19.1
+
+Bumps [zipp](https://github.com/jaraco/zipp) from 3.18.1 to 3.19.1.
+- [Release notes](https://github.com/jaraco/zipp/releases)
+- [Changelog](https://github.com/jaraco/zipp/blob/main/NEWS.rst)
+- [Commits](https://github.com/jaraco/zipp/compare/v3.18.1...v3.19.1)
+
+---
+updated-dependencies:
+- dependency-name: zipp
+  dependency-type: indirect
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`4052673`](https://github.com/supabase-community/auth-py/commit/4052673857464876d5703d3c73c9af0b0653d4dc))
+
+* chore(deps-dev): bump python-semantic-release from 9.8.3 to 9.8.5 (#544) ([`ff1046e`](https://github.com/supabase-community/auth-py/commit/ff1046ef2b78c14d6175e511e78cb6e80091425b))
+
+* chore(deps-dev): bump python-semantic-release from 9.8.3 to 9.8.5
+
+Bumps [python-semantic-release](https://github.com/python-semantic-release/python-semantic-release) from 9.8.3 to 9.8.5.
+- [Release notes](https://github.com/python-semantic-release/python-semantic-release/releases)
+- [Changelog](https://github.com/python-semantic-release/python-semantic-release/blob/master/CHANGELOG.md)
+- [Commits](https://github.com/python-semantic-release/python-semantic-release/compare/v9.8.3...v9.8.5)
+
+---
+updated-dependencies:
+- dependency-name: python-semantic-release
+  dependency-type: direct:development
+  update-type: version-update:semver-patch
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`dd38cdc`](https://github.com/supabase-community/auth-py/commit/dd38cdc39dc147850851953017f20ff568621a87))
+
+* chore(deps): bump python-semantic-release/python-semantic-release from 9.8.3 to 9.8.5 (#545) ([`32ac690`](https://github.com/supabase-community/auth-py/commit/32ac690dbb8a70550cfec8b5b12c8b74b79c69b5))
+
+* chore(deps): bump python-semantic-release/python-semantic-release
+
+Bumps [python-semantic-release/python-semantic-release](https://github.com/python-semantic-release/python-semantic-release) from 9.8.3 to 9.8.5.
+- [Release notes](https://github.com/python-semantic-release/python-semantic-release/releases)
+- [Changelog](https://github.com/python-semantic-release/python-semantic-release/blob/master/CHANGELOG.md)
+- [Commits](https://github.com/python-semantic-release/python-semantic-release/compare/v9.8.3...v9.8.5)
+
+---
+updated-dependencies:
+- dependency-name: python-semantic-release/python-semantic-release
+  dependency-type: direct:production
+  update-type: version-update:semver-patch
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`07042e6`](https://github.com/supabase-community/auth-py/commit/07042e603adcce30dc76f1fd78b1c8b4209a0a31))
+
+* chore(deps): bump certifi from 2024.2.2 to 2024.7.4 (#542) ([`d960b0f`](https://github.com/supabase-community/auth-py/commit/d960b0f6feb91415c27b805bf1fe09453df9660c))
+
+* chore(deps): bump certifi from 2024.2.2 to 2024.7.4
+
+Bumps [certifi](https://github.com/certifi/python-certifi) from 2024.2.2 to 2024.7.4.
+- [Commits](https://github.com/certifi/python-certifi/compare/2024.02.02...2024.07.04)
+
+---
+updated-dependencies:
+- dependency-name: certifi
+  dependency-type: indirect
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`95f06c3`](https://github.com/supabase-community/auth-py/commit/95f06c326118febd77a8464eadc0726c6a274c75))
+
+* chore(deps): bump pydantic from 2.7.4 to 2.8.2 (#539) ([`d0798d6`](https://github.com/supabase-community/auth-py/commit/d0798d69fc45e6abc20754be253d037265d7733c))
+
+* chore(deps): bump pydantic from 2.7.4 to 2.8.2
+
+Bumps [pydantic](https://github.com/pydantic/pydantic) from 2.7.4 to 2.8.2.
+- [Release notes](https://github.com/pydantic/pydantic/releases)
+- [Changelog](https://github.com/pydantic/pydantic/blob/v2.8.2/HISTORY.md)
+- [Commits](https://github.com/pydantic/pydantic/compare/v2.7.4...v2.8.2)
+
+---
+updated-dependencies:
+- dependency-name: pydantic
+  dependency-type: direct:production
+  update-type: version-update:semver-minor
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`e22a177`](https://github.com/supabase-community/auth-py/commit/e22a1777225a64c283e4dfd261e8ad3efbf5be0e))
+
+* chore(deps-dev): bump faker from 25.9.1 to 26.0.0 (#535) ([`f2fa2a9`](https://github.com/supabase-community/auth-py/commit/f2fa2a9eeaac2119e1fa2c6dc646649e926e32b1))
+
+* chore(deps-dev): bump faker from 25.9.1 to 26.0.0
+
+Bumps [faker](https://github.com/joke2k/faker) from 25.9.1 to 26.0.0.
+- [Release notes](https://github.com/joke2k/faker/releases)
+- [Changelog](https://github.com/joke2k/faker/blob/master/CHANGELOG.md)
+- [Commits](https://github.com/joke2k/faker/compare/v25.9.1...v26.0.0)
+
+---
+updated-dependencies:
+- dependency-name: faker
+  dependency-type: direct:development
+  update-type: version-update:semver-major
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`1fe332f`](https://github.com/supabase-community/auth-py/commit/1fe332fa783f71a25c67f7db42484cb029d77bfb))
+
+### Fix
+
+* fix: enable HTTP2 (#534) ([`73ea013`](https://github.com/supabase-community/auth-py/commit/73ea0131dc326df85adc927c1f908ba11adf4d25))
+
 ## v2.5.4 (2024-06-23)
+
+### Chore
+
+* chore(release): bump version to v2.5.4 ([`ca6e6c9`](https://github.com/supabase-community/auth-py/commit/ca6e6c97c1071fc13f7efa58269b936065d2395e))
 
 ### Fix
 
@@ -86,10 +202,6 @@ Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`8e5ec68`](https://g
 
 * chore(deps-dev): bump faker from 25.4.0 to 25.8.0 (#519) ([`e4fc889`](https://github.com/supabase-community/auth-py/commit/e4fc8891bcafc94688e75a305dfc85d9fbbb60e9))
 
-* chore(deps): bump python-semantic-release/python-semantic-release from 9.8.1 to 9.8.3 (#527) ([`eda2715`](https://github.com/supabase-community/auth-py/commit/eda2715283b589942ce85c0a83708190fa595d0b))
-
-* chore(deps-dev): bump urllib3 from 2.2.1 to 2.2.2 (#525) ([`8137d24`](https://github.com/supabase-community/auth-py/commit/8137d241a12f24e0dac3554c1ec7f34e504aaf87))
-
 * chore(deps-dev): bump faker from 25.4.0 to 25.8.0
 
 Bumps [faker](https://github.com/joke2k/faker) from 25.4.0 to 25.8.0.
@@ -106,9 +218,76 @@ updated-dependencies:
 
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`c730281`](https://github.com/supabase-community/auth-py/commit/c7302817c2fca068811fa507d582ce9ce7465494))
 
+* chore(deps): bump python-semantic-release/python-semantic-release from 9.8.1 to 9.8.3 (#527) ([`eda2715`](https://github.com/supabase-community/auth-py/commit/eda2715283b589942ce85c0a83708190fa595d0b))
+
+* chore(deps): bump python-semantic-release/python-semantic-release
+
+Bumps [python-semantic-release/python-semantic-release](https://github.com/python-semantic-release/python-semantic-release) from 9.8.1 to 9.8.3.
+- [Release notes](https://github.com/python-semantic-release/python-semantic-release/releases)
+- [Changelog](https://github.com/python-semantic-release/python-semantic-release/blob/master/CHANGELOG.md)
+- [Commits](https://github.com/python-semantic-release/python-semantic-release/compare/v9.8.1...v9.8.3)
+
+---
+updated-dependencies:
+- dependency-name: python-semantic-release/python-semantic-release
+  dependency-type: direct:production
+  update-type: version-update:semver-patch
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`941a87b`](https://github.com/supabase-community/auth-py/commit/941a87b3a62bb249fe01683e814a6f3700cc24f5))
+
+* chore(deps-dev): bump urllib3 from 2.2.1 to 2.2.2 (#525) ([`8137d24`](https://github.com/supabase-community/auth-py/commit/8137d241a12f24e0dac3554c1ec7f34e504aaf87))
+
+* chore(deps-dev): bump urllib3 from 2.2.1 to 2.2.2
+
+Bumps [urllib3](https://github.com/urllib3/urllib3) from 2.2.1 to 2.2.2.
+- [Release notes](https://github.com/urllib3/urllib3/releases)
+- [Changelog](https://github.com/urllib3/urllib3/blob/main/CHANGES.rst)
+- [Commits](https://github.com/urllib3/urllib3/compare/2.2.1...2.2.2)
+
+---
+updated-dependencies:
+- dependency-name: urllib3
+  dependency-type: indirect
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`097d3ac`](https://github.com/supabase-community/auth-py/commit/097d3ac788e4650358753dde48d93c3204940029))
+
 * chore(deps): bump pydantic from 2.7.3 to 2.7.4 (#521) ([`0647d43`](https://github.com/supabase-community/auth-py/commit/0647d43940df2fc387dde01092cb0ea018711082))
 
+* chore(deps): bump pydantic from 2.7.3 to 2.7.4
+
+Bumps [pydantic](https://github.com/pydantic/pydantic) from 2.7.3 to 2.7.4.
+- [Release notes](https://github.com/pydantic/pydantic/releases)
+- [Changelog](https://github.com/pydantic/pydantic/blob/main/HISTORY.md)
+- [Commits](https://github.com/pydantic/pydantic/compare/v2.7.3...v2.7.4)
+
+---
+updated-dependencies:
+- dependency-name: pydantic
+  dependency-type: direct:production
+  update-type: version-update:semver-patch
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`f7c60e7`](https://github.com/supabase-community/auth-py/commit/f7c60e727830bb1644416789a32ca0d3173658bc))
+
 * chore(deps-dev): bump pytest from 8.2.1 to 8.2.2 (#516) ([`2c40cd6`](https://github.com/supabase-community/auth-py/commit/2c40cd6fdbfae74ac9c104d307a91d6dc5b21195))
+
+* chore(deps-dev): bump pytest from 8.2.1 to 8.2.2
+
+Bumps [pytest](https://github.com/pytest-dev/pytest) from 8.2.1 to 8.2.2.
+- [Release notes](https://github.com/pytest-dev/pytest/releases)
+- [Changelog](https://github.com/pytest-dev/pytest/blob/main/CHANGELOG.rst)
+- [Commits](https://github.com/pytest-dev/pytest/compare/8.2.1...8.2.2)
+
+---
+updated-dependencies:
+- dependency-name: pytest
+  dependency-type: direct:development
+  update-type: version-update:semver-patch
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`e2f6c0a`](https://github.com/supabase-community/auth-py/commit/e2f6c0ab7bb962e2ed57a992d90bea91f91b2dd6))
 
 ### Fix
 
@@ -138,72 +317,7 @@ Co-authored-by: Joel Lee &lt;lee.yi.jie.joel@gmail.com&gt; ([`f44450d`](https://
 
 * chore(release): bump version to v2.5.0 ([`a92ec80`](https://github.com/supabase-community/auth-py/commit/a92ec8068d8751d0864a7cde2cdb62bfb39c7071))
 
-* chore(deps): bump python-semantic-release/python-semantic-release
-
-Bumps [python-semantic-release/python-semantic-release](https://github.com/python-semantic-release/python-semantic-release) from 9.8.1 to 9.8.3.
-- [Release notes](https://github.com/python-semantic-release/python-semantic-release/releases)
-- [Changelog](https://github.com/python-semantic-release/python-semantic-release/blob/master/CHANGELOG.md)
-- [Commits](https://github.com/python-semantic-release/python-semantic-release/compare/v9.8.1...v9.8.3)
-
----
-updated-dependencies:
-- dependency-name: python-semantic-release/python-semantic-release
-  dependency-type: direct:production
-  update-type: version-update:semver-patch
-...
-
-Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`941a87b`](https://github.com/supabase-community/auth-py/commit/941a87b3a62bb249fe01683e814a6f3700cc24f5))
-
-* chore(deps-dev): bump urllib3 from 2.2.1 to 2.2.2
-
-Bumps [urllib3](https://github.com/urllib3/urllib3) from 2.2.1 to 2.2.2.
-- [Release notes](https://github.com/urllib3/urllib3/releases)
-- [Changelog](https://github.com/urllib3/urllib3/blob/main/CHANGES.rst)
-- [Commits](https://github.com/urllib3/urllib3/compare/2.2.1...2.2.2)
-
----
-updated-dependencies:
-- dependency-name: urllib3
-  dependency-type: indirect
-...
-
-Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`097d3ac`](https://github.com/supabase-community/auth-py/commit/097d3ac788e4650358753dde48d93c3204940029))
-
-* chore(deps-dev): bump pytest from 8.2.1 to 8.2.2
-
-Bumps [pytest](https://github.com/pytest-dev/pytest) from 8.2.1 to 8.2.2.
-- [Release notes](https://github.com/pytest-dev/pytest/releases)
-- [Changelog](https://github.com/pytest-dev/pytest/blob/main/CHANGELOG.rst)
-- [Commits](https://github.com/pytest-dev/pytest/compare/8.2.1...8.2.2)
-
----
-updated-dependencies:
-- dependency-name: pytest
-  dependency-type: direct:development
-  update-type: version-update:semver-patch
-...
-
-Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`e2f6c0a`](https://github.com/supabase-community/auth-py/commit/e2f6c0ab7bb962e2ed57a992d90bea91f91b2dd6))
-
 * chore(deps-dev): bump python-semantic-release from 9.8.0 to 9.8.1 (#515) ([`98006ed`](https://github.com/supabase-community/auth-py/commit/98006ed08d07bb2414b261ba3c926f29c0de3645))
-
-* chore(deps): bump python-semantic-release/python-semantic-release from 9.8.0 to 9.8.1 (#514) ([`4458982`](https://github.com/supabase-community/auth-py/commit/445898229a3c504324a33a67d2bd9709bb8048ea))
-
-* chore(deps): bump pydantic from 2.7.3 to 2.7.4
-
-Bumps [pydantic](https://github.com/pydantic/pydantic) from 2.7.3 to 2.7.4.
-- [Release notes](https://github.com/pydantic/pydantic/releases)
-- [Changelog](https://github.com/pydantic/pydantic/blob/main/HISTORY.md)
-- [Commits](https://github.com/pydantic/pydantic/compare/v2.7.3...v2.7.4)
-
----
-updated-dependencies:
-- dependency-name: pydantic
-  dependency-type: direct:production
-  update-type: version-update:semver-patch
-...
-
-Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`f7c60e7`](https://github.com/supabase-community/auth-py/commit/f7c60e727830bb1644416789a32ca0d3173658bc))
 
 * chore(deps-dev): bump python-semantic-release from 9.8.0 to 9.8.1
 
@@ -220,6 +334,8 @@ updated-dependencies:
 ...
 
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`f28f6a2`](https://github.com/supabase-community/auth-py/commit/f28f6a29175a4af0dd00963b9718c65eda5d937a))
+
+* chore(deps): bump python-semantic-release/python-semantic-release from 9.8.0 to 9.8.1 (#514) ([`4458982`](https://github.com/supabase-community/auth-py/commit/445898229a3c504324a33a67d2bd9709bb8048ea))
 
 * chore(deps): bump python-semantic-release/python-semantic-release
 
@@ -257,8 +373,6 @@ Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`960d593`](https://g
 
 * chore(deps): bump pydantic from 2.7.2 to 2.7.3 (#513) ([`4a5e21e`](https://github.com/supabase-community/auth-py/commit/4a5e21e93f14a76d9a46b218163a2e9538537440))
 
-* chore(deps-dev): bump faker from 25.3.0 to 25.4.0 (#512) ([`daafb74`](https://github.com/supabase-community/auth-py/commit/daafb74a4970a6fcbd9dc36ef757079616d1f150))
-
 * chore(deps): bump pydantic from 2.7.2 to 2.7.3
 
 Bumps [pydantic](https://github.com/pydantic/pydantic) from 2.7.2 to 2.7.3.
@@ -274,6 +388,8 @@ updated-dependencies:
 ...
 
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`7b5269c`](https://github.com/supabase-community/auth-py/commit/7b5269c4254d598a41507f45ec4893cfa20a14ac))
+
+* chore(deps-dev): bump faker from 25.3.0 to 25.4.0 (#512) ([`daafb74`](https://github.com/supabase-community/auth-py/commit/daafb74a4970a6fcbd9dc36ef757079616d1f150))
 
 * chore(deps-dev): bump faker from 25.3.0 to 25.4.0
 
@@ -292,6 +408,22 @@ updated-dependencies:
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`35a8b14`](https://github.com/supabase-community/auth-py/commit/35a8b14dc5f6657e63d21de29dd2b60a29f07eed))
 
 * chore(deps-dev): bump faker from 25.2.0 to 25.3.0 (#510) ([`e7fdc2d`](https://github.com/supabase-community/auth-py/commit/e7fdc2d978c95638dfc7a27676aabcba44d2a80d))
+
+* chore(deps-dev): bump faker from 25.2.0 to 25.3.0
+
+Bumps [faker](https://github.com/joke2k/faker) from 25.2.0 to 25.3.0.
+- [Release notes](https://github.com/joke2k/faker/releases)
+- [Changelog](https://github.com/joke2k/faker/blob/master/CHANGELOG.md)
+- [Commits](https://github.com/joke2k/faker/compare/v25.2.0...v25.3.0)
+
+---
+updated-dependencies:
+- dependency-name: faker
+  dependency-type: direct:development
+  update-type: version-update:semver-minor
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`0e55988`](https://github.com/supabase-community/auth-py/commit/0e55988f74c908c0fee5b629939a8fab3305052c))
 
 ### Fix
 
@@ -315,26 +447,6 @@ Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`35a8b14`](https://g
 
 * chore(deps): bump pydantic from 2.7.1 to 2.7.2 (#509) ([`5d433fe`](https://github.com/supabase-community/auth-py/commit/5d433fe665fcc08dad5dc49c4225a0d53b5fa7e6))
 
-* chore(ci): bump python-semantic-release/python-semantic-release from 9.7.3 to 9.8.0 (#508) ([`a3037d9`](https://github.com/supabase-community/auth-py/commit/a3037d94cdfe0b419b2d8b3785783f36c843196c))
-
-* chore(deps-dev): bump faker from 25.2.0 to 25.3.0
-
-Bumps [faker](https://github.com/joke2k/faker) from 25.2.0 to 25.3.0.
-- [Release notes](https://github.com/joke2k/faker/releases)
-- [Changelog](https://github.com/joke2k/faker/blob/master/CHANGELOG.md)
-- [Commits](https://github.com/joke2k/faker/compare/v25.2.0...v25.3.0)
-
----
-updated-dependencies:
-- dependency-name: faker
-  dependency-type: direct:development
-  update-type: version-update:semver-minor
-...
-
-Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`0e55988`](https://github.com/supabase-community/auth-py/commit/0e55988f74c908c0fee5b629939a8fab3305052c))
-
-* chore(deps-dev): bump python-semantic-release from 9.7.3 to 9.8.0 (#507) ([`fe033c5`](https://github.com/supabase-community/auth-py/commit/fe033c5b803a64637acc819d84a83be939cbfffd))
-
 * chore(deps): bump pydantic from 2.7.1 to 2.7.2
 
 Bumps [pydantic](https://github.com/pydantic/pydantic) from 2.7.1 to 2.7.2.
@@ -351,6 +463,8 @@ updated-dependencies:
 
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`9f80a51`](https://github.com/supabase-community/auth-py/commit/9f80a51c2550e305c79eac312d582c1b8a516bee))
 
+* chore(ci): bump python-semantic-release/python-semantic-release from 9.7.3 to 9.8.0 (#508) ([`a3037d9`](https://github.com/supabase-community/auth-py/commit/a3037d94cdfe0b419b2d8b3785783f36c843196c))
+
 * chore(deps): bump python-semantic-release/python-semantic-release
 
 Bumps [python-semantic-release/python-semantic-release](https://github.com/python-semantic-release/python-semantic-release) from 9.7.3 to 9.8.0.
@@ -366,6 +480,8 @@ updated-dependencies:
 ...
 
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`7b21e47`](https://github.com/supabase-community/auth-py/commit/7b21e47fdc240d30add37ca1612105fac8777e4e))
+
+* chore(deps-dev): bump python-semantic-release from 9.7.3 to 9.8.0 (#507) ([`fe033c5`](https://github.com/supabase-community/auth-py/commit/fe033c5b803a64637acc819d84a83be939cbfffd))
 
 * chore(deps-dev): bump python-semantic-release from 9.7.3 to 9.8.0
 
@@ -405,8 +521,6 @@ Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`1e32b5c`](https://g
 
 * chore(deps-dev): bump pytest-asyncio from 0.23.6 to 0.23.7 (#500) ([`c0c17f8`](https://github.com/supabase-community/auth-py/commit/c0c17f86e8f1048818a23ef92bfcd08a8bd16879))
 
-* chore(deps): bump python-semantic-release/python-semantic-release from 9.5.0 to 9.7.3 (#499) ([`1b1fc19`](https://github.com/supabase-community/auth-py/commit/1b1fc19f28934c1d716e37153953a237b56a8bd0))
-
 * chore(deps-dev): bump pytest-asyncio from 0.23.6 to 0.23.7
 
 Bumps [pytest-asyncio](https://github.com/pytest-dev/pytest-asyncio) from 0.23.6 to 0.23.7.
@@ -421,6 +535,24 @@ updated-dependencies:
 ...
 
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`8a72775`](https://github.com/supabase-community/auth-py/commit/8a72775dc968a9c81a18342422fa710b7987a651))
+
+* chore(deps): bump python-semantic-release/python-semantic-release from 9.5.0 to 9.7.3 (#499) ([`1b1fc19`](https://github.com/supabase-community/auth-py/commit/1b1fc19f28934c1d716e37153953a237b56a8bd0))
+
+* chore(deps): bump python-semantic-release/python-semantic-release
+
+Bumps [python-semantic-release/python-semantic-release](https://github.com/python-semantic-release/python-semantic-release) from 9.5.0 to 9.7.3.
+- [Release notes](https://github.com/python-semantic-release/python-semantic-release/releases)
+- [Changelog](https://github.com/python-semantic-release/python-semantic-release/blob/master/CHANGELOG.md)
+- [Commits](https://github.com/python-semantic-release/python-semantic-release/compare/v9.5.0...v9.7.3)
+
+---
+updated-dependencies:
+- dependency-name: python-semantic-release/python-semantic-release
+  dependency-type: direct:production
+  update-type: version-update:semver-minor
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`29ee762`](https://github.com/supabase-community/auth-py/commit/29ee76258bba9a0b4a1dd2249f3493c8d30e211e))
 
 * chore(deps-dev): bump python-semantic-release from 9.5.0 to 9.7.3 (#498) ([`1b6fadf`](https://github.com/supabase-community/auth-py/commit/1b6fadf02f8d6d77bee9bfedaca5a85731173c67))
 
@@ -442,24 +574,6 @@ Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`039d6a5`](https://g
 
 * chore(deps-dev): bump faker from 24.14.1 to 25.2.0 (#497) ([`67b6a58`](https://github.com/supabase-community/auth-py/commit/67b6a581d45e027a815b8b3f7bc6b3c9068f47b4))
 
-* chore(deps-dev): bump jinja2 from 3.1.3 to 3.1.4 (#491) ([`a030a33`](https://github.com/supabase-community/auth-py/commit/a030a33675ad08d37a729a9835c619e8550acbd2))
-
-* chore(deps): bump python-semantic-release/python-semantic-release
-
-Bumps [python-semantic-release/python-semantic-release](https://github.com/python-semantic-release/python-semantic-release) from 9.5.0 to 9.7.3.
-- [Release notes](https://github.com/python-semantic-release/python-semantic-release/releases)
-- [Changelog](https://github.com/python-semantic-release/python-semantic-release/blob/master/CHANGELOG.md)
-- [Commits](https://github.com/python-semantic-release/python-semantic-release/compare/v9.5.0...v9.7.3)
-
----
-updated-dependencies:
-- dependency-name: python-semantic-release/python-semantic-release
-  dependency-type: direct:production
-  update-type: version-update:semver-minor
-...
-
-Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`29ee762`](https://github.com/supabase-community/auth-py/commit/29ee76258bba9a0b4a1dd2249f3493c8d30e211e))
-
 * chore(deps-dev): bump faker from 24.14.1 to 25.2.0
 
 Bumps [faker](https://github.com/joke2k/faker) from 24.14.1 to 25.2.0.
@@ -475,6 +589,8 @@ updated-dependencies:
 ...
 
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`ce825c8`](https://github.com/supabase-community/auth-py/commit/ce825c80646943078d54743cdebe3e2f4f38fde9))
+
+* chore(deps-dev): bump jinja2 from 3.1.3 to 3.1.4 (#491) ([`a030a33`](https://github.com/supabase-community/auth-py/commit/a030a33675ad08d37a729a9835c619e8550acbd2))
 
 * chore(deps-dev): bump jinja2 from 3.1.3 to 3.1.4
 
@@ -529,10 +645,6 @@ Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`db0d0e9`](https://g
 
 * chore(deps): bump pydantic from 2.7.0 to 2.7.1 (#476) ([`339155a`](https://github.com/supabase-community/auth-py/commit/339155a60d3047c85fef907961a409ec5113e2b2))
 
-* chore(deps-dev): bump python-semantic-release from 9.4.1 to 9.5.0 (#475) ([`8900536`](https://github.com/supabase-community/auth-py/commit/8900536a649aa40badb9331f4ee304d8cfaa83d9))
-
-* chore(deps): bump python-semantic-release/python-semantic-release from 9.4.1 to 9.5.0 (#474) ([`1d951b6`](https://github.com/supabase-community/auth-py/commit/1d951b6ed982a92ca85abed4eaedefd7ac0e1017))
-
 * chore(deps): bump pydantic from 2.7.0 to 2.7.1
 
 Bumps [pydantic](https://github.com/pydantic/pydantic) from 2.7.0 to 2.7.1.
@@ -549,6 +661,8 @@ updated-dependencies:
 
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`e0c7dac`](https://github.com/supabase-community/auth-py/commit/e0c7dac96076ff5d30b85a7f4982f690512cb89e))
 
+* chore(deps-dev): bump python-semantic-release from 9.4.1 to 9.5.0 (#475) ([`8900536`](https://github.com/supabase-community/auth-py/commit/8900536a649aa40badb9331f4ee304d8cfaa83d9))
+
 * chore(deps-dev): bump python-semantic-release from 9.4.1 to 9.5.0
 
 Bumps [python-semantic-release](https://github.com/python-semantic-release/python-semantic-release) from 9.4.1 to 9.5.0.
@@ -564,6 +678,8 @@ updated-dependencies:
 ...
 
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`aced040`](https://github.com/supabase-community/auth-py/commit/aced040ce04afd520c34e6f8502a995f847e9838))
+
+* chore(deps): bump python-semantic-release/python-semantic-release from 9.4.1 to 9.5.0 (#474) ([`1d951b6`](https://github.com/supabase-community/auth-py/commit/1d951b6ed982a92ca85abed4eaedefd7ac0e1017))
 
 * chore(deps): bump python-semantic-release/python-semantic-release
 
@@ -583,8 +699,6 @@ Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`d28719f`](https://g
 
 * chore(deps-dev): bump faker from 24.4.0 to 24.9.0 (#469) ([`9ae0b1d`](https://github.com/supabase-community/auth-py/commit/9ae0b1d51bb08b3396e0c1b66526d63565f108a3))
 
-* chore(deps): bump pydantic from 2.6.4 to 2.7.0 (#468) ([`6cee4e2`](https://github.com/supabase-community/auth-py/commit/6cee4e28d7ef97f736fa0f260dfc65c203676e85))
-
 * chore(deps-dev): bump faker from 24.4.0 to 24.9.0
 
 Bumps [faker](https://github.com/joke2k/faker) from 24.4.0 to 24.9.0.
@@ -601,11 +715,7 @@ updated-dependencies:
 
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`8db5aab`](https://github.com/supabase-community/auth-py/commit/8db5aab39588e66f8a2fd51bb1644cb6fd103925))
 
-* chore(deps): bump idna from 3.6 to 3.7 (#467) ([`75feed7`](https://github.com/supabase-community/auth-py/commit/75feed766c44dd5581989fb3244ab74cc5f088d3))
-
-* chore(deps-dev): bump python-semantic-release from 9.4.0 to 9.4.1 (#464) ([`d659e82`](https://github.com/supabase-community/auth-py/commit/d659e8248242671648d3d2c1e69af9afea47a77f))
-
-* chore(deps): bump python-semantic-release/python-semantic-release from 9.4.0 to 9.4.1 (#463) ([`066014e`](https://github.com/supabase-community/auth-py/commit/066014e59ce2e4e8364aeb10352d263846a6902f))
+* chore(deps): bump pydantic from 2.6.4 to 2.7.0 (#468) ([`6cee4e2`](https://github.com/supabase-community/auth-py/commit/6cee4e28d7ef97f736fa0f260dfc65c203676e85))
 
 * chore(deps): bump pydantic from 2.6.4 to 2.7.0
 
@@ -623,6 +733,8 @@ updated-dependencies:
 
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`1b888da`](https://github.com/supabase-community/auth-py/commit/1b888da2bf670cdd9017b26ac57eb3760e9d3c77))
 
+* chore(deps): bump idna from 3.6 to 3.7 (#467) ([`75feed7`](https://github.com/supabase-community/auth-py/commit/75feed766c44dd5581989fb3244ab74cc5f088d3))
+
 * chore(deps): bump idna from 3.6 to 3.7
 
 Bumps [idna](https://github.com/kjd/idna) from 3.6 to 3.7.
@@ -637,6 +749,8 @@ updated-dependencies:
 ...
 
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`e9fe838`](https://github.com/supabase-community/auth-py/commit/e9fe838da1ba1e6c095231e8197b726aa2e7af5f))
+
+* chore(deps-dev): bump python-semantic-release from 9.4.0 to 9.4.1 (#464) ([`d659e82`](https://github.com/supabase-community/auth-py/commit/d659e8248242671648d3d2c1e69af9afea47a77f))
 
 * chore(deps-dev): bump python-semantic-release from 9.4.0 to 9.4.1
 
@@ -653,6 +767,8 @@ updated-dependencies:
 ...
 
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`13feeae`](https://github.com/supabase-community/auth-py/commit/13feeae252b6a11c2a67a3724b2cca44f4e57688))
+
+* chore(deps): bump python-semantic-release/python-semantic-release from 9.4.0 to 9.4.1 (#463) ([`066014e`](https://github.com/supabase-community/auth-py/commit/066014e59ce2e4e8364aeb10352d263846a6902f))
 
 * chore(deps): bump python-semantic-release/python-semantic-release
 
@@ -672,8 +788,6 @@ Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`b536cf6`](https://g
 
 * chore(deps-dev): bump python-semantic-release from 9.3.1 to 9.4.0 (#462) ([`abf77ea`](https://github.com/supabase-community/auth-py/commit/abf77ea9702425f43b3efef9053b045dd6ca34c9))
 
-* chore(deps): bump python-semantic-release/python-semantic-release from 9.3.1 to 9.4.0 (#461) ([`d11910c`](https://github.com/supabase-community/auth-py/commit/d11910cc387fc907c10ace25fc09db935b039386))
-
 * chore(deps-dev): bump python-semantic-release from 9.3.1 to 9.4.0
 
 Bumps [python-semantic-release](https://github.com/python-semantic-release/python-semantic-release) from 9.3.1 to 9.4.0.
@@ -689,6 +803,8 @@ updated-dependencies:
 ...
 
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`05b6f2d`](https://github.com/supabase-community/auth-py/commit/05b6f2da2059cf79e579e8274e2ba260388b3409))
+
+* chore(deps): bump python-semantic-release/python-semantic-release from 9.3.1 to 9.4.0 (#461) ([`d11910c`](https://github.com/supabase-community/auth-py/commit/d11910cc387fc907c10ace25fc09db935b039386))
 
 * chore(deps): bump python-semantic-release/python-semantic-release
 
@@ -708,9 +824,22 @@ Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`4031e43`](https://g
 
 * chore(deps-dev): bump pytest-cov from 4.1.0 to 5.0.0 (#458) ([`17e6587`](https://github.com/supabase-community/auth-py/commit/17e658735512d3dfe1ea021ea24a48bd4e716b5f))
 
-* chore(deps): bump abatilo/actions-poetry from 2 to 3 (#460) ([`4376a7a`](https://github.com/supabase-community/auth-py/commit/4376a7ae7d259991c97da019cdbe39dcb0a35a2b))
+* chore(deps-dev): bump pytest-cov from 4.1.0 to 5.0.0
 
-* chore(deps): bump actions/cache from 3 to 4 (#459) ([`67bc67f`](https://github.com/supabase-community/auth-py/commit/67bc67fb005e1d318fdbe2979afd22e689492044))
+Bumps [pytest-cov](https://github.com/pytest-dev/pytest-cov) from 4.1.0 to 5.0.0.
+- [Changelog](https://github.com/pytest-dev/pytest-cov/blob/master/CHANGELOG.rst)
+- [Commits](https://github.com/pytest-dev/pytest-cov/compare/v4.1.0...v5.0.0)
+
+---
+updated-dependencies:
+- dependency-name: pytest-cov
+  dependency-type: direct:development
+  update-type: version-update:semver-major
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`10b44fe`](https://github.com/supabase-community/auth-py/commit/10b44fe5795ddfe015807880b68c875ac57fea58))
+
+* chore(deps): bump abatilo/actions-poetry from 2 to 3 (#460) ([`4376a7a`](https://github.com/supabase-community/auth-py/commit/4376a7ae7d259991c97da019cdbe39dcb0a35a2b))
 
 * chore(deps): bump abatilo/actions-poetry from 2 to 3
 
@@ -728,6 +857,8 @@ updated-dependencies:
 
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`cac82ad`](https://github.com/supabase-community/auth-py/commit/cac82adc513e9217fcc5e24c45f1cb7f804abad0))
 
+* chore(deps): bump actions/cache from 3 to 4 (#459) ([`67bc67f`](https://github.com/supabase-community/auth-py/commit/67bc67fb005e1d318fdbe2979afd22e689492044))
+
 * chore(deps): bump actions/cache from 3 to 4
 
 Bumps [actions/cache](https://github.com/actions/cache) from 3 to 4.
@@ -744,94 +875,7 @@ updated-dependencies:
 
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`7e1f6f7`](https://github.com/supabase-community/auth-py/commit/7e1f6f707e545be93bf8479520450fb1e2c59aef))
 
-* chore(deps-dev): bump pytest-cov from 4.1.0 to 5.0.0
-
-Bumps [pytest-cov](https://github.com/pytest-dev/pytest-cov) from 4.1.0 to 5.0.0.
-- [Changelog](https://github.com/pytest-dev/pytest-cov/blob/master/CHANGELOG.rst)
-- [Commits](https://github.com/pytest-dev/pytest-cov/compare/v4.1.0...v5.0.0)
-
----
-updated-dependencies:
-- dependency-name: pytest-cov
-  dependency-type: direct:development
-  update-type: version-update:semver-major
-...
-
-Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`10b44fe`](https://github.com/supabase-community/auth-py/commit/10b44fe5795ddfe015807880b68c875ac57fea58))
-
 * chore(deps-dev): bump faker from 23.3.0 to 24.4.0 (#456) ([`1562b15`](https://github.com/supabase-community/auth-py/commit/1562b15aaddc5aa7bfb0043b4fcc4db0dda91779))
-
-### Fix
-
-* fix: add &#34;verify&#34; flag to the creation of client ([`12f2396`](https://github.com/supabase-community/auth-py/commit/12f239668a5e49723e6fc92f4f1b07cf7d8f0c87))
-
-### Unknown
-
-* Add follow_redirects=True ([`fab26ac`](https://github.com/supabase-community/auth-py/commit/fab26ac5bd8eca3d2aa5a3413943bfbb4aca6417))
-
-* Add follow_redirects=True ([`5eea191`](https://github.com/supabase-community/auth-py/commit/5eea191bcb26a7faf2b5c3496eabd00ccb3ae1c8))
-
-* Add follow_redirects=True ([`7b38f75`](https://github.com/supabase-community/auth-py/commit/7b38f7544b090029b6105a51f5099eee7de59d61))
-
-* Fix #320 ([`e3862b9`](https://github.com/supabase-community/auth-py/commit/e3862b951cb16dd7c80617925f93febf7be57cd8))
-
-* Fix #320 ([`e6203f6`](https://github.com/supabase-community/auth-py/commit/e6203f68ef91b74830c438575bd1ec89bae159cb))
-
-* Fix #320 ([`d3ee089`](https://github.com/supabase-community/auth-py/commit/d3ee08910db712c729ddf05c27ef3e41a8fc7951))
-
-* Fix #320 ([`339fb59`](https://github.com/supabase-community/auth-py/commit/339fb591d855612da451266d4f9daeab973865f6))
-
-* Fix #320 ([`05d9fe9`](https://github.com/supabase-community/auth-py/commit/05d9fe9683699038df9007fa7b0f9ba763c81fed))
-
-* Fix #320 ([`eba8528`](https://github.com/supabase-community/auth-py/commit/eba8528d749f7887f853072e586494dceace64a7))
-
-* Fix #320 ([`2940262`](https://github.com/supabase-community/auth-py/commit/29402627fea628329018718e6434c761ae3375f6))
-
-* Fix #320 ([`cf2f9be`](https://github.com/supabase-community/auth-py/commit/cf2f9be0c39b841ea6971e223b12cb580e32dd09))
-
-* Fixes and style (#488) ([`7856d01`](https://github.com/supabase-community/auth-py/commit/7856d014fbec6a49264d57e579701f50bf434239))
-
-* Update .pre-commit-config.yaml (#487) ([`e00452c`](https://github.com/supabase-community/auth-py/commit/e00452c242b1b313bd80262238bb5166c3a16874))
-
-* 
-
----
-updated-dependencies:
-- dependency-name: requests
-  dependency-type: indirect
-...
-
-Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`a2423da`](https://github.com/supabase-community/auth-py/commit/a2423da474b3abf5bb5512b98c9aef508f6d5722))
-
-* Add stale bot (#484) ([`7059504`](https://github.com/supabase-community/auth-py/commit/7059504d95ffccc3d9cef0dad130de28543772bf))
-
-* Fixes and style ([`4f723eb`](https://github.com/supabase-community/auth-py/commit/4f723eb7be48c1dda251918b4c3241f8ff6c78e7))
-
-* Fixes and style ([`0165846`](https://github.com/supabase-community/auth-py/commit/01658461ab7c1fe20c21e6093a5871b2da4f51c7))
-
-* Update .pre-commit-config.yaml ([`9824403`](https://github.com/supabase-community/auth-py/commit/9824403d785269340cc29dc49e840b743a2d2974))
-
-* Update .pre-commit-config.yaml ([`d0ceba0`](https://github.com/supabase-community/auth-py/commit/d0ceba0fac7bab61c76f49e6958ef31ae76ed361))
-
-* Update .pre-commit-config.yaml ([`e2470f0`](https://github.com/supabase-community/auth-py/commit/e2470f0e60c0c6ee6b1e091616b4a2c794656ef4))
-
-* Update .pre-commit-config.yaml ([`d0757be`](https://github.com/supabase-community/auth-py/commit/d0757be5ab3a5762d59f33ccd129ea862d4f3180))
-
-* Update .pre-commit-config.yaml ([`da1c0cd`](https://github.com/supabase-community/auth-py/commit/da1c0cdedf35dcb3aa4005bab606f36b28b812c8))
-
-* Update .pre-commit-config.yaml ([`f0890cb`](https://github.com/supabase-community/auth-py/commit/f0890cbbb3d0c949c6bb529d7e127c9c16aa2e6a))
-
-* Update .pre-commit-config.yaml ([`17a4db5`](https://github.com/supabase-community/auth-py/commit/17a4db52f253bac7c7b839c3c7e3bcba9782d511))
-
-* Update .pre-commit-config.yaml ([`83e6021`](https://github.com/supabase-community/auth-py/commit/83e6021dbbc4818db65840bea261d0798885d9d5))
-
-* Add stale bot ([`87b27b6`](https://github.com/supabase-community/auth-py/commit/87b27b63db1f99a64601de4ed16213c0e7ec7d63))
-
-## v2.4.2 (2024-03-26)
-
-### Chore
-
-* chore(release): bump version to v2.4.2 ([`bdabba3`](https://github.com/supabase-community/auth-py/commit/bdabba35d7703ac1370964cea2502499ed9f0c28))
 
 * chore(deps-dev): bump faker from 23.3.0 to 24.4.0
 
@@ -849,9 +893,79 @@ updated-dependencies:
 
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`d44b0ea`](https://github.com/supabase-community/auth-py/commit/d44b0ea2143154dca08b4554a337a024c80ddf2f))
 
-* chore(deps-dev): bump black from 23.10.1 to 24.3.0 (#446) ([`4850a9f`](https://github.com/supabase-community/auth-py/commit/4850a9fad7384fae24d9fcec8b89bdaf94eab47b))
+### Fix
 
-* chore(deps): bump python-semantic-release/python-semantic-release from 9.1.1 to 9.3.1 (#452) ([`31a67fd`](https://github.com/supabase-community/auth-py/commit/31a67fdc2e852c8fa38f56e1a88f0b37bfa68ae6))
+* fix: add &#34;verify&#34; flag to the creation of client ([`12f2396`](https://github.com/supabase-community/auth-py/commit/12f239668a5e49723e6fc92f4f1b07cf7d8f0c87))
+
+### Unknown
+
+* Fix #320 ([`e3862b9`](https://github.com/supabase-community/auth-py/commit/e3862b951cb16dd7c80617925f93febf7be57cd8))
+
+* Fix #320 ([`e6203f6`](https://github.com/supabase-community/auth-py/commit/e6203f68ef91b74830c438575bd1ec89bae159cb))
+
+* Fix #320 ([`d3ee089`](https://github.com/supabase-community/auth-py/commit/d3ee08910db712c729ddf05c27ef3e41a8fc7951))
+
+* Fix #320 ([`339fb59`](https://github.com/supabase-community/auth-py/commit/339fb591d855612da451266d4f9daeab973865f6))
+
+* Fix #320 ([`05d9fe9`](https://github.com/supabase-community/auth-py/commit/05d9fe9683699038df9007fa7b0f9ba763c81fed))
+
+* Fix #320 ([`eba8528`](https://github.com/supabase-community/auth-py/commit/eba8528d749f7887f853072e586494dceace64a7))
+
+* Fix #320 ([`2940262`](https://github.com/supabase-community/auth-py/commit/29402627fea628329018718e6434c761ae3375f6))
+
+* Fix #320 ([`cf2f9be`](https://github.com/supabase-community/auth-py/commit/cf2f9be0c39b841ea6971e223b12cb580e32dd09))
+
+* 
+
+---
+updated-dependencies:
+- dependency-name: requests
+  dependency-type: indirect
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`a2423da`](https://github.com/supabase-community/auth-py/commit/a2423da474b3abf5bb5512b98c9aef508f6d5722))
+
+* Fixes and style (#488) ([`7856d01`](https://github.com/supabase-community/auth-py/commit/7856d014fbec6a49264d57e579701f50bf434239))
+
+* Fixes and style ([`4f723eb`](https://github.com/supabase-community/auth-py/commit/4f723eb7be48c1dda251918b4c3241f8ff6c78e7))
+
+* Fixes and style ([`0165846`](https://github.com/supabase-community/auth-py/commit/01658461ab7c1fe20c21e6093a5871b2da4f51c7))
+
+* Update .pre-commit-config.yaml (#487) ([`e00452c`](https://github.com/supabase-community/auth-py/commit/e00452c242b1b313bd80262238bb5166c3a16874))
+
+* Update .pre-commit-config.yaml ([`9824403`](https://github.com/supabase-community/auth-py/commit/9824403d785269340cc29dc49e840b743a2d2974))
+
+* Update .pre-commit-config.yaml ([`d0ceba0`](https://github.com/supabase-community/auth-py/commit/d0ceba0fac7bab61c76f49e6958ef31ae76ed361))
+
+* Update .pre-commit-config.yaml ([`e2470f0`](https://github.com/supabase-community/auth-py/commit/e2470f0e60c0c6ee6b1e091616b4a2c794656ef4))
+
+* Update .pre-commit-config.yaml ([`d0757be`](https://github.com/supabase-community/auth-py/commit/d0757be5ab3a5762d59f33ccd129ea862d4f3180))
+
+* Update .pre-commit-config.yaml ([`da1c0cd`](https://github.com/supabase-community/auth-py/commit/da1c0cdedf35dcb3aa4005bab606f36b28b812c8))
+
+* Update .pre-commit-config.yaml ([`f0890cb`](https://github.com/supabase-community/auth-py/commit/f0890cbbb3d0c949c6bb529d7e127c9c16aa2e6a))
+
+* Update .pre-commit-config.yaml ([`17a4db5`](https://github.com/supabase-community/auth-py/commit/17a4db52f253bac7c7b839c3c7e3bcba9782d511))
+
+* Update .pre-commit-config.yaml ([`83e6021`](https://github.com/supabase-community/auth-py/commit/83e6021dbbc4818db65840bea261d0798885d9d5))
+
+* Add follow_redirects=True ([`fab26ac`](https://github.com/supabase-community/auth-py/commit/fab26ac5bd8eca3d2aa5a3413943bfbb4aca6417))
+
+* Add follow_redirects=True ([`5eea191`](https://github.com/supabase-community/auth-py/commit/5eea191bcb26a7faf2b5c3496eabd00ccb3ae1c8))
+
+* Add follow_redirects=True ([`7b38f75`](https://github.com/supabase-community/auth-py/commit/7b38f7544b090029b6105a51f5099eee7de59d61))
+
+* Add stale bot (#484) ([`7059504`](https://github.com/supabase-community/auth-py/commit/7059504d95ffccc3d9cef0dad130de28543772bf))
+
+* Add stale bot ([`87b27b6`](https://github.com/supabase-community/auth-py/commit/87b27b63db1f99a64601de4ed16213c0e7ec7d63))
+
+## v2.4.2 (2024-03-26)
+
+### Chore
+
+* chore(release): bump version to v2.4.2 ([`bdabba3`](https://github.com/supabase-community/auth-py/commit/bdabba35d7703ac1370964cea2502499ed9f0c28))
+
+* chore(deps-dev): bump black from 23.10.1 to 24.3.0 (#446) ([`4850a9f`](https://github.com/supabase-community/auth-py/commit/4850a9fad7384fae24d9fcec8b89bdaf94eab47b))
 
 * chore(deps-dev): bump black from 23.10.1 to 24.3.0
 
@@ -869,7 +983,7 @@ updated-dependencies:
 
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`5a2ab10`](https://github.com/supabase-community/auth-py/commit/5a2ab106d9167ddc7d5c51afc37b5f94d22e3f33))
 
-* chore: rename package to supabase_auth (#455) ([`3b63cd6`](https://github.com/supabase-community/auth-py/commit/3b63cd6dc7fd7e136c88e849c032da696fa977cf))
+* chore(deps): bump python-semantic-release/python-semantic-release from 9.1.1 to 9.3.1 (#452) ([`31a67fd`](https://github.com/supabase-community/auth-py/commit/31a67fdc2e852c8fa38f56e1a88f0b37bfa68ae6))
 
 * chore(deps): bump python-semantic-release/python-semantic-release
 
@@ -886,6 +1000,8 @@ updated-dependencies:
 ...
 
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`1b1ce42`](https://github.com/supabase-community/auth-py/commit/1b1ce429ce9836c7937fae474b1001f0951acf8b))
+
+* chore: rename package to supabase_auth (#455) ([`3b63cd6`](https://github.com/supabase-community/auth-py/commit/3b63cd6dc7fd7e136c88e849c032da696fa977cf))
 
 * chore(deps): bump httpx from 0.25.0 to 0.27.0 (#431) ([`3914bb6`](https://github.com/supabase-community/auth-py/commit/3914bb675e09189418caabb6ca2af6aacaea6582))
 
@@ -907,8 +1023,6 @@ Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`60da4b5`](https://g
 
 * chore(deps-dev): bump pytest from 8.0.2 to 8.1.0 (#443) ([`de90b46`](https://github.com/supabase-community/auth-py/commit/de90b462a9e49b36e6a5298ae3119bc94ec9fba1))
 
-* chore: bump fixed version of poetry (#438) ([`9344e79`](https://github.com/supabase-community/auth-py/commit/9344e796cb93b803fb395710e678a0bf6801f7ca))
-
 * chore(deps-dev): bump pytest from 8.0.2 to 8.1.0
 
 Bumps [pytest](https://github.com/pytest-dev/pytest) from 8.0.2 to 8.1.0.
@@ -924,6 +1038,8 @@ updated-dependencies:
 ...
 
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`91f26fa`](https://github.com/supabase-community/auth-py/commit/91f26fa55cc8cad38ecab55ccebf61691d01980a))
+
+* chore: bump fixed version of poetry (#438) ([`9344e79`](https://github.com/supabase-community/auth-py/commit/9344e796cb93b803fb395710e678a0bf6801f7ca))
 
 * chore(deps-dev): bump faker from 19.12.1 to 23.3.0 (#436) ([`6a9e1ce`](https://github.com/supabase-community/auth-py/commit/6a9e1ce5ecdf060a086f91a5f7a0f0733be4c6f8))
 
@@ -961,6 +1077,20 @@ updated-dependencies:
 
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`0c04828`](https://github.com/supabase-community/auth-py/commit/0c04828812369a772d9bd1be1ed2da5ac5e78ece))
 
+* chore(deps-dev): bump cryptography from 42.0.0 to 42.0.4
+
+Bumps [cryptography](https://github.com/pyca/cryptography) from 42.0.0 to 42.0.4.
+- [Changelog](https://github.com/pyca/cryptography/blob/main/CHANGELOG.rst)
+- [Commits](https://github.com/pyca/cryptography/compare/42.0.0...42.0.4)
+
+---
+updated-dependencies:
+- dependency-name: cryptography
+  dependency-type: indirect
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`9066970`](https://github.com/supabase-community/auth-py/commit/90669704b42d9dd4e8a242d7b57b301ca197534a))
+
 * chore(deps-dev): bump python-semantic-release from 8.3.0 to 9.1.1 (#440) ([`0d41e57`](https://github.com/supabase-community/auth-py/commit/0d41e5735e6e573c77783fd29f71fae6c08b5d63))
 
 * chore(deps-dev): bump python-semantic-release from 8.3.0 to 9.1.1
@@ -981,13 +1111,40 @@ Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`7f2e12d`](https://g
 
 * chore(deps): bump python-semantic-release/python-semantic-release from 8.3.0 to 9.1.1 (#435) ([`a9789f7`](https://github.com/supabase-community/auth-py/commit/a9789f726ed82f06f74649c997f0ed40731d1c3c))
 
+* chore(deps): bump python-semantic-release/python-semantic-release
+
+Bumps [python-semantic-release/python-semantic-release](https://github.com/python-semantic-release/python-semantic-release) from 8.3.0 to 9.1.1.
+- [Release notes](https://github.com/python-semantic-release/python-semantic-release/releases)
+- [Changelog](https://github.com/python-semantic-release/python-semantic-release/blob/master/CHANGELOG.md)
+- [Commits](https://github.com/python-semantic-release/python-semantic-release/compare/v8.3.0...v9.1.1)
+
+---
+updated-dependencies:
+- dependency-name: python-semantic-release/python-semantic-release
+  dependency-type: direct:production
+  update-type: version-update:semver-major
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`7468b29`](https://github.com/supabase-community/auth-py/commit/7468b29b4240104c61578f158a98907c9777c94c))
+
 * chore(deps-dev): bump pytest-asyncio from 0.21.1 to 0.23.5 (#424) ([`262547b`](https://github.com/supabase-community/auth-py/commit/262547b4acb652963033e2daab7ee283983d2f20))
 
+* chore(deps-dev): bump pytest-asyncio from 0.21.1 to 0.23.5
+
+Bumps [pytest-asyncio](https://github.com/pytest-dev/pytest-asyncio) from 0.21.1 to 0.23.5.
+- [Release notes](https://github.com/pytest-dev/pytest-asyncio/releases)
+- [Commits](https://github.com/pytest-dev/pytest-asyncio/compare/v0.21.1...v0.23.5)
+
+---
+updated-dependencies:
+- dependency-name: pytest-asyncio
+  dependency-type: direct:development
+  update-type: version-update:semver-minor
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`f88b538`](https://github.com/supabase-community/auth-py/commit/f88b5384c7b7ba1dbf440f67680ed307a7040845))
+
 * chore(deps): bump pydantic from 2.4.2 to 2.6.3 (#437) ([`0de3da7`](https://github.com/supabase-community/auth-py/commit/0de3da7a6d78fa700324abf673b89568ab2fddec))
-
-* chore(deps): bump codecov/codecov-action from 3 to 4 (#415) ([`f374e91`](https://github.com/supabase-community/auth-py/commit/f374e916809777c44e86984fa3d4b57d477a5996))
-
-* chore(deps): bump abatilo/actions-poetry from 2.3.0 to 3.0.0 (#405) ([`63e028d`](https://github.com/supabase-community/auth-py/commit/63e028dbf62922de2ec8cf886942c3e80922b9d7))
 
 * chore(deps): bump pydantic from 2.4.2 to 2.6.3
 
@@ -1005,50 +1162,41 @@ updated-dependencies:
 
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`4d1984d`](https://github.com/supabase-community/auth-py/commit/4d1984db5ecabc4d7ace6fc7fa183e1aeddc7b5b))
 
-* chore(deps): bump python-semantic-release/python-semantic-release
+* chore(deps): bump codecov/codecov-action from 3 to 4 (#415) ([`f374e91`](https://github.com/supabase-community/auth-py/commit/f374e916809777c44e86984fa3d4b57d477a5996))
 
-Bumps [python-semantic-release/python-semantic-release](https://github.com/python-semantic-release/python-semantic-release) from 8.3.0 to 9.1.1.
-- [Release notes](https://github.com/python-semantic-release/python-semantic-release/releases)
-- [Changelog](https://github.com/python-semantic-release/python-semantic-release/blob/master/CHANGELOG.md)
-- [Commits](https://github.com/python-semantic-release/python-semantic-release/compare/v8.3.0...v9.1.1)
+* chore(deps): bump codecov/codecov-action from 3 to 4
+
+Bumps [codecov/codecov-action](https://github.com/codecov/codecov-action) from 3 to 4.
+- [Release notes](https://github.com/codecov/codecov-action/releases)
+- [Changelog](https://github.com/codecov/codecov-action/blob/main/CHANGELOG.md)
+- [Commits](https://github.com/codecov/codecov-action/compare/v3...v4)
 
 ---
 updated-dependencies:
-- dependency-name: python-semantic-release/python-semantic-release
+- dependency-name: codecov/codecov-action
   dependency-type: direct:production
   update-type: version-update:semver-major
 ...
 
-Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`7468b29`](https://github.com/supabase-community/auth-py/commit/7468b29b4240104c61578f158a98907c9777c94c))
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`db2307a`](https://github.com/supabase-community/auth-py/commit/db2307a155a4692c90503da78ef959268f0e3db1))
 
-* chore(deps-dev): bump cryptography from 42.0.0 to 42.0.4
+* chore(deps): bump abatilo/actions-poetry from 2.3.0 to 3.0.0 (#405) ([`63e028d`](https://github.com/supabase-community/auth-py/commit/63e028dbf62922de2ec8cf886942c3e80922b9d7))
 
-Bumps [cryptography](https://github.com/pyca/cryptography) from 42.0.0 to 42.0.4.
-- [Changelog](https://github.com/pyca/cryptography/blob/main/CHANGELOG.rst)
-- [Commits](https://github.com/pyca/cryptography/compare/42.0.0...42.0.4)
+* chore(deps): bump abatilo/actions-poetry from 2.3.0 to 3.0.0
 
----
-updated-dependencies:
-- dependency-name: cryptography
-  dependency-type: indirect
-...
-
-Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`9066970`](https://github.com/supabase-community/auth-py/commit/90669704b42d9dd4e8a242d7b57b301ca197534a))
-
-* chore(deps-dev): bump pytest-asyncio from 0.21.1 to 0.23.5
-
-Bumps [pytest-asyncio](https://github.com/pytest-dev/pytest-asyncio) from 0.21.1 to 0.23.5.
-- [Release notes](https://github.com/pytest-dev/pytest-asyncio/releases)
-- [Commits](https://github.com/pytest-dev/pytest-asyncio/compare/v0.21.1...v0.23.5)
+Bumps [abatilo/actions-poetry](https://github.com/abatilo/actions-poetry) from 2.3.0 to 3.0.0.
+- [Release notes](https://github.com/abatilo/actions-poetry/releases)
+- [Changelog](https://github.com/abatilo/actions-poetry/blob/master/.releaserc)
+- [Commits](https://github.com/abatilo/actions-poetry/compare/v2.3.0...v3.0.0)
 
 ---
 updated-dependencies:
-- dependency-name: pytest-asyncio
-  dependency-type: direct:development
-  update-type: version-update:semver-minor
+- dependency-name: abatilo/actions-poetry
+  dependency-type: direct:production
+  update-type: version-update:semver-major
 ...
 
-Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`f88b538`](https://github.com/supabase-community/auth-py/commit/f88b5384c7b7ba1dbf440f67680ed307a7040845))
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`f52f7e2`](https://github.com/supabase-community/auth-py/commit/f52f7e2793ca37ee7943bfe6e38510ec8bc1ca31))
 
 ### Fix
 
@@ -1068,9 +1216,9 @@ Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`f88b538`](https://g
 
 * update ci to include python 3.12 in tests ([`2350d43`](https://github.com/supabase-community/auth-py/commit/2350d4379460adf677dd3b6ecdd1031243087d07))
 
-* feat (deps-dev): bump cryptography from 42.0.0 to 42.0.4 (#430) ([`26de4cb`](https://github.com/supabase-community/auth-py/commit/26de4cbbade04cece7af71d43752833496359ee6))
-
 * Update manual_pypi_publish.yml ([`af2d2e5`](https://github.com/supabase-community/auth-py/commit/af2d2e51d59f3e0f3d8ead126e06beabd99030dd))
+
+* feat (deps-dev): bump cryptography from 42.0.0 to 42.0.4 (#430) ([`26de4cb`](https://github.com/supabase-community/auth-py/commit/26de4cbbade04cece7af71d43752833496359ee6))
 
 ## v2.4.1 (2024-02-09)
 
@@ -1094,22 +1242,6 @@ updated-dependencies:
 
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`7d91ca2`](https://github.com/supabase-community/auth-py/commit/7d91ca2c612a29ccbcfc16d4ff8b030aa5e72d05))
 
-* chore(deps): bump codecov/codecov-action from 3 to 4
-
-Bumps [codecov/codecov-action](https://github.com/codecov/codecov-action) from 3 to 4.
-- [Release notes](https://github.com/codecov/codecov-action/releases)
-- [Changelog](https://github.com/codecov/codecov-action/blob/main/CHANGELOG.md)
-- [Commits](https://github.com/codecov/codecov-action/compare/v3...v4)
-
----
-updated-dependencies:
-- dependency-name: codecov/codecov-action
-  dependency-type: direct:production
-  update-type: version-update:semver-major
-...
-
-Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`db2307a`](https://github.com/supabase-community/auth-py/commit/db2307a155a4692c90503da78ef959268f0e3db1))
-
 ### Fix
 
 * fix: add AuthOtpResponse (#419) ([`130bdb1`](https://github.com/supabase-community/auth-py/commit/130bdb1ba47f8e18800ee052cb1d1e1538482ed4))
@@ -1132,22 +1264,6 @@ Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`db2307a`](https://g
 
 * chore(deps-dev): bump jinja2 from 3.1.2 to 3.1.3 (#403) ([`0d58002`](https://github.com/supabase-community/auth-py/commit/0d580021af269a2e18e4a7864a88462c37334ecd))
 
-* chore(deps): bump abatilo/actions-poetry from 2.3.0 to 3.0.0
-
-Bumps [abatilo/actions-poetry](https://github.com/abatilo/actions-poetry) from 2.3.0 to 3.0.0.
-- [Release notes](https://github.com/abatilo/actions-poetry/releases)
-- [Changelog](https://github.com/abatilo/actions-poetry/blob/master/.releaserc)
-- [Commits](https://github.com/abatilo/actions-poetry/compare/v2.3.0...v3.0.0)
-
----
-updated-dependencies:
-- dependency-name: abatilo/actions-poetry
-  dependency-type: direct:production
-  update-type: version-update:semver-major
-...
-
-Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`f52f7e2`](https://github.com/supabase-community/auth-py/commit/f52f7e2793ca37ee7943bfe6e38510ec8bc1ca31))
-
 * chore(deps-dev): bump jinja2 from 3.1.2 to 3.1.3
 
 Bumps [jinja2](https://github.com/pallets/jinja) from 3.1.2 to 3.1.3.
@@ -1165,11 +1281,24 @@ Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`f439d3f`](https://g
 
 * chore(deps-dev): bump gitpython from 3.1.40 to 3.1.41 (#401) ([`8c8cd65`](https://github.com/supabase-community/auth-py/commit/8c8cd65ae7506c32d0fd040ea146c8cd2a15c73e))
 
+* chore(deps-dev): bump gitpython from 3.1.40 to 3.1.41
+
+Bumps [gitpython](https://github.com/gitpython-developers/GitPython) from 3.1.40 to 3.1.41.
+- [Release notes](https://github.com/gitpython-developers/GitPython/releases)
+- [Changelog](https://github.com/gitpython-developers/GitPython/blob/main/CHANGES)
+- [Commits](https://github.com/gitpython-developers/GitPython/compare/3.1.40...3.1.41)
+
+---
+updated-dependencies:
+- dependency-name: gitpython
+  dependency-type: indirect
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`a60428c`](https://github.com/supabase-community/auth-py/commit/a60428ca97985a0b1210a08eee0866e8eca24fe2))
+
 ### Feature
 
 * feat: add new identity linking methods release in LWX (#395) ([`96d18be`](https://github.com/supabase-community/auth-py/commit/96d18becda00478bacd08f32b61e75adc07d48fe))
-
-* feat: add pydantic type ([`1308119`](https://github.com/supabase-community/auth-py/commit/1308119b80b3685852a20ec322fd8bea4315fd75))
 
 * feat: add sso (#358) ([`c250f93`](https://github.com/supabase-community/auth-py/commit/c250f93cf5e50049629e5bb8f7d6b5c3fd408a42))
 
@@ -1180,6 +1309,8 @@ Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`f439d3f`](https://g
 * feat: skip http redirects ([`8dca4a5`](https://github.com/supabase-community/auth-py/commit/8dca4a555718f463c54dba22aa77f77b748dc472))
 
 * feat: add sso ([`99c9409`](https://github.com/supabase-community/auth-py/commit/99c9409ef2398b10bb7563ca3cbde0b0204ec88d))
+
+* feat: add pydantic type ([`1308119`](https://github.com/supabase-community/auth-py/commit/1308119b80b3685852a20ec322fd8bea4315fd75))
 
 * feat: add get_user_identities ([`2de717a`](https://github.com/supabase-community/auth-py/commit/2de717aa1785585ff872e4f94df891673b16858a))
 
@@ -1207,42 +1338,27 @@ Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`f439d3f`](https://g
 
 * chore(release): bump version to v2.3.0 ([`17fa5d2`](https://github.com/supabase-community/auth-py/commit/17fa5d23daab9344c1f1b47b30c69e62803f7e06))
 
-* chore(deps-dev): bump gitpython from 3.1.40 to 3.1.41
-
-Bumps [gitpython](https://github.com/gitpython-developers/GitPython) from 3.1.40 to 3.1.41.
-- [Release notes](https://github.com/gitpython-developers/GitPython/releases)
-- [Changelog](https://github.com/gitpython-developers/GitPython/blob/main/CHANGES)
-- [Commits](https://github.com/gitpython-developers/GitPython/compare/3.1.40...3.1.41)
-
----
-updated-dependencies:
-- dependency-name: gitpython
-  dependency-type: indirect
-...
-
-Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`a60428c`](https://github.com/supabase-community/auth-py/commit/a60428ca97985a0b1210a08eee0866e8eca24fe2))
-
 * chore: update to pull auth instead of gotrue ([`38977a6`](https://github.com/supabase-community/auth-py/commit/38977a6596f426805cf5fb106e7fdbbae311394c))
 
 * chore: pull latest postgres image instead ([`e1877b2`](https://github.com/supabase-community/auth-py/commit/e1877b230f960d5eda7b1ad6b11b8a87a7513487))
 
 ### Feature
 
+* feat: add sync methods ([`7c9f642`](https://github.com/supabase-community/auth-py/commit/7c9f642c9a6448707683fe6b54d3be4102aa8506))
+
 * feat: add sync methods ([`280dc40`](https://github.com/supabase-community/auth-py/commit/280dc406c4e031b6c4681c56a36a9c9ddefd15d9))
 
 * feat: pin version ([`5a90fff`](https://github.com/supabase-community/auth-py/commit/5a90fff802ff2c4860694d472243d69e8bedce1e))
 
-* feat: add sync methods ([`7c9f642`](https://github.com/supabase-community/auth-py/commit/7c9f642c9a6448707683fe6b54d3be4102aa8506))
-
 ### Fix
+
+* fix: add linking methods ([`987adf2`](https://github.com/supabase-community/auth-py/commit/987adf2c112398be252d1fd9563cc8763dfc0b6f))
 
 * fix: add linking methods ([`a29083a`](https://github.com/supabase-community/auth-py/commit/a29083a840200d984e9b969569eeb16185e5b598))
 
 * fix: fix build by updating error message in test (#404) ([`ac94c60`](https://github.com/supabase-community/auth-py/commit/ac94c60529984d7cf82b422f0c65bc3b01e43732))
 
 * fix: update error message in tests ([`6718dcd`](https://github.com/supabase-community/auth-py/commit/6718dcd19f3707647077ccd5cfa413bcbe718fd4))
-
-* fix: add linking methods ([`987adf2`](https://github.com/supabase-community/auth-py/commit/987adf2c112398be252d1fd9563cc8763dfc0b6f))
 
 ### Unknown
 
@@ -1257,6 +1373,21 @@ Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`a60428c`](https://g
 * chore(release): bump version to v2.2.0 ([`6db7cc2`](https://github.com/supabase-community/auth-py/commit/6db7cc25cbca86e9908d2f268a46fd5f066aa5e3))
 
 * chore(deps): bump actions/setup-python from 4 to 5 (#382) ([`55c04e2`](https://github.com/supabase-community/auth-py/commit/55c04e2121948b26ecd6af63c07e643892f05b45))
+
+* chore(deps): bump actions/setup-python from 4 to 5
+
+Bumps [actions/setup-python](https://github.com/actions/setup-python) from 4 to 5.
+- [Release notes](https://github.com/actions/setup-python/releases)
+- [Commits](https://github.com/actions/setup-python/compare/v4...v5)
+
+---
+updated-dependencies:
+- dependency-name: actions/setup-python
+  dependency-type: direct:production
+  update-type: version-update:semver-major
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`c6f378a`](https://github.com/supabase-community/auth-py/commit/c6f378a409489f136f5808d1b6aeb859ac95636f))
 
 ### Feature
 
@@ -1273,21 +1404,6 @@ Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`a60428c`](https://g
 ### Chore
 
 * chore(release): bump version to v2.1.0 ([`a1f060c`](https://github.com/supabase-community/auth-py/commit/a1f060c55d3a18fae8a616d2b4f7cd3cd2afc867))
-
-* chore(deps): bump actions/setup-python from 4 to 5
-
-Bumps [actions/setup-python](https://github.com/actions/setup-python) from 4 to 5.
-- [Release notes](https://github.com/actions/setup-python/releases)
-- [Commits](https://github.com/actions/setup-python/compare/v4...v5)
-
----
-updated-dependencies:
-- dependency-name: actions/setup-python
-  dependency-type: direct:production
-  update-type: version-update:semver-major
-...
-
-Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`c6f378a`](https://github.com/supabase-community/auth-py/commit/c6f378a409489f136f5808d1b6aeb859ac95636f))
 
 ### Feature
 
@@ -1313,22 +1429,6 @@ BREAKING CHANGE: change async method on_auth_state_change to sync only. ([`a249b
 
 * chore(deps-dev): bump cryptography from 41.0.5 to 41.0.6 (#377) ([`e6b3d46`](https://github.com/supabase-community/auth-py/commit/e6b3d46fba5f24631fdd5fdb1b8d1688a1087053))
 
-### Feature
-
-* feat: exchange code for session now fully async (#378) ([`c294568`](https://github.com/supabase-community/auth-py/commit/c2945684a8ad4d8710ca72428b4ec16aab87bad1))
-
-### Unknown
-
-* bug fix: use pydantic v2 model.model_rebuild (#373) ([`fd94314`](https://github.com/supabase-community/auth-py/commit/fd94314c4412d49610acf8d3166abe660f6a4ee4))
-
-* add soft delete support to &#34;delete user&#34; (#376) ([`08bada3`](https://github.com/supabase-community/auth-py/commit/08bada3692f230cf1bd793a7eb60a12d62fec0c6))
-
-## v1.3.1 (2023-11-29)
-
-### Chore
-
-* chore(release): bump version to v1.3.1 ([`ede20fe`](https://github.com/supabase-community/auth-py/commit/ede20fea097fd900df2efc6231c14ea86f486087))
-
 * chore(deps-dev): bump cryptography from 41.0.5 to 41.0.6
 
 Bumps [cryptography](https://github.com/pyca/cryptography) from 41.0.5 to 41.0.6.
@@ -1343,6 +1443,26 @@ updated-dependencies:
 
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`424a5df`](https://github.com/supabase-community/auth-py/commit/424a5df56f91ac30fab056bd9128d4dac004c565))
 
+### Feature
+
+* feat: exchange code for session now fully async (#378) ([`c294568`](https://github.com/supabase-community/auth-py/commit/c2945684a8ad4d8710ca72428b4ec16aab87bad1))
+
+### Unknown
+
+* bug fix: use pydantic v2 model.model_rebuild (#373) ([`fd94314`](https://github.com/supabase-community/auth-py/commit/fd94314c4412d49610acf8d3166abe660f6a4ee4))
+
+* bug fix: use pydantic v2 model.model_rebuild not rebuild_model ([`9d723df`](https://github.com/supabase-community/auth-py/commit/9d723df7637fb501f83aad3562a49e2ed24bb9a2))
+
+* add soft delete support to &#34;delete user&#34; (#376) ([`08bada3`](https://github.com/supabase-community/auth-py/commit/08bada3692f230cf1bd793a7eb60a12d62fec0c6))
+
+* add soft delete support to &#34;delete user&#34; ([`5471167`](https://github.com/supabase-community/auth-py/commit/54711675533ce58fdf3017f250e92a88db719aad))
+
+## v1.3.1 (2023-11-29)
+
+### Chore
+
+* chore(release): bump version to v1.3.1 ([`ede20fe`](https://github.com/supabase-community/auth-py/commit/ede20fea097fd900df2efc6231c14ea86f486087))
+
 ### Fix
 
 * fix: remove unnecessary async to on_auth_state_change (#374) ([`574c739`](https://github.com/supabase-community/auth-py/commit/574c739500dd304aa6d09c69122373b6e4a5be01))
@@ -1353,12 +1473,6 @@ Somehow this got reverted on a refactor (https://github.com/supabase-community/g
 
 This causes problems when using the supabase client, since it&#39;s not being awaited:
 https://github.com/supabase-community/supabase-py/blob/main/supabase/_async/client.py#L90 ([`7548d02`](https://github.com/supabase-community/auth-py/commit/7548d0290199bdb1053564b953932c53aabdea29))
-
-### Unknown
-
-* add soft delete support to &#34;delete user&#34; ([`5471167`](https://github.com/supabase-community/auth-py/commit/54711675533ce58fdf3017f250e92a88db719aad))
-
-* bug fix: use pydantic v2 model.model_rebuild not rebuild_model ([`9d723df`](https://github.com/supabase-community/auth-py/commit/9d723df7637fb501f83aad3562a49e2ed24bb9a2))
 
 ## v1.3.0 (2023-11-01)
 
@@ -1371,12 +1485,6 @@ https://github.com/supabase-community/supabase-py/blob/main/supabase/_async/clie
 * chore: update CI config with PAT ([`1fffc1f`](https://github.com/supabase-community/auth-py/commit/1fffc1fdebca39c35a9e69ea3d25240e13eb73b7))
 
 * chore(deps-dev): bump pygithub from 1.59.1 to 2.1.1 (#337) ([`160b671`](https://github.com/supabase-community/auth-py/commit/160b671de0ecab9d40a6caf4c6553d8808974b1f))
-
-* chore: update dependencies (#357) ([`a5d4a81`](https://github.com/supabase-community/auth-py/commit/a5d4a812d1cc4bb8624a33853088a1710b1a501d))
-
-* chore: update dependencies ([`dc67de1`](https://github.com/supabase-community/auth-py/commit/dc67de1b9e56fd7d07e98cba73969ec458ce4d3c))
-
-* chore(deps-dev): bump urllib3 from 2.0.4 to 2.0.7 (#350) ([`4ea73e4`](https://github.com/supabase-community/auth-py/commit/4ea73e42892f63a3065e3fc9cc059ae940cefdc1))
 
 * chore(deps-dev): bump pygithub from 1.59.1 to 2.1.1
 
@@ -1393,6 +1501,27 @@ updated-dependencies:
 ...
 
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`264e773`](https://github.com/supabase-community/auth-py/commit/264e77314e5a50e0b325d906e11998be933339d2))
+
+* chore: update dependencies (#357) ([`a5d4a81`](https://github.com/supabase-community/auth-py/commit/a5d4a812d1cc4bb8624a33853088a1710b1a501d))
+
+* chore: update dependencies ([`dc67de1`](https://github.com/supabase-community/auth-py/commit/dc67de1b9e56fd7d07e98cba73969ec458ce4d3c))
+
+* chore(deps-dev): bump urllib3 from 2.0.4 to 2.0.7 (#350) ([`4ea73e4`](https://github.com/supabase-community/auth-py/commit/4ea73e42892f63a3065e3fc9cc059ae940cefdc1))
+
+* chore(deps-dev): bump urllib3 from 2.0.4 to 2.0.7
+
+Bumps [urllib3](https://github.com/urllib3/urllib3) from 2.0.4 to 2.0.7.
+- [Release notes](https://github.com/urllib3/urllib3/releases)
+- [Changelog](https://github.com/urllib3/urllib3/blob/main/CHANGES.rst)
+- [Commits](https://github.com/urllib3/urllib3/compare/2.0.4...2.0.7)
+
+---
+updated-dependencies:
+- dependency-name: urllib3
+  dependency-type: indirect
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`2400229`](https://github.com/supabase-community/auth-py/commit/240022942e7513b67e5db3e26e4f9a9be77f7f83))
 
 * chore(deps): bump python-semantic-release/python-semantic-release from 8.0.8 to 8.3.0 (#354) ([`a385575`](https://github.com/supabase-community/auth-py/commit/a385575e960426090c5aa6b8395c43c706015f72))
 
@@ -1412,20 +1541,21 @@ updated-dependencies:
 
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`3fbe6fc`](https://github.com/supabase-community/auth-py/commit/3fbe6fcbefde561833a45c07df565ad00c448669))
 
-* chore(deps-dev): bump urllib3 from 2.0.4 to 2.0.7
+* chore(deps): bump httpx from 0.24.1 to 0.25.0
 
-Bumps [urllib3](https://github.com/urllib3/urllib3) from 2.0.4 to 2.0.7.
-- [Release notes](https://github.com/urllib3/urllib3/releases)
-- [Changelog](https://github.com/urllib3/urllib3/blob/main/CHANGES.rst)
-- [Commits](https://github.com/urllib3/urllib3/compare/2.0.4...2.0.7)
+Bumps [httpx](https://github.com/encode/httpx) from 0.24.1 to 0.25.0.
+- [Release notes](https://github.com/encode/httpx/releases)
+- [Changelog](https://github.com/encode/httpx/blob/master/CHANGELOG.md)
+- [Commits](https://github.com/encode/httpx/compare/0.24.1...0.25.0)
 
 ---
 updated-dependencies:
-- dependency-name: urllib3
-  dependency-type: indirect
+- dependency-name: httpx
+  dependency-type: direct:production
+  update-type: version-update:semver-minor
 ...
 
-Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`2400229`](https://github.com/supabase-community/auth-py/commit/240022942e7513b67e5db3e26e4f9a9be77f7f83))
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`a5b2f85`](https://github.com/supabase-community/auth-py/commit/a5b2f85c68a4157c41eec606fcd041f89969b08e))
 
 ### Feature
 
@@ -1442,10 +1572,6 @@ Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`2400229`](https://g
 * fix: fix typo ([`72ee18d`](https://github.com/supabase-community/auth-py/commit/72ee18db05b8d1ea2b916a4bfea074459df9ecf0))
 
 * fix: update imports ([`66759da`](https://github.com/supabase-community/auth-py/commit/66759da715a1d1511cf2518b5a1119bdfa205088))
-
-* fix: patch imports ([`3b61aff`](https://github.com/supabase-community/auth-py/commit/3b61aff1574a6adbbc49cd9ef81e86ff3b35535d))
-
-* fix: run pre-commit ([`754c7ab`](https://github.com/supabase-community/auth-py/commit/754c7abe6f30d429d2606a24b3f63667fc96c530))
 
 ### Unknown
 
@@ -1471,11 +1597,29 @@ Use urlsafe_b64decode to properly handle URL-encoded JWTs ([`7541ade`](https://g
 
 * chore(release): bump version to v1.2.0 ([`8da1032`](https://github.com/supabase-community/auth-py/commit/8da10323c27adf9976c1eaab4ac82aca560ee578))
 
+* chore(deps-dev): bump cryptography from 41.0.3 to 41.0.4
+
+Bumps [cryptography](https://github.com/pyca/cryptography) from 41.0.3 to 41.0.4.
+- [Changelog](https://github.com/pyca/cryptography/blob/main/CHANGELOG.rst)
+- [Commits](https://github.com/pyca/cryptography/compare/41.0.3...41.0.4)
+
+---
+updated-dependencies:
+- dependency-name: cryptography
+  dependency-type: indirect
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`4aa7224`](https://github.com/supabase-community/auth-py/commit/4aa7224e414df9c7ddc822d29d79e0db777dd7d3))
+
 ### Feature
 
 * feat: Add exception to handle API errors on signout ([`59b90d5`](https://github.com/supabase-community/auth-py/commit/59b90d545f59cb00b08b3a5c02edcd9a4a229538))
 
 ### Fix
+
+* fix: patch imports ([`3b61aff`](https://github.com/supabase-community/auth-py/commit/3b61aff1574a6adbbc49cd9ef81e86ff3b35535d))
+
+* fix: run pre-commit ([`754c7ab`](https://github.com/supabase-community/auth-py/commit/754c7abe6f30d429d2606a24b3f63667fc96c530))
 
 * fix: add pkce ([`02f7c05`](https://github.com/supabase-community/auth-py/commit/02f7c05c24c656d079c4be149d98140411445c37))
 
@@ -1495,49 +1639,19 @@ Add correct variables for semantic release ([`5155312`](https://github.com/supab
 
 * Add correct variables for semantic release ([`80b0e30`](https://github.com/supabase-community/auth-py/commit/80b0e30cc5ddf510f2ea1891aab247bde7c01ccc))
 
+* Merge pull request #330 from supabase-community/dependabot/pip/cryptography-41.0.4
+
+chore(deps-dev): bump cryptography from 41.0.3 to 41.0.4 ([`1bf3e5d`](https://github.com/supabase-community/auth-py/commit/1bf3e5dc03f9d0da1f939001ec120e1ef0c69420))
+
 * Merge pull request #332 from supabase-community/sourcery/j0/pkce
 
 feat: add OAuth PKCE (Sourcery refactored) ([`b331d04`](https://github.com/supabase-community/auth-py/commit/b331d043ce056a9a09355e14989e036e86db9c59))
 
 * &#39;Refactored by Sourcery&#39; ([`af4f842`](https://github.com/supabase-community/auth-py/commit/af4f842d8fdf59fcef04b853660627b6b24a18a4))
 
-* Merge pull request #330 from supabase-community/dependabot/pip/cryptography-41.0.4
-
-chore(deps-dev): bump cryptography from 41.0.3 to 41.0.4 ([`1bf3e5d`](https://github.com/supabase-community/auth-py/commit/1bf3e5dc03f9d0da1f939001ec120e1ef0c69420))
-
 ## v1.1.1 (2023-09-22)
 
 ### Chore
-
-* chore(deps-dev): bump cryptography from 41.0.3 to 41.0.4
-
-Bumps [cryptography](https://github.com/pyca/cryptography) from 41.0.3 to 41.0.4.
-- [Changelog](https://github.com/pyca/cryptography/blob/main/CHANGELOG.rst)
-- [Commits](https://github.com/pyca/cryptography/compare/41.0.3...41.0.4)
-
----
-updated-dependencies:
-- dependency-name: cryptography
-  dependency-type: indirect
-...
-
-Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`4aa7224`](https://github.com/supabase-community/auth-py/commit/4aa7224e414df9c7ddc822d29d79e0db777dd7d3))
-
-* chore(deps): bump httpx from 0.24.1 to 0.25.0
-
-Bumps [httpx](https://github.com/encode/httpx) from 0.24.1 to 0.25.0.
-- [Release notes](https://github.com/encode/httpx/releases)
-- [Changelog](https://github.com/encode/httpx/blob/master/CHANGELOG.md)
-- [Commits](https://github.com/encode/httpx/compare/0.24.1...0.25.0)
-
----
-updated-dependencies:
-- dependency-name: httpx
-  dependency-type: direct:production
-  update-type: version-update:semver-minor
-...
-
-Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`a5b2f85`](https://github.com/supabase-community/auth-py/commit/a5b2f85c68a4157c41eec606fcd041f89969b08e))
 
 * chore(deps): bump python-semantic-release/python-semantic-release
 
@@ -1838,21 +1952,6 @@ chore(deps-dev): bump faker from 18.13.0 to 19.2.0 ([`69f5994`](https://github.c
 
 * chore: bump ci file ([`cfe3acb`](https://github.com/supabase-community/auth-py/commit/cfe3acbba295d30b1360269f891449ca2fe7fa13))
 
-* chore(deps-dev): bump pytest-asyncio from 0.20.3 to 0.21.1
-
-Bumps [pytest-asyncio](https://github.com/pytest-dev/pytest-asyncio) from 0.20.3 to 0.21.1.
-- [Release notes](https://github.com/pytest-dev/pytest-asyncio/releases)
-- [Commits](https://github.com/pytest-dev/pytest-asyncio/compare/v0.20.3...v0.21.1)
-
----
-updated-dependencies:
-- dependency-name: pytest-asyncio
-  dependency-type: direct:development
-  update-type: version-update:semver-minor
-...
-
-Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`d5f937f`](https://github.com/supabase-community/auth-py/commit/d5f937f3c2d377336c93537d46cc53969ad1f1f6))
-
 * chore(deps-dev): bump pygithub from 1.58.0 to 1.59.0
 
 Bumps [pygithub](https://github.com/pygithub/pygithub) from 1.58.0 to 1.59.0.
@@ -1868,6 +1967,21 @@ updated-dependencies:
 ...
 
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`57ae5f7`](https://github.com/supabase-community/auth-py/commit/57ae5f79261545977d97c39f76d2cc9e868b65b1))
+
+* chore(deps-dev): bump pytest-asyncio from 0.20.3 to 0.21.1
+
+Bumps [pytest-asyncio](https://github.com/pytest-dev/pytest-asyncio) from 0.20.3 to 0.21.1.
+- [Release notes](https://github.com/pytest-dev/pytest-asyncio/releases)
+- [Commits](https://github.com/pytest-dev/pytest-asyncio/compare/v0.20.3...v0.21.1)
+
+---
+updated-dependencies:
+- dependency-name: pytest-asyncio
+  dependency-type: direct:development
+  update-type: version-update:semver-minor
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`d5f937f`](https://github.com/supabase-community/auth-py/commit/d5f937f3c2d377336c93537d46cc53969ad1f1f6))
 
 * chore(deps-dev): bump python-semantic-release from 7.33.2 to 7.34.6
 
@@ -2094,6 +2208,10 @@ chore(deps): bump requests from 2.28.2 to 2.31.0 ([`15f2dbd`](https://github.com
 
 fix issue #246 ([`dca7d9a`](https://github.com/supabase-community/auth-py/commit/dca7d9a4219230d3f99b69d00b84bcd84f0dd12f))
 
+* fix import ([`034da90`](https://github.com/supabase-community/auth-py/commit/034da901685a6022e6f16a8588386d54c43b2594))
+
+* fix url double encode ([`69a4f4a`](https://github.com/supabase-community/auth-py/commit/69a4f4a6a03ab30ea0c0d9862fa7c15191588f21))
+
 * Merge pull request #266 from supabase-community/dependabot/pip/main/httpx-0.24.1
 
 chore(deps): bump httpx from 0.23.3 to 0.24.1 ([`0efdd9d`](https://github.com/supabase-community/auth-py/commit/0efdd9d1e206fcac8aa9b62b45b86e2120f835d1))
@@ -2102,15 +2220,11 @@ chore(deps): bump httpx from 0.23.3 to 0.24.1 ([`0efdd9d`](https://github.com/su
 
 optional last_sign_in_at in UserIdentity type ([`99d4567`](https://github.com/supabase-community/auth-py/commit/99d45678572b4ea7ad91c2340a5753a263a40703))
 
+* optional last_sign_in_at in UserIdentity type ([`6fef36a`](https://github.com/supabase-community/auth-py/commit/6fef36a583018c113f72e927a6598adf4948669b))
+
 * Merge pull request #261 from hgseo16/main
 
 fix: parse_auth_response to handle cases when data is an empty dictio… ([`633c4ab`](https://github.com/supabase-community/auth-py/commit/633c4ab5207d12991d0e97c35786ed699ac175b9))
-
-* fix import ([`034da90`](https://github.com/supabase-community/auth-py/commit/034da901685a6022e6f16a8588386d54c43b2594))
-
-* optional last_sign_in_at in UserIdentity type ([`6fef36a`](https://github.com/supabase-community/auth-py/commit/6fef36a583018c113f72e927a6598adf4948669b))
-
-* fix url double encode ([`69a4f4a`](https://github.com/supabase-community/auth-py/commit/69a4f4a6a03ab30ea0c0d9862fa7c15191588f21))
 
 * Merge pull request #260 from supabase-community/dependabot/pip/main/pre-commit-3.2.2
 
@@ -2184,6 +2298,22 @@ updated-dependencies:
 
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`8ba18fd`](https://github.com/supabase-community/auth-py/commit/8ba18fd6d16bf98fbd8fb5cff186ec4322ce6189))
 
+* chore(deps): bump abatilo/actions-poetry from 2.2.0 to 2.3.0
+
+Bumps [abatilo/actions-poetry](https://github.com/abatilo/actions-poetry) from 2.2.0 to 2.3.0.
+- [Release notes](https://github.com/abatilo/actions-poetry/releases)
+- [Changelog](https://github.com/abatilo/actions-poetry/blob/master/.releaserc)
+- [Commits](https://github.com/abatilo/actions-poetry/compare/v2.2.0...v2.3.0)
+
+---
+updated-dependencies:
+- dependency-name: abatilo/actions-poetry
+  dependency-type: direct:production
+  update-type: version-update:semver-minor
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`e28fd25`](https://github.com/supabase-community/auth-py/commit/e28fd25a03f09468237a08accc7546210461d4ea))
+
 * chore(deps-dev): bump pytest from 7.2.1 to 7.2.2
 
 Bumps [pytest](https://github.com/pytest-dev/pytest) from 7.2.1 to 7.2.2.
@@ -2232,22 +2362,6 @@ updated-dependencies:
 
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`2bf3dce`](https://github.com/supabase-community/auth-py/commit/2bf3dcee6dab4287e03d16905891a51b1a79fab9))
 
-* chore(deps): bump abatilo/actions-poetry from 2.2.0 to 2.3.0
-
-Bumps [abatilo/actions-poetry](https://github.com/abatilo/actions-poetry) from 2.2.0 to 2.3.0.
-- [Release notes](https://github.com/abatilo/actions-poetry/releases)
-- [Changelog](https://github.com/abatilo/actions-poetry/blob/master/.releaserc)
-- [Commits](https://github.com/abatilo/actions-poetry/compare/v2.2.0...v2.3.0)
-
----
-updated-dependencies:
-- dependency-name: abatilo/actions-poetry
-  dependency-type: direct:production
-  update-type: version-update:semver-minor
-...
-
-Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`e28fd25`](https://github.com/supabase-community/auth-py/commit/e28fd25a03f09468237a08accc7546210461d4ea))
-
 * chore(deps-dev): bump pre-commit from 3.0.4 to 3.1.0
 
 Bumps [pre-commit](https://github.com/pre-commit/pre-commit) from 3.0.4 to 3.1.0.
@@ -2280,6 +2394,22 @@ updated-dependencies:
 
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`c6f0b49`](https://github.com/supabase-community/auth-py/commit/c6f0b49d971ac5aaa0a77eccf13c623f6d23e5f2))
 
+* chore(deps-dev): bump faker from 16.8.1 to 17.0.0
+
+Bumps [faker](https://github.com/joke2k/faker) from 16.8.1 to 17.0.0.
+- [Release notes](https://github.com/joke2k/faker/releases)
+- [Changelog](https://github.com/joke2k/faker/blob/master/CHANGELOG.md)
+- [Commits](https://github.com/joke2k/faker/compare/v16.8.1...v17.0.0)
+
+---
+updated-dependencies:
+- dependency-name: faker
+  dependency-type: direct:development
+  update-type: version-update:semver-major
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`911f5cb`](https://github.com/supabase-community/auth-py/commit/911f5cba28f0ccd0b1194ec414d08d0db416dbdf))
+
 * chore(deps): bump pydantic from 1.10.4 to 1.10.5 (#233)
 
 Bumps [pydantic](https://github.com/pydantic/pydantic) from 1.10.4 to 1.10.5.
@@ -2297,22 +2427,6 @@ updated-dependencies:
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt;
 Co-authored-by: dependabot[bot] &lt;49699333+dependabot[bot]@users.noreply.github.com&gt; ([`a785e16`](https://github.com/supabase-community/auth-py/commit/a785e16c79a76d9a897d58dbc17f370a014038b0))
 
-* chore(deps-dev): bump faker from 16.8.1 to 17.0.0
-
-Bumps [faker](https://github.com/joke2k/faker) from 16.8.1 to 17.0.0.
-- [Release notes](https://github.com/joke2k/faker/releases)
-- [Changelog](https://github.com/joke2k/faker/blob/master/CHANGELOG.md)
-- [Commits](https://github.com/joke2k/faker/compare/v16.8.1...v17.0.0)
-
----
-updated-dependencies:
-- dependency-name: faker
-  dependency-type: direct:development
-  update-type: version-update:semver-major
-...
-
-Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`911f5cb`](https://github.com/supabase-community/auth-py/commit/911f5cba28f0ccd0b1194ec414d08d0db416dbdf))
-
 * chore(deps-dev): bump faker from 16.7.0 to 16.8.1
 
 Bumps [faker](https://github.com/joke2k/faker) from 16.7.0 to 16.8.1.
@@ -2329,6 +2443,21 @@ updated-dependencies:
 
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`e7088a7`](https://github.com/supabase-community/auth-py/commit/e7088a72d647483841857d00d6c33153ed39de51))
 
+* chore(deps): bump cryptography from 39.0.0 to 39.0.1
+
+Bumps [cryptography](https://github.com/pyca/cryptography) from 39.0.0 to 39.0.1.
+- [Release notes](https://github.com/pyca/cryptography/releases)
+- [Changelog](https://github.com/pyca/cryptography/blob/main/CHANGELOG.rst)
+- [Commits](https://github.com/pyca/cryptography/compare/39.0.0...39.0.1)
+
+---
+updated-dependencies:
+- dependency-name: cryptography
+  dependency-type: indirect
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`c84f04d`](https://github.com/supabase-community/auth-py/commit/c84f04d42f8e25e0fd492861b82d03c6d0ec98a5))
+
 * chore(deps-dev): bump faker from 16.6.1 to 16.7.0
 
 Bumps [faker](https://github.com/joke2k/faker) from 16.6.1 to 16.7.0.
@@ -2344,21 +2473,6 @@ updated-dependencies:
 ...
 
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`7d5cbfc`](https://github.com/supabase-community/auth-py/commit/7d5cbfcf2a94533dc106db4fbda20aa0e0d14070))
-
-* chore(deps): bump cryptography from 39.0.0 to 39.0.1
-
-Bumps [cryptography](https://github.com/pyca/cryptography) from 39.0.0 to 39.0.1.
-- [Release notes](https://github.com/pyca/cryptography/releases)
-- [Changelog](https://github.com/pyca/cryptography/blob/main/CHANGELOG.rst)
-- [Commits](https://github.com/pyca/cryptography/compare/39.0.0...39.0.1)
-
----
-updated-dependencies:
-- dependency-name: cryptography
-  dependency-type: indirect
-...
-
-Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`c84f04d`](https://github.com/supabase-community/auth-py/commit/c84f04d42f8e25e0fd492861b82d03c6d0ec98a5))
 
 ### Feature
 
@@ -2384,11 +2498,11 @@ chore(deps-dev): bump faker from 18.3.0 to 18.3.1 ([`578734e`](https://github.co
 
 fix: patch padding for base64 ([`f77663a`](https://github.com/supabase-community/auth-py/commit/f77663ac11f6303f95677f4913c12f7765bd07f5))
 
+* Update helpers.py ([`e1ba5e2`](https://github.com/supabase-community/auth-py/commit/e1ba5e2ab79484beda860c27961336771f73b15b))
+
 * Merge pull request #252 from supabase-community/dependabot/pip/main/faker-18.3.0
 
 chore(deps-dev): bump faker from 17.6.0 to 18.3.0 ([`5d075d2`](https://github.com/supabase-community/auth-py/commit/5d075d2649ac4c2942dfdc3cfad3459d43868a1e))
-
-* Update helpers.py ([`e1ba5e2`](https://github.com/supabase-community/auth-py/commit/e1ba5e2ab79484beda860c27961336771f73b15b))
 
 * Merge pull request #235 from supabase-community/dependabot/pip/main/python-semantic-release-7.33.2
 
@@ -2492,8 +2606,6 @@ Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`3b2fd7f`](https://g
 
 * chore: update ci ([`dc3573c`](https://github.com/supabase-community/auth-py/commit/dc3573c466b139fc7fdb89670f0a2de08da38830))
 
-* chore: remove PyGithub as dep ([`08231ba`](https://github.com/supabase-community/auth-py/commit/08231baf14e72772e19f9d70ddd29e1b7387587e))
-
 * chore(deps-dev): bump faker from 16.6.0 to 16.6.1
 
 Bumps [faker](https://github.com/joke2k/faker) from 16.6.0 to 16.6.1.
@@ -2577,22 +2689,6 @@ updated-dependencies:
 
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`8a1b4dd`](https://github.com/supabase-community/auth-py/commit/8a1b4dd2510feb731b8862a4971b32642ae9f8de))
 
-* chore(deps): bump httpx from 0.23.1 to 0.23.3
-
-Bumps [httpx](https://github.com/encode/httpx) from 0.23.1 to 0.23.3.
-- [Release notes](https://github.com/encode/httpx/releases)
-- [Changelog](https://github.com/encode/httpx/blob/master/CHANGELOG.md)
-- [Commits](https://github.com/encode/httpx/compare/0.23.1...0.23.3)
-
----
-updated-dependencies:
-- dependency-name: httpx
-  dependency-type: direct:production
-  update-type: version-update:semver-patch
-...
-
-Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`32ce139`](https://github.com/supabase-community/auth-py/commit/32ce139d602503287fe5a6846f2983cbcc42f8bb))
-
 * chore(deps): bump wheel from 0.37.1 to 0.38.1
 
 Bumps [wheel](https://github.com/pypa/wheel) from 0.37.1 to 0.38.1.
@@ -2623,6 +2719,22 @@ updated-dependencies:
 ...
 
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`ba7cdc6`](https://github.com/supabase-community/auth-py/commit/ba7cdc6f4490e01ebcafad4768050998ea9a7307))
+
+* chore(deps): bump httpx from 0.23.1 to 0.23.3
+
+Bumps [httpx](https://github.com/encode/httpx) from 0.23.1 to 0.23.3.
+- [Release notes](https://github.com/encode/httpx/releases)
+- [Changelog](https://github.com/encode/httpx/blob/master/CHANGELOG.md)
+- [Commits](https://github.com/encode/httpx/compare/0.23.1...0.23.3)
+
+---
+updated-dependencies:
+- dependency-name: httpx
+  dependency-type: direct:production
+  update-type: version-update:semver-patch
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`32ce139`](https://github.com/supabase-community/auth-py/commit/32ce139d602503287fe5a6846f2983cbcc42f8bb))
 
 * chore(deps-dev): bump isort from 5.10.1 to 5.11.1 (#195)
 
@@ -2867,11 +2979,7 @@ Signed-off-by: dependabot[bot] &lt;support@github.com&gt;
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt;
 Co-authored-by: dependabot[bot] &lt;49699333+dependabot[bot]@users.noreply.github.com&gt; ([`2c15513`](https://github.com/supabase-community/auth-py/commit/2c15513f5986ff27448eba04e4c8e75140e96441))
 
-* chore: gen sync files ([`01385ea`](https://github.com/supabase-community/auth-py/commit/01385eac0c0ae79ae583b4ade84ab985f5933d20))
-
 * chore: fix EOL ([`44a4f25`](https://github.com/supabase-community/auth-py/commit/44a4f2573deb61ecdae704ec67f9e65c1dc25bd2))
-
-* chore: implement clients and utils for testing ([`6fbd3de`](https://github.com/supabase-community/auth-py/commit/6fbd3de4247f38ddd4af76422729658a8f0fb2da))
 
 * chore(deps-dev): bump pytest from 7.1.3 to 7.2.0 (#179)
 
@@ -2927,6 +3035,12 @@ updated-dependencies:
 
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`89f1336`](https://github.com/supabase-community/auth-py/commit/89f133619118f4fbf8eaa9ef4b05283397fbfefd))
 
+* chore: remove PyGithub as dep ([`08231ba`](https://github.com/supabase-community/auth-py/commit/08231baf14e72772e19f9d70ddd29e1b7387587e))
+
+* chore: gen sync files ([`01385ea`](https://github.com/supabase-community/auth-py/commit/01385eac0c0ae79ae583b4ade84ab985f5933d20))
+
+* chore: implement clients and utils for testing ([`6fbd3de`](https://github.com/supabase-community/auth-py/commit/6fbd3de4247f38ddd4af76422729658a8f0fb2da))
+
 * chore(deps-dev): bump faker from 15.0.0 to 15.1.1
 
 Bumps [faker](https://github.com/joke2k/faker) from 15.0.0 to 15.1.1.
@@ -2944,10 +3058,6 @@ updated-dependencies:
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`69c7c4e`](https://github.com/supabase-community/auth-py/commit/69c7c4e0e9434a16195c7cc9fb2c29bd119362ca))
 
 * chore(deps): fix poetry lock file ([`5148277`](https://github.com/supabase-community/auth-py/commit/514827788828799817ea47f3f89f442c163ba5be))
-
-* chore(deps): bump dev dependencies ([`93aabbe`](https://github.com/supabase-community/auth-py/commit/93aabbe1f5f130677b9a3765c998936940b75dc2))
-
-* chore: format docstring to avoid linter warning ([`6a200fe`](https://github.com/supabase-community/auth-py/commit/6a200fead8b18cb06fe4fcf93c37b65345b48372))
 
 * chore(deps-dev): bump black from 22.8.0 to 22.10.0 (#170)
 
@@ -3155,6 +3265,10 @@ Signed-off-by: dependabot[bot] &lt;support@github.com&gt;
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt;
 Co-authored-by: dependabot[bot] &lt;49699333+dependabot[bot]@users.noreply.github.com&gt; ([`a322dce`](https://github.com/supabase-community/auth-py/commit/a322dce65f54de8a98d54c02dce0a12fdd5201c2))
 
+* chore(deps): bump dev dependencies ([`93aabbe`](https://github.com/supabase-community/auth-py/commit/93aabbe1f5f130677b9a3765c998936940b75dc2))
+
+* chore: format docstring to avoid linter warning ([`6a200fe`](https://github.com/supabase-community/auth-py/commit/6a200fead8b18cb06fe4fcf93c37b65345b48372))
+
 * chore: update dependencies ([`6b15a50`](https://github.com/supabase-community/auth-py/commit/6b15a50466f82b87aae67823e08770c25cb352f6))
 
 ### Feature
@@ -3187,8 +3301,6 @@ Co-authored-by: dependabot[bot] &lt;49699333+dependabot[bot]@users.noreply.githu
 
 * fix: add jwt package ([`36e8d12`](https://github.com/supabase-community/auth-py/commit/36e8d12e10f5f8494a7e5b00bf443678f6db0e47))
 
-* fix: patch merge conflicts on next ([`fb033e4`](https://github.com/supabase-community/auth-py/commit/fb033e44208be7f3ae611eefd83d48d379909c44))
-
 * fix: revert poetry.lock to original main files ([`df4ab8f`](https://github.com/supabase-community/auth-py/commit/df4ab8fa9ddbcf966026e98a9617f652f1f91179))
 
 * fix: checkout main poetry.lock and poetry.toml ([`c8aeabc`](https://github.com/supabase-community/auth-py/commit/c8aeabc06dd6208f13e7934e0d70bf7bac8ea487))
@@ -3197,21 +3309,23 @@ Co-authored-by: dependabot[bot] &lt;49699333+dependabot[bot]@users.noreply.githu
 
 * fix: comment out sphinx ([`d46cf0d`](https://github.com/supabase-community/auth-py/commit/d46cf0d195b293f2f285190a726208c033a4722c))
 
-* fix: bugs in admin api and finish tests implementation ([`9db7ce6`](https://github.com/supabase-community/auth-py/commit/9db7ce680326c149730ef84cbe9540ad8a735676))
-
 * fix: remove group from pyproject.toml ([`41349d2`](https://github.com/supabase-community/auth-py/commit/41349d2cebf239a3529d92c2d848ca1cf78cc4f3))
 
 * fix: revert dependency group ([`a923e52`](https://github.com/supabase-community/auth-py/commit/a923e52ecebc5706c210135b0bfeaaccf78fffd8))
+
+* fix: stray EOLS ([`33cefba`](https://github.com/supabase-community/auth-py/commit/33cefba743b326647aee7c8639f000894dd609e9))
+
+* fix: include modules page ([`8dab491`](https://github.com/supabase-community/auth-py/commit/8dab491fc1ce754f9d5aa27eab0e4c938b1342cd))
+
+* fix: patch merge conflicts on next ([`fb033e4`](https://github.com/supabase-community/auth-py/commit/fb033e44208be7f3ae611eefd83d48d379909c44))
+
+* fix: bugs in admin api and finish tests implementation ([`9db7ce6`](https://github.com/supabase-community/auth-py/commit/9db7ce680326c149730ef84cbe9540ad8a735676))
 
 * fix: list users method of admin api ([`a973a1c`](https://github.com/supabase-community/auth-py/commit/a973a1cce3ea90e3c3ece0def70626c68727ae0d))
 
 * fix: respect EXPIRY_MARGIN on getSession ([`45afb35`](https://github.com/supabase-community/auth-py/commit/45afb351ebe960a292edb77d4ea77bc235ee1563))
 
 * fix: use literal from typing extensions ([`ec6618b`](https://github.com/supabase-community/auth-py/commit/ec6618b0c4e1ac0137f98debbc02b98e61e8ef60))
-
-* fix: stray EOLS ([`33cefba`](https://github.com/supabase-community/auth-py/commit/33cefba743b326647aee7c8639f000894dd609e9))
-
-* fix: include modules page ([`8dab491`](https://github.com/supabase-community/auth-py/commit/8dab491fc1ce754f9d5aa27eab0e4c938b1342cd))
 
 * fix: insert default content type header ([`332f782`](https://github.com/supabase-community/auth-py/commit/332f782db88921ef30a5362e054fd39d26166d2d))
 
@@ -3309,10 +3423,6 @@ chore(deps-dev): bump black from 22.10.0 to 22.12.0 ([`dff74c6`](https://github.
 
 * Merge branch &#39;main&#39; into j0/add_docs ([`24fbb46`](https://github.com/supabase-community/auth-py/commit/24fbb46852bb1f311cb7f8358b2806834ca80be3))
 
-* tests: add python 3.11 and update poetry version ([`33756af`](https://github.com/supabase-community/auth-py/commit/33756af49f995017cf3d9fdfd581b4974f13003c))
-
-* tests: add tests for create user in admin api ([`30fd751`](https://github.com/supabase-community/auth-py/commit/30fd7512221145363f1ac5fb44fed86cdb08eb6d))
-
 * Merge branch &#39;j0/add_docs&#39; of github.com:supabase-community/gotrue-py into j0/add_docs ([`798ef1c`](https://github.com/supabase-community/auth-py/commit/798ef1cd86751de8fd55fd1aeef30ad6ef1548be))
 
 * Merge pull request #181 from supabase-community/sourcery/j0/add_docs
@@ -3321,11 +3431,15 @@ feat: add docs for GoTrue (Sourcery refactored) ([`7482f1a`](https://github.com/
 
 * &#39;Refactored by Sourcery&#39; ([`d26ff18`](https://github.com/supabase-community/auth-py/commit/d26ff1880cc55fe467beae0a3b59f629d79a212e))
 
-* Merge remote-tracking branch &#39;remotes/origin/next&#39; into next ([`20638fe`](https://github.com/supabase-community/auth-py/commit/20638fe9b8388367ce72669817c2590070ad60d6))
-
 * Merge pull request #178 from supabase-community/dependabot/pip/main/pytest-asyncio-0.20.1
 
 chore(deps-dev): bump pytest-asyncio from 0.19.0 to 0.20.1 ([`e20893a`](https://github.com/supabase-community/auth-py/commit/e20893a9a9dc0be47883962396d91378ab2de81d))
+
+* tests: add python 3.11 and update poetry version ([`33756af`](https://github.com/supabase-community/auth-py/commit/33756af49f995017cf3d9fdfd581b4974f13003c))
+
+* tests: add tests for create user in admin api ([`30fd751`](https://github.com/supabase-community/auth-py/commit/30fd7512221145363f1ac5fb44fed86cdb08eb6d))
+
+* Merge remote-tracking branch &#39;remotes/origin/next&#39; into next ([`20638fe`](https://github.com/supabase-community/auth-py/commit/20638fe9b8388367ce72669817c2590070ad60d6))
 
 * &#39;Refactored by Sourcery&#39; (#176)
 
@@ -3614,8 +3728,6 @@ Signed-off-by: dependabot[bot] &lt;support@github.com&gt;
 
 Co-authored-by: dependabot[bot] &lt;49699333+dependabot[bot]@users.noreply.github.com&gt; ([`8aba5b5`](https://github.com/supabase-community/auth-py/commit/8aba5b56d0e7177d3edbb2ee1535592eb05ffbb6))
 
-* chore: upgrade pytest-asyncio ([`1fc2fa9`](https://github.com/supabase-community/auth-py/commit/1fc2fa968851c42947f9733f1ad7a169d475be2c))
-
 * chore(deps-dev): bump python-semantic-release from 7.30.1 to 7.30.2 (#139)
 
 Bumps [python-semantic-release](https://github.com/relekang/python-semantic-release) from 7.30.1 to 7.30.2.
@@ -3687,6 +3799,8 @@ updated-dependencies:
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt;
 
 Co-authored-by: dependabot[bot] &lt;49699333+dependabot[bot]@users.noreply.github.com&gt; ([`74a9410`](https://github.com/supabase-community/auth-py/commit/74a9410067e302040eff3aba064b230ccf2a9216))
+
+* chore: upgrade pytest-asyncio ([`1fc2fa9`](https://github.com/supabase-community/auth-py/commit/1fc2fa968851c42947f9733f1ad7a169d475be2c))
 
 ### Fix
 
@@ -4573,22 +4687,6 @@ Co-authored-by: dependabot[bot] &lt;49699333+dependabot[bot]@users.noreply.githu
 
 * chore: remove skip of tests in sync version ([`70b1286`](https://github.com/supabase-community/auth-py/commit/70b128680588c8bb96ec0d0e1a2a66820a590222))
 
-* chore(deps): bump httpx from 0.21.1 to 0.21.2
-
-Bumps [httpx](https://github.com/encode/httpx) from 0.21.1 to 0.21.2.
-- [Release notes](https://github.com/encode/httpx/releases)
-- [Changelog](https://github.com/encode/httpx/blob/master/CHANGELOG.md)
-- [Commits](https://github.com/encode/httpx/compare/0.21.1...0.21.2)
-
----
-updated-dependencies:
-- dependency-name: httpx
-  dependency-type: direct:production
-  update-type: version-update:semver-patch
-...
-
-Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`52c9a4a`](https://github.com/supabase-community/auth-py/commit/52c9a4ae593fe80471a37e0e3a328345816fac53))
-
 * chore(deps-dev): bump faker from 11.1.0 to 11.3.0
 
 Bumps [faker](https://github.com/joke2k/faker) from 11.1.0 to 11.3.0.
@@ -4605,15 +4703,31 @@ updated-dependencies:
 
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`67a52e8`](https://github.com/supabase-community/auth-py/commit/67a52e8ad178695367bda26d01fc7c469803487e))
 
+* chore(deps): bump httpx from 0.21.1 to 0.21.2
+
+Bumps [httpx](https://github.com/encode/httpx) from 0.21.1 to 0.21.2.
+- [Release notes](https://github.com/encode/httpx/releases)
+- [Changelog](https://github.com/encode/httpx/blob/master/CHANGELOG.md)
+- [Commits](https://github.com/encode/httpx/compare/0.21.1...0.21.2)
+
+---
+updated-dependencies:
+- dependency-name: httpx
+  dependency-type: direct:production
+  update-type: version-update:semver-patch
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`52c9a4a`](https://github.com/supabase-community/auth-py/commit/52c9a4ae593fe80471a37e0e3a328345816fac53))
+
 * chore: filter deploy section by repo owner ([`c28e6c7`](https://github.com/supabase-community/auth-py/commit/c28e6c76152fc81882b514b108e629c1aea3504f))
 
 * chore: add ignore md rules to dev container and fix changelog ([`2638c1b`](https://github.com/supabase-community/auth-py/commit/2638c1b5bc1da97826812546b4e7902111b46fa9))
 
 * chore: update poetry version in ci github action ([`a1e765d`](https://github.com/supabase-community/auth-py/commit/a1e765d87331638ac038c76f6a4f3f8d538571f4))
 
-* chore: fix rule in makefile ([`455d0ce`](https://github.com/supabase-community/auth-py/commit/455d0cefe2163f24f3246a8673a03ab10730bc19))
-
 * chore: add python versions badge to readme ([`cb407bd`](https://github.com/supabase-community/auth-py/commit/cb407bd4e00c8e1c3fdfab7773a61ee797bae60f))
+
+* chore: fix rule in makefile ([`455d0ce`](https://github.com/supabase-community/auth-py/commit/455d0cefe2163f24f3246a8673a03ab10730bc19))
 
 ### Unknown
 
@@ -4764,6 +4878,22 @@ updated-dependencies:
 
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`57c73f3`](https://github.com/supabase-community/auth-py/commit/57c73f338e5135f38f09d88d6e60442848a59bbb))
 
+* chore(deps-dev): bump faker from 9.8.2 to 10.0.0
+
+Bumps [faker](https://github.com/joke2k/faker) from 9.8.2 to 10.0.0.
+- [Release notes](https://github.com/joke2k/faker/releases)
+- [Changelog](https://github.com/joke2k/faker/blob/master/CHANGELOG.md)
+- [Commits](https://github.com/joke2k/faker/compare/v9.8.2...v10.0.0)
+
+---
+updated-dependencies:
+- dependency-name: faker
+  dependency-type: direct:development
+  update-type: version-update:semver-major
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`d012ae8`](https://github.com/supabase-community/auth-py/commit/d012ae88341accfa9b79666d3b9e1a68cdf594f4))
+
 * chore(deps): update poetry.lock ([`882388f`](https://github.com/supabase-community/auth-py/commit/882388f0b162cd4dae714623c3c5dde5a4ab8b72))
 
 * chore(deps-dev): bump commitizen from 2.20.0 to 2.20.2
@@ -4788,6 +4918,21 @@ Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`4210dba`](https://g
 
 * chore(deps): update poetry.lock ([`3130b5a`](https://github.com/supabase-community/auth-py/commit/3130b5afd13ad2655b90655aa3be5f5e5c381db7))
 
+* chore(deps-dev): bump black from 21.11b1 to 21.12b0
+
+Bumps [black](https://github.com/psf/black) from 21.11b1 to 21.12b0.
+- [Release notes](https://github.com/psf/black/releases)
+- [Changelog](https://github.com/psf/black/blob/main/CHANGES.md)
+- [Commits](https://github.com/psf/black/commits)
+
+---
+updated-dependencies:
+- dependency-name: black
+  dependency-type: direct:development
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`bbc76f5`](https://github.com/supabase-community/auth-py/commit/bbc76f50ceb54a105f32c14c25d57e2d9caf0727))
+
 * chore(deps-dev): bump faker from 9.9.0 to 10.0.0
 
 Bumps [faker](https://github.com/joke2k/faker) from 9.9.0 to 10.0.0.
@@ -4804,38 +4949,23 @@ updated-dependencies:
 
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`475e9f6`](https://github.com/supabase-community/auth-py/commit/475e9f6eba17b3a67d1ca1c4cf566832658ce480))
 
-* chore(deps-dev): bump faker from 9.8.2 to 10.0.0
-
-Bumps [faker](https://github.com/joke2k/faker) from 9.8.2 to 10.0.0.
-- [Release notes](https://github.com/joke2k/faker/releases)
-- [Changelog](https://github.com/joke2k/faker/blob/master/CHANGELOG.md)
-- [Commits](https://github.com/joke2k/faker/compare/v9.8.2...v10.0.0)
-
----
-updated-dependencies:
-- dependency-name: faker
-  dependency-type: direct:development
-  update-type: version-update:semver-major
-...
-
-Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`d012ae8`](https://github.com/supabase-community/auth-py/commit/d012ae88341accfa9b79666d3b9e1a68cdf594f4))
-
-* chore(deps-dev): bump black from 21.11b1 to 21.12b0
-
-Bumps [black](https://github.com/psf/black) from 21.11b1 to 21.12b0.
-- [Release notes](https://github.com/psf/black/releases)
-- [Changelog](https://github.com/psf/black/blob/main/CHANGES.md)
-- [Commits](https://github.com/psf/black/commits)
-
----
-updated-dependencies:
-- dependency-name: black
-  dependency-type: direct:development
-...
-
-Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`bbc76f5`](https://github.com/supabase-community/auth-py/commit/bbc76f50ceb54a105f32c14c25d57e2d9caf0727))
-
 * chore: update dependencies ([`59635a9`](https://github.com/supabase-community/auth-py/commit/59635a9c1e66109fa1ac1d54812d6e88f2b845b2))
+
+* chore(deps-dev): bump pre-commit from 2.15.0 to 2.16.0
+
+Bumps [pre-commit](https://github.com/pre-commit/pre-commit) from 2.15.0 to 2.16.0.
+- [Release notes](https://github.com/pre-commit/pre-commit/releases)
+- [Changelog](https://github.com/pre-commit/pre-commit/blob/master/CHANGELOG.md)
+- [Commits](https://github.com/pre-commit/pre-commit/compare/v2.15.0...v2.16.0)
+
+---
+updated-dependencies:
+- dependency-name: pre-commit
+  dependency-type: direct:development
+  update-type: version-update:semver-minor
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`7b8f8f7`](https://github.com/supabase-community/auth-py/commit/7b8f8f77ca5b9e39e7fe2cc9f72f7c49596f2954))
 
 * chore(deps-dev): bump sphinx from 4.3.0 to 4.3.1
 
@@ -4887,33 +5017,17 @@ updated-dependencies:
 
 Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`fc369d6`](https://github.com/supabase-community/auth-py/commit/fc369d6001ed570fafbef4e8275a3e2c43f552ef))
 
-* chore(deps-dev): bump pre-commit from 2.15.0 to 2.16.0
-
-Bumps [pre-commit](https://github.com/pre-commit/pre-commit) from 2.15.0 to 2.16.0.
-- [Release notes](https://github.com/pre-commit/pre-commit/releases)
-- [Changelog](https://github.com/pre-commit/pre-commit/blob/master/CHANGELOG.md)
-- [Commits](https://github.com/pre-commit/pre-commit/compare/v2.15.0...v2.16.0)
-
----
-updated-dependencies:
-- dependency-name: pre-commit
-  dependency-type: direct:development
-  update-type: version-update:semver-minor
-...
-
-Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`7b8f8f7`](https://github.com/supabase-community/auth-py/commit/7b8f8f77ca5b9e39e7fe2cc9f72f7c49596f2954))
-
 * chore: add make rules for generate html report and clean infra ([`e4a1405`](https://github.com/supabase-community/auth-py/commit/e4a1405bbc101ecdb5c9d3f5cbe1b38f82b8fadd))
 
 * chore: remove html report for try fix the gh action ([`f717a9f`](https://github.com/supabase-community/auth-py/commit/f717a9f45bcf5f7a1310d028f35cb528e7ce3404))
 
 * chore: add html report to make rul ([`26783b5`](https://github.com/supabase-community/auth-py/commit/26783b583b28be8c35eb0d865242a60bd0567973))
 
-* chore: add pragma no cover comments ([`1256518`](https://github.com/supabase-community/auth-py/commit/1256518d534a0d84785a7fd60174fe25795dffd0))
-
 * chore: add test ci and codecov badges ([`38597b3`](https://github.com/supabase-community/auth-py/commit/38597b37be5a16027186e719583d6477fd505367))
 
 * chore: add badges to README.md ([`a74a0bf`](https://github.com/supabase-community/auth-py/commit/a74a0bfdf93b8efe3fd3a71e179e3a37181c54c6))
+
+* chore: add pragma no cover comments ([`1256518`](https://github.com/supabase-community/auth-py/commit/1256518d534a0d84785a7fd60174fe25795dffd0))
 
 * chore(deps): bump httpx from 0.20.0 to 0.21.1
 
@@ -5283,13 +5397,13 @@ fix: error in recovery_mode of get_session_from_url ([`740d866`](https://github.
 
 * Merge remote-tracking branch &#39;remotes/upstream/main&#39; ([`0f05aa8`](https://github.com/supabase-community/auth-py/commit/0f05aa84da19088776c48cd9f0c7289ea45d58f2))
 
-* Merge pull request #9 from leynier/dependabot/pip/main/commitizen-2.20.2
-
-chore(deps-dev): bump commitizen from 2.20.0 to 2.20.2 ([`838b136`](https://github.com/supabase-community/auth-py/commit/838b1369591a83a55a7731189f8c87d783b75b58))
-
 * Merge pull request #39 from supabase-community/dependabot/pip/main/faker-10.0.0
 
 chore(deps-dev): bump faker from 9.8.2 to 10.0.0 ([`3878d91`](https://github.com/supabase-community/auth-py/commit/3878d910f8abbb9d92a88bfbb476d3a482fe538f))
+
+* Merge pull request #9 from leynier/dependabot/pip/main/commitizen-2.20.2
+
+chore(deps-dev): bump commitizen from 2.20.0 to 2.20.2 ([`838b136`](https://github.com/supabase-community/auth-py/commit/838b1369591a83a55a7731189f8c87d783b75b58))
 
 * Merge pull request #8 from leynier/dependabot/pip/main/faker-10.0.0
 
@@ -5419,13 +5533,13 @@ Reinstate lib and fix build ([`ac53ea8`](https://github.com/supabase-community/a
 
 add set_auth to gotrue client ([`49c092e`](https://github.com/supabase-community/auth-py/commit/49c092e3a4a6d7bb5e1c08067a4c42cc2f74b5cc))
 
-* Merge pull request #5 from supabase/j0_deps
-
-Update dependencies ([`8189c49`](https://github.com/supabase-community/auth-py/commit/8189c49c2f2e75db5fc34ac271af375f5a2ecb36))
-
 * remove lib from gitignore ([`757714b`](https://github.com/supabase-community/auth-py/commit/757714bdd53d4a0eb8a2d33b1999470f1648d543))
 
 * add set_auth to gotrue client ([`87a6e68`](https://github.com/supabase-community/auth-py/commit/87a6e68f6e29a8755e031a83d2022106e216d69e))
+
+* Merge pull request #5 from supabase/j0_deps
+
+Update dependencies ([`8189c49`](https://github.com/supabase-community/auth-py/commit/8189c49c2f2e75db5fc34ac271af375f5a2ecb36))
 
 * Merge pull request #1 from fedden/main
 
@@ -5485,9 +5599,9 @@ Co-authored-by: Lee Yi Jie Joel &lt;lee.yi.jie.joel@gmail.com&gt; ([`1828117`](h
 
 * Resolve merge conflicts ([`a34bea1`](https://github.com/supabase-community/auth-py/commit/a34bea153dee52044f6ce5e238c24aa5b3a96a2a))
 
-* Allow headers and lint with black ([`d9c9533`](https://github.com/supabase-community/auth-py/commit/d9c9533d3f78d1f51fbab83e89846042cc4bf751))
-
 * Update README.md ([`0201f09`](https://github.com/supabase-community/auth-py/commit/0201f090c06bd10703bd73c2678bbba795dd0d85))
+
+* Allow headers and lint with black ([`d9c9533`](https://github.com/supabase-community/auth-py/commit/d9c9533d3f78d1f51fbab83e89846042cc4bf751))
 
 * decrease minimum py version required ([`d768579`](https://github.com/supabase-community/auth-py/commit/d768579e3e9d7463e3df93c0b6b9360a1beaeb53))
 
