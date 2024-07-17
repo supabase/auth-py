@@ -305,10 +305,10 @@ SignInWithPasswordCredentials = Union[
 
 class SignInWithIdTokenCredentials(TypedDict):
     """
-    Provider name or OIDC `iss` value identifying which provider should be used to verify the provided token. Supported names: `google`, `apple`, `azure`, `facebook`, `keycloak` (deprecated).
+    Provider name or OIDC `iss` value identifying which provider should be used to verify the provided token. Supported names: `google`, `apple`, `azure`, `facebook`, `kakao`, `keycloak` (deprecated).
     """
 
-    provider: Literal["google", "apple", "azure", "facebook"]
+    provider: Literal["google", "apple", "azure", "facebook", "kakao"]
     token: str
     access_token: NotRequired[str]
     nonce: NotRequired[str]

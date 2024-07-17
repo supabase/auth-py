@@ -307,7 +307,6 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         access_token = credentials.get("access_token")
         nonce = credentials.get("nonce")
         options = credentials.get("options", {})
-        data = options.get("data") or {}
         captcha_token = options.get("captcha_token")
 
         response = self._request(
