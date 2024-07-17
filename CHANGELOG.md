@@ -1,8 +1,16 @@
 # CHANGELOG
 
+## v2.6.0 (2024-07-17)
+
+### Feature
+
+* feat: add sign_in_with_id_token method (#548) ([`b7e2c2c`](https://github.com/supabase-community/auth-py/commit/b7e2c2c2b9dd949aa0931c3b90ed66b5de46825e))
+
 ## v2.5.5 (2024-07-14)
 
 ### Chore
+
+* chore(release): bump version to v2.5.5 ([`79a24f0`](https://github.com/supabase-community/auth-py/commit/79a24f0d52b07693102812fa0934ae03b9bed898))
 
 * chore(deps-dev): bump zipp from 3.18.1 to 3.19.1 (#546) ([`1c807cb`](https://github.com/supabase-community/auth-py/commit/1c807cb21ebc88cb95c98c8c12ca9b4e71c6da9d))
 
