@@ -303,6 +303,22 @@ SignInWithPasswordCredentials = Union[
 ]
 
 
+class SignInWithIdTokenCredentials(TypedDict):
+    """
+    Provider name or OIDC `iss` value identifying which provider should be used to verify the provided token. Supported names: `google`, `apple`, `azure`, `facebook`, `kakao`, `keycloak` (deprecated).
+    """
+
+    provider: Literal["google", "apple", "azure", "facebook", "kakao"]
+    token: str
+    access_token: NotRequired[str]
+    nonce: NotRequired[str]
+    options: NotRequired[SignInWithIdTokenCredentialsOptions]
+
+
+class SignInWithIdTokenCredentialsOptions(TypedDict):
+    captcha_token: NotRequired[str]
+
+
 class SignInWithEmailAndPasswordlessCredentialsOptions(TypedDict):
     email_redirect_to: NotRequired[str]
     should_create_user: NotRequired[bool]

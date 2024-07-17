@@ -63,6 +63,7 @@ from ..types import (
     Provider,
     Session,
     SignInAnonymouslyCredentials,
+    SignInWithIdTokenCredentials,
     SignInWithOAuthCredentials,
     SignInWithPasswordCredentials,
     SignInWithPasswordlessCredentials,
@@ -288,6 +289,44 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
             raise AuthInvalidCredentialsError(
                 "You must provide either an email or phone number and a password"
             )
+        if response.session:
+            self._save_session(response.session)
+            self._notify_all_subscribers("SIGNED_IN", response.session)
+        return response
+
+    def sign_in_with_id_token(
+        self,
+        credentials: SignInWithIdTokenCredentials,
+    ) -> AuthResponse:
+        """
+        Allows signing in with an OIDC ID token. The authentication provider used should be enabled and configured.
+        """
+        self._remove_session()
+        provider = credentials.get("provider")
+        token = credentials.get("token")
+        access_token = credentials.get("access_token")
+        nonce = credentials.get("nonce")
+        options = credentials.get("options", {})
+        captcha_token = options.get("captcha_token")
+
+        response = self._request(
+            "POST",
+            "token",
+            body={
+                "provider": provider,
+                "id_token": token,
+                "access_token": access_token,
+                "nonce": nonce,
+                "gotrue_meta_security": {
+                    "captcha_token": captcha_token,
+                },
+            },
+            query={
+                "grant_type": "id_token",
+            },
+            xform=parse_auth_response,
+        )
+
         if response.session:
             self._save_session(response.session)
             self._notify_all_subscribers("SIGNED_IN", response.session)
