@@ -1,6 +1,26 @@
 # CHANGELOG
 
+## v2.6.1 (2024-07-24)
+
+### Chore
+
+* chore(deps-dev): bump pytest from 8.2.2 to 8.3.1 (#551) ([`964826c`](https://github.com/supabase-community/auth-py/commit/964826c2ae6baf823d491c38b30cba6392b4aa77))
+
+* chore(deps): bump python-semantic-release/python-semantic-release from 9.8.5 to 9.8.6 (#552) ([`fd92320`](https://github.com/supabase-community/auth-py/commit/fd923204c5da0cae480636ac12d3286e292f88ee))
+
+* chore(deps-dev): bump python-semantic-release from 9.8.5 to 9.8.6 (#550) ([`625f4af`](https://github.com/supabase-community/auth-py/commit/625f4af3b773f242483e4ba10f67e7e0452c28cc))
+
+* chore(deps-dev): bump pytest-asyncio from 0.23.7 to 0.23.8 (#549) ([`0a7a766`](https://github.com/supabase-community/auth-py/commit/0a7a76691e4597a9417afcbc016d24642329bcc9))
+
+### Fix
+
+* fix: add is_anonymous type to the user model (#553) ([`c37913f`](https://github.com/supabase-community/auth-py/commit/c37913f013be27231bb3347d29334d6af8024eb3))
+
 ## v2.6.0 (2024-07-17)
+
+### Chore
+
+* chore(release): bump version to v2.6.0 ([`0899975`](https://github.com/supabase-community/auth-py/commit/0899975e9d964ba3ab525bca89fa487ca99b90d5))
 
 ### Feature
 
