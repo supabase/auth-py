@@ -199,6 +199,7 @@ class User(BaseModel):
     recovery_sent_at: Union[datetime, None] = None
     email_change_sent_at: Union[datetime, None] = None
     new_email: Union[str, None] = None
+    new_phone: Union[str, None] = None
     invited_at: Union[datetime, None] = None
     action_link: Union[str, None] = None
     email: Union[str, None] = None
@@ -211,6 +212,7 @@ class User(BaseModel):
     role: Union[str, None] = None
     updated_at: Union[datetime, None] = None
     identities: Union[List[UserIdentity], None] = None
+    is_anonymous: bool = False
     factors: Union[List[Factor], None] = None
 
 
