@@ -1,27 +1,96 @@
 from __future__ import annotations
 
-from typing import Union
+from typing import Literal, Union
 
 from typing_extensions import TypedDict
 
+ErrorCode = Literal[
+    "unexpected_failure",
+    "validation_failed",
+    "bad_json",
+    "email_exists",
+    "phone_exists",
+    "bad_jwt",
+    "not_admin",
+    "no_authorization",
+    "user_not_found",
+    "session_not_found",
+    "flow_state_not_found",
+    "flow_state_expired",
+    "signup_disabled",
+    "user_banned",
+    "provider_email_needs_verification",
+    "invite_not_found",
+    "bad_oauth_state",
+    "bad_oauth_callback",
+    "oauth_provider_not_supported",
+    "unexpected_audience",
+    "single_identity_not_deletable",
+    "email_conflict_identity_not_deletable",
+    "identity_already_exists",
+    "email_provider_disabled",
+    "phone_provider_disabled",
+    "too_many_enrolled_mfa_factors",
+    "mfa_factor_name_conflict",
+    "mfa_factor_not_found",
+    "mfa_ip_address_mismatch",
+    "mfa_challenge_expired",
+    "mfa_verification_failed",
+    "mfa_verification_rejected",
+    "insufficient_aal",
+    "captcha_failed",
+    "saml_provider_disabled",
+    "manual_linking_disabled",
+    "sms_send_failed",
+    "email_not_confirmed",
+    "phone_not_confirmed",
+    "reauth_nonce_missing",
+    "saml_relay_state_not_found",
+    "saml_relay_state_expired",
+    "saml_idp_not_found",
+    "saml_assertion_no_user_id",
+    "saml_assertion_no_email",
+    "user_already_exists",
+    "sso_provider_not_found",
+    "saml_metadata_fetch_failed",
+    "saml_idp_already_exists",
+    "sso_domain_already_exists",
+    "saml_entity_id_mismatch",
+    "conflict",
+    "provider_disabled",
+    "user_sso_managed",
+    "reauthentication_needed",
+    "same_password",
+    "reauthentication_not_valid",
+    "otp_expired",
+    "otp_disabled",
+    "identity_not_found",
+    "weak_password",
+    "over_request_rate_limit",
+    "over_email_send_rate_limit",
+    "over_sms_send_rate_limit",
+    "bad_code_verifier",
+]
+
 
 class AuthError(Exception):
-    def __init__(self, message: str) -> None:
+    def __init__(self, message: str, code: ErrorCode) -> None:
         Exception.__init__(self, message)
         self.message = message
         self.name = "AuthError"
+        self.code = code
 
 
 class AuthApiErrorDict(TypedDict):
     name: str
     message: str
     status: int
-    code: str
+    code: ErrorCode
 
 
 class AuthApiError(AuthError):
-    def __init__(self, message: str, status: int, code: str) -> None:
-        AuthError.__init__(self, message)
+    def __init__(self, message: str, status: int, code: ErrorCode) -> None:
+        AuthError.__init__(self, message, code)
         self.name = "AuthApiError"
         self.status = status
         self.code = code
@@ -37,14 +106,14 @@ class AuthApiError(AuthError):
 
 class AuthUnknownError(AuthError):
     def __init__(self, message: str, original_error: Exception) -> None:
-        AuthError.__init__(self, message)
+        AuthError.__init__(self, message, None)
         self.name = "AuthUnknownError"
         self.original_error = original_error
 
 
 class CustomAuthError(AuthError):
-    def __init__(self, message: str, name: str, status: int) -> None:
-        AuthError.__init__(self, message)
+    def __init__(self, message: str, name: str, status: int, code: ErrorCode) -> None:
+        AuthError.__init__(self, message, code)
         self.name = name
         self.status = status
 
@@ -63,6 +132,7 @@ class AuthSessionMissingError(CustomAuthError):
             "Auth session missing!",
             "AuthSessionMissingError",
             400,
+            None,
         )
 
 
@@ -73,6 +143,7 @@ class AuthInvalidCredentialsError(CustomAuthError):
             message,
             "AuthInvalidCredentialsError",
             400,
+            None,
         )
 
 
@@ -96,6 +167,7 @@ class AuthImplicitGrantRedirectError(CustomAuthError):
             message,
             "AuthImplicitGrantRedirectError",
             500,
+            None,
         )
         self.details = details
 
@@ -115,4 +187,5 @@ class AuthRetryableError(CustomAuthError):
             message,
             "AuthRetryableError",
             status,
+            None,
         )
