@@ -114,6 +114,10 @@ def get_error_message(error: Any) -> str:
     return next((error[prop] for prop in props if filter(prop)), str(error))
 
 
+def get_error_code(error: Any) -> str:
+    return error.get("error_code", None) if isinstance(error, dict) else None
+
+
 def looks_like_http_status_error(exception: Exception) -> bool:
     return isinstance(exception, HTTPStatusError)
 
@@ -129,7 +133,11 @@ def handle_exception(exception: Exception) -> AuthError:
                 get_error_message(error), error.response.status_code
             )
         json = error.response.json()
-        return AuthApiError(get_error_message(json), error.response.status_code or 500)
+        return AuthApiError(
+            get_error_message(json),
+            error.response.status_code or 500,
+            get_error_code(json),
+        )
     except Exception as e:
         return AuthUnknownError(get_error_message(error), e)
 

@@ -16,19 +16,22 @@ class AuthApiErrorDict(TypedDict):
     name: str
     message: str
     status: int
+    code: str
 
 
 class AuthApiError(AuthError):
-    def __init__(self, message: str, status: int) -> None:
+    def __init__(self, message: str, status: int, code: str) -> None:
         AuthError.__init__(self, message)
         self.name = "AuthApiError"
         self.status = status
+        self.code = code
 
     def to_dict(self) -> AuthApiErrorDict:
         return {
             "name": self.name,
             "message": self.message,
             "status": self.status,
+            "code": self.code,
         }
 
 
