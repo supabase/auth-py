@@ -221,7 +221,7 @@ def generate_pkce_challenge(code_verifier):
     return base64.urlsafe_b64encode(sha256_hash).rstrip(b"=").decode("utf-8")
 
 
-API_VERSION_REGEX = r"^2[0-9]{3}-(0[1-9]|1[0-2])-(0[1-9]|1[0-9]|2[0-9]|3[0-1])"
+API_VERSION_REGEX = r"^2[0-9]{3}-(0[1-9]|1[0-2])-(0[1-9]|1[0-9]|2[0-9]|3[0-1])$"
 
 
 def parse_response_api_version(response: Response):
