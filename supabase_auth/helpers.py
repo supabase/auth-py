@@ -15,7 +15,13 @@ from httpx import HTTPStatusError, Response
 from pydantic import BaseModel
 
 from .constants import API_VERSION_HEADER_NAME, API_VERSIONS
-from .errors import AuthApiError, AuthError, AuthRetryableError, AuthUnknownError
+from .errors import (
+    AuthApiError,
+    AuthError,
+    AuthRetryableError,
+    AuthUnknownError,
+    AuthWeakPasswordError,
+)
 from .types import (
     AuthOtpResponse,
     AuthResponse,
@@ -154,6 +160,27 @@ def handle_exception(exception: Exception) -> AuthError:
             isinstance(data, dict) and data and isinstance(data.get("error_code"), str)
         ):
             error_code = data.get("error_code")
+
+        if error_code is None:
+            if (
+                isinstance(data, dict)
+                and data
+                and isinstance(data.get("weak_password"), dict)
+                and data.get("weak_password")
+                and isinstance(data.get("weak_password"), list)
+                and len(data.get("weak_password"))
+            ):
+                return AuthWeakPasswordError(
+                    get_error_message(data),
+                    error.response.status_code,
+                    data.get("weak_password").get("reasons"),
+                )
+        elif error_code == "weak_password":
+            return AuthWeakPasswordError(
+                get_error_message(data),
+                error.response.status_code,
+                data.get("weak_password", {}).get("reasons", {}),
+            )
 
         return AuthApiError(
             get_error_message(data),

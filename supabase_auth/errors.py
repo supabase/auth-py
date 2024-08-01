@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Literal, Union
+from typing import List, Literal, Union
 
 from typing_extensions import TypedDict
 
@@ -189,3 +189,23 @@ class AuthRetryableError(CustomAuthError):
             status,
             None,
         )
+
+
+class AuthWeakPasswordError(CustomAuthError):
+    def __init__(self, message: str, status: int, reasons: List[str]) -> None:
+        CustomAuthError.__init__(
+            self,
+            message,
+            "AuthWeakPasswordError",
+            status,
+            "weak_password",
+        )
+        self.reasons = reasons
+
+    def to_dict(self) -> AuthApiErrorDict:
+        return {
+            "name": self.name,
+            "message": self.message,
+            "status": self.status,
+            "reasons": self.reasons,
+        }
