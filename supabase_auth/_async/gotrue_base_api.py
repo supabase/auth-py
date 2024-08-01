@@ -6,6 +6,7 @@ from httpx import Response
 from pydantic import BaseModel
 from typing_extensions import Literal, Self
 
+from ..constants import API_VERSION_HEADER_NAME, API_VERSIONS
 from ..helpers import handle_exception, model_dump
 from ..http_clients import AsyncClient
 
@@ -97,6 +98,8 @@ class AsyncGoTrueBaseAPI:
     ) -> Union[T, None]:
         url = f"{self._url}/{path}"
         headers = {**self._headers, **(headers or {})}
+        if headers.get(API_VERSION_HEADER_NAME) is None:
+            headers[API_VERSION_HEADER_NAME] = API_VERSIONS["2024-01-01"].get("name")
         if "Content-Type" not in headers:
             headers["Content-Type"] = "application/json;charset=UTF-8"
         if jwt:
