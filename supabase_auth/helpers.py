@@ -5,7 +5,6 @@ import hashlib
 import re
 import secrets
 import string
-import time
 from base64 import urlsafe_b64decode
 from datetime import datetime
 from json import loads
@@ -149,7 +148,7 @@ def handle_exception(exception: Exception) -> AuthError:
 
         if (
             response_api_version
-            and time.mktime(response_api_version.timetuple())
+            and datetime.timestamp(response_api_version)
             >= API_VERSIONS.get("2024-01-01").get("timestamp")
             and isinstance(data, dict)
             and data
@@ -235,7 +234,7 @@ def parse_response_api_version(response: Response):
         return None
 
     try:
-        dt = datetime.strptime(api_version, "%Y-%m-%d").date()
+        dt = datetime.strptime(api_version, "%Y-%m-%d")
         return dt
     except Exception as e:
         return None

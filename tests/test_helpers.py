@@ -78,7 +78,9 @@ def test_parse_response_api_version_with_valid_date():
     headers = Headers({API_VERSION_HEADER_NAME: "2024-01-01"})
     response = Response(headers=headers, status_code=200)
     api_ver = parse_response_api_version(response)
-    assert api_ver == datetime.strptime("2024-01-01", "%Y-%m-%d").date()
+    assert datetime.timestamp(api_ver) == datetime.timestamp(
+        datetime.strptime("2024-01-01", "%Y-%m-%d")
+    )
 
 
 def test_parse_response_api_version_with_invalid_dates():

@@ -98,7 +98,7 @@ class AsyncGoTrueBaseAPI:
     ) -> Union[T, None]:
         url = f"{self._url}/{path}"
         headers = {**self._headers, **(headers or {})}
-        if headers.get(API_VERSION_HEADER_NAME) is None:
+        if API_VERSION_HEADER_NAME not in headers:
             headers[API_VERSION_HEADER_NAME] = API_VERSIONS["2024-01-01"].get("name")
         if "Content-Type" not in headers:
             headers["Content-Type"] = "application/json;charset=UTF-8"

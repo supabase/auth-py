@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import time
 from datetime import datetime
 from typing import Dict
 
@@ -18,9 +17,7 @@ STORAGE_KEY = "supabase.auth.token"
 API_VERSION_HEADER_NAME = "X-Supabase-Api-Version"
 API_VERSIONS = {
     "2024-01-01": {
-        "timestamp": time.mktime(
-            datetime.strptime("2024-01-01", "%Y-%m-%d").timetuple()
-        ),
+        "timestamp": datetime.timestamp(datetime.strptime("2024-01-01", "%Y-%m-%d")),
         "name": "2024-01-01",
     },
 }
