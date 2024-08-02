@@ -14,12 +14,12 @@ tests_only:
 
 run_infra:
 	cd infra &&\
-	docker-compose down &&\
-	docker-compose up -d
+	docker compose down &&\
+	docker compose up -d
 
 clean_infra:
 	cd infra &&\
-	docker-compose down --remove-orphans &&\
+	docker compose down --remove-orphans &&\
 	docker system prune -a --volumes -f
 
 sync_infra:
