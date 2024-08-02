@@ -26,14 +26,17 @@ Provider = Literal[
     "discord",
     "facebook",
     "figma",
+    "fly",
     "github",
     "gitlab",
     "google",
     "kakao",
     "keycloak",
     "linkedin",
+    "linkedin_oidc",
     "notion",
     "slack",
+    "slack_oidc",
     "spotify",
     "twitch",
     "twitter",
@@ -229,6 +232,28 @@ class AdminUserAttributes(UserAttributes, TypedDict):
     email_confirm: NotRequired[bool]
     phone_confirm: NotRequired[bool]
     ban_duration: NotRequired[Union[str, Literal["none"]]]
+    role: NotRequired[str]
+    """
+    The `role` claim set in the user's access token JWT.
+
+    When a user signs up, this role is set to `authenticated` by default. You should only modify the `role` if you need to provision several levels of admin access that have different permissions on individual columns in your database.
+
+    Setting this role to `service_role` is not recommended as it grants the user admin privileges.
+    """
+    password_hash: NotRequired[str]
+    """
+    The `password_hash` for the user's password.
+
+    Allows you to specify a password hash for the user. This is useful for migrating a user's password hash from another service.
+
+    Supports bcrypt and argon2 password hashes.
+    """
+    id: NotRequired[str]
+    """
+    The `id` for the user.
+
+    Allows you to overwrite the default `id` set for the user.
+    """
 
 
 class Subscription(BaseModel):
