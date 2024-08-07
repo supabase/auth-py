@@ -579,7 +579,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
                 return None
         return self._request("GET", "user", jwt=jwt, xform=parse_user_response)
 
-    def update_user(self, attributes: UserAttributes) -> UserResponse:
+    def update_user(self, attributes: UserAttributes, jwt: Union[str, None] = None) -> UserResponse:
         """
         Updates user data, if there is a logged in user.
         """
