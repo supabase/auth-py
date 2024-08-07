@@ -583,14 +583,17 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         """
         Updates user data, if there is a logged in user.
         """
-        session = self.get_session()
-        if not session:
-            raise AuthSessionMissingError()
+        if not jwt:
+            session = self.get_session()
+            if session:
+                jwt = session.access_token
+            else:
+                raise AuthSessionMissingError()
         response = self._request(
             "PUT",
             "user",
             body=attributes,
-            jwt=session.access_token,
+            jwt=jwt,
             xform=parse_user_response,
         )
         session.user = response.user
