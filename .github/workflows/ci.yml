@@ -58,7 +58,6 @@ jobs:
         with:
           ref: ${{ github.ref }}
           fetch-depth: 0
-          token: ${{ secrets.SILENTWORKS_PAT }}
           # This action uses Python Semantic Release v8
       - name: Python Semantic Release
         id: release
