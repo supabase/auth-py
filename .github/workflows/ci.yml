@@ -93,7 +93,6 @@ jobs:
         with:
           ref: ${{ github.ref }}
           fetch-depth: 0
-          token: ${{ secrets.SILENTWORKS_PAT }}
 
       - name: Rename Project
         id: rename_project
