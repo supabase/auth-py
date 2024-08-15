@@ -34,16 +34,6 @@ unasync-cli = "^0.0.9"
 [tool.poetry.group.dev.dependencies]
 pygithub = ">=1.57,<3.0"
 
-[tool.semantic_release]
-version_variables = ["supabase_auth/__init__.py:__version__"]
-version_toml = ["pyproject.toml:tool.poetry.version"]
-major_on_zero = false
-commit_message = "chore(release): bump version to v{version}"
-build_command = "curl -sSL https://install.python-poetry.org | python - && export PATH=\"/github/home/.local/bin:$PATH\" && poetry install && poetry build"
-upload_to_vcs_release = true
-branch = "main"
-changelog_components = "semantic_release.changelog.changelog_headers,semantic_release.changelog.compare_url"
-
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
