@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Dict
 
-from . import __version__
+from .version import __version__
 
 GOTRUE_URL = "http://localhost:9999"
 DEFAULT_HEADERS: Dict[str, str] = {
