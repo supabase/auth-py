@@ -1,11 +1,11 @@
 [tool.poetry]
 name = "supabase_auth"
-version = "2.6.2"
+version = "2.6.2" # {x-release-please-version}
 description = "Python Client Library for Supabase Auth"
 authors = ["Joel Lee <joel@joellee.org>"]
-homepage = "https://github.com/supabase-community/auth-py"
-repository = "https://github.com/supabase-community/auth-py"
-documentation = "https://github.com/supabase-community/auth-py"
+homepage = "https://github.com/supabase/auth-py"
+repository = "https://github.com/supabase/auth-py"
+documentation = "https://github.com/supabase/auth-py"
 readme = "README.md"
 license = "MIT"
 classifiers = [
@@ -30,20 +30,9 @@ pytest-depends = "^1.0.1"
 pytest-asyncio = "^0.23.8"
 Faker = "^26.1.0"
 unasync-cli = "^0.0.9"
-python-semantic-release = "^9.8.6"
 
 [tool.poetry.group.dev.dependencies]
 pygithub = ">=1.57,<3.0"
-
-[tool.semantic_release]
-version_variables = ["supabase_auth/__init__.py:__version__"]
-version_toml = ["pyproject.toml:tool.poetry.version"]
-major_on_zero = false
-commit_message = "chore(release): bump version to v{version}"
-build_command = "curl -sSL https://install.python-poetry.org | python - && export PATH=\"/github/home/.local/bin:$PATH\" && poetry install && poetry build"
-upload_to_vcs_release = true
-branch = "main"
-changelog_components = "semantic_release.changelog.changelog_headers,semantic_release.changelog.compare_url"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
