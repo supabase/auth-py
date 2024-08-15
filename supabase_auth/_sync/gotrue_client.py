@@ -598,7 +598,9 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         self._notify_all_subscribers("USER_UPDATED", session)
         return response
 
-    def set_session(self, access_token: str, refresh_token: str) -> AuthResponse:
+    def set_session(
+        self, access_token: str, refresh_token: Union[str, None] = None
+    ) -> AuthResponse:
         """
         Sets the session data from the current session. If the current session
         is expired, `set_session` will take care of refreshing it to obtain a
@@ -1000,8 +1002,6 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         if not data:
             return None
         if not data.get("access_token"):
-            return None
-        if not data.get("refresh_token"):
             return None
         if not data.get("expires_at"):
             return None

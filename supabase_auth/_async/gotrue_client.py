@@ -604,7 +604,9 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         self._notify_all_subscribers("USER_UPDATED", session)
         return response
 
-    async def set_session(self, access_token: str, refresh_token: str) -> AuthResponse:
+    async def set_session(
+        self, access_token: str, refresh_token: Union[str, None] = None
+    ) -> AuthResponse:
         """
         Sets the session data from the current session. If the current session
         is expired, `set_session` will take care of refreshing it to obtain a
@@ -1008,8 +1010,6 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         if not data:
             return None
         if not data.get("access_token"):
-            return None
-        if not data.get("refresh_token"):
             return None
         if not data.get("expires_at"):
             return None

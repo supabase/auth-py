@@ -135,7 +135,7 @@ class Session(BaseModel):
     documentation for information on how to obtain the provider refresh token.
     """
     access_token: str
-    refresh_token: str
+    refresh_token: Union[str, None] = None
     expires_in: int
     """
     The number of seconds until the token expires (since it was issued).
