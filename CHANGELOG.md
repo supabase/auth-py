@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## [2.7.0](https://github.com/supabase/auth-py/compare/v2.6.2...v2.7.0) (2024-08-16)
+
+
+### Features
+
+* add error codes ([#556](https://github.com/supabase/auth-py/issues/556)) ([05dfb8a](https://github.com/supabase/auth-py/commit/05dfb8aadeb3a3321fbcc01c0e3fe8ce49f3cccd))
+
 ## v2.6.2 (2024-08-09)
 
 ### Chore
