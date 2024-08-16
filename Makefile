@@ -22,6 +22,10 @@ clean_infra:
 	docker compose down --remove-orphans &&\
 	docker system prune -a --volumes -f
 
+stop_infra:
+	cd infra &&\
+	docker compose down --remove-orphans
+
 sync_infra:
 	python scripts/gh-download.py --repo=supabase/gotrue-js --branch=master --folder=infra
 

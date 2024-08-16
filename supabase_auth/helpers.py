@@ -2,16 +2,25 @@ from __future__ import annotations
 
 import base64
 import hashlib
+import re
 import secrets
 import string
 from base64 import urlsafe_b64decode
+from datetime import datetime
 from json import loads
 from typing import Any, Dict, Type, TypeVar, Union, cast
 
-from httpx import HTTPStatusError
+from httpx import HTTPStatusError, Response
 from pydantic import BaseModel
 
-from .errors import AuthApiError, AuthError, AuthRetryableError, AuthUnknownError
+from .constants import API_VERSION_HEADER_NAME, API_VERSIONS
+from .errors import (
+    AuthApiError,
+    AuthError,
+    AuthRetryableError,
+    AuthUnknownError,
+    AuthWeakPasswordError,
+)
 from .types import (
     AuthOtpResponse,
     AuthResponse,
@@ -114,6 +123,10 @@ def get_error_message(error: Any) -> str:
     return next((error[prop] for prop in props if filter(prop)), str(error))
 
 
+def get_error_code(error: Any) -> str:
+    return error.get("error_code", None) if isinstance(error, dict) else None
+
+
 def looks_like_http_status_error(exception: Exception) -> bool:
     return isinstance(exception, HTTPStatusError)
 
@@ -128,8 +141,51 @@ def handle_exception(exception: Exception) -> AuthError:
             return AuthRetryableError(
                 get_error_message(error), error.response.status_code
             )
-        json = error.response.json()
-        return AuthApiError(get_error_message(json), error.response.status_code or 500)
+        data = error.response.json()
+
+        error_code = None
+        response_api_version = parse_response_api_version(error.response)
+
+        if (
+            response_api_version
+            and datetime.timestamp(response_api_version)
+            >= API_VERSIONS.get("2024-01-01").get("timestamp")
+            and isinstance(data, dict)
+            and data
+            and isinstance(data.get("code"), str)
+        ):
+            error_code = data.get("code")
+        elif (
+            isinstance(data, dict) and data and isinstance(data.get("error_code"), str)
+        ):
+            error_code = data.get("error_code")
+
+        if error_code is None:
+            if (
+                isinstance(data, dict)
+                and data
+                and isinstance(data.get("weak_password"), dict)
+                and data.get("weak_password")
+                and isinstance(data.get("weak_password"), list)
+                and len(data.get("weak_password"))
+            ):
+                return AuthWeakPasswordError(
+                    get_error_message(data),
+                    error.response.status_code,
+                    data.get("weak_password").get("reasons"),
+                )
+        elif error_code == "weak_password":
+            return AuthWeakPasswordError(
+                get_error_message(data),
+                error.response.status_code,
+                data.get("weak_password", {}).get("reasons", {}),
+            )
+
+        return AuthApiError(
+            get_error_message(data),
+            error.response.status_code or 500,
+            error_code,
+        )
     except Exception as e:
         return AuthUnknownError(get_error_message(error), e)
 
@@ -163,3 +219,22 @@ def generate_pkce_challenge(code_verifier):
     sha256_hash = hashlib.sha256(verifier_bytes).digest()
 
     return base64.urlsafe_b64encode(sha256_hash).rstrip(b"=").decode("utf-8")
+
+
+API_VERSION_REGEX = r"^2[0-9]{3}-(0[1-9]|1[0-2])-(0[1-9]|1[0-9]|2[0-9]|3[0-1])$"
+
+
+def parse_response_api_version(response: Response):
+    api_version = response.headers.get(API_VERSION_HEADER_NAME)
+
+    if not api_version:
+        return None
+
+    if re.search(API_VERSION_REGEX, api_version) is None:
+        return None
+
+    try:
+        dt = datetime.strptime(api_version, "%Y-%m-%d")
+        return dt
+    except Exception as e:
+        return None
