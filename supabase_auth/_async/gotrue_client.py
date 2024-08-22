@@ -739,8 +739,8 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
             raise AuthSessionMissingError()
 
         body = {
-            "friendly_name": params['friendly_name'],
-            "factor_type": params['factor_type']
+            "friendly_name": params["friendly_name"],
+            "factor_type": params["factor_type"],
         }
 
         if params["factor_type"] == "phone":
