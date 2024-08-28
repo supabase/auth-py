@@ -737,14 +737,25 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         session = await self.get_session()
         if not session:
             raise AuthSessionMissingError()
+
+        body = {
+            "friendly_name": params["friendly_name"],
+            "factor_type": params["factor_type"],
+        }
+
+        if params["factor_type"] == "phone":
+            body["phone"] = params["phone"]
+        else:
+            body["issuer"] = params["issuer"]
+
         response = await self._request(
             "POST",
             "factors",
-            body=params,
+            body=body,
             jwt=session.access_token,
             xform=partial(model_validate, AuthMFAEnrollResponse),
         )
-        if response.totp.qr_code:
+        if params["factor_type"] == "totp" and response.totp.qr_code:
             response.totp.qr_code = f"data:image/svg+xml;utf-8,{response.totp.qr_code}"
         return response
 
@@ -755,6 +766,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         return await self._request(
             "POST",
             f"factors/{params.get('factor_id')}/challenge",
+            body={"channel": params["channel"]},
             jwt=session.access_token,
             xform=partial(model_validate, AuthMFAChallengeResponse),
         )
@@ -807,7 +819,8 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         response = await self.get_user()
         all = response.user.factors or []
         totp = [f for f in all if f.factor_type == "totp" and f.status == "verified"]
-        return AuthMFAListFactorsResponse(all=all, totp=totp)
+        phone = [f for f in all if f.factor_type == "phone" and f.status == "verified"]
+        return AuthMFAListFactorsResponse(all=all, totp=totp, phone=phone)
 
     async def _get_authenticator_assurance_level(
         self,

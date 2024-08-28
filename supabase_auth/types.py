@@ -4,7 +4,7 @@ from datetime import datetime
 from time import time
 from typing import Any, Callable, Dict, List, Union
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 try:
     # > 2
@@ -180,7 +180,7 @@ class Factor(BaseModel):
     """
     Friendly name of the factor, useful to disambiguate between multiple factors.
     """
-    factor_type: Union[Literal["totp"], str]
+    factor_type: Union[Literal["totp", "phone"], str]
     """
     Type of factor. Only `totp` supported with this version but may change in
     future versions.
@@ -492,9 +492,10 @@ GenerateLinkType = Literal[
 
 
 class MFAEnrollParams(TypedDict):
-    factor_type: Literal["totp"]
+    factor_type: Literal["totp", "phone"]
     issuer: NotRequired[str]
     friendly_name: NotRequired[str]
+    phone: str
 
 
 class MFAUnenrollParams(TypedDict):
@@ -539,6 +540,7 @@ class MFAChallengeParams(TypedDict):
     """
     ID of the factor to be challenged.
     """
+    channel: NotRequired[Literal["sms", "whatsapp"]]
 
 
 class MFAChallengeAndVerifyParams(TypedDict):
@@ -600,13 +602,22 @@ class AuthMFAEnrollResponse(BaseModel):
     """
     ID of the factor that was just enrolled (in an unverified state).
     """
-    type: Literal["totp"]
+    type: Literal["totp", "phone"]
     """
     Type of MFA factor. Only `totp` supported for now.
     """
     totp: AuthMFAEnrollResponseTotp
     """
     TOTP enrollment information.
+    """
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+    friendly_name: str
+    """
+    Friendly name of the factor, useful for distinguishing between factors
+    """
+    phone: str
+    """
+    Phone number of the MFA factor in E.164 format. Used to send messages
     """
 
 
@@ -626,6 +637,10 @@ class AuthMFAChallengeResponse(BaseModel):
     """
     Timestamp in UNIX seconds when this challenge will no longer be usable.
     """
+    factor_type: Literal["totp", "phone"]
+    """
+    Factor Type which generated the challenge
+    """
 
 
 class AuthMFAListFactorsResponse(BaseModel):
@@ -636,6 +651,10 @@ class AuthMFAListFactorsResponse(BaseModel):
     totp: List[Factor]
     """
     Only verified TOTP factors. (A subset of `all`.)
+    """
+    phone: List[Factor]
+    """
+    Only verified Phone factors. (A subset of `all`.)
     """
 
 
