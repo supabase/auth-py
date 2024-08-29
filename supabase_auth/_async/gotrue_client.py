@@ -711,11 +711,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         self._state_change_emitters[unique_id] = subscription
         return subscription
 
-    async def reset_password_email(
-        self,
-        email: str,
-        options: Options = {},
-    ) -> None:
+    async def reset_password_for_email(self, email: str, options: Options = {}) -> None:
         """
         Sends a password reset request to an email address.
         """
@@ -730,6 +726,16 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
             },
             redirect_to=options.get("redirect_to"),
         )
+
+    async def reset_password_email(
+        self,
+        email: str,
+        options: Options = {},
+    ) -> None:
+        """
+        Sends a password reset request to an email address.
+        """
+        await self.reset_password_for_email(email, options)
 
     # MFA methods
 

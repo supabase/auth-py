@@ -703,11 +703,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         self._state_change_emitters[unique_id] = subscription
         return subscription
 
-    def reset_password_email(
-        self,
-        email: str,
-        options: Options = {},
-    ) -> None:
+    def reset_password_for_email(self, email: str, options: Options = {}) -> None:
         """
         Sends a password reset request to an email address.
         """
@@ -722,6 +718,16 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
             },
             redirect_to=options.get("redirect_to"),
         )
+
+    def reset_password_email(
+        self,
+        email: str,
+        options: Options = {},
+    ) -> None:
+        """
+        Sends a password reset request to an email address.
+        """
+        self.reset_password_for_email(email, options)
 
     # MFA methods
 

@@ -84,7 +84,7 @@ class AMREntry(BaseModel):
 
 class Options(TypedDict):
     redirect_to: NotRequired[str]
-    data: NotRequired[Any]
+    captcha_token: NotRequired[str]
 
 
 class AuthResponse(BaseModel):
