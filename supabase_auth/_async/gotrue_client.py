@@ -525,16 +525,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         credentials: ResendCredentials,
     ) -> AuthOtpResponse:
         """
-        Log in a user using magiclink or a one-time password (OTP).
-
-        If the `{{ .ConfirmationURL }}` variable is specified in
-        the email template, a magiclink will be sent.
-
-        If the `{{ .Token }}` variable is specified in the email
-        template, an OTP will be sent.
-
-        If you're using phone sign-ins, only an OTP will be sent.
-        You won't be able to send a magiclink for phone sign-ins.
+        Resends an existing signup confirmation email, email change email, SMS OTP or phone change OTP.
         """
         email = credentials.get("email")
         phone = credentials.get("phone")
@@ -555,7 +546,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
             )
 
         body.update({"email": email} if email else {"phone": phone})
-        print(f"BODY: {body}")
+
         return await self._request(
             "POST",
             "resend",
