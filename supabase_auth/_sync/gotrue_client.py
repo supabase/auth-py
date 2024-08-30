@@ -535,6 +535,18 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
             self._notify_all_subscribers("SIGNED_IN", response.session)
         return response
 
+    def reauthenticate(self) -> AuthResponse:
+        session = self.get_session()
+        if not session:
+            raise AuthSessionMissingError()
+
+        return self._request(
+            "GET",
+            "reauthenticate",
+            jwt=session.access_token,
+            xform=parse_auth_response,
+        )
+
     def get_session(self) -> Union[Session, None]:
         """
         Returns the session, refreshing it if necessary.
