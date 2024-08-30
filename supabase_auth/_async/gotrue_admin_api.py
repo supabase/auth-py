@@ -13,7 +13,7 @@ from ..types import (
     AuthMFAAdminListFactorsResponse,
     GenerateLinkParams,
     GenerateLinkResponse,
-    Options,
+    InviteUserByEmailOptions,
     SignOutScope,
     User,
     UserResponse,
@@ -57,7 +57,7 @@ class AsyncGoTrueAdminAPI(AsyncGoTrueBaseAPI):
     async def invite_user_by_email(
         self,
         email: str,
-        options: Options = {},
+        options: InviteUserByEmailOptions = {},
     ) -> UserResponse:
         """
         Sends an invite link to an email address.
