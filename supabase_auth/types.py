@@ -376,6 +376,30 @@ SignInWithPasswordlessCredentials = Union[
 ]
 
 
+class ResendEmailCredentialsOptions(TypedDict):
+    email_redirect_to: NotRequired[str]
+    captcha_token: NotRequired[str]
+
+
+class ResendEmailCredentials(TypedDict):
+    type: Literal["signup", "email_change"]
+    email: str
+    options: NotRequired[ResendEmailCredentialsOptions]
+
+
+class ResendPhoneCredentialsOptions(TypedDict):
+    captcha_token: NotRequired[str]
+
+
+class ResendPhoneCredentials(TypedDict):
+    type: Literal["sms", "phone_change"]
+    phone: str
+    options: NotRequired[ResendPhoneCredentialsOptions]
+
+
+ResendCredentials = Union[ResendEmailCredentials, ResendPhoneCredentials]
+
+
 class SignInWithOAuthCredentialsOptions(TypedDict):
     redirect_to: NotRequired[str]
     scopes: NotRequired[str]
