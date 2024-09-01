@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from datetime import datetime
 from time import time
 from typing import Any, Callable, Dict, List, Union
