@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from contextlib import suppress
 from functools import partial
 from json import loads
