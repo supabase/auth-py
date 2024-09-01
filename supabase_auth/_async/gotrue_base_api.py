@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from typing import Any, Callable, Dict, TypeVar, Union, overload
 
 from httpx import Response
