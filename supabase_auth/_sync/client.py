@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from functools import partial
 from json import dumps, loads
 from threading import Timer
