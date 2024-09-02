@@ -1,5 +1,20 @@
 # CHANGELOG
 
+## [2.8.0](https://github.com/supabase/auth-py/compare/v2.7.0...v2.8.0) (2024-09-02)
+
+
+### Features
+
+* add MFA Phone ([#578](https://github.com/supabase/auth-py/issues/578)) ([b2bb7a1](https://github.com/supabase/auth-py/commit/b2bb7a149b42da0460ace211f6a640d9fa9f13b5))
+* add reauthenticate method ([#586](https://github.com/supabase/auth-py/issues/586)) ([d54feeb](https://github.com/supabase/auth-py/commit/d54feeb21006bfd5e5e1bdc039fac0aadab24e65))
+* add resend method ([#587](https://github.com/supabase/auth-py/issues/587)) ([536ad2c](https://github.com/supabase/auth-py/commit/536ad2c28e1815a8a2f48821081bfca009e198f2))
+
+
+### Bug Fixes
+
+* update invite user by email option type ([#588](https://github.com/supabase/auth-py/issues/588)) ([2510230](https://github.com/supabase/auth-py/commit/2510230c4eaa45303b269d029cfe9a0ece6e8a4e))
+* update password reset method name to match js lib ([#584](https://github.com/supabase/auth-py/issues/584)) ([d47daf1](https://github.com/supabase/auth-py/commit/d47daf1a0208c2df1a8993d37991f283f81f3221))
+
 ## [2.7.0](https://github.com/supabase/auth-py/compare/v2.6.2...v2.7.0) (2024-08-16)
 
 
