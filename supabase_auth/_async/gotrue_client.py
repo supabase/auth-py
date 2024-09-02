@@ -61,6 +61,7 @@ from ..types import (
     OAuthResponse,
     Options,
     Provider,
+    ResendCredentials,
     Session,
     SignInAnonymouslyCredentials,
     SignInWithIdTokenCredentials,
@@ -517,6 +518,41 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
             )
         raise AuthInvalidCredentialsError(
             "You must provide either an email or phone number"
+        )
+
+    async def resend(
+        self,
+        credentials: ResendCredentials,
+    ) -> AuthOtpResponse:
+        """
+        Resends an existing signup confirmation email, email change email, SMS OTP or phone change OTP.
+        """
+        email = credentials.get("email")
+        phone = credentials.get("phone")
+        type = credentials.get("type")
+        options = credentials.get("options", {})
+        email_redirect_to = options.get("email_redirect_to")
+        captcha_token = options.get("captcha_token")
+        body = {
+            "type": type,
+            "gotrue_meta_security": {
+                "captcha_token": captcha_token,
+            },
+        }
+
+        if email is None and phone is None:
+            raise AuthInvalidCredentialsError(
+                "You must provide either an email or phone number"
+            )
+
+        body.update({"email": email} if email else {"phone": phone})
+
+        return await self._request(
+            "POST",
+            "resend",
+            body=body,
+            redirect_to=email_redirect_to if email else None,
+            xform=parse_auth_otp_response,
         )
 
     async def verify_otp(self, params: VerifyOtpParams) -> AuthResponse:
