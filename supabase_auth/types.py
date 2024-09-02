@@ -87,6 +87,11 @@ class Options(TypedDict):
     captcha_token: NotRequired[str]
 
 
+class InviteUserByEmailOptions(TypedDict):
+    redirect_to: NotRequired[str]
+    data: NotRequired[Any]
+
+
 class AuthResponse(BaseModel):
     user: Union[User, None] = None
     session: Union[Session, None] = None
