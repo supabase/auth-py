@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime
 from time import time
-from typing import Any, Callable, Dict, List, Union
+from typing import Any, Awaitable, Callable, Dict, List, Union
 
 from pydantic import BaseModel, ConfigDict
 
@@ -269,6 +269,21 @@ class Subscription(BaseModel):
     callback: Callable[[AuthChangeEvent, Union[Session, None]], None]
     """
     The function to call every time there is an event.
+    """
+    unsubscribe: Callable[[], None]
+    """
+    Call this to remove the listener.
+    """
+
+
+class AsyncSubscription(BaseModel):
+    id: str
+    """
+    The subscriber UUID. This will be set by the client.
+    """
+    callback: Callable[[AuthChangeEvent, Union[Session, None]], Awaitable[None]]
+    """
+    The async function to call every time there is an event.
     """
     unsubscribe: Callable[[], None]
     """
