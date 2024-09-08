@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## [2.8.1](https://github.com/supabase/auth-py/compare/v2.8.0...v2.8.1) (2024-09-08)
+
+
+### Bug Fixes
+
+* **deps-dev:** bump cryptography from 43.0.0 to 43.0.1 ([#592](https://github.com/supabase/auth-py/issues/592)) ([79829d3](https://github.com/supabase/auth-py/commit/79829d3332c7d71c11dbc3adcdb8a89626144c4d))
+
 ## [2.8.0](https://github.com/supabase/auth-py/compare/v2.7.0...v2.8.0) (2024-09-02)
 
 
