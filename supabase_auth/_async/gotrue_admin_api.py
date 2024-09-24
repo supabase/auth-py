@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from functools import partial
-from typing import Dict, List, Union, Optional
+from typing import Dict, List, Optional, Union
 
 from ..helpers import model_validate, parse_link_response, parse_user_response
 from ..http_clients import AsyncClient
