@@ -27,6 +27,7 @@ class SyncGoTrueAPI:
         cookie_options: CookieOptions,
         http_client: Optional[SyncClient] = None,
         verify: bool = True,
+        proxy: Optional[str] = None,
     ) -> None:
         """Initialise API class."""
         self.url = url
@@ -34,6 +35,7 @@ class SyncGoTrueAPI:
         self.cookie_options = cookie_options
         self.http_client = http_client or SyncClient(
             verify=bool(verify),
+            proxy=proxy,
             follow_redirects=True,
             http2=True,
         )
