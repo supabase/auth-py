@@ -38,7 +38,7 @@ class SyncGoTrueClient:
         api: Optional[SyncGoTrueAPI] = None,
         replace_default_headers: bool = False,
         verify: bool = True,
-        proxy: str | None = None,
+        proxy: Optional[str] = None,
     ) -> None:
         """Create a new client
 
