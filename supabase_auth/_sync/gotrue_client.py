@@ -4,7 +4,7 @@ from contextlib import suppress
 from functools import partial
 from json import loads
 from time import time
-from typing import Callable, Dict, List, Tuple, Union, Optional
+from typing import Callable, Dict, List, Optional, Tuple, Union
 from urllib.parse import parse_qs, urlencode, urlparse
 from uuid import uuid4
 
