@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## [2.9.0](https://github.com/supabase/auth-py/compare/v2.8.1...v2.9.0) (2024-09-28)
+
+
+### Features
+
+* Proxy support ([#600](https://github.com/supabase/auth-py/issues/600)) ([574d615](https://github.com/supabase/auth-py/commit/574d615d6c0b93e455cfcb16560f409c021471f1))
+
+
+### Bug Fixes
+
+* **deps:** bump pydantic from 2.9.0 to 2.9.2 ([#598](https://github.com/supabase/auth-py/issues/598)) ([c865a98](https://github.com/supabase/auth-py/commit/c865a98cf10248433dff23c3f6a67fc3683766b0))
+
 ## [2.8.1](https://github.com/supabase/auth-py/compare/v2.8.0...v2.8.1) (2024-09-08)
 
 
