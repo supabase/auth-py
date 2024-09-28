@@ -4,7 +4,7 @@ from contextlib import suppress
 from functools import partial
 from json import loads
 from time import time
-from typing import Callable, Dict, List, Tuple, Union
+from typing import Callable, Dict, List, Optional, Tuple, Union
 from urllib.parse import parse_qs, urlencode, urlparse
 from uuid import uuid4
 
@@ -96,6 +96,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         http_client: Union[SyncClient, None] = None,
         flow_type: AuthFlowType = "implicit",
         verify: bool = True,
+        proxy: Optional[str] = None,
     ) -> None:
         SyncGoTrueBaseAPI.__init__(
             self,
@@ -103,6 +104,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
             headers=headers or DEFAULT_HEADERS,
             http_client=http_client,
             verify=verify,
+            proxy=proxy,
         )
         self._storage_key = storage_key or STORAGE_KEY
         self._auto_refresh_token = auto_refresh_token

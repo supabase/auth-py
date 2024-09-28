@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from functools import partial
-from typing import Dict, List, Union
+from typing import Dict, List, Optional, Union
 
 from ..helpers import model_validate, parse_link_response, parse_user_response
 from ..http_clients import AsyncClient
@@ -30,6 +30,7 @@ class AsyncGoTrueAdminAPI(AsyncGoTrueBaseAPI):
         headers: Dict[str, str] = {},
         http_client: Union[AsyncClient, None] = None,
         verify: bool = True,
+        proxy: Optional[str] = None,
     ) -> None:
         AsyncGoTrueBaseAPI.__init__(
             self,
@@ -37,6 +38,7 @@ class AsyncGoTrueAdminAPI(AsyncGoTrueBaseAPI):
             headers=headers,
             http_client=http_client,
             verify=verify,
+            proxy=proxy,
         )
         self.mfa = AsyncGoTrueAdminMFAAPI()
         self.mfa.list_factors = self._list_factors

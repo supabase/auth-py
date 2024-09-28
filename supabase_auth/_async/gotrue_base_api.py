@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Callable, Dict, TypeVar, Union, overload
+from typing import Any, Callable, Dict, Optional, TypeVar, Union, overload
 
 from httpx import Response
 from pydantic import BaseModel
@@ -21,11 +21,13 @@ class AsyncGoTrueBaseAPI:
         headers: Dict[str, str],
         http_client: Union[AsyncClient, None],
         verify: bool = True,
+        proxy: Optional[str] = None,
     ):
         self._url = url
         self._headers = headers
         self._http_client = http_client or AsyncClient(
             verify=bool(verify),
+            proxy=proxy,
             follow_redirects=True,
             http2=True,
         )
