@@ -822,7 +822,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         return await self._request(
             "POST",
             f"factors/{params.get('factor_id')}/challenge",
-            body={"channel": params["channel"]},
+            body={"channel": params.get("channel")},
             jwt=session.access_token,
             xform=partial(model_validate, AuthMFAChallengeResponse),
         )
