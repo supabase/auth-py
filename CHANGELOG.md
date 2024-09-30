@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## [2.9.1](https://github.com/supabase/auth-py/compare/v2.9.0...v2.9.1) (2024-09-30)
+
+
+### Bug Fixes
+
+* mfa challenge channel field not required ([#603](https://github.com/supabase/auth-py/issues/603)) ([38a8696](https://github.com/supabase/auth-py/commit/38a8696058c4cc770a2a99b0ea1cf9649b2cea8c))
+
 ## [2.9.0](https://github.com/supabase/auth-py/compare/v2.8.1...v2.9.0) (2024-09-28)
 
 
