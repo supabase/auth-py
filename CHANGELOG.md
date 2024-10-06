@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## [2.9.2](https://github.com/supabase/auth-py/compare/v2.9.1...v2.9.2) (2024-10-06)
+
+
+### Bug Fixes
+
+* httpx minimum version update ([#606](https://github.com/supabase/auth-py/issues/606)) ([28be757](https://github.com/supabase/auth-py/commit/28be757561977f2138639089e29888e2be6d871e))
+
 ## [2.9.1](https://github.com/supabase/auth-py/compare/v2.9.0...v2.9.1) (2024-09-30)
 
 
