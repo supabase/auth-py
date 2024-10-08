@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Callable, Dict, TypeVar, overload, Optional
+from typing import Any, Callable, Dict, Optional, TypeVar, overload
 
 from httpx import Response
 from pydantic import BaseModel
