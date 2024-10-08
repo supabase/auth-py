@@ -96,6 +96,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         http_client: Optional[AsyncClient] = None,
         flow_type: AuthFlowType = "implicit",
         verify: bool = True,
+        proxy: Optional[str] = None,
     ) -> None:
         AsyncGoTrueBaseAPI.__init__(
             self,
@@ -103,6 +104,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
             headers=headers or DEFAULT_HEADERS,
             http_client=http_client,
             verify=verify,
+            proxy=proxy,
         )
         self._storage_key = storage_key or STORAGE_KEY
         self._auto_refresh_token = auto_refresh_token
@@ -820,7 +822,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         return await self._request(
             "POST",
             f"factors/{params.get('factor_id')}/challenge",
-            body={"channel": params["channel"]},
+            body={"channel": params.get("channel")},
             jwt=session.access_token,
             xform=partial(model_validate, AuthMFAChallengeResponse),
         )

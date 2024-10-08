@@ -30,6 +30,7 @@ class SyncGoTrueAdminAPI(SyncGoTrueBaseAPI):
         headers: Dict[str, str] = {},
         http_client: Optional[SyncClient] = None,
         verify: bool = True,
+        proxy: Optional[str] = None,
     ) -> None:
         SyncGoTrueBaseAPI.__init__(
             self,
@@ -37,6 +38,7 @@ class SyncGoTrueAdminAPI(SyncGoTrueBaseAPI):
             headers=headers,
             http_client=http_client,
             verify=verify,
+            proxy=proxy,
         )
         self.mfa = SyncGoTrueAdminMFAAPI()
         self.mfa.list_factors = self._list_factors

@@ -30,6 +30,7 @@ class AsyncGoTrueAdminAPI(AsyncGoTrueBaseAPI):
         headers: Dict[str, str] = {},
         http_client: Optional[AsyncClient] = None,
         verify: bool = True,
+        proxy: Optional[str] = None,
     ) -> None:
         AsyncGoTrueBaseAPI.__init__(
             self,
@@ -37,6 +38,7 @@ class AsyncGoTrueAdminAPI(AsyncGoTrueBaseAPI):
             headers=headers,
             http_client=http_client,
             verify=verify,
+            proxy=proxy,
         )
         self.mfa = AsyncGoTrueAdminMFAAPI()
         self.mfa.list_factors = self._list_factors

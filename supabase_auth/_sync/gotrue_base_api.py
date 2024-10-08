@@ -21,11 +21,13 @@ class SyncGoTrueBaseAPI:
         headers: Dict[str, str],
         http_client: Optional[SyncClient],
         verify: bool = True,
+        proxy: Optional[str] = None,
     ):
         self._url = url
         self._headers = headers
         self._http_client = http_client or SyncClient(
             verify=bool(verify),
+            proxy=proxy,
             follow_redirects=True,
             http2=True,
         )
