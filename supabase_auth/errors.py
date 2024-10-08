@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import List, Literal, Union
+from typing import List, Literal, Optional
 
 from typing_extensions import TypedDict
 
@@ -153,14 +153,14 @@ class AuthImplicitGrantRedirectErrorDetails(TypedDict):
 
 
 class AuthImplicitGrantRedirectErrorDict(AuthApiErrorDict):
-    details: Union[AuthImplicitGrantRedirectErrorDetails, None]
+    details: Optional[AuthImplicitGrantRedirectErrorDetails]
 
 
 class AuthImplicitGrantRedirectError(CustomAuthError):
     def __init__(
         self,
         message: str,
-        details: Union[AuthImplicitGrantRedirectErrorDetails, None] = None,
+        details: Optional[AuthImplicitGrantRedirectErrorDetails] = None,
     ) -> None:
         CustomAuthError.__init__(
             self,
