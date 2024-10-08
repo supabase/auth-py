@@ -1,6 +1,6 @@
 import asyncio
 from threading import Timer as _Timer
-from typing import Any, Callable, Coroutine, cast, Optional
+from typing import Any, Callable, Coroutine, Optional, cast
 
 
 class Timer:
