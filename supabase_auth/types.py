@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime
 from time import time
-from typing import Any, Callable, Dict, List, Union
+from typing import Any, Callable, Dict, List, Optional, Union
 
 from pydantic import BaseModel, ConfigDict
 
@@ -93,14 +93,14 @@ class InviteUserByEmailOptions(TypedDict):
 
 
 class AuthResponse(BaseModel):
-    user: Union[User, None] = None
-    session: Union[Session, None] = None
+    user: Optional[User] = None
+    session: Optional[Session] = None
 
 
 class AuthOtpResponse(BaseModel):
     user: None = None
     session: None = None
-    message_id: Union[str, None] = None
+    message_id: Optional[str] = None
 
 
 class OAuthResponse(BaseModel):
@@ -125,12 +125,12 @@ class UserResponse(BaseModel):
 
 
 class Session(BaseModel):
-    provider_token: Union[str, None] = None
+    provider_token: Optional[str] = None
     """
     The oauth provider token. If present, this can be used to make external API
     requests to the oauth provider used.
     """
-    provider_refresh_token: Union[str, None] = None
+    provider_refresh_token: Optional[str] = None
     """
     The oauth provider refresh token. If present, this can be used to refresh
     the provider_token via the oauth provider's API.
@@ -146,7 +146,7 @@ class Session(BaseModel):
     The number of seconds until the token expires (since it was issued).
     Returned when a login is confirmed.
     """
-    expires_at: Union[int, None] = None
+    expires_at: Optional[int] = None
     """
     A timestamp of when the token will expire. Returned when a login is confirmed.
     """
@@ -168,8 +168,8 @@ class UserIdentity(BaseModel):
     identity_data: Dict[str, Any]
     provider: str
     created_at: datetime
-    last_sign_in_at: Union[datetime, None] = None
-    updated_at: Union[datetime, None] = None
+    last_sign_in_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
 
 
 class Factor(BaseModel):
@@ -181,7 +181,7 @@ class Factor(BaseModel):
     """
     ID of the factor.
     """
-    friendly_name: Union[str, None] = None
+    friendly_name: Optional[str] = None
     """
     Friendly name of the factor, useful to disambiguate between multiple factors.
     """
@@ -203,25 +203,25 @@ class User(BaseModel):
     app_metadata: Dict[str, Any]
     user_metadata: Dict[str, Any]
     aud: str
-    confirmation_sent_at: Union[datetime, None] = None
-    recovery_sent_at: Union[datetime, None] = None
-    email_change_sent_at: Union[datetime, None] = None
-    new_email: Union[str, None] = None
-    new_phone: Union[str, None] = None
-    invited_at: Union[datetime, None] = None
-    action_link: Union[str, None] = None
-    email: Union[str, None] = None
-    phone: Union[str, None] = None
+    confirmation_sent_at: Optional[datetime] = None
+    recovery_sent_at: Optional[datetime] = None
+    email_change_sent_at: Optional[datetime] = None
+    new_email: Optional[str] = None
+    new_phone: Optional[str] = None
+    invited_at: Optional[datetime] = None
+    action_link: Optional[str] = None
+    email: Optional[str] = None
+    phone: Optional[str] = None
     created_at: datetime
-    confirmed_at: Union[datetime, None] = None
-    email_confirmed_at: Union[datetime, None] = None
-    phone_confirmed_at: Union[datetime, None] = None
-    last_sign_in_at: Union[datetime, None] = None
-    role: Union[str, None] = None
-    updated_at: Union[datetime, None] = None
-    identities: Union[List[UserIdentity], None] = None
+    confirmed_at: Optional[datetime] = None
+    email_confirmed_at: Optional[datetime] = None
+    phone_confirmed_at: Optional[datetime] = None
+    last_sign_in_at: Optional[datetime] = None
+    role: Optional[str] = None
+    updated_at: Optional[datetime] = None
+    identities: Optional[List[UserIdentity]] = None
     is_anonymous: bool = False
-    factors: Union[List[Factor], None] = None
+    factors: Optional[List[Factor]] = None
 
 
 class UserAttributes(TypedDict):
@@ -266,7 +266,7 @@ class Subscription(BaseModel):
     """
     The subscriber UUID. This will be set by the client.
     """
-    callback: Callable[[AuthChangeEvent, Union[Session, None]], None]
+    callback: Callable[[AuthChangeEvent, Optional[Session]], None]
     """
     The function to call every time there is an event.
     """
@@ -691,11 +691,11 @@ AuthenticatorAssuranceLevels = Literal["aal1", "aal2"]
 
 
 class AuthMFAGetAuthenticatorAssuranceLevelResponse(BaseModel):
-    current_level: Union[AuthenticatorAssuranceLevels, None] = None
+    current_level: Optional[AuthenticatorAssuranceLevels] = None
     """
     Current AAL level of the session.
     """
-    next_level: Union[AuthenticatorAssuranceLevels, None] = None
+    next_level: Optional[AuthenticatorAssuranceLevels] = None
     """
     Next possible AAL level for the session. If the next level is higher
     than the current one, the user should go through MFA.
@@ -778,8 +778,8 @@ class GenerateLinkResponse(BaseModel):
 
 class DecodedJWTDict(TypedDict):
     exp: NotRequired[int]
-    aal: NotRequired[Union[AuthenticatorAssuranceLevels, None]]
-    amr: NotRequired[Union[List[AMREntry], None]]
+    aal: NotRequired[Optional[AuthenticatorAssuranceLevels]]
+    amr: NotRequired[Optional[List[AMREntry]]]
 
 
 SignOutScope = Literal["global", "local", "others"]

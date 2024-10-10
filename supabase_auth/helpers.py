@@ -8,7 +8,7 @@ import string
 from base64 import urlsafe_b64decode
 from datetime import datetime
 from json import loads
-from typing import Any, Dict, Type, TypeVar, Union, cast
+from typing import Any, Dict, Optional, Type, TypeVar, cast
 
 from httpx import HTTPStatusError, Response
 from pydantic import BaseModel
@@ -68,7 +68,7 @@ def model_dump_json(model: BaseModel) -> str:
 
 
 def parse_auth_response(data: Any) -> AuthResponse:
-    session: Union[Session, None] = None
+    session: Optional[Session] = None
     if (
         "access_token" in data
         and "refresh_token" in data

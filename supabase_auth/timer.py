@@ -1,18 +1,18 @@
 import asyncio
 from threading import Timer as _Timer
-from typing import Any, Callable, Coroutine, Union, cast
+from typing import Any, Callable, Coroutine, Optional, cast
 
 
 class Timer:
     def __init__(
         self,
         seconds: float,
-        function: Callable[[], Union[Coroutine[Any, Any, None], None]],
+        function: Callable[[], Optional[Coroutine[Any, Any, None]]],
     ) -> None:
         self._milliseconds = seconds
         self._function = function
-        self._task: Union[asyncio.Task, None] = None
-        self._timer: Union[_Timer, None] = None
+        self._task: Optional[asyncio.Task] = None
+        self._timer: Optional[_Timer] = None
 
     def start(self) -> None:
         if asyncio.iscoroutinefunction(self._function):

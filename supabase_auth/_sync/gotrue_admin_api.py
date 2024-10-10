@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from functools import partial
-from typing import Dict, List, Optional, Union
+from typing import Dict, List, Optional
 
 from ..helpers import model_validate, parse_link_response, parse_user_response
 from ..http_clients import SyncClient
@@ -28,7 +28,7 @@ class SyncGoTrueAdminAPI(SyncGoTrueBaseAPI):
         *,
         url: str = "",
         headers: Dict[str, str] = {},
-        http_client: Union[SyncClient, None] = None,
+        http_client: Optional[SyncClient] = None,
         verify: bool = True,
         proxy: Optional[str] = None,
     ) -> None:

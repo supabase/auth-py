@@ -4,7 +4,7 @@ from contextlib import suppress
 from functools import partial
 from json import loads
 from time import time
-from typing import Callable, Dict, List, Optional, Tuple, Union
+from typing import Callable, Dict, List, Optional, Tuple
 from urllib.parse import parse_qs, urlencode, urlparse
 from uuid import uuid4
 
@@ -87,13 +87,13 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
     def __init__(
         self,
         *,
-        url: Union[str, None] = None,
-        headers: Union[Dict[str, str], None] = None,
-        storage_key: Union[str, None] = None,
+        url: Optional[str] = None,
+        headers: Optional[Dict[str, str]] = None,
+        storage_key: Optional[str] = None,
         auto_refresh_token: bool = True,
         persist_session: bool = True,
-        storage: Union[SyncSupportedStorage, None] = None,
-        http_client: Union[SyncClient, None] = None,
+        storage: Optional[SyncSupportedStorage] = None,
+        http_client: Optional[SyncClient] = None,
         flow_type: AuthFlowType = "implicit",
         verify: bool = True,
         proxy: Optional[str] = None,
@@ -110,8 +110,8 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         self._auto_refresh_token = auto_refresh_token
         self._persist_session = persist_session
         self._storage = storage or SyncMemoryStorage()
-        self._in_memory_session: Union[Session, None] = None
-        self._refresh_token_timer: Union[Timer, None] = None
+        self._in_memory_session: Optional[Session] = None
+        self._refresh_token_timer: Optional[Timer] = None
         self._network_retries = 0
         self._state_change_emitters: Dict[str, Subscription] = {}
         self._flow_type = flow_type
@@ -134,7 +134,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
 
     # Initializations
 
-    def initialize(self, *, url: Union[str, None] = None) -> None:
+    def initialize(self, *, url: Optional[str] = None) -> None:
         if url and self._is_implicit_grant_flow(url):
             self.initialize_from_url(url)
         else:
@@ -158,7 +158,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
     # Public methods
 
     def sign_in_anonymously(
-        self, credentials: Union[SignInAnonymouslyCredentials, None] = None
+        self, credentials: Optional[SignInAnonymouslyCredentials] = None
     ) -> AuthResponse:
         """
         Creates a new anonymous user.
@@ -585,14 +585,14 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
             xform=parse_auth_response,
         )
 
-    def get_session(self) -> Union[Session, None]:
+    def get_session(self) -> Optional[Session]:
         """
         Returns the session, refreshing it if necessary.
 
         The session returned can be null if the session is not detected which
         can happen in the event a user is not signed-in or has logged out.
         """
-        current_session: Union[Session, None] = None
+        current_session: Optional[Session] = None
         if self._persist_session:
             maybe_session = self._storage.get_item(self._storage_key)
             current_session = self._get_valid_session(maybe_session)
@@ -614,7 +614,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
             else current_session
         )
 
-    def get_user(self, jwt: Union[str, None] = None) -> Union[UserResponse, None]:
+    def get_user(self, jwt: Optional[str] = None) -> Optional[UserResponse]:
         """
         Gets the current user details if there is an existing session.
 
@@ -666,7 +666,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         time_now = round(time())
         expires_at = time_now
         has_expired = True
-        session: Union[Session, None] = None
+        session: Optional[Session] = None
         if access_token and access_token.split(".")[1]:
             payload = self._decode_jwt(access_token)
             exp = payload.get("exp")
@@ -694,7 +694,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         self._notify_all_subscribers("TOKEN_REFRESHED", session)
         return AuthResponse(session=session, user=response.user)
 
-    def refresh_session(self, refresh_token: Union[str, None] = None) -> AuthResponse:
+    def refresh_session(self, refresh_token: Optional[str] = None) -> AuthResponse:
         """
         Returns a new session, regardless of expiry status.
 
@@ -735,7 +735,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
 
     def on_auth_state_change(
         self,
-        callback: Callable[[AuthChangeEvent, Union[Session, None]], None],
+        callback: Callable[[AuthChangeEvent, Optional[Session]], None],
     ) -> Subscription:
         """
         Receive a notification every time an auth event happens.
@@ -881,7 +881,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
                 current_authentication_methods=[],
             )
         payload = self._decode_jwt(session.access_token)
-        current_level: Union[AuthenticatorAssuranceLevels, None] = None
+        current_level: Optional[AuthenticatorAssuranceLevels] = None
         if payload.get("aal"):
             current_level = payload.get("aal")
         verified_factors = [
@@ -909,7 +909,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
     def _get_session_from_url(
         self,
         url: str,
-    ) -> Tuple[Session, Union[str, None]]:
+    ) -> Tuple[Session, Optional[str]]:
         if not self._is_implicit_grant_flow(url):
             raise AuthImplicitGrantRedirectError("Not a valid implicit grant flow url.")
         result = urlparse(url)
@@ -1054,15 +1054,15 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
     def _notify_all_subscribers(
         self,
         event: AuthChangeEvent,
-        session: Union[Session, None],
+        session: Optional[Session],
     ) -> None:
         for subscription in self._state_change_emitters.values():
             subscription.callback(event, session)
 
     def _get_valid_session(
         self,
-        raw_session: Union[str, None],
-    ) -> Union[Session, None]:
+        raw_session: Optional[str],
+    ) -> Optional[Session]:
         if not raw_session:
             return None
         data = loads(raw_session)
@@ -1088,7 +1088,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         self,
         query_params: Dict[str, List[str]],
         name: str,
-    ) -> Union[str, None]:
+    ) -> Optional[str]:
         return query_params[name][0] if name in query_params else None
 
     def _is_implicit_grant_flow(self, url: str) -> bool:

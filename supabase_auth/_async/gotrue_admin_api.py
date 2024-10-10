@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from functools import partial
-from typing import Dict, List, Optional, Union
+from typing import Dict, List, Optional
 
 from ..helpers import model_validate, parse_link_response, parse_user_response
 from ..http_clients import AsyncClient
@@ -28,7 +28,7 @@ class AsyncGoTrueAdminAPI(AsyncGoTrueBaseAPI):
         *,
         url: str = "",
         headers: Dict[str, str] = {},
-        http_client: Union[AsyncClient, None] = None,
+        http_client: Optional[AsyncClient] = None,
         verify: bool = True,
         proxy: Optional[str] = None,
     ) -> None:
