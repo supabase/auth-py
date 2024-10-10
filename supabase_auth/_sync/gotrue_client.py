@@ -1011,8 +1011,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         )
 
     def _save_session(self, session: Session) -> None:
-        if not self._persist_session:
-            self._in_memory_session = session
+        self._in_memory_session = session
         expire_at = session.expires_at
         if expire_at:
             time_now = round(time())
