@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## [2.9.3](https://github.com/supabase/auth-py/compare/v2.9.2...v2.9.3) (2024-10-18)
+
+
+### Bug Fixes
+
+* bump minimal version of Python to 3.9 ([#612](https://github.com/supabase/auth-py/issues/612)) ([30938a6](https://github.com/supabase/auth-py/commit/30938a6db97c5ee3eb4c27fd8d38b7437bc07fd7))
+* Types to use Option[T] ([#609](https://github.com/supabase/auth-py/issues/609)) ([4484ea0](https://github.com/supabase/auth-py/commit/4484ea0f61149c75caff879161f63d390bf1ff1c))
+
 ## [2.9.2](https://github.com/supabase/auth-py/compare/v2.9.1...v2.9.2) (2024-10-06)
 
 
