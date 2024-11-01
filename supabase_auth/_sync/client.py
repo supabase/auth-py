@@ -10,7 +10,7 @@ from uuid import uuid4
 
 from ..constants import COOKIE_OPTIONS, DEFAULT_HEADERS, GOTRUE_URL, STORAGE_KEY
 from ..exceptions import APIError
-from ..helpers import model_dump, model_validate, is_http_url
+from ..helpers import is_http_url, model_dump, model_validate
 from ..types import (
     AuthChangeEvent,
     CookieOptions,
