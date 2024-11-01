@@ -8,6 +8,7 @@ import string
 from base64 import urlsafe_b64decode
 from datetime import datetime
 from json import loads
+from urllib.parse import urlparse
 from typing import Any, Dict, Optional, Type, TypeVar, cast
 
 from httpx import HTTPStatusError, Response
@@ -238,3 +239,7 @@ def parse_response_api_version(response: Response):
         return dt
     except Exception as e:
         return None
+
+
+def is_http_url(url: str) -> bool:
+    return urlparse(url).scheme in {"https", "http"}
