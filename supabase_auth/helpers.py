@@ -8,8 +8,8 @@ import string
 from base64 import urlsafe_b64decode
 from datetime import datetime
 from json import loads
-from urllib.parse import urlparse
 from typing import Any, Dict, Optional, Type, TypeVar, cast
+from urllib.parse import urlparse
 
 from httpx import HTTPStatusError, Response
 from pydantic import BaseModel
