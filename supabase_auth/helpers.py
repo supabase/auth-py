@@ -9,6 +9,7 @@ from base64 import urlsafe_b64decode
 from datetime import datetime
 from json import loads
 from typing import Any, Dict, Optional, Type, TypeVar, cast
+from urllib.parse import urlparse
 
 from httpx import HTTPStatusError, Response
 from pydantic import BaseModel
@@ -238,3 +239,7 @@ def parse_response_api_version(response: Response):
         return dt
     except Exception as e:
         return None
+
+
+def is_http_url(url: str) -> bool:
+    return urlparse(url).scheme in {"https", "http"}
