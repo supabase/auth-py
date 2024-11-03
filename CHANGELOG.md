@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## [2.10.0](https://github.com/supabase/auth-py/compare/v2.9.3...v2.10.0) (2024-11-03)
+
+
+### Features
+
+* Check if url is an HTTP URL ([#620](https://github.com/supabase/auth-py/issues/620)) ([f0ccae5](https://github.com/supabase/auth-py/commit/f0ccae5fe6a8c012b8bcaf89bfc767d63feecbae))
+
 ## [2.9.3](https://github.com/supabase/auth-py/compare/v2.9.2...v2.9.3) (2024-10-18)
 
 
