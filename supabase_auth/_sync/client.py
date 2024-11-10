@@ -10,7 +10,7 @@ from uuid import uuid4
 
 from ..constants import COOKIE_OPTIONS, DEFAULT_HEADERS, GOTRUE_URL, STORAGE_KEY
 from ..exceptions import APIError
-from ..helpers import is_http_url, model_dump, model_validate
+from ..helpers import is_http_url, is_valid_jwt, model_dump, model_validate
 from ..types import (
     AuthChangeEvent,
     CookieOptions,
@@ -364,6 +364,10 @@ class SyncGoTrueClient:
         APIError
             If an error occurs.
         """
+
+        if not is_valid_jwt(refresh_token):
+            ValueError("refresh_token must be a valid JWT authorization token")
+
         response = self.api.refresh_access_token(refresh_token=refresh_token)
         self._save_session(session=response)
         self._notify_all_subscribers(event=AuthChangeEvent.SIGNED_IN)
@@ -388,6 +392,10 @@ class SyncGoTrueClient:
         APIError
             If an error occurs.
         """
+
+        if not is_valid_jwt(access_token):
+            ValueError("access_token must be a valid JWT authorization token")
+
         session = Session(
             access_token=access_token,
             token_type="bearer",
