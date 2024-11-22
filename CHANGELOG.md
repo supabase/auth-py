@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## [2.11.0](https://github.com/supabase/auth-py/compare/v2.10.0...v2.11.0) (2024-11-22)
+
+
+### Features
+
+* Check if token is a JWT ([#623](https://github.com/supabase/auth-py/issues/623)) ([f435736](https://github.com/supabase/auth-py/commit/f435736de16dfa68543e76861c2742ca46c05cf6))
+
 ## [2.10.0](https://github.com/supabase/auth-py/compare/v2.9.3...v2.10.0) (2024-11-03)
 
 
