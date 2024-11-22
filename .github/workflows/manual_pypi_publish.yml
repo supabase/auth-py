@@ -24,7 +24,7 @@ jobs:
       - name: Run Tests
         run: make run_tests
       - name: Upload Coverage
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
       - name: Run Tests with pydantic v1
         run: |
           pip install pydantic==1.10.12
