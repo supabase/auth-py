@@ -26,7 +26,7 @@ except ImportError:
 from typing_extensions import Literal, NotRequired, TypedDict
 
 
-class Provider(StrEnum):
+class Provider(StrEnum, str):
     Apple = "apple"
     Azure = "azure"
     Bitbucket = "bitbucket"
@@ -50,7 +50,7 @@ class Provider(StrEnum):
     Workos = "workos"
 
 
-class EmailOtpType(StrEnum):
+class EmailOtpType(StrEnum, str):
     Signup = "signup"
     Invite = "invite"
     Magiclink = "magiclink"
@@ -62,12 +62,12 @@ class EmailOtpType(StrEnum):
 AuthChangeEventMFA = Literal["MFA_CHALLENGE_VERIFIED"]
 
 
-class AuthFlowType(StrEnum):
+class AuthFlowType(StrEnum, str):
     Pkce = "pkce"
     Implicit = "implicit"
 
 
-class AuthChangeEvent(StrEnum):
+class AuthChangeEvent(StrEnum, str):
     Password_Recovery = "PASSWORD_RECOVERY"
     Signed_in = "SIGNED_IN"
     Signed_out = "SIGNED_OUT"
@@ -525,7 +525,7 @@ GenerateLinkParams = Union[
 ]
 
 
-class GenerateLinkType(StrEnum):
+class GenerateLinkType(StrEnum, str):
     Signup = "signup"
     Invite = "invite"
     Magiclink = "magiclink"
@@ -795,7 +795,7 @@ class DecodedJWTDict(TypedDict):
     amr: NotRequired[Optional[List[AMREntry]]]
 
 
-class SignOutScope(StrEnum):
+class SignOutScope(StrEnum, str):
     Global = "global"
     Local = "local"
     Others = "others"
