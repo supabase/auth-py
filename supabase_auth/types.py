@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import sys
-
 from datetime import datetime
 from time import time
 from typing import Any, Callable, Dict, List, Optional, Union
@@ -28,53 +27,53 @@ from typing_extensions import Literal, NotRequired, TypedDict
 
 
 class Provider(StrEnum):
-    Apple         = "apple"
-    Azure         = "azure"
-    Bitbucket     = "bitbucket"
-    Discord       = "discord"
-    Facebook      = "facebook"
-    Figman        = "figma"
-    Fly           = "fly"
-    Github        = "github"
-    Gitlab        = "gitlab"
-    Google        = "google"
-    Kakao         = "kakao"
-    Keycloak      = "keycloak"
-    Linkedin      = "linkedin"
+    Apple = "apple"
+    Azure = "azure"
+    Bitbucket = "bitbucket"
+    Discord = "discord"
+    Facebook = "facebook"
+    Figman = "figma"
+    Fly = "fly"
+    Github = "github"
+    Gitlab = "gitlab"
+    Google = "google"
+    Kakao = "kakao"
+    Keycloak = "keycloak"
+    Linkedin = "linkedin"
     Linkedin_oidc = "linkedin_oidc"
-    Notion        = "notion"
-    Slack         = "slack"
-    Slack_oidc    = "slack_oidc"
-    Spotify       = "spotify"
-    Twitch        = "twitch"
-    Twitter       = "twitter"
-    Workos        = "workos"
+    Notion = "notion"
+    Slack = "slack"
+    Slack_oidc = "slack_oidc"
+    Spotify = "spotify"
+    Twitch = "twitch"
+    Twitter = "twitter"
+    Workos = "workos"
 
 
 class EmailOtpType(StrEnum):
-    Signup       = "signup"
-    Invite       = "invite"
-    Magiclink    = "magiclink"
-    Recovery     = "recovery"
+    Signup = "signup"
+    Invite = "invite"
+    Magiclink = "magiclink"
+    Recovery = "recovery"
     Email_change = "email_change"
-    Email        = "email"
+    Email = "email"
 
 
 AuthChangeEventMFA = Literal["MFA_CHALLENGE_VERIFIED"]
 
 
 class AuthFlowType(StrEnum):
-    Pkce     = "pkce"
+    Pkce = "pkce"
     Implicit = "implicit"
 
 
 class AuthChangeEvent(StrEnum):
-    Password_Recovery  = "PASSWORD_RECOVERY"
-    Signed_in          = "SIGNED_IN"
-    Signed_out         = "SIGNED_OUT"
-    Token_refreshed    = "TOKEN_REFRESHED"
-    User_updated       = "USER_UPDATED"
-    User_deleted       = "USER_DELETED"
+    Password_Recovery = "PASSWORD_RECOVERY"
+    Signed_in = "SIGNED_IN"
+    Signed_out = "SIGNED_OUT"
+    Token_refreshed = "TOKEN_REFRESHED"
+    User_updated = "USER_UPDATED"
+    User_deleted = "USER_DELETED"
     AuthChangeEventMFA = AuthChangeEventMFA
 
 
@@ -527,10 +526,10 @@ GenerateLinkParams = Union[
 
 
 class GenerateLinkType(StrEnum):
-    Signup             = "signup"
-    Invite             = "invite"
-    Magiclink          = "magiclink"
-    Recovery           = "recovery"
+    Signup = "signup"
+    Invite = "invite"
+    Magiclink = "magiclink"
+    Recovery = "recovery"
     EmailChangeCurrent = "email_change_current"
 
 
@@ -798,7 +797,7 @@ class DecodedJWTDict(TypedDict):
 
 class SignOutScope(StrEnum):
     Global = "global"
-    Local  = "local"
+    Local = "local"
     Others = "others"
 
 
