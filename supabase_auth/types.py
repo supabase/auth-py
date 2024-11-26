@@ -74,7 +74,7 @@ class AuthChangeEvent(StrEnum):
     Token_refreshed = "TOKEN_REFRESHED"
     User_updated = "USER_UPDATED"
     User_deleted = "USER_DELETED"
-    AuthChangeEventMFA = AuthChangeEventMFA
+    AuthChangeEventMFA = "MFA_CHALLENGE_VERIFIED"
 
 
 class AMREntry(BaseModel):
