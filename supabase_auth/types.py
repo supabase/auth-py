@@ -1,10 +1,17 @@
 from __future__ import annotations
 
+import sys
+
 from datetime import datetime
 from time import time
 from typing import Any, Callable, Dict, List, Optional, Union
 
 from pydantic import BaseModel, ConfigDict
+
+if sys.version_info >= (3, 11):
+    from enum import StrEnum
+else:
+    from strenum import StrEnum
 
 try:
     # > 2
@@ -19,48 +26,56 @@ except ImportError:
 
 from typing_extensions import Literal, NotRequired, TypedDict
 
-Provider = Literal[
-    "apple",
-    "azure",
-    "bitbucket",
-    "discord",
-    "facebook",
-    "figma",
-    "fly",
-    "github",
-    "gitlab",
-    "google",
-    "kakao",
-    "keycloak",
-    "linkedin",
-    "linkedin_oidc",
-    "notion",
-    "slack",
-    "slack_oidc",
-    "spotify",
-    "twitch",
-    "twitter",
-    "workos",
-    "zoom",
-]
 
-EmailOtpType = Literal[
-    "signup", "invite", "magiclink", "recovery", "email_change", "email"
-]
+class Provider(StrEnum):
+    Apple         = "apple"
+    Azure         = "azure"
+    Bitbucket     = "bitbucket"
+    Discord       = "discord"
+    Facebook      = "facebook"
+    Figman        = "figma"
+    Fly           = "fly"
+    Github        = "github"
+    Gitlab        = "gitlab"
+    Google        = "google"
+    Kakao         = "kakao"
+    Keycloak      = "keycloak"
+    Linkedin      = "linkedin"
+    Linkedin_oidc = "linkedin_oidc"
+    Notion        = "notion"
+    Slack         = "slack"
+    Slack_oidc    = "slack_oidc"
+    Spotify       = "spotify"
+    Twitch        = "twitch"
+    Twitter       = "twitter"
+    Workos        = "workos"
+
+
+class EmailOtpType(StrEnum):
+    Signup       = "signup"
+    Invite       = "invite"
+    Magiclink    = "magiclink"
+    Recovery     = "recovery"
+    Email_change = "email_change"
+    Email        = "email"
+
 
 AuthChangeEventMFA = Literal["MFA_CHALLENGE_VERIFIED"]
 
-AuthFlowType = Literal["pkce", "implicit"]
 
-AuthChangeEvent = Literal[
-    "PASSWORD_RECOVERY",
-    "SIGNED_IN",
-    "SIGNED_OUT",
-    "TOKEN_REFRESHED",
-    "USER_UPDATED",
-    "USER_DELETED",
-    AuthChangeEventMFA,
-]
+class AuthFlowType(StrEnum):
+    Pkce     = "pkce"
+    Implicit = "implicit"
+
+
+class AuthChangeEvent(StrEnum):
+    Password_Recovery  = "PASSWORD_RECOVERY"
+    Signed_in          = "SIGNED_IN"
+    Signed_out         = "SIGNED_OUT"
+    Token_refreshed    = "TOKEN_REFRESHED"
+    User_updated       = "USER_UPDATED"
+    User_deleted       = "USER_DELETED"
+    AuthChangeEventMFA = AuthChangeEventMFA
 
 
 class AMREntry(BaseModel):
@@ -510,14 +525,13 @@ GenerateLinkParams = Union[
     GenerateEmailChangeLinkParams,
 ]
 
-GenerateLinkType = Literal[
-    "signup",
-    "invite",
-    "magiclink",
-    "recovery",
-    "email_change_current",
-    "email_change_new",
-]
+
+class GenerateLinkType(StrEnum):
+    Signup             = "signup"
+    Invite             = "invite"
+    Magiclink          = "magiclink"
+    Recovery           = "recovery"
+    EmailChangeCurrent = "email_change_current"
 
 
 class MFAEnrollParams(TypedDict):
@@ -782,7 +796,10 @@ class DecodedJWTDict(TypedDict):
     amr: NotRequired[Optional[List[AMREntry]]]
 
 
-SignOutScope = Literal["global", "local", "others"]
+class SignOutScope(StrEnum):
+    Global = "global"
+    Local  = "local"
+    Others = "others"
 
 
 class SignOutOptions(TypedDict):
