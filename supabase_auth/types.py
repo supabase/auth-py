@@ -48,6 +48,7 @@ class Provider(StrEnum):
     Twitch = "twitch"
     Twitter = "twitter"
     Workos = "workos"
+    Zoom = "zoom"
 
 
 class EmailOtpType(StrEnum):
@@ -531,6 +532,7 @@ class GenerateLinkType(StrEnum):
     Magiclink = "magiclink"
     Recovery = "recovery"
     EmailChangeCurrent = "email_change_current"
+    EmailChangeNew = "email_change_new"
 
 
 class MFAEnrollParams(TypedDict):
