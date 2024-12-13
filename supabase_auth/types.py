@@ -32,7 +32,7 @@ class Provider(StrEnum):
     Bitbucket = "bitbucket"
     Discord = "discord"
     Facebook = "facebook"
-    Figman = "figma"
+    Figma = "figma"
     Fly = "fly"
     Github = "github"
     Gitlab = "gitlab"
