@@ -70,6 +70,22 @@ ErrorCode = Literal[
     "over_email_send_rate_limit",
     "over_sms_send_rate_limit",
     "bad_code_verifier",
+    "anonymous_provider_disabled",
+    "hook_timeout",
+    "hook_timeout_after_retry",
+    "hook_payload_over_size_limit",
+    "hook_payload_invalid_content_type",
+    "request_timeout",
+    "mfa_phone_enroll_not_enabled",
+    "mfa_phone_verify_not_enabled",
+    "mfa_totp_enroll_not_enabled",
+    "mfa_totp_verify_not_enabled",
+    "mfa_webauthn_enroll_not_enabled",
+    "mfa_webauthn_verify_not_enabled",
+    "mfa_verified_factor_exists",
+    "invalid_credentials",
+    "email_address_not_authorized",
+    "email_address_invalid",
 ]
 
 
