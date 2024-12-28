@@ -28,6 +28,7 @@ class Timer:
             self._task.add_done_callback(cleanup)
         else:
             self._timer = _Timer(self._milliseconds / 1000, self._function)
+            self._timer.daemon = True
             self._timer.start()
 
     def cancel(self) -> None:
