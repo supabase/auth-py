@@ -33,12 +33,15 @@ jobs:
           poetry-version: 1.8.4
       - name: Run Tests
         run: make run_tests
-      - name: Upload Coverage
-        uses: codecov/codecov-action@v5
       - name: Run Tests with pydantic v1
         run: |
           pip install pydantic==1.10.12
           make tests_only
+      - name: Upload coverage to Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
   release-please:
     needs: test
     if: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' && github.repository_owner == 'supabase' }}
