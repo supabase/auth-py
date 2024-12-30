@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## [2.11.1](https://github.com/supabase/auth-py/compare/v2.11.0...v2.11.1) (2024-12-30)
+
+
+### Bug Fixes
+
+* add email_address_invalid error code ([#644](https://github.com/supabase/auth-py/issues/644)) ([4926bd5](https://github.com/supabase/auth-py/commit/4926bd51cb616d7c974f7c6ad34471f2d38c3c88))
+* set timer to be use daemon thread ([#647](https://github.com/supabase/auth-py/issues/647)) ([98de380](https://github.com/supabase/auth-py/commit/98de380bf5b90e594ef6560267d2c14a6001e3da))
+
 ## [2.11.0](https://github.com/supabase/auth-py/compare/v2.10.0...v2.11.0) (2024-11-22)
 
 
