@@ -1,4 +1,4 @@
-from supabase_auth.errors import AuthError
+from supabase_auth.errors import AuthError, AuthApiError, AuthWeakPasswordError
 
 from .clients import (
     auth_client_with_session,
@@ -158,6 +158,31 @@ def test_modify_confirm_email_using_update_user_by_id():
         },
     )
     assert response.user.confirmed_at
+
+
+def test_invalid_credential_sign_in():
+    try:
+        client_api_auto_confirm_off_signups_enabled_client().sign_in_with_password(
+            {
+                "email": "unknown_user@unknowndomain.com",
+                "password": "strong_pwd",
+            }
+        )
+    except AuthApiError as e:
+        assert e.to_dict()
+
+
+def test_weak_password_error():
+    credentials = mock_user_credentials()
+    try:
+        client_api_auto_confirm_off_signups_enabled_client().sign_up(
+            {
+                "email": credentials.get("email"),
+                "password": "123",
+            }
+        )
+    except AuthWeakPasswordError as e:
+        assert e.to_dict()
 
 
 def test_delete_user_should_be_able_delete_an_existing_user():
