@@ -7,7 +7,14 @@ from httpx import Headers, Response
 
 from supabase_auth.constants import API_VERSION_HEADER_NAME
 from supabase_auth.errors import AuthApiError, AuthWeakPasswordError
-from supabase_auth.helpers import parse_response_api_version
+from supabase_auth.helpers import (
+    decode_jwt_payload,
+    get_error_code,
+    parse_link_identity_response,
+    parse_response_api_version,
+)
+
+from ._sync.utils import mock_access_token
 
 TEST_URL = f"http://localhost"
 
@@ -90,3 +97,22 @@ def test_parse_response_api_version_with_invalid_dates():
         response = Response(headers=headers, status_code=200)
         api_ver = parse_response_api_version(response)
         assert api_ver == None
+
+
+def test_parse_link_identity_response():
+    assert parse_link_identity_response({"url": f"{TEST_URL}/hello-world"})
+
+
+def test_get_error_code():
+    assert get_error_code({}) == None
+    assert get_error_code({"error_code": "500"}) == "500"
+
+
+def test_decode_jwt_payload():
+    assert decode_jwt_payload(mock_access_token())
+
+    with pytest.raises(
+        ValueError, match=r"JWT is not valid: not a JWT structure"
+    ) as exc:
+        decode_jwt_payload("non-valid-jwt")
+    assert exc.value is not None
