@@ -1,3 +1,5 @@
+import pytest
+
 from supabase_auth.errors import (
     AuthApiError,
     AuthError,
@@ -398,3 +400,44 @@ async def test_verify_otp_with_invalid_phone_number():
         assert False
     except AuthError as e:
         assert e.message == "Invalid phone number format (E.164 required)"
+
+
+async def test_sign_in_with_id_token():
+    try:
+        await client_api_auto_confirm_off_signups_enabled_client().sign_in_with_id_token(
+            {
+                "provider": "google",
+                "token": "123456",
+            }
+        )
+    except AuthApiError as e:
+        assert e.to_dict()
+
+
+async def test_sign_in_with_sso():
+    assert await client_api_auto_confirm_off_signups_enabled_client().sign_in_with_sso(
+        {
+            "domain": "google",
+        }
+    )
+
+
+async def test_sign_in_with_oauth():
+    assert (
+        await client_api_auto_confirm_off_signups_enabled_client().sign_in_with_oauth(
+            {
+                "provider": "google",
+            }
+        )
+    )
+
+
+async def test_link_identity_missing_session():
+
+    with pytest.raises(AuthSessionMissingError) as exc:
+        await client_api_auto_confirm_off_signups_enabled_client().link_identity(
+            {
+                "provider": "google",
+            }
+        )
+    assert exc.value is not None
