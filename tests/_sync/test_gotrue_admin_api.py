@@ -1,4 +1,4 @@
-from supabase_auth.errors import AuthApiError, AuthError, AuthWeakPasswordError
+from supabase_auth.errors import AuthApiError, AuthError
 
 from .clients import (
     auth_client_with_session,
