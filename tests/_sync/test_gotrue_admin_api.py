@@ -440,7 +440,7 @@ def test_sign_in_with_id_token():
 
 def test_get_item_from_memory_storage():
     credentials = mock_user_credentials()
-    client = auth_client()
+    client = auth_client_with_session()
     client.sign_up(
         {
             "email": credentials.get("email"),
@@ -459,7 +459,7 @@ def test_get_item_from_memory_storage():
 
 def test_remove_item_from_memory_storage():
     credentials = mock_user_credentials()
-    client = auth_client()
+    client = auth_client_with_session()
     client.sign_up(
         {
             "email": credentials.get("email"),
