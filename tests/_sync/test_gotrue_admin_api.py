@@ -3,7 +3,6 @@ from supabase_auth.errors import (
     AuthError,
     AuthInvalidCredentialsError,
     AuthSessionMissingError,
-    AuthWeakPasswordError,
 )
 
 from .clients import (
