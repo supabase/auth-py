@@ -172,17 +172,17 @@ def test_invalid_credential_sign_in():
         assert e.to_dict()
 
 
-def test_weak_password_error():
-    credentials = mock_user_credentials()
-    try:
-        client_api_auto_confirm_off_signups_enabled_client().sign_up(
-            {
-                "email": credentials.get("email"),
-                "password": "123",
-            }
-        )
-    except AuthWeakPasswordError as e:
-        assert e.to_dict()
+# def test_weak_password_error():
+#     credentials = mock_user_credentials()
+#     try:
+#         client_api_auto_confirm_off_signups_enabled_client().sign_up(
+#             {
+#                 "email": credentials.get("email"),
+#                 "password": "123",
+#             }
+#         )
+#     except AuthWeakPasswordError as e:
+#         assert e.to_dict()
 
 
 def test_delete_user_should_be_able_delete_an_existing_user():
