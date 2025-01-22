@@ -1,4 +1,10 @@
-from supabase_auth.errors import AuthApiError, AuthError
+from supabase_auth.errors import (
+    AuthApiError,
+    AuthError,
+    AuthInvalidCredentialsError,
+    AuthSessionMissingError,
+    AuthWeakPasswordError,
+)
 
 from .clients import (
     auth_client_with_session,
@@ -160,7 +166,19 @@ def test_modify_confirm_email_using_update_user_by_id():
     assert response.user.email_confirmed_at
 
 
-def test_invalid_credential_sign_in():
+def test_invalid_credential_sign_in_with_phone():
+    try:
+        client_api_auto_confirm_off_signups_enabled_client().sign_in_with_password(
+            {
+                "phone": "+123456789",
+                "password": "strong_pwd",
+            }
+        )
+    except AuthApiError as e:
+        assert e.to_dict()
+
+
+def test_invalid_credential_sign_in_with_email():
     try:
         client_api_auto_confirm_off_signups_enabled_client().sign_in_with_password(
             {
@@ -172,7 +190,71 @@ def test_invalid_credential_sign_in():
         assert e.to_dict()
 
 
-# def test_weak_password_error():
+def test_sign_in_with_otp_email():
+    try:
+        client_api_auto_confirm_off_signups_enabled_client().sign_in_with_otp(
+            {
+                "email": "unknown_user@unknowndomain.com",
+            }
+        )
+    except AuthApiError as e:
+        assert e.to_dict()
+
+
+def test_sign_in_with_otp_phone():
+    try:
+        client_api_auto_confirm_off_signups_enabled_client().sign_in_with_otp(
+            {
+                "phone": "+112345678",
+            }
+        )
+    except AuthApiError as e:
+        assert e.to_dict()
+
+
+def test_resend():
+    try:
+        client_api_auto_confirm_off_signups_enabled_client().resend(
+            {"phone": "+112345678", "type": "sms"}
+        )
+    except AuthApiError as e:
+        assert e.to_dict()
+
+
+def test_reauthenticate():
+    try:
+        response = auth_client_with_session().reauthenticate()
+    except AuthSessionMissingError:
+        pass
+
+
+def test_refresh_session():
+    try:
+        response = auth_client_with_session().refresh_session()
+    except AuthSessionMissingError:
+        pass
+
+
+def test_reset_password_for_email():
+    credentials = mock_user_credentials()
+    try:
+        response = auth_client_with_session().reset_password_email(
+            email=credentials.get("email")
+        )
+    except AuthSessionMissingError:
+        pass
+
+
+def test_resend_missing_credentials():
+    try:
+        client_api_auto_confirm_off_signups_enabled_client().resend(
+            {"type": "email_change"}
+        )
+    except AuthInvalidCredentialsError as e:
+        assert e.to_dict()
+
+
+# def test_weak_email_password_error():
 #     credentials = mock_user_credentials()
 #     try:
 #         client_api_auto_confirm_off_signups_enabled_client().sign_up(
@@ -183,6 +265,27 @@ def test_invalid_credential_sign_in():
 #         )
 #     except AuthWeakPasswordError as e:
 #         assert e.to_dict()
+
+
+def test_weak_phone_password_error():
+    credentials = mock_user_credentials()
+    try:
+        client_api_auto_confirm_off_signups_enabled_client().sign_up(
+            {
+                "phone": credentials.get("phone"),
+                "password": "123",
+            }
+        )
+    except AuthWeakPasswordError as e:
+        assert e.to_dict()
+
+
+def test_sign_in_anonymously():
+    try:
+        response = auth_client_with_session().sign_in_anonymously()
+        assert response
+    except AuthApiError:
+        pass
 
 
 def test_delete_user_should_be_able_delete_an_existing_user():
