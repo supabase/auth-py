@@ -1,3 +1,5 @@
+import pytest
+
 from supabase_auth.errors import (
     AuthApiError,
     AuthError,
@@ -13,6 +15,7 @@ from .clients import (
 )
 from .utils import (
     create_new_user_with_email,
+    mock_access_token,
     mock_app_metadata,
     mock_user_credentials,
     mock_user_metadata,
@@ -398,3 +401,26 @@ def test_verify_otp_with_invalid_phone_number():
         assert False
     except AuthError as e:
         assert e.message == "Invalid phone number format (E.164 required)"
+
+
+def test_sign_in_with_oauth():
+    assert client_api_auto_confirm_off_signups_enabled_client().sign_in_with_oauth(
+        {
+            "provider": "google",
+        }
+    )
+
+
+def test_decode_jwt():
+    assert auth_client_with_session()._decode_jwt(mock_access_token())
+
+
+def test_link_identity_missing_session():
+
+    with pytest.raises(AuthSessionMissingError) as exc:
+        client_api_auto_confirm_off_signups_enabled_client().link_identity(
+            {
+                "provider": "google",
+            }
+        )
+    assert exc.value is not None
