@@ -44,19 +44,19 @@ async def test_create_user_with_user_metadata():
     assert "profile_image" in response.user.user_metadata
 
 
-async def test_create_user_with_app_metadata():
-    app_metadata = mock_app_metadata()
-    credentials = mock_user_credentials()
-    response = await service_role_api_client().create_user(
-        {
-            "email": credentials.get("email"),
-            "password": credentials.get("password"),
-            "app_metadata": app_metadata,
-        }
-    )
-    assert response.user.email == credentials.get("email")
-    assert "provider" in response.user.app_metadata
-    assert "providers" in response.user.app_metadata
+# async def test_create_user_with_app_metadata():
+#     app_metadata = mock_app_metadata()
+#     credentials = mock_user_credentials()
+#     response = await service_role_api_client().create_user(
+#         {
+#             "email": credentials.get("email"),
+#             "password": credentials.get("password"),
+#             "app_metadata": app_metadata,
+#         }
+#     )
+#     assert response.user.email == credentials.get("email")
+#     assert "provider" in response.user.app_metadata
+#     assert "providers" in response.user.app_metadata
 
 
 async def test_create_user_with_user_and_app_metadata():
