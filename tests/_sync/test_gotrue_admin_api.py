@@ -476,3 +476,24 @@ def test_remove_item_from_memory_storage():
     )
     client._storage.remove_item(client._storage_key)
     assert client._storage_key not in client._storage.storage
+
+
+def test_list_factors():
+    credentials = mock_user_credentials()
+    client = auth_client()
+    client.sign_up(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+        }
+    )
+
+    client.sign_in_with_password(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+        }
+    )
+    factors = client._list_factors()
+    assert factors
+    assert isinstance(factors.totp, list) and isinstance(factors.phone, list)
