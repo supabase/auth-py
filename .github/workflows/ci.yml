@@ -38,6 +38,7 @@ jobs:
           pip install pydantic==1.10.12
           make tests_only
       - name: Upload coverage to Coveralls
+        if: ${{ matrix.python-version }} == "3.12"
         uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
