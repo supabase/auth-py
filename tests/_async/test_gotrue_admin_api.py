@@ -8,6 +8,7 @@ from supabase_auth.errors import (
 )
 
 from .clients import (
+    auth_client,
     auth_client_with_session,
     client_api_auto_confirm_disabled_client,
     client_api_auto_confirm_off_signups_enabled_client,
@@ -441,3 +442,42 @@ async def test_link_identity_missing_session():
             }
         )
     assert exc.value is not None
+
+
+async def test_get_item_from_memory_storage():
+    credentials = mock_user_credentials()
+    client = auth_client()
+    await client.sign_up(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+        }
+    )
+
+    await client.sign_in_with_password(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+        }
+    )
+    assert await client._storage.get_item(client._storage_key) is not None
+
+
+async def test_remove_item_from_memory_storage():
+    credentials = mock_user_credentials()
+    client = auth_client()
+    await client.sign_up(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+        }
+    )
+
+    await client.sign_in_with_password(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+        }
+    )
+    await client._storage.remove_item(client._storage_key)
+    assert client._storage_key not in client._storage.storage
