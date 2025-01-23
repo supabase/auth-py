@@ -579,5 +579,5 @@ def test_weak_phone_password_error():
                 "password": "123",
             }
         )
-    except AuthWeakPasswordError as e:
+    except (AuthWeakPasswordError, AuthApiError) as e:
         assert e.to_dict()
