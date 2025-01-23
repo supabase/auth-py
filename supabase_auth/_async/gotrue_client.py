@@ -361,7 +361,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         skip_http_redirect = options.get("skip_http_redirect", True)
 
         if domain:
-            return self._request(
+            return await self._request(
                 "POST",
                 "sso",
                 body={
@@ -375,7 +375,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
                 xform=parse_sso_response,
             )
         if provider_id:
-            return self._request(
+            return await self._request(
                 "POST",
                 "sso",
                 body={
