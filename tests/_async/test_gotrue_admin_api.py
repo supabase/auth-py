@@ -44,21 +44,6 @@ async def test_create_user_with_user_metadata():
     assert "profile_image" in response.user.user_metadata
 
 
-# async def test_create_user_with_app_metadata():
-#     app_metadata = mock_app_metadata()
-#     credentials = mock_user_credentials()
-#     response = await service_role_api_client().create_user(
-#         {
-#             "email": credentials.get("email"),
-#             "password": credentials.get("password"),
-#             "app_metadata": app_metadata,
-#         }
-#     )
-#     assert response.user.email == credentials.get("email")
-#     assert "provider" in response.user.app_metadata
-#     assert "providers" in response.user.app_metadata
-
-
 async def test_create_user_with_user_and_app_metadata():
     user_metadata = mock_user_metadata()
     app_metadata = mock_app_metadata()
@@ -254,32 +239,6 @@ async def test_resend_missing_credentials():
         )
     except AuthInvalidCredentialsError as e:
         assert e.to_dict()
-
-
-# async def test_weak_email_password_error():
-#     credentials = mock_user_credentials()
-#     try:
-#         await client_api_auto_confirm_off_signups_enabled_client().sign_up(
-#             {
-#                 "email": credentials.get("email"),
-#                 "password": "123",
-#             }
-#         )
-#     except AuthWeakPasswordError as e:
-#         assert e.to_dict()
-
-
-# async def test_weak_phone_password_error():
-#     credentials = mock_user_credentials()
-#     try:
-#         await client_api_auto_confirm_off_signups_enabled_client().sign_up(
-#             {
-#                 "phone": credentials.get("phone"),
-#                 "password": "123",
-#             }
-#         )
-#     except AuthWeakPasswordError as e:
-#         assert e.to_dict()
 
 
 async def test_sign_in_anonymously():
@@ -587,3 +546,44 @@ async def test_update_user():
             "password": "123e5a",
         }
     )
+
+
+# async def test_create_user_with_app_metadata():
+#     app_metadata = mock_app_metadata()
+#     credentials = mock_user_credentials()
+#     response = await service_role_api_client().create_user(
+#         {
+#             "email": credentials.get("email"),
+#             "password": credentials.get("password"),
+#             "app_metadata": app_metadata,
+#         }
+#     )
+#     assert response.user.email == credentials.get("email")
+#     assert "provider" in response.user.app_metadata
+#     assert "providers" in response.user.app_metadata
+
+
+# async def test_weak_email_password_error():
+#     credentials = mock_user_credentials()
+#     try:
+#         await client_api_auto_confirm_off_signups_enabled_client().sign_up(
+#             {
+#                 "email": credentials.get("email"),
+#                 "password": "123",
+#             }
+#         )
+#     except AuthWeakPasswordError as e:
+#         assert e.to_dict()
+
+
+# async def test_weak_phone_password_error():
+#     credentials = mock_user_credentials()
+#     try:
+#         await client_api_auto_confirm_off_signups_enabled_client().sign_up(
+#             {
+#                 "phone": credentials.get("phone"),
+#                 "password": "123",
+#             }
+#         )
+#     except AuthWeakPasswordError as e:
+#         assert e.to_dict()
