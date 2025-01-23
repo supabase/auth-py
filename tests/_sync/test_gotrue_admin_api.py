@@ -518,3 +518,65 @@ def test_start_auto_refresh_token():
     )
 
     assert client._start_auto_refresh_token(2.0) is None
+
+
+def test_recover_and_refresh():
+    credentials = mock_user_credentials()
+    client = auth_client()
+    client._auto_refresh_token = True
+    client.sign_up(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+        }
+    )
+
+    client.sign_in_with_password(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+        }
+    )
+    client._recover_and_refresh()
+    assert client._storage_key in client._storage.storage
+
+
+def test_get_user_identities():
+    credentials = mock_user_credentials()
+    client = auth_client()
+    client._auto_refresh_token = True
+    client.sign_up(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+        }
+    )
+
+    client.sign_in_with_password(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+        }
+    )
+    assert client.get_user_identities().identities[0].identity_data[
+        "email"
+    ] == credentials.get("email")
+
+
+def test_update_user():
+    credentials = mock_user_credentials()
+    client = auth_client()
+    client._auto_refresh_token = True
+    client.sign_up(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+        }
+    )
+    client.update_user({"password": "123e5a"})
+    client.sign_in_with_password(
+        {
+            "email": credentials.get("email"),
+            "password": "123e5a",
+        }
+    )
