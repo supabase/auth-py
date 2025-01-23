@@ -569,14 +569,14 @@ def test_update_user():
 #         assert e.to_dict()
 
 
-# def test_weak_phone_password_error():
-#     credentials = mock_user_credentials()
-#     try:
-#         client_api_auto_confirm_off_signups_enabled_client().sign_up(
-#             {
-#                 "phone": credentials.get("phone"),
-#                 "password": "123",
-#             }
-#         )
-#     except AuthWeakPasswordError as e:
-#         assert e.to_dict()
+def test_weak_phone_password_error():
+    credentials = mock_user_credentials()
+    try:
+        client_api_auto_confirm_off_signups_enabled_client().sign_up(
+            {
+                "phone": credentials.get("phone"),
+                "password": "123",
+            }
+        )
+    except AuthWeakPasswordError as e:
+        assert e.to_dict()
