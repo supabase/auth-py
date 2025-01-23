@@ -523,3 +523,65 @@ async def test_start_auto_refresh_token():
     )
 
     assert await client._start_auto_refresh_token(2.0) is None
+
+
+async def test_recover_and_refresh():
+    credentials = mock_user_credentials()
+    client = auth_client()
+    client._auto_refresh_token = True
+    await client.sign_up(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+        }
+    )
+
+    await client.sign_in_with_password(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+        }
+    )
+    await client._recover_and_refresh()
+    assert client._storage_key in client._storage.storage
+
+
+async def test_get_user_identities():
+    credentials = mock_user_credentials()
+    client = auth_client()
+    client._auto_refresh_token = True
+    await client.sign_up(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+        }
+    )
+
+    await client.sign_in_with_password(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+        }
+    )
+    assert (await client.get_user_identities()).identities[0].identity_data[
+        "email"
+    ] == credentials.get("email")
+
+
+async def test_update_user():
+    credentials = mock_user_credentials()
+    client = auth_client()
+    client._auto_refresh_token = True
+    await client.sign_up(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+        }
+    )
+    await client.update_user({"password": "123e5a"})
+    await client.sign_in_with_password(
+        {
+            "email": credentials.get("email"),
+            "password": "123e5a",
+        }
+    )
