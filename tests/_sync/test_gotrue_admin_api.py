@@ -497,3 +497,24 @@ def test_list_factors():
     factors = client._list_factors()
     assert factors
     assert isinstance(factors.totp, list) and isinstance(factors.phone, list)
+
+
+def test_start_auto_refresh_token():
+    credentials = mock_user_credentials()
+    client = auth_client()
+    client._auto_refresh_token = True
+    client.sign_up(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+        }
+    )
+
+    client.sign_in_with_password(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+        }
+    )
+
+    assert client._start_auto_refresh_token(2.0) is None
