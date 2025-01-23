@@ -416,11 +416,13 @@ async def test_sign_in_with_id_token():
 
 
 async def test_sign_in_with_sso():
-    assert await client_api_auto_confirm_off_signups_enabled_client().sign_in_with_sso(
-        {
-            "domain": "google",
-        }
-    )
+    with pytest.raises(AuthApiError, match=r"SAML 2.0 is disabled") as exc:
+        await client_api_auto_confirm_off_signups_enabled_client().sign_in_with_sso(
+            {
+                "domain": "google",
+            }
+        )
+    assert exc.value is not None
 
 
 async def test_sign_in_with_oauth():
