@@ -502,3 +502,24 @@ async def test_list_factors():
     factors = await client._list_factors()
     assert factors
     assert isinstance(factors.totp, list) and isinstance(factors.phone, list)
+
+
+async def test_start_auto_refresh_token():
+    credentials = mock_user_credentials()
+    client = auth_client()
+    client._auto_refresh_token = True
+    await client.sign_up(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+        }
+    )
+
+    await client.sign_in_with_password(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+        }
+    )
+
+    assert await client._start_auto_refresh_token(2.0) is None
