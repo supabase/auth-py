@@ -9,7 +9,10 @@ from supabase_auth.constants import API_VERSION_HEADER_NAME
 from supabase_auth.errors import AuthApiError, AuthWeakPasswordError
 from supabase_auth.helpers import (
     decode_jwt_payload,
+    generate_pkce_challenge,
+    generate_pkce_verifier,
     get_error_code,
+    is_valid_jwt,
     parse_link_identity_response,
     parse_response_api_version,
 )
@@ -116,3 +119,25 @@ def test_decode_jwt_payload():
     ) as exc:
         decode_jwt_payload("non-valid-jwt")
     assert exc.value is not None
+
+
+def test_generate_pkce_verifier():
+    assert isinstance(generate_pkce_verifier(45), str)
+    with pytest.raises(
+        ValueError, match=r"PKCE verifier length must be between 43 and 128 characters"
+    ) as exc:
+        generate_pkce_verifier(42)
+    assert exc.value is not None
+
+
+def test_generate_pkce_challenge():
+    pkce = generate_pkce_verifier(45)
+    assert isinstance(generate_pkce_challenge(pkce), str)
+
+
+def test_is_valid_jwt():
+    jwt = mock_access_token()
+    assert not is_valid_jwt(1)
+    assert not is_valid_jwt("")
+    assert not is_valid_jwt("Bearer       ")
+    assert is_valid_jwt(jwt)
