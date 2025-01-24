@@ -410,8 +410,10 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
             params["redirect_to"] = redirect_to
         if scopes:
             params["scopes"] = scopes
-        url = self._get_url_for_provider(f"{self._url}/authorize", provider, params)
-        return OAuthResponse(provider=provider, url=url)
+        url_with_qs, _ = self._get_url_for_provider(
+            f"{self._url}/authorize", provider, params
+        )
+        return OAuthResponse(provider=provider, url=url_with_qs)
 
     def link_identity(self, credentials: SignInWithOAuthCredentials) -> OAuthResponse:
         provider = credentials.get("provider")
@@ -424,7 +426,8 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         if scopes:
             params["scopes"] = scopes
         params["skip_http_redirect"] = "true"
-        url = self._get_url_for_provider("user/identities/authorize", provider, params)
+        url = "user/identities/authorize"
+        _, query = self._get_url_for_provider(url, provider, params)
 
         session = self.get_session()
         if not session:
@@ -433,6 +436,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         response = self._request(
             method="GET",
             path=url,
+            query=query,
             jwt=session.access_token,
             xform=parse_link_identity_response,
         )
@@ -1101,7 +1105,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         url: str,
         provider: Provider,
         params: Dict[str, str],
-    ) -> str:
+    ) -> Tuple[str, Dict[str, str]]:
         if self._flow_type == "pkce":
             code_verifier = generate_pkce_verifier()
             code_challenge = generate_pkce_challenge(code_verifier)
@@ -1114,7 +1118,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
 
         params["provider"] = provider
         query = urlencode(params)
-        return f"{url}?{query}"
+        return f"{url}?{query}", params
 
     def _decode_jwt(self, jwt: str) -> DecodedJWTDict:
         """
@@ -1128,7 +1132,8 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         )
         response = self._request(
             "POST",
-            "token?grant_type=pkce",
+            "token",
+            query={"grant_type": "pkce"},
             body={
                 "auth_code": params.get("auth_code"),
                 "code_verifier": code_verifier,
