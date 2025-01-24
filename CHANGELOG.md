@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## [2.11.2](https://github.com/supabase/auth-py/compare/v2.11.1...v2.11.2) (2025-01-24)
+
+
+### Bug Fixes
+
+* use query params for all httpx requests ([#662](https://github.com/supabase/auth-py/issues/662)) ([a7a9cea](https://github.com/supabase/auth-py/commit/a7a9cea1ceab302aabd07610244a54ce84221006))
+
 ## [2.11.1](https://github.com/supabase/auth-py/compare/v2.11.0...v2.11.1) (2024-12-30)
 
 
