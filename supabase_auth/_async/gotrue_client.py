@@ -410,10 +410,10 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
             params["redirect_to"] = redirect_to
         if scopes:
             params["scopes"] = scopes
-        url = await self._get_url_for_provider(
+        url_with_qs, _ = await self._get_url_for_provider(
             f"{self._url}/authorize", provider, params
         )
-        return OAuthResponse(provider=provider, url=url)
+        return OAuthResponse(provider=provider, url=url_with_qs)
 
     async def link_identity(
         self, credentials: SignInWithOAuthCredentials
@@ -428,9 +428,8 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         if scopes:
             params["scopes"] = scopes
         params["skip_http_redirect"] = "true"
-        url = await self._get_url_for_provider(
-            "user/identities/authorize", provider, params
-        )
+        url = "user/identities/authorize"
+        _, query = await self._get_url_for_provider(url, provider, params)
 
         session = await self.get_session()
         if not session:
@@ -439,6 +438,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         response = await self._request(
             method="GET",
             path=url,
+            query=query,
             jwt=session.access_token,
             xform=parse_link_identity_response,
         )
@@ -1109,7 +1109,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         url: str,
         provider: Provider,
         params: Dict[str, str],
-    ) -> str:
+    ) -> Tuple[str, Dict[str, str]]:
         if self._flow_type == "pkce":
             code_verifier = generate_pkce_verifier()
             code_challenge = generate_pkce_challenge(code_verifier)
@@ -1124,7 +1124,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
 
         params["provider"] = provider
         query = urlencode(params)
-        return f"{url}?{query}"
+        return f"{url}?{query}", params
 
     def _decode_jwt(self, jwt: str) -> DecodedJWTDict:
         """
@@ -1138,7 +1138,8 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         )
         response = await self._request(
             "POST",
-            "token?grant_type=pkce",
+            "token",
+            query={"grant_type": "pkce"},
             body={
                 "auth_code": params.get("auth_code"),
                 "code_verifier": code_verifier,
