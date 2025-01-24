@@ -1,6 +1,15 @@
-from supabase_auth.errors import AuthError
+import pytest
+
+from supabase_auth.errors import (
+    AuthApiError,
+    AuthError,
+    AuthInvalidCredentialsError,
+    AuthSessionMissingError,
+    AuthWeakPasswordError,
+)
 
 from .clients import (
+    auth_client,
     auth_client_with_session,
     client_api_auto_confirm_disabled_client,
     client_api_auto_confirm_off_signups_enabled_client,
@@ -8,6 +17,7 @@ from .clients import (
 )
 from .utils import (
     create_new_user_with_email,
+    mock_access_token,
     mock_app_metadata,
     mock_user_credentials,
     mock_user_metadata,
@@ -19,21 +29,6 @@ def test_create_user_should_create_a_new_user():
     credentials = mock_user_credentials()
     response = create_new_user_with_email(email=credentials.get("email"))
     assert response.email == credentials.get("email")
-
-
-def test_create_user_with_user_metadata():
-    user_metadata = mock_user_metadata()
-    credentials = mock_user_credentials()
-    response = service_role_api_client().create_user(
-        {
-            "email": credentials.get("email"),
-            "password": credentials.get("password"),
-            "user_metadata": user_metadata,
-        }
-    )
-    assert response.user.email == credentials.get("email")
-    assert response.user.user_metadata == user_metadata
-    assert "profile_image" in response.user.user_metadata
 
 
 def test_create_user_with_app_metadata():
@@ -160,6 +155,102 @@ def test_modify_confirm_email_using_update_user_by_id():
     assert response.user.email_confirmed_at
 
 
+def test_invalid_credential_sign_in_with_phone():
+    try:
+        client_api_auto_confirm_off_signups_enabled_client().sign_in_with_password(
+            {
+                "phone": "+123456789",
+                "password": "strong_pwd",
+            }
+        )
+    except AuthApiError as e:
+        assert e.to_dict()
+
+
+def test_invalid_credential_sign_in_with_email():
+    try:
+        client_api_auto_confirm_off_signups_enabled_client().sign_in_with_password(
+            {
+                "email": "unknown_user@unknowndomain.com",
+                "password": "strong_pwd",
+            }
+        )
+    except AuthApiError as e:
+        assert e.to_dict()
+
+
+def test_sign_in_with_otp_email():
+    try:
+        client_api_auto_confirm_off_signups_enabled_client().sign_in_with_otp(
+            {
+                "email": "unknown_user@unknowndomain.com",
+            }
+        )
+    except AuthApiError as e:
+        assert e.to_dict()
+
+
+def test_sign_in_with_otp_phone():
+    try:
+        client_api_auto_confirm_off_signups_enabled_client().sign_in_with_otp(
+            {
+                "phone": "+112345678",
+            }
+        )
+    except AuthApiError as e:
+        assert e.to_dict()
+
+
+def test_resend():
+    try:
+        client_api_auto_confirm_off_signups_enabled_client().resend(
+            {"phone": "+112345678", "type": "sms"}
+        )
+    except AuthApiError as e:
+        assert e.to_dict()
+
+
+def test_reauthenticate():
+    try:
+        response = auth_client_with_session().reauthenticate()
+    except AuthSessionMissingError:
+        pass
+
+
+def test_refresh_session():
+    try:
+        response = auth_client_with_session().refresh_session()
+    except AuthSessionMissingError:
+        pass
+
+
+def test_reset_password_for_email():
+    credentials = mock_user_credentials()
+    try:
+        response = auth_client_with_session().reset_password_email(
+            email=credentials.get("email")
+        )
+    except AuthSessionMissingError:
+        pass
+
+
+def test_resend_missing_credentials():
+    try:
+        client_api_auto_confirm_off_signups_enabled_client().resend(
+            {"type": "email_change"}
+        )
+    except AuthInvalidCredentialsError as e:
+        assert e.to_dict()
+
+
+def test_sign_in_anonymously():
+    try:
+        response = auth_client_with_session().sign_in_anonymously()
+        assert response
+    except AuthApiError:
+        pass
+
+
 def test_delete_user_should_be_able_delete_an_existing_user():
     credentials = mock_user_credentials()
     user = create_new_user_with_email(email=credentials.get("email"))
@@ -271,3 +362,222 @@ def test_verify_otp_with_invalid_phone_number():
         assert False
     except AuthError as e:
         assert e.message == "Invalid phone number format (E.164 required)"
+
+
+def test_sign_in_with_oauth():
+    assert client_api_auto_confirm_off_signups_enabled_client().sign_in_with_oauth(
+        {
+            "provider": "google",
+        }
+    )
+
+
+def test_decode_jwt():
+    assert auth_client_with_session()._decode_jwt(mock_access_token())
+
+
+def test_link_identity_missing_session():
+
+    with pytest.raises(AuthSessionMissingError) as exc:
+        client_api_auto_confirm_off_signups_enabled_client().link_identity(
+            {
+                "provider": "google",
+            }
+        )
+    assert exc.value is not None
+
+
+def test_sign_in_with_id_token():
+    try:
+        client_api_auto_confirm_off_signups_enabled_client().sign_in_with_id_token(
+            {
+                "provider": "google",
+                "token": "123456",
+            }
+        )
+    except AuthApiError as e:
+        assert e.to_dict()
+
+
+def test_get_item_from_memory_storage():
+    credentials = mock_user_credentials()
+    client = auth_client()
+    client.sign_up(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+        }
+    )
+
+    client.sign_in_with_password(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+        }
+    )
+    assert client._storage.get_item(client._storage_key) is not None
+
+
+def test_remove_item_from_memory_storage():
+    credentials = mock_user_credentials()
+    client = auth_client()
+    client.sign_up(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+        }
+    )
+
+    client.sign_in_with_password(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+        }
+    )
+    client._storage.remove_item(client._storage_key)
+    assert client._storage_key not in client._storage.storage
+
+
+def test_list_factors():
+    credentials = mock_user_credentials()
+    client = auth_client()
+    client.sign_up(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+        }
+    )
+
+    client.sign_in_with_password(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+        }
+    )
+    factors = client._list_factors()
+    assert factors
+    assert isinstance(factors.totp, list) and isinstance(factors.phone, list)
+
+
+def test_start_auto_refresh_token():
+    credentials = mock_user_credentials()
+    client = auth_client()
+    client._auto_refresh_token = True
+    client.sign_up(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+        }
+    )
+
+    client.sign_in_with_password(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+        }
+    )
+
+    assert client._start_auto_refresh_token(2.0) is None
+
+
+def test_recover_and_refresh():
+    credentials = mock_user_credentials()
+    client = auth_client()
+    client._auto_refresh_token = True
+    client.sign_up(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+        }
+    )
+
+    client.sign_in_with_password(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+        }
+    )
+    client._recover_and_refresh()
+    assert client._storage_key in client._storage.storage
+
+
+def test_get_user_identities():
+    credentials = mock_user_credentials()
+    client = auth_client()
+    client._auto_refresh_token = True
+    client.sign_up(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+        }
+    )
+
+    client.sign_in_with_password(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+        }
+    )
+    assert client.get_user_identities().identities[0].identity_data[
+        "email"
+    ] == credentials.get("email")
+
+
+def test_update_user():
+    credentials = mock_user_credentials()
+    client = auth_client()
+    client._auto_refresh_token = True
+    client.sign_up(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+        }
+    )
+    client.update_user({"password": "123e5a"})
+    client.sign_in_with_password(
+        {
+            "email": credentials.get("email"),
+            "password": "123e5a",
+        }
+    )
+
+
+def test_create_user_with_user_metadata():
+    user_metadata = mock_user_metadata()
+    credentials = mock_user_credentials()
+    response = service_role_api_client().create_user(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+            "user_metadata": user_metadata,
+        }
+    )
+    assert response.user.email == credentials.get("email")
+    assert response.user.user_metadata == user_metadata
+    assert "profile_image" in response.user.user_metadata
+
+
+def test_weak_email_password_error():
+    credentials = mock_user_credentials()
+    try:
+        client_api_auto_confirm_off_signups_enabled_client().sign_up(
+            {
+                "email": credentials.get("email"),
+                "password": "123",
+            }
+        )
+    except (AuthWeakPasswordError, AuthApiError) as e:
+        assert e.to_dict()
+
+
+def test_weak_phone_password_error():
+    credentials = mock_user_credentials()
+    try:
+        client_api_auto_confirm_off_signups_enabled_client().sign_up(
+            {
+                "phone": credentials.get("phone"),
+                "password": "123",
+            }
+        )
+    except (AuthWeakPasswordError, AuthApiError) as e:
+        assert e.to_dict()

@@ -349,7 +349,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         If you have built an organization-specific login page, you can use the
         organization's SSO Identity Provider UUID directly instead.
         """
-        self._remove_session()
+        await self._remove_session()
         provider_id = credentials.get("provider_id")
         domain = credentials.get("domain")
         options = credentials.get("options", {})
@@ -361,7 +361,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         skip_http_redirect = options.get("skip_http_redirect", True)
 
         if domain:
-            return self._request(
+            return await self._request(
                 "POST",
                 "sso",
                 body={
@@ -375,7 +375,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
                 xform=parse_sso_response,
             )
         if provider_id:
-            return self._request(
+            return await self._request(
                 "POST",
                 "sso",
                 body={
