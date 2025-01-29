@@ -28,9 +28,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Set up Poetry
-        uses: abatilo/actions-poetry@v4
-        with:
-          poetry-version: 1.8.4
+        run: pipx install poetry==1.8.5 --python python${{ matrix.python-version }}
       - name: Run Tests
         run: make run_tests
       - name: Run Tests with pydantic v1
@@ -81,9 +79,7 @@ jobs:
           fetch-depth: 0
 
       - name: Set up Poetry
-        uses: abatilo/actions-poetry@v4
-        with:
-          poetry-version: 1.8.4
+        run: pipx install poetry==1.8.5 --python python3.11
 
       - name: Install dependencies
         run: poetry install
@@ -122,20 +118,7 @@ jobs:
         run: make rename_project
 
       - name: Set up Poetry
-        uses: abatilo/actions-poetry@v4
-        with:
-          poetry-version: 1.8.4
-
-      - name: Setup a local virtual environment (if no poetry.toml file)
-        run: |
-          poetry config virtualenvs.create true --local
-          poetry config virtualenvs.in-project true --local
-
-      - uses: actions/cache@v4
-        name: Define a cache for the virtual environment based on the dependencies lock file
-        with:
-          path: ./.venv
-          key: venv-${{ hashFiles('poetry.lock') }}
+        run: pipx install poetry==1.8.5 --python python3.11
 
       - name: Install the project dependencies
         run: poetry install
