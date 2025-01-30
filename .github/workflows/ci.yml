@@ -28,9 +28,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Set up Poetry
-        uses: abatilo/actions-poetry@v4
-        with:
-          poetry-version: 1.8.4
+        run: pipx install poetry==1.8.5 --python python${{ matrix.python-version }}
       - name: Run Tests
         run: make run_tests
       - name: Run Tests with pydantic v1
@@ -38,10 +36,24 @@ jobs:
           pip install pydantic==1.10.12
           make tests_only
       - name: Upload coverage to Coveralls
-        if: ${{ matrix.python-version }} == "3.12"
         uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          flag-name: run-${{ join(matrix.*, '-') }}
+          parallel: true
+
+  finish_tests:
+    needs: test
+    name: Upload tests coveralls results
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Coveralls Finished
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel-finished: true
+          carryforward: "run-ubuntu-latest-3.9,run-ubuntu-latest-3.10,run-ubuntu-latest-3.11,run-ubuntu-latest-3.12,run-ubuntu-latest-3.13"
 
   release-please:
     needs: test
@@ -81,9 +93,7 @@ jobs:
           fetch-depth: 0
 
       - name: Set up Poetry
-        uses: abatilo/actions-poetry@v4
-        with:
-          poetry-version: 1.8.4
+        run: pipx install poetry==1.8.5 --python python3.11
 
       - name: Install dependencies
         run: poetry install
@@ -122,20 +132,7 @@ jobs:
         run: make rename_project
 
       - name: Set up Poetry
-        uses: abatilo/actions-poetry@v4
-        with:
-          poetry-version: 1.8.4
-
-      - name: Setup a local virtual environment (if no poetry.toml file)
-        run: |
-          poetry config virtualenvs.create true --local
-          poetry config virtualenvs.in-project true --local
-
-      - uses: actions/cache@v4
-        name: Define a cache for the virtual environment based on the dependencies lock file
-        with:
-          path: ./.venv
-          key: venv-${{ hashFiles('poetry.lock') }}
+        run: pipx install poetry==1.8.5 --python python3.11
 
       - name: Install the project dependencies
         run: poetry install
