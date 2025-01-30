@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## [2.11.3](https://github.com/supabase/auth-py/compare/v2.11.2...v2.11.3) (2025-01-30)
+
+
+### Bug Fixes
+
+* move redirect_to into metadata for SSO authentication ([#671](https://github.com/supabase/auth-py/issues/671)) ([6226426](https://github.com/supabase/auth-py/commit/6226426c59449d2cd57765b9dfd199e83089dd8c))
+* sign_out not clearing session when exception raised ([#665](https://github.com/supabase/auth-py/issues/665)) ([81a9d9e](https://github.com/supabase/auth-py/commit/81a9d9e5de91a515766d79a4e0a13d9f89cbfaf4))
+
 ## [2.11.2](https://github.com/supabase/auth-py/compare/v2.11.1...v2.11.2) (2025-01-24)
 
 
