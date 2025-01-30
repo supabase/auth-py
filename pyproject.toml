@@ -27,7 +27,7 @@ isort = "^6.0.0"
 pre-commit = "^4.1.0"
 pytest-cov = "^6.0.0"
 pytest-depends = "^1.0.1"
-pytest-asyncio = "^0.25.2"
+pytest-asyncio = "^0.25.3"
 Faker = "^35.0.0"
 unasync-cli = "^0.0.9"
 
