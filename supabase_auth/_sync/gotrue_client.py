@@ -370,8 +370,8 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
                     "gotrue_meta_security": {
                         "captcha_token": captcha_token,
                     },
+                    "redirect_to": redirect_to,
                 },
-                redirect_to=redirect_to,
                 xform=parse_sso_response,
             )
         if provider_id:
@@ -384,8 +384,8 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
                     "gotrue_meta_security": {
                         "captcha_token": captcha_token,
                     },
+                    "redirect_to": redirect_to,
                 },
-                redirect_to=redirect_to,
                 xform=parse_sso_response,
             )
         raise AuthInvalidCredentialsError(
