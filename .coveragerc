@@ -3,3 +3,5 @@ omit =
     build_sync.py
     conftest.py
     tests/*
+    supabase_auth/_sync/api.py
+    supabase_auth/_sync/client.py
