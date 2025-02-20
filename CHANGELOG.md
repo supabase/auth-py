@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## [2.11.4](https://github.com/supabase/auth-py/compare/v2.11.3...v2.11.4) (2025-02-18)
+
+
+### Bug Fixes
+
+* Remove unused deprecated files ([#675](https://github.com/supabase/auth-py/issues/675)) ([961628a](https://github.com/supabase/auth-py/commit/961628ada82c0ac4476e8cb89553b8502b506d81))
+
 ## [2.11.3](https://github.com/supabase/auth-py/compare/v2.11.2...v2.11.3) (2025-01-30)
 
 
