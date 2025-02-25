@@ -8,16 +8,19 @@ import string
 from base64 import urlsafe_b64decode
 from datetime import datetime
 from json import loads
-from typing import Any, Dict, Optional, Type, TypeVar, cast
+from typing import Any, Callable, Dict, Literal, Optional, Type, TypeVar, cast
 from urllib.parse import urlparse
 
 from httpx import HTTPStatusError, Response
+import jwt
+import jwt.algorithms
 from pydantic import BaseModel
 
 from .constants import API_VERSION_HEADER_NAME, API_VERSIONS
 from .errors import (
     AuthApiError,
     AuthError,
+    AuthInvalidJwtError,
     AuthRetryableError,
     AuthUnknownError,
     AuthWeakPasswordError,
@@ -192,15 +195,38 @@ def handle_exception(exception: Exception) -> AuthError:
         return AuthUnknownError(get_error_message(error), e)
 
 
-def decode_jwt_payload(token: str) -> Any:
-    parts = token.split(".")
-    if len(parts) != 3:
-        raise ValueError("JWT is not valid: not a JWT structure")
-    base64url = parts[1]
+def str_from_base64url(base64url: str) -> str:
     # Addding padding otherwise the following error happens:
     # binascii.Error: Incorrect padding
     base64url_with_padding = base64url + "=" * (-len(base64url) % 4)
-    return loads(urlsafe_b64decode(base64url_with_padding).decode("utf-8"))
+    return urlsafe_b64decode(base64url_with_padding).decode("utf-8")
+
+
+def base64url_to_bytes(base64url: str) -> bytes:
+    # Addding padding otherwise the following error happens:
+    # binascii.Error: Incorrect padding
+    base64url_with_padding = base64url + "=" * (-len(base64url) % 4)
+    return urlsafe_b64decode(base64url_with_padding)
+
+
+def decode_jwt(token: str) -> Dict[str, Any]:
+    parts = token.split(".")
+    if len(parts) != 3:
+        raise AuthInvalidJwtError("Invalid JWT structure")
+
+    # regex check for base64url
+    if not re.match(BASE64URL_REGEX, parts[1]):
+        raise AuthInvalidJwtError("JWT not in base64url format")
+
+    return {
+        "header": loads(str_from_base64url(parts[0])),
+        "payload": loads(str_from_base64url(parts[1])),
+        "signature": base64url_to_bytes(parts[2]),
+        "raw": {
+            "header": parts[0],
+            "payload": parts[1],
+        },
+    }
 
 
 def generate_pkce_verifier(length=64):
@@ -267,3 +293,19 @@ def is_valid_jwt(value: str) -> bool:
             return False
 
     return True
+
+
+def validate_exp(exp: int) -> None:
+    if not exp:
+        raise AuthInvalidJwtError("JWT has no expiration time")
+
+    time_now = datetime.now().timestamp()
+    if exp <= time_now:
+        raise AuthInvalidJwtError("JWT has expired")
+
+
+def get_algorithm(alg: Literal["RS256", "ES256"]) -> jwt.algorithms.Algorithm:
+    if alg == "RS256":
+        return jwt.algorithms.RSAAlgorithm
+    elif alg == "ES256":
+        return jwt.algorithms.ECAlgorithm
