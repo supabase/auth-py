@@ -18,6 +18,7 @@ classifiers = [
 python = "^3.9"
 httpx = {version = ">=0.26,<0.29", extras = ["http2"]}
 pydantic = ">=1.10,<3"
+pyjwt = "^2.10.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^8.3.5"
