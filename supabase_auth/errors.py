@@ -232,5 +232,6 @@ class AuthInvalidJwtError(CustomAuthError):
             self,
             message,
             "AuthInvalidJwtError",
+            400,
             "invalid_jwt",
         )

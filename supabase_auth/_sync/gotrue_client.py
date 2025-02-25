@@ -4,7 +4,7 @@ from contextlib import suppress
 from functools import partial
 from json import loads
 from time import time
-from typing import Callable, Dict, List, Optional, Tuple
+from typing import Any, Callable, Dict, List, Optional, Tuple
 from urllib.parse import parse_qs, urlencode, urlparse
 from uuid import uuid4
 
@@ -20,11 +20,12 @@ from ..errors import (
     AuthApiError,
     AuthImplicitGrantRedirectError,
     AuthInvalidCredentialsError,
+    AuthInvalidJwtError,
     AuthRetryableError,
     AuthSessionMissingError,
 )
 from ..helpers import (
-    decode_jwt_payload,
+    decode_jwt,
     generate_pkce_challenge,
     generate_pkce_verifier,
     model_dump,
@@ -39,6 +40,8 @@ from ..helpers import (
 from ..http_clients import SyncClient
 from ..timer import Timer
 from ..types import (
+    JWK,
+    JWKS,
     AuthChangeEvent,
     AuthenticatorAssuranceLevels,
     AuthFlowType,
@@ -106,6 +109,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
             verify=verify,
             proxy=proxy,
         )
+        self._jwks: JWKS = {}
         self._storage_key = storage_key or STORAGE_KEY
         self._auto_refresh_token = auto_refresh_token
         self._persist_session = persist_session
@@ -415,7 +419,9 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         )
         return OAuthResponse(provider=provider, url=url_with_qs)
 
-    def link_identity(self, credentials: SignInWithOAuthCredentials) -> OAuthResponse:
+    def link_identity(
+        self, credentials: SignInWithOAuthCredentials
+    ) -> OAuthResponse:
         provider = credentials.get("provider")
         options = credentials.get("options", {})
         redirect_to = options.get("redirect_to")
@@ -698,7 +704,9 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         self._notify_all_subscribers("TOKEN_REFRESHED", session)
         return AuthResponse(session=session, user=response.user)
 
-    def refresh_session(self, refresh_token: Optional[str] = None) -> AuthResponse:
+    def refresh_session(
+        self, refresh_token: Optional[str] = None
+    ) -> AuthResponse:
         """
         Returns a new session, regardless of expiry status.
 
@@ -1107,7 +1115,9 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         if self._flow_type == "pkce":
             code_verifier = generate_pkce_verifier()
             code_challenge = generate_pkce_challenge(code_verifier)
-            self._storage.set_item(f"{self._storage_key}-code-verifier", code_verifier)
+            self._storage.set_item(
+                f"{self._storage_key}-code-verifier", code_verifier
+            )
             code_challenge_method = (
                 "plain" if code_verifier == code_challenge else "s256"
             )
@@ -1122,7 +1132,8 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         """
         Decodes a JWT (without performing any validation).
         """
-        return decode_jwt_payload(jwt)
+        decoded = decode_jwt(jwt)
+        return decoded["payload"]
 
     def exchange_code_for_session(self, params: CodeExchangeParams):
         code_verifier = params.get("code_verifier") or self._storage.get_item(
@@ -1144,3 +1155,41 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
             self._save_session(response.session)
             self._notify_all_subscribers("SIGNED_IN", response.session)
         return response
+
+    def _fetch_jwks(self, kid: str, jwks: JWKS) -> JWK:
+        # try fetching from the suplied keys.
+        jwk = next((jwk for jwk in jwks["keys"] if jwk["kid"] == kid), None)
+
+        if jwk:
+            return jwk
+
+        # try fetching from the cache.
+        jwk = next((jwk for jwk in self._jwks["keys"] if jwk["kid"] == kid), None)
+        if jwk:
+            return jwk
+
+        # jwk isn't cached in memory so we need to fetch it from the well-known endpoint
+        response = self._request("GET", ".well-known/jwks.json", xform=parse_jwks)
+        if response.jwks:
+            self._jwks = response.jwks
+
+            # find the signing key
+            jwk = next(
+                (jwk for jwk in response.jwks["keys"] if jwk["kid"] == kid), None
+            )
+            if not jwk:
+                raise AuthInvalidJwtError("No matching signing key found in JWKS")
+
+            return jwk
+
+        raise AuthInvalidJwtError("JWT has no valid kid")
+
+    def get_claims(self):
+        pass
+
+
+def parse_jwks(response: Any) -> JWKS:
+    if "keys" not in response or len(response.keys) == 0:
+        raise AuthInvalidJwtError("JWKS is empty")
+
+    return JWKS(keys=response.keys)
