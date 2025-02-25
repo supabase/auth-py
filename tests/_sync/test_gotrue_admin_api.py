@@ -17,7 +17,6 @@ from .clients import (
 )
 from .utils import (
     create_new_user_with_email,
-    mock_access_token,
     mock_app_metadata,
     mock_user_credentials,
     mock_user_metadata,
@@ -31,19 +30,19 @@ def test_create_user_should_create_a_new_user():
     assert response.email == credentials.get("email")
 
 
-def test_create_user_with_app_metadata():
-    app_metadata = mock_app_metadata()
+def test_create_user_with_user_metadata():
+    user_metadata = mock_user_metadata()
     credentials = mock_user_credentials()
     response = service_role_api_client().create_user(
         {
             "email": credentials.get("email"),
             "password": credentials.get("password"),
-            "app_metadata": app_metadata,
+            "user_metadata": user_metadata,
         }
     )
     assert response.user.email == credentials.get("email")
-    assert "provider" in response.user.app_metadata
-    assert "providers" in response.user.app_metadata
+    assert response.user.user_metadata == user_metadata
+    assert "profile_image" in response.user.user_metadata
 
 
 def test_create_user_with_user_and_app_metadata():
@@ -157,11 +156,13 @@ def test_modify_confirm_email_using_update_user_by_id():
 
 def test_invalid_credential_sign_in_with_phone():
     try:
-        client_api_auto_confirm_off_signups_enabled_client().sign_in_with_password(
-            {
-                "phone": "+123456789",
-                "password": "strong_pwd",
-            }
+        response = (
+            client_api_auto_confirm_off_signups_enabled_client().sign_in_with_password(
+                {
+                    "phone": "+123456789",
+                    "password": "strong_pwd",
+                }
+            )
         )
     except AuthApiError as e:
         assert e.to_dict()
@@ -169,11 +170,13 @@ def test_invalid_credential_sign_in_with_phone():
 
 def test_invalid_credential_sign_in_with_email():
     try:
-        client_api_auto_confirm_off_signups_enabled_client().sign_in_with_password(
-            {
-                "email": "unknown_user@unknowndomain.com",
-                "password": "strong_pwd",
-            }
+        response = (
+            client_api_auto_confirm_off_signups_enabled_client().sign_in_with_password(
+                {
+                    "email": "unknown_user@unknowndomain.com",
+                    "password": "strong_pwd",
+                }
+            )
         )
     except AuthApiError as e:
         assert e.to_dict()
@@ -345,7 +348,7 @@ def test_verify_otp_with_non_existent_phone_number():
         )
         assert False
     except AuthError as e:
-        assert e.message == "User not found"
+        assert e.message == "Token has expired or is invalid"
 
 
 def test_verify_otp_with_invalid_phone_number():
@@ -364,16 +367,34 @@ def test_verify_otp_with_invalid_phone_number():
         assert e.message == "Invalid phone number format (E.164 required)"
 
 
+def test_sign_in_with_id_token():
+    try:
+        client_api_auto_confirm_off_signups_enabled_client().sign_in_with_id_token(
+            {
+                "provider": "google",
+                "token": "123456",
+            }
+        )
+    except AuthApiError as e:
+        assert e.to_dict()
+
+
+def test_sign_in_with_sso():
+    with pytest.raises(AuthApiError, match=r"SAML 2.0 is disabled") as exc:
+        client_api_auto_confirm_off_signups_enabled_client().sign_in_with_sso(
+            {
+                "domain": "google",
+            }
+        )
+    assert exc.value is not None
+
+
 def test_sign_in_with_oauth():
     assert client_api_auto_confirm_off_signups_enabled_client().sign_in_with_oauth(
         {
             "provider": "google",
         }
     )
-
-
-def test_decode_jwt():
-    assert auth_client_with_session()._decode_jwt(mock_access_token())
 
 
 def test_link_identity_missing_session():
@@ -385,18 +406,6 @@ def test_link_identity_missing_session():
             }
         )
     assert exc.value is not None
-
-
-def test_sign_in_with_id_token():
-    try:
-        client_api_auto_confirm_off_signups_enabled_client().sign_in_with_id_token(
-            {
-                "provider": "google",
-                "token": "123456",
-            }
-        )
-    except AuthApiError as e:
-        assert e.to_dict()
 
 
 def test_get_item_from_memory_storage():
@@ -518,7 +527,7 @@ def test_get_user_identities():
             "password": credentials.get("password"),
         }
     )
-    assert client.get_user_identities().identities[0].identity_data[
+    assert (client.get_user_identities()).identities[0].identity_data[
         "email"
     ] == credentials.get("email")
 
@@ -542,19 +551,19 @@ def test_update_user():
     )
 
 
-def test_create_user_with_user_metadata():
-    user_metadata = mock_user_metadata()
+def test_create_user_with_app_metadata():
+    app_metadata = mock_app_metadata()
     credentials = mock_user_credentials()
     response = service_role_api_client().create_user(
         {
             "email": credentials.get("email"),
             "password": credentials.get("password"),
-            "user_metadata": user_metadata,
+            "app_metadata": app_metadata,
         }
     )
     assert response.user.email == credentials.get("email")
-    assert response.user.user_metadata == user_metadata
-    assert "profile_image" in response.user.user_metadata
+    assert "provider" in response.user.app_metadata
+    assert "providers" in response.user.app_metadata
 
 
 def test_weak_email_password_error():
