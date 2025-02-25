@@ -816,8 +816,10 @@ class JWK(TypedDict, total=False):
     alg: Optional[str]
     kid: Optional[str]
 
+
 class JWKS(TypedDict):
     keys: List[JWK]
+
 
 for model in [
     AMREntry,
