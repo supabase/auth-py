@@ -6,7 +6,11 @@ import respx
 from httpx import Headers, Response
 
 from supabase_auth.constants import API_VERSION_HEADER_NAME
-from supabase_auth.errors import AuthApiError, AuthInvalidJwtError, AuthWeakPasswordError
+from supabase_auth.errors import (
+    AuthApiError,
+    AuthInvalidJwtError,
+    AuthWeakPasswordError,
+)
 from supabase_auth.helpers import (
     decode_jwt,
     generate_pkce_challenge,
@@ -114,9 +118,7 @@ def test_get_error_code():
 def test_decode_jwt():
     assert decode_jwt(mock_access_token())
 
-    with pytest.raises(
-        AuthInvalidJwtError, match=r"Invalid JWT structure"
-    ) as exc:
+    with pytest.raises(AuthInvalidJwtError, match=r"Invalid JWT structure") as exc:
         decode_jwt("non-valid-jwt")
     assert exc.value is not None
 

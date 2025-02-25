@@ -8,12 +8,12 @@ import string
 from base64 import urlsafe_b64decode
 from datetime import datetime
 from json import loads
-from typing import Any, Dict, Literal, Optional, Type, TypeVar, TypedDict, cast
+from typing import Any, Dict, Literal, Optional, Type, TypedDict, TypeVar, cast
 from urllib.parse import urlparse
 
-from httpx import HTTPStatusError, Response
 import jwt
 import jwt.algorithms
+from httpx import HTTPStatusError, Response
 from pydantic import BaseModel
 
 from .constants import API_VERSION_HEADER_NAME, API_VERSIONS

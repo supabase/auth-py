@@ -226,6 +226,7 @@ class AuthWeakPasswordError(CustomAuthError):
             "reasons": self.reasons,
         }
 
+
 class AuthInvalidJwtError(CustomAuthError):
     def __init__(self, message: str) -> None:
         CustomAuthError.__init__(

@@ -344,7 +344,7 @@ async def test_verify_otp_with_non_existent_phone_number():
         )
         assert False
     except AuthError as e:
-        assert e.message == "User not found"
+        assert e.message == "Token has expired or is invalid"
 
 
 async def test_verify_otp_with_invalid_phone_number():
