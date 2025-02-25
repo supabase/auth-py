@@ -8,7 +8,7 @@ import string
 from base64 import urlsafe_b64decode
 from datetime import datetime
 from json import loads
-from typing import Any, Dict, Literal, Optional, Type, TypeVar, cast
+from typing import Any, Dict, Literal, Optional, Type, TypeVar, TypedDict, cast
 from urllib.parse import urlparse
 
 from httpx import HTTPStatusError, Response
@@ -30,6 +30,8 @@ from .types import (
     AuthResponse,
     GenerateLinkProperties,
     GenerateLinkResponse,
+    JWTHeader,
+    JWTPayload,
     LinkIdentityResponse,
     Session,
     SSOResponse,
@@ -209,24 +211,32 @@ def base64url_to_bytes(base64url: str) -> bytes:
     return urlsafe_b64decode(base64url_with_padding)
 
 
-def decode_jwt(token: str) -> Dict[str, Any]:
+class DecodedJWT(TypedDict):
+    header: JWTHeader
+    payload: JWTPayload
+    signature: bytes
+    raw: Dict[str, str]
+
+
+def decode_jwt(token: str) -> DecodedJWT:
     parts = token.split(".")
     if len(parts) != 3:
         raise AuthInvalidJwtError("Invalid JWT structure")
 
     # regex check for base64url
-    if not re.match(BASE64URL_REGEX, parts[1]):
-        raise AuthInvalidJwtError("JWT not in base64url format")
+    # for part in parts:
+    #     if not re.match(BASE64URL_REGEX, part):
+    #         raise AuthInvalidJwtError("JWT not in base64url format")
 
-    return {
-        "header": loads(str_from_base64url(parts[0])),
-        "payload": loads(str_from_base64url(parts[1])),
-        "signature": base64url_to_bytes(parts[2]),
-        "raw": {
+    return DecodedJWT(
+        header=JWTHeader(**loads(str_from_base64url(parts[0]))),
+        payload=JWTPayload(**loads(str_from_base64url(parts[1]))),
+        signature=base64url_to_bytes(parts[2]),
+        raw={
             "header": parts[0],
             "payload": parts[1],
         },
-    }
+    )
 
 
 def generate_pkce_verifier(length=64):
