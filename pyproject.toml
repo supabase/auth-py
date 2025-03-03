@@ -20,7 +20,7 @@ httpx = {version = ">=0.26,<0.29", extras = ["http2"]}
 pydantic = ">=1.10,<3"
 
 [tool.poetry.dev-dependencies]
-pytest = "^8.3.4"
+pytest = "^8.3.5"
 flake8 = "^7.1.2"
 black = "^25.1.0"
 isort = "^6.0.0"
