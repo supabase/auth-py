@@ -16,7 +16,7 @@ import jwt.algorithms
 from httpx import HTTPStatusError, Response
 from pydantic import BaseModel
 
-from .constants import API_VERSION_HEADER_NAME, API_VERSIONS
+from .constants import API_VERSION_HEADER_NAME, API_VERSIONS, BASE64URL_REGEX
 from .errors import (
     AuthApiError,
     AuthError,
@@ -40,7 +40,6 @@ from .types import (
 )
 
 TBaseModel = TypeVar("TBaseModel", bound=BaseModel)
-BASE64URL_REGEX = r"^([a-z0-9_-]{4})*($|[a-z0-9_-]{3}$|[a-z0-9_-]{2}$)$"
 
 
 def model_validate(model: Type[TBaseModel], contents) -> TBaseModel:

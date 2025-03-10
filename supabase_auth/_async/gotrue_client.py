@@ -4,7 +4,7 @@ from contextlib import suppress
 from functools import partial
 from json import loads
 from time import time
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from typing import Any, Callable, Dict, List, Optional, Tuple, TypedDict
 from urllib.parse import parse_qs, urlencode, urlparse
 from uuid import uuid4
 
@@ -28,6 +28,7 @@ from ..helpers import (
     decode_jwt,
     generate_pkce_challenge,
     generate_pkce_verifier,
+    get_algorithm,
     model_dump,
     model_dump_json,
     model_validate,
@@ -36,6 +37,7 @@ from ..helpers import (
     parse_link_identity_response,
     parse_sso_response,
     parse_user_response,
+    validate_exp,
 )
 from ..http_clients import AsyncClient
 from ..timer import Timer
@@ -53,9 +55,12 @@ from ..types import (
     AuthMFAVerifyResponse,
     AuthOtpResponse,
     AuthResponse,
+    ClaimsResponse,
     CodeExchangeParams,
     DecodedJWTDict,
     IdentitiesResponse,
+    JWTHeader,
+    JWTPayload,
     MFAChallengeAndVerifyParams,
     MFAChallengeParams,
     MFAEnrollParams,
@@ -1158,13 +1163,13 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
 
     async def _fetch_jwks(self, kid: str, jwks: JWKS) -> JWK:
         # try fetching from the suplied keys.
-        jwk = next((jwk for jwk in jwks["keys"] if jwk["kid"] == kid), None)
+        jwk = next((jwk for jwk in jwks.keys if jwk["kid"] == kid), None)
 
         if jwk:
             return jwk
 
         # try fetching from the cache.
-        jwk = next((jwk for jwk in self._jwks["keys"] if jwk["kid"] == kid), None)
+        jwk = next((jwk for jwk in self._jwks.keys if jwk["kid"] == kid), None)
         if jwk:
             return jwk
 
@@ -1184,12 +1189,34 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
 
         raise AuthInvalidJwtError("JWT has no valid kid")
 
-    async def get_claims(self):
-        pass
+    async def get_claims(self, jwt: Optional[str] = None, jwks: Optional[JWKS] = None) -> Optional[ClaimsResponse]:
+        token = jwt
+        if not token:
+            session = await self.get_session()
+            if not session:
+                return None
+            
+            token = session.access_token
+
+        decoded_jwt = decode_jwt(token)
+        payload = decoded_jwt["payload"]
+        header = decoded_jwt["header"]
+        signature = decoded_jwt["signature"]
+
+        validate_exp(payload["exp"])
+
+        # if symetric algorithm, fallback to get_user
+        if 'kid' not in header or header["alg"] == 'HS256':
+            await self.get_user(token)
+            return ClaimsResponse(claims=payload, headers=header, signature=signature)
+
+        algorithm = get_algorithm(header["alg"])
+        signing_key = await self._fetch_jwks(header["kid"], jwks)
+        algorithm.prepare_key
 
 
 def parse_jwks(response: Any) -> JWKS:
     if "keys" not in response or len(response.keys) == 0:
         raise AuthInvalidJwtError("JWKS is empty")
 
-    return JWKS(keys=response.keys)
+    return JWKS(keys=response["keys"])
