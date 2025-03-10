@@ -806,11 +806,11 @@ class RequiredClaims(TypedDict):
     session_id: str
 
 
-class JWTPayload(RequiredClaims, TypedDict, total=False):
+class JWTPayload(RequiredClaims, total=False):
     pass
 
 
-class JWK(TypedDict, total=False):
+class JWK(TypedDict):
     kty: Literal["RSA", "EC", "oct"]
     key_ops: List[str]
     alg: Optional[str]
@@ -820,6 +820,11 @@ class JWK(TypedDict, total=False):
 class JWKS(TypedDict):
     keys: List[JWK]
 
+
+class ClaimsResponse(TypedDict):
+    claims: JWTPayload
+    headers: JWTHeader
+    signature: bytes
 
 for model in [
     AMREntry,
