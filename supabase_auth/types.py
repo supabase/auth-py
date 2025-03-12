@@ -816,6 +816,17 @@ class ClaimsResponse(TypedDict):
     signature: bytes
 
 
+class JWK(TypedDict, total=False):
+    kty: Literal["RSA", "EC", "oct"]
+    key_ops: List[str]
+    alg: Optional[str]
+    kid: Optional[str]
+
+
+class JWKSet(TypedDict):
+    keys: List[JWK]
+
+
 for model in [
     AMREntry,
     AuthResponse,

@@ -43,6 +43,7 @@ from ..helpers import (
 from ..http_clients import AsyncClient
 from ..timer import Timer
 from ..types import (
+    JWK,
     AuthChangeEvent,
     AuthenticatorAssuranceLevels,
     AuthFlowType,
@@ -58,6 +59,7 @@ from ..types import (
     CodeExchangeParams,
     DecodedJWTDict,
     IdentitiesResponse,
+    JWKSet,
     MFAChallengeAndVerifyParams,
     MFAChallengeParams,
     MFAEnrollParams,
@@ -111,7 +113,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
             verify=verify,
             proxy=proxy,
         )
-        self._jwks = {"keys": []}
+        self._jwks: JWKSet = {"keys": []}
         self._storage_key = storage_key or STORAGE_KEY
         self._auto_refresh_token = auto_refresh_token
         self._persist_session = persist_session
@@ -1158,11 +1160,11 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
             self._notify_all_subscribers("SIGNED_IN", response.session)
         return response
 
-    async def _fetch_jwks(self, kid: str, jwks: Dict[str, list]) -> Dict[str, Any]:
-        jwk: Dict[str, Any] = {}
+    async def _fetch_jwks(self, kid: str, jwks: JWKSet) -> JWK:
+        jwk: Optional[JWK] = None
 
         # try fetching from the suplied keys.
-        jwk = next((jwk for jwk in jwks.get("keys", []) if jwk.get("kid") == kid), None)
+        jwk = next((jwk for jwk in jwks["keys"] if jwk["kid"] == kid), None)
 
         if jwk:
             return jwk
@@ -1170,7 +1172,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         if self._jwks:
             # try fetching from the cache.
             jwk = next(
-                (jwk for jwk in self._jwks.get("keys", []) if jwk.get("kid") == kid),
+                (jwk for jwk in self._jwks["keys"] if jwk["kid"] == kid),
                 None,
             )
             if jwk:
@@ -1182,9 +1184,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
             self._jwks = response
 
             # find the signing key
-            jwk = next(
-                (jwk for jwk in response.get("keys", []) if jwk.get("kid") == kid), None
-            )
+            jwk = next((jwk for jwk in response["keys"] if jwk["kid"] == kid), None)
             if not jwk:
                 raise AuthInvalidJwtError("No matching signing key found in JWKS")
 
@@ -1193,7 +1193,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         raise AuthInvalidJwtError("JWT has no valid kid")
 
     async def get_claims(
-        self, jwt: Optional[str] = None, jwks: Optional[Dict[str, list]] = None
+        self, jwt: Optional[str] = None, jwks: Optional[JWKSet] = None
     ) -> Optional[ClaimsResponse]:
         token = jwt
         if not token:
@@ -1204,12 +1204,16 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
             token = session.access_token
 
         decoded_jwt = decode_jwt(token)
-        payload = decoded_jwt["payload"]
-        header = decoded_jwt["header"]
-        signature = decoded_jwt["signature"]
 
-        raw_header = decoded_jwt["raw"]["header"]
-        raw_payload = decoded_jwt["raw"]["payload"]
+        payload, header, signature = (
+            decoded_jwt["payload"],
+            decoded_jwt["header"],
+            decoded_jwt["signature"],
+        )
+        raw_header, raw_payload = (
+            decoded_jwt["raw"]["header"],
+            decoded_jwt["raw"]["payload"],
+        )
 
         validate_exp(payload["exp"])
 
@@ -1220,7 +1224,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
 
         algorithm = get_algorithm_by_name(header["alg"])
         signing_key = algorithm.from_jwk(
-            await self._fetch_jwks(header["kid"], jwks or {})
+            await self._fetch_jwks(header["kid"], jwks or {"keys": []})
         )
 
         # verify the signature
@@ -1235,8 +1239,8 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         return ClaimsResponse(claims=payload, headers=header, signature=signature)
 
 
-def parse_jwks(response: Any) -> Dict[str, list]:
+def parse_jwks(response: Any) -> JWKSet:
     if "keys" not in response or len(response["keys"]) == 0:
         raise AuthInvalidJwtError("JWKS is empty")
 
-    return response
+    return {"keys": response["keys"]}

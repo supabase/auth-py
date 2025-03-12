@@ -156,13 +156,11 @@ def test_modify_confirm_email_using_update_user_by_id():
 
 def test_invalid_credential_sign_in_with_phone():
     try:
-        response = (
-            client_api_auto_confirm_off_signups_enabled_client().sign_in_with_password(
-                {
-                    "phone": "+123456789",
-                    "password": "strong_pwd",
-                }
-            )
+        response = client_api_auto_confirm_off_signups_enabled_client().sign_in_with_password(
+            {
+                "phone": "+123456789",
+                "password": "strong_pwd",
+            }
         )
     except AuthApiError as e:
         assert e.to_dict()
@@ -170,13 +168,11 @@ def test_invalid_credential_sign_in_with_phone():
 
 def test_invalid_credential_sign_in_with_email():
     try:
-        response = (
-            client_api_auto_confirm_off_signups_enabled_client().sign_in_with_password(
-                {
-                    "email": "unknown_user@unknowndomain.com",
-                    "password": "strong_pwd",
-                }
-            )
+        response = client_api_auto_confirm_off_signups_enabled_client().sign_in_with_password(
+            {
+                "email": "unknown_user@unknowndomain.com",
+                "password": "strong_pwd",
+            }
         )
     except AuthApiError as e:
         assert e.to_dict()
@@ -390,10 +386,12 @@ def test_sign_in_with_sso():
 
 
 def test_sign_in_with_oauth():
-    assert client_api_auto_confirm_off_signups_enabled_client().sign_in_with_oauth(
-        {
-            "provider": "google",
-        }
+    assert (
+        client_api_auto_confirm_off_signups_enabled_client().sign_in_with_oauth(
+            {
+                "provider": "google",
+            }
+        )
     )
 
 
