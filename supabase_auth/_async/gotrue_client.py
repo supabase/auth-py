@@ -4,7 +4,7 @@ from contextlib import suppress
 from functools import partial
 from json import loads
 from time import time
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from typing import Callable, Dict, List, Optional, Tuple
 from urllib.parse import parse_qs, urlencode, urlparse
 from uuid import uuid4
 
@@ -35,6 +35,7 @@ from ..helpers import (
     model_validate,
     parse_auth_otp_response,
     parse_auth_response,
+    parse_jwks,
     parse_link_identity_response,
     parse_sso_response,
     parse_user_response,
@@ -1237,10 +1238,3 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
 
         # If verification succeeds, decode and return claims
         return ClaimsResponse(claims=payload, headers=header, signature=signature)
-
-
-def parse_jwks(response: Any) -> JWKSet:
-    if "keys" not in response or len(response["keys"]) == 0:
-        raise AuthInvalidJwtError("JWKS is empty")
-
-    return {"keys": response["keys"]}

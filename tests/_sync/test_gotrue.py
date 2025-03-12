@@ -35,4 +35,7 @@ def test_get_claims_fetches_jwks_to_verify_asymmetric_jwt(mocker):
     spy.assert_called_once()
     spy.assert_called_with("GET", ".well-known/jwks.json", xform=unittest.mock.ANY)
 
-    assert len(spy.spy_return.get("keys")) > 0
+    expected_keyid = "638c54b8-28c2-4b12-9598-ba12ef610a29"
+
+    assert len(client._jwks["keys"]) == 1
+    assert client._jwks["keys"][0]["kid"] == expected_keyid

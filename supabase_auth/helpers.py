@@ -28,6 +28,7 @@ from .types import (
     AuthResponse,
     GenerateLinkProperties,
     GenerateLinkResponse,
+    JWKSet,
     JWTHeader,
     JWTPayload,
     LinkIdentityResponse,
@@ -117,6 +118,13 @@ def parse_user_response(data: Any) -> UserResponse:
 
 def parse_sso_response(data: Any) -> SSOResponse:
     return model_validate(SSOResponse, data)
+
+
+def parse_jwks(response: Any) -> JWKSet:
+    if "keys" not in response or len(response["keys"]) == 0:
+        raise AuthInvalidJwtError("JWKS is empty")
+
+    return {"keys": response["keys"]}
 
 
 def get_error_message(error: Any) -> str:
