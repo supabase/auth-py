@@ -810,21 +810,11 @@ class JWTPayload(RequiredClaims, total=False):
     pass
 
 
-class JWK(TypedDict):
-    kty: Literal["RSA", "EC", "oct"]
-    key_ops: List[str]
-    alg: Optional[str]
-    kid: Optional[str]
-
-
-class JWKS(TypedDict):
-    keys: List[JWK]
-
-
 class ClaimsResponse(TypedDict):
     claims: JWTPayload
     headers: JWTHeader
     signature: bytes
+
 
 for model in [
     AMREntry,

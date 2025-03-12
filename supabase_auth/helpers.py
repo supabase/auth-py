@@ -8,11 +8,9 @@ import string
 from base64 import urlsafe_b64decode
 from datetime import datetime
 from json import loads
-from typing import Any, Dict, Literal, Optional, Type, TypedDict, TypeVar, cast
+from typing import Any, Dict, Optional, Type, TypedDict, TypeVar, cast
 from urllib.parse import urlparse
 
-import jwt
-import jwt.algorithms
 from httpx import HTTPStatusError, Response
 from pydantic import BaseModel
 
@@ -311,10 +309,3 @@ def validate_exp(exp: int) -> None:
     time_now = datetime.now().timestamp()
     if exp <= time_now:
         raise AuthInvalidJwtError("JWT has expired")
-
-
-def get_algorithm(alg: Literal["RS256", "ES256"]) -> jwt.algorithms.Algorithm:
-    if alg == "RS256":
-        return jwt.algorithms.RSAAlgorithm
-    elif alg == "ES256":
-        return jwt.algorithms.ECAlgorithm
