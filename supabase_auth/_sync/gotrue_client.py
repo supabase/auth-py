@@ -1,9 +1,9 @@
 from __future__ import annotations
 
+import time
 from contextlib import suppress
 from functools import partial
 from json import loads
-from time import time
 from typing import Callable, Dict, List, Optional, Tuple
 from urllib.parse import parse_qs, urlencode, urlparse
 from uuid import uuid4
@@ -619,7 +619,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
             current_session = self._in_memory_session
         if not current_session:
             return None
-        time_now = round(time())
+        time_now = round(time.time())
         has_expired = (
             current_session.expires_at <= time_now + EXPIRY_MARGIN
             if current_session.expires_at
@@ -680,7 +680,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         The current session that minimally contains an access token,
         refresh token and a user.
         """
-        time_now = round(time())
+        time_now = round(time.time())
         expires_at = time_now
         has_expired = True
         session: Optional[Session] = None
@@ -955,7 +955,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         token_type = self._get_param(params, "token_type")
         if not token_type:
             raise AuthImplicitGrantRedirectError("No token_type detected.")
-        time_now = round(time())
+        time_now = round(time.time())
         expires_at = time_now + int(expires_in)
         user = self.get_user(access_token)
         session = Session(
@@ -978,7 +978,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
             if raw_session:
                 self._remove_session()
             return
-        time_now = round(time())
+        time_now = round(time.time())
         expires_at = current_session.expires_at
         if expires_at and expires_at < time_now + EXPIRY_MARGIN:
             refresh_token = current_session.refresh_token
@@ -1030,7 +1030,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
             self._in_memory_session = session
         expire_at = session.expires_at
         if expire_at:
-            time_now = round(time())
+            time_now = round(time.time())
             expire_in = expire_at - time_now
             refresh_duration_before_expires = (
                 EXPIRY_MARGIN if expire_in > EXPIRY_MARGIN else 0.5
@@ -1169,7 +1169,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
             return jwk
 
         if self._jwks and (
-            self._jwks_cached_at and self._jwks_cached_at + self._jwks_ttl < time()
+            self._jwks_cached_at and time.time() - self._jwks_cached_at < self._jwks_ttl
         ):
             # try fetching from the cache.
             jwk = next(
@@ -1183,7 +1183,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         response = self._request("GET", ".well-known/jwks.json", xform=parse_jwks)
         if response:
             self._jwks = response
-            self._jwks_cached_at = time()
+            self._jwks_cached_at = time.time()
 
             # find the signing key
             jwk = next((jwk for jwk in response["keys"] if jwk["kid"] == kid), None)
