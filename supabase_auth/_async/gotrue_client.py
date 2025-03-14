@@ -114,7 +114,11 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
             verify=verify,
             proxy=proxy,
         )
+
         self._jwks: JWKSet = {"keys": []}
+        self._jwks_ttl: float = 600  # 10 minutes
+        self._jwks_cached_at: Optional[float] = None
+
         self._storage_key = storage_key or STORAGE_KEY
         self._auto_refresh_token = auto_refresh_token
         self._persist_session = persist_session
@@ -1170,7 +1174,9 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         if jwk:
             return jwk
 
-        if self._jwks:
+        if self._jwks and (
+            self._jwks_cached_at and self._jwks_cached_at + self._jwks_ttl < time()
+        ):
             # try fetching from the cache.
             jwk = next(
                 (jwk for jwk in self._jwks["keys"] if jwk["kid"] == kid),
@@ -1183,6 +1189,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         response = await self._request("GET", ".well-known/jwks.json", xform=parse_jwks)
         if response:
             self._jwks = response
+            self._jwks_cached_at = time()
 
             # find the signing key
             jwk = next((jwk for jwk in response["keys"] if jwk["kid"] == kid), None)
