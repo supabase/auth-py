@@ -1237,3 +1237,16 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
 
         # If verification succeeds, decode and return claims
         return ClaimsResponse(claims=payload, headers=header, signature=signature)
+
+    def __del__(self) -> None:
+        """Clean up resources when the client is destroyed."""
+        if self._refresh_token_timer:
+            try:
+                # Try to cancel the timer
+                self._refresh_token_timer.cancel()
+            except:
+                # Ignore errors if event loop is closed or selector is not registered
+                pass
+            finally:
+                # Always set to None to prevent further attempts
+                self._refresh_token_timer = None
