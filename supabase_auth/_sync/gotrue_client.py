@@ -58,7 +58,6 @@ from ..types import (
     AuthResponse,
     ClaimsResponse,
     CodeExchangeParams,
-    DecodedJWTDict,
     IdentitiesResponse,
     JWKSet,
     MFAChallengeAndVerifyParams,
@@ -685,7 +684,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         has_expired = True
         session: Optional[Session] = None
         if access_token and access_token.split(".")[1]:
-            payload = self._decode_jwt(access_token)
+            payload = decode_jwt(access_token)["payload"]
             exp = payload.get("exp")
             if exp:
                 expires_at = int(exp)
@@ -895,7 +894,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
                 next_level=None,
                 current_authentication_methods=[],
             )
-        payload = self._decode_jwt(session.access_token)
+        payload = decode_jwt(session.access_token)["payload"]
         current_level: Optional[AuthenticatorAssuranceLevels] = None
         if payload.get("aal"):
             current_level = payload.get("aal")
@@ -1130,13 +1129,6 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         params["provider"] = provider
         query = urlencode(params)
         return f"{url}?{query}", params
-
-    def _decode_jwt(self, jwt: str) -> DecodedJWTDict:
-        """
-        Decodes a JWT (without performing any validation).
-        """
-        decoded = decode_jwt(jwt)
-        return decoded["payload"]
 
     def exchange_code_for_session(self, params: CodeExchangeParams):
         code_verifier = params.get("code_verifier") or self._storage.get_item(

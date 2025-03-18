@@ -229,9 +229,9 @@ def decode_jwt(token: str) -> DecodedJWT:
         raise AuthInvalidJwtError("Invalid JWT structure")
 
     # regex check for base64url
-    # for part in parts:
-    #     if not re.match(BASE64URL_REGEX, part):
-    #         raise AuthInvalidJwtError("JWT not in base64url format")
+    for part in parts:
+        if not re.match(BASE64URL_REGEX, part, re.IGNORECASE):
+            raise AuthInvalidJwtError("JWT not in base64url format")
 
     return DecodedJWT(
         header=JWTHeader(**loads(str_from_base64url(parts[0]))),
