@@ -8,16 +8,17 @@ import string
 from base64 import urlsafe_b64decode
 from datetime import datetime
 from json import loads
-from typing import Any, Dict, Optional, Type, TypeVar, cast
+from typing import Any, Dict, Optional, Type, TypedDict, TypeVar, cast
 from urllib.parse import urlparse
 
 from httpx import HTTPStatusError, Response
 from pydantic import BaseModel
 
-from .constants import API_VERSION_HEADER_NAME, API_VERSIONS
+from .constants import API_VERSION_HEADER_NAME, API_VERSIONS, BASE64URL_REGEX
 from .errors import (
     AuthApiError,
     AuthError,
+    AuthInvalidJwtError,
     AuthRetryableError,
     AuthUnknownError,
     AuthWeakPasswordError,
@@ -27,6 +28,9 @@ from .types import (
     AuthResponse,
     GenerateLinkProperties,
     GenerateLinkResponse,
+    JWKSet,
+    JWTHeader,
+    JWTPayload,
     LinkIdentityResponse,
     Session,
     SSOResponse,
@@ -35,7 +39,6 @@ from .types import (
 )
 
 TBaseModel = TypeVar("TBaseModel", bound=BaseModel)
-BASE64URL_REGEX = r"^([a-z0-9_-]{4})*($|[a-z0-9_-]{3}$|[a-z0-9_-]{2}$)$"
 
 
 def model_validate(model: Type[TBaseModel], contents) -> TBaseModel:
@@ -117,6 +120,13 @@ def parse_sso_response(data: Any) -> SSOResponse:
     return model_validate(SSOResponse, data)
 
 
+def parse_jwks(response: Any) -> JWKSet:
+    if "keys" not in response or len(response["keys"]) == 0:
+        raise AuthInvalidJwtError("JWKS is empty")
+
+    return {"keys": response["keys"]}
+
+
 def get_error_message(error: Any) -> str:
     props = ["msg", "message", "error_description", "error"]
     filter = lambda prop: (
@@ -192,15 +202,46 @@ def handle_exception(exception: Exception) -> AuthError:
         return AuthUnknownError(get_error_message(error), e)
 
 
-def decode_jwt_payload(token: str) -> Any:
-    parts = token.split(".")
-    if len(parts) != 3:
-        raise ValueError("JWT is not valid: not a JWT structure")
-    base64url = parts[1]
+def str_from_base64url(base64url: str) -> str:
     # Addding padding otherwise the following error happens:
     # binascii.Error: Incorrect padding
     base64url_with_padding = base64url + "=" * (-len(base64url) % 4)
-    return loads(urlsafe_b64decode(base64url_with_padding).decode("utf-8"))
+    return urlsafe_b64decode(base64url_with_padding).decode("utf-8")
+
+
+def base64url_to_bytes(base64url: str) -> bytes:
+    # Addding padding otherwise the following error happens:
+    # binascii.Error: Incorrect padding
+    base64url_with_padding = base64url + "=" * (-len(base64url) % 4)
+    return urlsafe_b64decode(base64url_with_padding)
+
+
+class DecodedJWT(TypedDict):
+    header: JWTHeader
+    payload: JWTPayload
+    signature: bytes
+    raw: Dict[str, str]
+
+
+def decode_jwt(token: str) -> DecodedJWT:
+    parts = token.split(".")
+    if len(parts) != 3:
+        raise AuthInvalidJwtError("Invalid JWT structure")
+
+    # regex check for base64url
+    for part in parts:
+        if not re.match(BASE64URL_REGEX, part, re.IGNORECASE):
+            raise AuthInvalidJwtError("JWT not in base64url format")
+
+    return DecodedJWT(
+        header=JWTHeader(**loads(str_from_base64url(parts[0]))),
+        payload=JWTPayload(**loads(str_from_base64url(parts[1]))),
+        signature=base64url_to_bytes(parts[2]),
+        raw={
+            "header": parts[0],
+            "payload": parts[1],
+        },
+    )
 
 
 def generate_pkce_verifier(length=64):
@@ -267,3 +308,12 @@ def is_valid_jwt(value: str) -> bool:
             return False
 
     return True
+
+
+def validate_exp(exp: int) -> None:
+    if not exp:
+        raise AuthInvalidJwtError("JWT has no expiration time")
+
+    time_now = datetime.now().timestamp()
+    if exp <= time_now:
+        raise AuthInvalidJwtError("JWT has expired")

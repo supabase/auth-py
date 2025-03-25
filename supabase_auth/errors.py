@@ -225,3 +225,14 @@ class AuthWeakPasswordError(CustomAuthError):
             "status": self.status,
             "reasons": self.reasons,
         }
+
+
+class AuthInvalidJwtError(CustomAuthError):
+    def __init__(self, message: str) -> None:
+        CustomAuthError.__init__(
+            self,
+            message,
+            "AuthInvalidJwtError",
+            400,
+            "invalid_jwt",
+        )

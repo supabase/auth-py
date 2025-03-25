@@ -5,12 +5,16 @@ from supabase_auth import SyncGoTrueAdminAPI, SyncGoTrueClient
 SIGNUP_ENABLED_AUTO_CONFIRM_OFF_PORT = 9999
 SIGNUP_ENABLED_AUTO_CONFIRM_ON_PORT = 9998
 SIGNUP_DISABLED_AUTO_CONFIRM_OFF_PORT = 9997
+SIGNUP_ENABLED_ASYMMETRIC_AUTO_CONFIRM_ON_PORT = 9996
 
 GOTRUE_URL_SIGNUP_ENABLED_AUTO_CONFIRM_OFF = (
     f"http://localhost:{SIGNUP_ENABLED_AUTO_CONFIRM_OFF_PORT}"
 )
 GOTRUE_URL_SIGNUP_ENABLED_AUTO_CONFIRM_ON = (
     f"http://localhost:{SIGNUP_ENABLED_AUTO_CONFIRM_ON_PORT}"
+)
+GOTRUE_URL_SIGNUP_ENABLED_ASYMMETRIC_AUTO_CONFIRM_ON = (
+    f"http://localhost:{SIGNUP_ENABLED_ASYMMETRIC_AUTO_CONFIRM_ON_PORT}"
 )
 GOTRUE_URL_SIGNUP_DISABLED_AUTO_CONFIRM_OFF = (
     f"http://localhost:{SIGNUP_DISABLED_AUTO_CONFIRM_OFF_PORT}"
@@ -38,6 +42,14 @@ def auth_client():
 def auth_client_with_session():
     return SyncGoTrueClient(
         url=GOTRUE_URL_SIGNUP_ENABLED_AUTO_CONFIRM_ON,
+        auto_refresh_token=False,
+        persist_session=False,
+    )
+
+
+def auth_client_with_asymmetric_session() -> SyncGoTrueClient:
+    return SyncGoTrueClient(
+        url=GOTRUE_URL_SIGNUP_ENABLED_ASYMMETRIC_AUTO_CONFIRM_ON,
         auto_refresh_token=False,
         persist_session=False,
     )

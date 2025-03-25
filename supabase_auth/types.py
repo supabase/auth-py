@@ -789,6 +789,44 @@ class SignOutOptions(TypedDict):
     scope: NotRequired[SignOutScope]
 
 
+class JWTHeader(TypedDict):
+    alg: Literal["RS256", "ES256", "HS256"]
+    typ: str
+    kid: str
+
+
+class RequiredClaims(TypedDict):
+    iss: str
+    sub: str
+    auth: Union[str, List[str]]
+    exp: int
+    iat: int
+    role: str
+    aal: AuthenticatorAssuranceLevels
+    session_id: str
+
+
+class JWTPayload(RequiredClaims, total=False):
+    pass
+
+
+class ClaimsResponse(TypedDict):
+    claims: JWTPayload
+    headers: JWTHeader
+    signature: bytes
+
+
+class JWK(TypedDict, total=False):
+    kty: Literal["RSA", "EC", "oct"]
+    key_ops: List[str]
+    alg: Optional[str]
+    kid: Optional[str]
+
+
+class JWKSet(TypedDict):
+    keys: List[JWK]
+
+
 for model in [
     AMREntry,
     AuthResponse,

@@ -38,7 +38,7 @@ build_run_tests: build_sync run_tests
 	echo "Done"
 
 sleep:
-	sleep 20
+	sleep 3
 
 rename_project: rename_package_dir rename_package
 

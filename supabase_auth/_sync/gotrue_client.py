@@ -1,12 +1,14 @@
 from __future__ import annotations
 
+import time
 from contextlib import suppress
 from functools import partial
 from json import loads
-from time import time
 from typing import Callable, Dict, List, Optional, Tuple
 from urllib.parse import parse_qs, urlencode, urlparse
 from uuid import uuid4
+
+from jwt import get_algorithm_by_name
 
 from ..constants import (
     DEFAULT_HEADERS,
@@ -20,11 +22,12 @@ from ..errors import (
     AuthApiError,
     AuthImplicitGrantRedirectError,
     AuthInvalidCredentialsError,
+    AuthInvalidJwtError,
     AuthRetryableError,
     AuthSessionMissingError,
 )
 from ..helpers import (
-    decode_jwt_payload,
+    decode_jwt,
     generate_pkce_challenge,
     generate_pkce_verifier,
     model_dump,
@@ -32,13 +35,16 @@ from ..helpers import (
     model_validate,
     parse_auth_otp_response,
     parse_auth_response,
+    parse_jwks,
     parse_link_identity_response,
     parse_sso_response,
     parse_user_response,
+    validate_exp,
 )
 from ..http_clients import SyncClient
 from ..timer import Timer
 from ..types import (
+    JWK,
     AuthChangeEvent,
     AuthenticatorAssuranceLevels,
     AuthFlowType,
@@ -50,9 +56,10 @@ from ..types import (
     AuthMFAVerifyResponse,
     AuthOtpResponse,
     AuthResponse,
+    ClaimsResponse,
     CodeExchangeParams,
-    DecodedJWTDict,
     IdentitiesResponse,
+    JWKSet,
     MFAChallengeAndVerifyParams,
     MFAChallengeParams,
     MFAEnrollParams,
@@ -106,6 +113,11 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
             verify=verify,
             proxy=proxy,
         )
+
+        self._jwks: JWKSet = {"keys": []}
+        self._jwks_ttl: float = 600  # 10 minutes
+        self._jwks_cached_at: Optional[float] = None
+
         self._storage_key = storage_key or STORAGE_KEY
         self._auto_refresh_token = auto_refresh_token
         self._persist_session = persist_session
@@ -606,7 +618,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
             current_session = self._in_memory_session
         if not current_session:
             return None
-        time_now = round(time())
+        time_now = round(time.time())
         has_expired = (
             current_session.expires_at <= time_now + EXPIRY_MARGIN
             if current_session.expires_at
@@ -667,12 +679,12 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         The current session that minimally contains an access token,
         refresh token and a user.
         """
-        time_now = round(time())
+        time_now = round(time.time())
         expires_at = time_now
         has_expired = True
         session: Optional[Session] = None
         if access_token and access_token.split(".")[1]:
-            payload = self._decode_jwt(access_token)
+            payload = decode_jwt(access_token)["payload"]
             exp = payload.get("exp")
             if exp:
                 expires_at = int(exp)
@@ -882,7 +894,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
                 next_level=None,
                 current_authentication_methods=[],
             )
-        payload = self._decode_jwt(session.access_token)
+        payload = decode_jwt(session.access_token)["payload"]
         current_level: Optional[AuthenticatorAssuranceLevels] = None
         if payload.get("aal"):
             current_level = payload.get("aal")
@@ -942,7 +954,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         token_type = self._get_param(params, "token_type")
         if not token_type:
             raise AuthImplicitGrantRedirectError("No token_type detected.")
-        time_now = round(time())
+        time_now = round(time.time())
         expires_at = time_now + int(expires_in)
         user = self.get_user(access_token)
         session = Session(
@@ -965,7 +977,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
             if raw_session:
                 self._remove_session()
             return
-        time_now = round(time())
+        time_now = round(time.time())
         expires_at = current_session.expires_at
         if expires_at and expires_at < time_now + EXPIRY_MARGIN:
             refresh_token = current_session.refresh_token
@@ -1017,7 +1029,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
             self._in_memory_session = session
         expire_at = session.expires_at
         if expire_at:
-            time_now = round(time())
+            time_now = round(time.time())
             expire_in = expire_at - time_now
             refresh_duration_before_expires = (
                 EXPIRY_MARGIN if expire_in > EXPIRY_MARGIN else 0.5
@@ -1118,12 +1130,6 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         query = urlencode(params)
         return f"{url}?{query}", params
 
-    def _decode_jwt(self, jwt: str) -> DecodedJWTDict:
-        """
-        Decodes a JWT (without performing any validation).
-        """
-        return decode_jwt_payload(jwt)
-
     def exchange_code_for_session(self, params: CodeExchangeParams):
         code_verifier = params.get("code_verifier") or self._storage.get_item(
             f"{self._storage_key}-code-verifier"
@@ -1144,3 +1150,97 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
             self._save_session(response.session)
             self._notify_all_subscribers("SIGNED_IN", response.session)
         return response
+
+    def _fetch_jwks(self, kid: str, jwks: JWKSet) -> JWK:
+        jwk: Optional[JWK] = None
+
+        # try fetching from the suplied keys.
+        jwk = next((jwk for jwk in jwks["keys"] if jwk["kid"] == kid), None)
+
+        if jwk:
+            return jwk
+
+        if self._jwks and (
+            self._jwks_cached_at and time.time() - self._jwks_cached_at < self._jwks_ttl
+        ):
+            # try fetching from the cache.
+            jwk = next(
+                (jwk for jwk in self._jwks["keys"] if jwk["kid"] == kid),
+                None,
+            )
+            if jwk:
+                return jwk
+
+        # jwk isn't cached in memory so we need to fetch it from the well-known endpoint
+        response = self._request("GET", ".well-known/jwks.json", xform=parse_jwks)
+        if response:
+            self._jwks = response
+            self._jwks_cached_at = time.time()
+
+            # find the signing key
+            jwk = next((jwk for jwk in response["keys"] if jwk["kid"] == kid), None)
+            if not jwk:
+                raise AuthInvalidJwtError("No matching signing key found in JWKS")
+
+            return jwk
+
+        raise AuthInvalidJwtError("JWT has no valid kid")
+
+    def get_claims(
+        self, jwt: Optional[str] = None, jwks: Optional[JWKSet] = None
+    ) -> Optional[ClaimsResponse]:
+        token = jwt
+        if not token:
+            session = self.get_session()
+            if not session:
+                return None
+
+            token = session.access_token
+
+        decoded_jwt = decode_jwt(token)
+
+        payload, header, signature = (
+            decoded_jwt["payload"],
+            decoded_jwt["header"],
+            decoded_jwt["signature"],
+        )
+        raw_header, raw_payload = (
+            decoded_jwt["raw"]["header"],
+            decoded_jwt["raw"]["payload"],
+        )
+
+        validate_exp(payload["exp"])
+
+        # if symmetric algorithm, fallback to get_user
+        if "kid" not in header or header["alg"] == "HS256":
+            self.get_user(token)
+            return ClaimsResponse(claims=payload, headers=header, signature=signature)
+
+        algorithm = get_algorithm_by_name(header["alg"])
+        signing_key = algorithm.from_jwk(
+            self._fetch_jwks(header["kid"], jwks or {"keys": []})
+        )
+
+        # verify the signature
+        is_valid = algorithm.verify(
+            msg=f"{raw_header}.{raw_payload}".encode(), key=signing_key, sig=signature
+        )
+
+        if not is_valid:
+            raise AuthInvalidJwtError("Invalid JWT signature")
+
+        # If verification succeeds, decode and return claims
+        return ClaimsResponse(claims=payload, headers=header, signature=signature)
+
+    def __del__(self) -> None:
+        """Clean up resources when the client is destroyed."""
+        if self._refresh_token_timer:
+            try:
+                # Try to cancel the timer
+                self._refresh_token_timer.cancel()
+            except:
+                # Ignore errors if event loop is closed or selector is not registered
+                pass
+            finally:
+                # Always set to None to prevent further attempts
+                self._refresh_token_timer = None
