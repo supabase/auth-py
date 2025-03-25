@@ -7,7 +7,12 @@ from jwt import encode
 from supabase_auth.errors import AuthInvalidJwtError, AuthSessionMissingError
 from supabase_auth.helpers import decode_jwt
 
-from .clients import GOTRUE_JWT_SECRET, auth_client, auth_client_with_asymmetric_session
+from .clients import (
+    GOTRUE_JWT_SECRET,
+    auth_client,
+    auth_client_with_asymmetric_session,
+    auth_client_with_session,
+)
 from .utils import mock_user_credentials
 
 
@@ -189,3 +194,97 @@ async def test_set_session_with_invalid_token():
     # Try to set the session with invalid tokens
     with pytest.raises(AuthInvalidJwtError):
         await client.set_session("invalid.token.here", "invalid_refresh_token")
+
+
+async def test_mfa_enroll():
+    client = auth_client_with_session()
+
+    credentials = mock_user_credentials()
+
+    # First sign up to get a valid session
+    await client.sign_up(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+        }
+    )
+
+    # Test MFA enrollment
+    enroll_response = await client.mfa.enroll(
+        {"issuer": "test-issuer", "factor_type": "totp", "friendly_name": "test-factor"}
+    )
+
+    assert enroll_response.id is not None
+    assert enroll_response.type == "totp"
+    assert enroll_response.friendly_name == "test-factor"
+    assert enroll_response.totp.qr_code is not None
+
+
+async def test_mfa_challenge():
+    client = auth_client()
+    credentials = mock_user_credentials()
+
+    # First sign up to get a valid session
+    signup_response = await client.sign_up(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+        }
+    )
+    assert signup_response.session is not None
+
+    # Enroll a factor first
+    enroll_response = await client.mfa.enroll(
+        {"factor_type": "totp", "issuer": "test-issuer", "friendly_name": "test-factor"}
+    )
+
+    # Test MFA challenge
+    challenge_response = await client.mfa.challenge({"factor_id": enroll_response.id})
+    assert challenge_response.id is not None
+    assert challenge_response.expires_at is not None
+
+
+async def test_mfa_unenroll():
+    client = auth_client()
+    credentials = mock_user_credentials()
+
+    # First sign up to get a valid session
+    signup_response = await client.sign_up(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+        }
+    )
+    assert signup_response.session is not None
+
+    # Enroll a factor first
+    enroll_response = await client.mfa.enroll(
+        {"factor_type": "totp", "issuer": "test-issuer", "friendly_name": "test-factor"}
+    )
+
+    # Test MFA unenroll
+    unenroll_response = await client.mfa.unenroll({"factor_id": enroll_response.id})
+    assert unenroll_response.id == enroll_response.id
+
+
+async def test_mfa_list_factors():
+    client = auth_client()
+    credentials = mock_user_credentials()
+
+    # First sign up to get a valid session
+    signup_response = await client.sign_up(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+        }
+    )
+    assert signup_response.session is not None
+
+    # Enroll a factor first
+    await client.mfa.enroll(
+        {"factor_type": "totp", "issuer": "test-issuer", "friendly_name": "test-factor"}
+    )
+
+    # Test MFA list factors
+    list_response = await client.mfa.list_factors()
+    assert len(list_response.all) == 1
