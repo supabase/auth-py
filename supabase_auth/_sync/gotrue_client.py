@@ -874,7 +874,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
             "DELETE",
             f"factors/{params.get('factor_id')}",
             jwt=session.access_token,
-            xform=partial(AuthMFAUnenrollResponse, model_validate),
+            xform=partial(model_validate, AuthMFAUnenrollResponse),
         )
 
     def _list_factors(self) -> AuthMFAListFactorsResponse:

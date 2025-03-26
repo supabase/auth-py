@@ -520,11 +520,19 @@ GenerateLinkType = Literal[
 ]
 
 
-class MFAEnrollParams(TypedDict):
-    factor_type: Literal["totp", "phone"]
+class MFAEnrollTOTPParams(TypedDict):
+    factor_type: Literal["totp"]
     issuer: NotRequired[str]
     friendly_name: NotRequired[str]
+
+
+class MFAEnrollPhoneParams(TypedDict):
+    factor_type: Literal["phone"]
+    friendly_name: NotRequired[str]
     phone: str
+
+
+MFAEnrollParams = Union[MFAEnrollTOTPParams, MFAEnrollPhoneParams]
 
 
 class MFAUnenrollParams(TypedDict):
@@ -644,10 +652,16 @@ class AuthMFAEnrollResponse(BaseModel):
     """
     Friendly name of the factor, useful for distinguishing between factors
     """
-    phone: str
+    phone: Optional[str] = None
     """
     Phone number of the MFA factor in E.164 format. Used to send messages
     """
+
+    @model_validator_v1_v2_compat
+    def validate_phone_required_for_phone_type(cls, values: dict) -> dict:
+        if values.get("type") == "phone" and not values.get("phone"):
+            raise ValueError("phone is required when type is 'phone'")
+        return values
 
 
 class AuthMFAUnenrollResponse(BaseModel):
@@ -666,7 +680,7 @@ class AuthMFAChallengeResponse(BaseModel):
     """
     Timestamp in UNIX seconds when this challenge will no longer be usable.
     """
-    factor_type: Literal["totp", "phone"]
+    factor_type: Optional[Literal["totp", "phone"]] = None
     """
     Factor Type which generated the challenge
     """
