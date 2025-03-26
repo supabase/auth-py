@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## [2.12.0](https://github.com/supabase/auth-py/compare/v2.11.4...v2.12.0) (2025-03-26)
+
+
+### Features
+
+* add `get_claims` method ([#681](https://github.com/supabase/auth-py/issues/681)) ([f5c9926](https://github.com/supabase/auth-py/commit/f5c992608452b264d2b90277e384bd65fee98ee7))
+
+
+### Bug Fixes
+
+* enroll mfa totp ([#693](https://github.com/supabase/auth-py/issues/693)) ([ca9fcf3](https://github.com/supabase/auth-py/commit/ca9fcf3a1a0fbf99987e7e032a0eae542e4fd659))
+
 ## [2.11.4](https://github.com/supabase/auth-py/compare/v2.11.3...v2.11.4) (2025-02-18)
 
 
