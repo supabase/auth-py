@@ -405,3 +405,27 @@ async def test_exchange_code_for_session(mocker):
     )
 
 
+async def test_get_authenticator_assurance_level():
+    client = auth_client()
+    credentials = mock_user_credentials()
+    
+    # Test without session
+    response = await client.mfa.get_authenticator_assurance_level()
+    assert response.current_level is None
+    assert response.next_level is None
+    assert response.current_authentication_methods == []
+    
+    # Sign up to get a valid session
+    signup_response = await client.sign_up(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+        }
+    )
+    assert signup_response.session is not None
+    
+    # Test with session
+    response = await client.mfa.get_authenticator_assurance_level()
+    assert response.current_authentication_methods is not None
+
+
