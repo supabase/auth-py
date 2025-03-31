@@ -288,3 +288,44 @@ async def test_mfa_list_factors():
     # Test MFA list factors
     list_response = await client.mfa.list_factors()
     assert len(list_response.all) == 1
+
+
+async def test_initialize_from_url():
+    client = auth_client()
+    credentials = mock_user_credentials()
+    
+    # Sign up to get a valid session
+    signup_response = await client.sign_up(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+        }
+    )
+    assert signup_response.session is not None
+    
+    # Create a mock URL with access_token and refresh_token as query parameters
+    mock_url = f"http://example.com/?access_token={signup_response.session.access_token}&refresh_token={signup_response.session.refresh_token}&expires_in=3600&token_type=bearer"
+    
+    # Clear the session
+    await client._remove_session()
+    
+    # Need to mock _get_session_from_url to return a valid session
+    from unittest.mock import patch
+    from supabase_auth.types import Session
+    
+    # Create a reference to the original session
+    original_session = signup_response.session
+    
+    # Mock the _get_session_from_url method to return the original session
+    with patch.object(client, '_get_session_from_url', return_value=(original_session, "signup")) as mock_method:
+        # Test initialize_from_url
+        await client.initialize_from_url(mock_url)
+        
+        # Verify _get_session_from_url was called with the right URL
+        mock_method.assert_called_once_with(mock_url)
+    
+    # Verify the session was restored
+    session = await client.get_session()
+    assert session is not None
+    assert session.access_token == signup_response.session.access_token
+
