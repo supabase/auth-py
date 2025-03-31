@@ -329,3 +329,79 @@ async def test_initialize_from_url():
     assert session is not None
     assert session.access_token == signup_response.session.access_token
 
+
+async def test_exchange_code_for_session(mocker):
+    client = auth_client()
+    
+    # Create a proper AuthResponse-like object
+    from supabase_auth.types import Session, User, AuthResponse
+    
+    mock_user = User(
+        id="mock_user_id",
+        email="mock@example.com",
+        app_metadata={},
+        user_metadata={},
+        created_at="2023-01-01T00:00:00Z",  # Valid ISO timestamp
+        aud="",
+    )
+    
+    mock_session = Session(
+        access_token="mock_access_token",
+        refresh_token="mock_refresh_token",
+        expires_in=3600,
+        expires_at=int(time.time()) + 3600,
+        token_type="bearer",
+        user=mock_user
+    )
+    
+    mock_auth_response = AuthResponse(
+        session=mock_session,
+        user=mock_user
+    )
+    
+    # Mock the _request method to return a valid auth response
+    mocker.patch.object(
+        client, 
+        '_request', 
+        return_value=mock_auth_response
+    )
+    
+    # Mock storage.get_item to return a code verifier
+    mocker.patch.object(
+        client._storage,
+        'get_item',
+        return_value="mock_code_verifier"
+    )
+    
+    # Also mock the _save_session method to prevent actual saving
+    mocker.patch.object(client, '_save_session')
+    
+    # Also mock the _notify_all_subscribers method
+    mocker.patch.object(client, '_notify_all_subscribers')
+    
+    # Mock the storage.remove_item method
+    mocker.patch.object(client._storage, 'remove_item')
+    
+    # Test exchange_code_for_session
+    response = await client.exchange_code_for_session({
+        "auth_code": "mock_auth_code"
+    })
+    
+    # Verify response has a session
+    assert response.session is not None
+    assert response.session.access_token == "mock_access_token"
+    
+    # Verify _request was called with the right parameters
+    client._request.assert_called_once_with(
+        "POST",
+        "token",
+        query={"grant_type": "pkce"},
+        body={
+            "auth_code": "mock_auth_code",
+            "code_verifier": "mock_code_verifier",
+        },
+        redirect_to=None,
+        xform=mocker.ANY
+    )
+
+
