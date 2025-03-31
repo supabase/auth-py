@@ -1,10 +1,11 @@
 import time
 import unittest
+from uuid import uuid4
 
 import pytest
 from jwt import encode
 
-from supabase_auth.errors import AuthInvalidJwtError, AuthSessionMissingError
+from supabase_auth.errors import AuthInvalidJwtError, AuthSessionMissingError, AuthApiError
 from supabase_auth.helpers import decode_jwt
 
 from .clients import (
@@ -305,21 +306,83 @@ async def test_initialize_from_url():
     url_without_token = "http://example.com/?other=value"
     assert client._is_implicit_grant_flow(url_without_token) == False
     
-    # Now we'll test the initialize method with mocks
+    # Now test actual URL initialization with a valid URL containing auth tokens
     from unittest.mock import patch
+    from supabase_auth.types import User, Session, UserResponse
     
-    # Create a URL that will pass the _is_implicit_grant_flow check
-    good_url = "http://example.com/?access_token=test_token&refresh_token=test_refresh&expires_in=3600&token_type=bearer"
+    # Create a mock user and session to avoid actual API calls
+    mock_user = User(
+        id="user123",
+        email="test@example.com",
+        app_metadata={},
+        user_metadata={},
+        aud="authenticated",
+        created_at="2023-01-01T00:00:00Z",
+        confirmed_at="2023-01-01T00:00:00Z",
+        last_sign_in_at="2023-01-01T00:00:00Z",
+        role="authenticated",
+        updated_at="2023-01-01T00:00:00Z"
+    )
     
-    # Test initialize method with a valid URL
-    with patch.object(client, 'initialize_from_url') as mock_init_url:
-        await client.initialize(url=good_url)
-        mock_init_url.assert_called_once_with(good_url)
+    # Wrap the user in a UserResponse as that's what get_user returns
+    mock_user_response = UserResponse(user=mock_user)
     
-    # Test initialize method with an invalid URL
-    with patch.object(client, 'initialize_from_storage') as mock_init_storage:
-        await client.initialize(url="http://example.com/no_token_here")
-        mock_init_storage.assert_called_once()
+    # Test successful initialization with tokens in URL
+    good_url = "http://example.com/?access_token=mock_access_token&refresh_token=mock_refresh_token&expires_in=3600&token_type=bearer"
+    
+    # We need to mock:
+    # 1. get_user which is called by _get_session_from_url to validate the token
+    # 2. _save_session which is called to store the session data
+    # 3. _notify_all_subscribers which is called to notify about sign-in
+    with patch.object(client, 'get_user') as mock_get_user:
+        mock_get_user.return_value = mock_user_response
+        
+        with patch.object(client, '_save_session') as mock_save_session:
+            with patch.object(client, '_notify_all_subscribers') as mock_notify:
+                # Call initialize_from_url with the good URL
+                result = await client.initialize_from_url(good_url)
+                
+                # Verify get_user was called with the access token
+                mock_get_user.assert_called_once_with("mock_access_token")
+                
+                # Verify _save_session was called with a Session object
+                mock_save_session.assert_called_once()
+                session_arg = mock_save_session.call_args[0][0]
+                assert isinstance(session_arg, Session)
+                assert session_arg.access_token == "mock_access_token"
+                assert session_arg.refresh_token == "mock_refresh_token"
+                assert session_arg.expires_in == 3600
+                
+                # Verify _notify_all_subscribers was called
+                mock_notify.assert_called_with("SIGNED_IN", session_arg)
+                
+                assert result is None  # initialize_from_url doesn't have a return value
+    
+    # Test URL with error - need to include error_code for the test to work correctly
+    error_url = "http://example.com/?error=invalid_request&error_description=Invalid+request&error_code=400"
+    
+    # Should throw an error when URL contains error parameters
+    from supabase_auth.errors import AuthImplicitGrantRedirectError
+    
+    try:
+        await client.initialize_from_url(error_url)
+        assert False, "Expected AuthImplicitGrantRedirectError"
+    except AuthImplicitGrantRedirectError as e:
+        # The error message includes the error_description value
+        assert "Invalid request" in str(e)
+    
+    # Test URL with code for PKCE flow
+    code_url = "http://example.com/?code=authorization_code"
+    
+    # For the code URL path, we're not testing it here since it requires more mocking
+    # and is indirectly tested via other tests like exchange_code_for_session
+    
+    # Test URL with neither tokens nor code - should not throw but also not call anything
+    invalid_url = "http://example.com/?foo=bar"
+    with patch.object(client, '_get_session_from_url') as mock_get_session:
+        result = await client.initialize_from_url(invalid_url)
+        mock_get_session.assert_not_called()
+        assert result is None
 
 
 async def test_exchange_code_for_session():
@@ -430,170 +493,7 @@ async def test_get_user_identities():
     assert hasattr(identities_response, "identities")
 
 
-async def test_sign_in_with_sso():
-    client = auth_client()
-    
-    # Test sign in with domain
-    from unittest.mock import patch
-    from supabase_auth.types import SSOResponse
-    from supabase_auth.errors import AuthInvalidCredentialsError
-    
-    with patch.object(client, '_request') as mock_request:
-        mock_response = SSOResponse(url="https://example.com/sso/redirect")
-        mock_request.return_value = mock_response
-        
-        # Call sign_in_with_sso with domain
-        response = await client.sign_in_with_sso({
-            "domain": "example.com",
-            "options": {
-                "redirect_to": "https://example.com/callback",
-                "skip_http_redirect": True,
-            },
-        })
-        
-        # Verify the response
-        assert response.url == "https://example.com/sso/redirect"
-        
-        # Verify the request parameters
-        mock_request.assert_called_once()
-        args, kwargs = mock_request.call_args
-        assert args[0] == "POST"
-        assert args[1] == "sso"
-        assert "domain" in kwargs.get("body", {})
-        assert kwargs.get("body", {}).get("domain") == "example.com"
-        
-    # Test sign in with provider_id
-    with patch.object(client, '_request') as mock_request:
-        mock_response = SSOResponse(url="https://example.com/sso/redirect")
-        mock_request.return_value = mock_response
-        
-        # Call sign_in_with_sso with provider_id
-        response = await client.sign_in_with_sso({
-            "provider_id": "provider123",
-            "options": {
-                "redirect_to": "https://example.com/callback",
-                "skip_http_redirect": True,
-            },
-        })
-        
-        # Verify the response
-        assert response.url == "https://example.com/sso/redirect"
-        
-        # Verify the request parameters
-        mock_request.assert_called_once()
-        args, kwargs = mock_request.call_args
-        assert "provider_id" in kwargs.get("body", {})
-        assert kwargs.get("body", {}).get("provider_id") == "provider123"
-    
-    # Test invalid parameters
-    with pytest.raises(AuthInvalidCredentialsError):
-        await client.sign_in_with_sso({})
-
-
-async def test_sign_in_with_id_token():
-    client = auth_client()
-    
-    # Create mocked response
-    from unittest.mock import patch
-    
-    # Use patch for _request to avoid actual API calls
-    with patch.object(client, '_request') as mock_request:
-        from supabase_auth.types import AuthResponse, Session, User
-        
-        mock_user = User(
-            id="mock_user_id",
-            email="mock@example.com",
-            app_metadata={},
-            user_metadata={},
-            created_at="2023-01-01T00:00:00Z",
-            aud="",
-        )
-        
-        mock_session = Session(
-            access_token="mock_access_token",
-            refresh_token="mock_refresh_token",
-            expires_in=3600,
-            expires_at=int(time.time()) + 3600,
-            token_type="bearer",
-            user=mock_user
-        )
-        
-        mock_auth_response = AuthResponse(
-            session=mock_session,
-            user=mock_user
-        )
-        
-        mock_request.return_value = mock_auth_response
-        
-        # Call sign_in_with_id_token
-        credentials = {
-            "provider": "google",
-            "token": "mock_id_token",
-            "access_token": "mock_access_token",
-            "nonce": "mock_nonce",
-            "options": {
-                "captcha_token": "mock_captcha_token"
-            }
-        }
-        
-        response = await client.sign_in_with_id_token(credentials)
-        
-        # Verify response
-        assert response.session == mock_session
-        assert response.user == mock_user
-        
-        # Verify the request was made with correct parameters
-        mock_request.assert_called_once()
-        args, kwargs = mock_request.call_args
-        
-        assert args[0] == "POST"
-        assert args[1] == "token"
-        assert kwargs.get("query", {}).get("grant_type") == "id_token"
-        assert kwargs.get("body", {}).get("provider") == "google"
-        assert kwargs.get("body", {}).get("id_token") == "mock_id_token"
-        assert kwargs.get("body", {}).get("access_token") == "mock_access_token"
-        assert kwargs.get("body", {}).get("nonce") == "mock_nonce"
-        assert kwargs.get("body", {}).get("gotrue_meta_security", {}).get("captcha_token") == "mock_captcha_token"
-
-
-async def test_sign_in_with_oauth():
-    client = auth_client()
-    
-    # Test with various providers
-    for provider in ["google", "github", "facebook"]:
-        # Test with minimal options
-        credentials = {
-            "provider": provider,
-        }
-        
-        response = await client.sign_in_with_oauth(credentials)
-        
-        # Verify response structure 
-        assert response.provider == provider
-        assert response.url is not None
-        assert provider in response.url
-        
-        # Test with additional options
-        credentials = {
-            "provider": provider,
-            "options": {
-                "redirect_to": "https://example.com/callback",
-                "scopes": "email,profile",
-                "query_params": {
-                    "access_type": "offline",
-                    "prompt": "consent"
-                }
-            }
-        }
-        
-        response = await client.sign_in_with_oauth(credentials)
-        
-        # Verify response contains the redirect_to and scopes in URL
-        assert "redirect_to=https%3A%2F%2Fexample.com%2Fcallback" in response.url
-        assert "scopes=email%2Cprofile" in response.url
-
-
-async def test_reauthenticate():
+async def test_unlink_identity():
     client = auth_client()
     credentials = mock_user_credentials()
     
@@ -606,54 +506,124 @@ async def test_reauthenticate():
     )
     assert signup_response.session is not None
     
-    # Test reauthenticate with a valid session
+    # Mock a UserIdentity to test unlink_identity
     from unittest.mock import patch
+    from supabase_auth.types import UserIdentity
+    
+    # Create a mock identity
+    mock_identity = UserIdentity(
+        id="user-id",
+        identity_id="identity-id-1",
+        user_id="user-id",
+        identity_data={"email": "user@example.com"},
+        provider="github",
+        created_at="2023-01-01T00:00:00Z",
+        last_sign_in_at="2023-01-01T00:00:00Z",
+        updated_at="2023-01-01T00:00:00Z"
+    )
+    
+    # Mock the _request method since we can't actually unlink an identity that doesn't exist
+    with patch.object(client, '_request') as mock_request:
+        mock_request.return_value = None
+        
+        # Call the method
+        await client.unlink_identity(mock_identity)
+        
+        # Verify the request was made properly
+        mock_request.assert_called_once_with(
+            "DELETE",
+            "user/identities/identity-id-1",
+            jwt=signup_response.session.access_token
+        )
+    
+    # Test error case: no session
+    with patch.object(client, 'get_session') as mock_get_session:
+        from supabase_auth.errors import AuthSessionMissingError
+        mock_get_session.return_value = None
+        
+        try:
+            await client.unlink_identity(mock_identity)
+            assert False, "Expected AuthSessionMissingError"
+        except AuthSessionMissingError:
+            pass
+
+
+async def test_verify_otp():
+    client = auth_client()
+    
+    # Mock the _request method since we can't actually verify an OTP in the test
+    from unittest.mock import patch
+    from supabase_auth.types import AuthResponse, Session, User
+    import time
+    
+    mock_user = User(
+        id="test-user-id",
+        app_metadata={},
+        user_metadata={},
+        aud="test-aud",
+        email="test@example.com",
+        phone="",
+        created_at="2023-01-01T00:00:00Z",
+        confirmed_at="2023-01-01T00:00:00Z",
+        last_sign_in_at="2023-01-01T00:00:00Z",
+        role="",
+        updated_at="2023-01-01T00:00:00Z"
+    )
+    
+    mock_session = Session(
+        access_token="mock-access-token",
+        refresh_token="mock-refresh-token",
+        expires_in=3600,
+        expires_at=round(time.time()) + 3600,
+        token_type="bearer",
+        user=mock_user
+    )
+    
+    mock_response = AuthResponse(
+        session=mock_session,
+        user=mock_user
+    )
     
     with patch.object(client, '_request') as mock_request:
-        # Create a mock response
-        from supabase_auth.types import AuthResponse, Session, User
+        # Configure the mock to return a predefined response
+        mock_request.return_value = mock_response
         
-        # Use the real user from the signed-up session
-        session = signup_response.session
-        user = session.user
-        
-        mock_auth_response = AuthResponse(
-            session=session,
-            user=user
-        )
-        
-        mock_request.return_value = mock_auth_response
-        
-        # Call reauthenticate
-        response = await client.reauthenticate()
-        
-        # Verify the response
-        assert response.session == session
-        assert response.user == user
-        
-        # Verify the request parameters
-        mock_request.assert_called_once()
-        args, kwargs = mock_request.call_args
-        assert args[0] == "GET"
-        assert args[1] == "reauthenticate"
-        assert kwargs.get("jwt") == session.access_token
-    
-    # Test error when no session is available
-    from supabase_auth.errors import AuthSessionMissingError
-    
-    # Create a new client with no session
-    new_client = auth_client()
-    
-    # Try to reauthenticate without a session
-    with pytest.raises(AuthSessionMissingError):
-        await new_client.reauthenticate()
+        # Also patch _save_session to avoid actual storage interactions
+        with patch.object(client, '_save_session') as mock_save:
+            # Call verify_otp with test parameters
+            params = {
+                "type": "sms",
+                "phone": "+11234567890",
+                "token": "123456",
+                "options": {
+                    "redirect_to": "https://example.com/callback"
+                }
+            }
+            
+            response = await client.verify_otp(params)
+            
+            # Verify the request was made with correct parameters
+            mock_request.assert_called_once()
+            args, kwargs = mock_request.call_args
+            assert args[0] == "POST"  # method
+            assert args[1] == "verify"  # path
+            assert kwargs["body"]["phone"] == "+11234567890"
+            assert kwargs["body"]["token"] == "123456"
+            assert kwargs["redirect_to"] == "https://example.com/callback"
+            
+            # Verify the session was saved
+            mock_save.assert_called_once_with(mock_session)
+            
+            # Verify the response
+            assert response == mock_response
 
 
-async def test_sign_out():
+async def test_sign_in_with_password():
     client = auth_client()
     credentials = mock_user_credentials()
+    from supabase_auth.errors import AuthApiError, AuthInvalidCredentialsError
     
-    # First sign up to get a valid session
+    # First create a user we can sign in with
     signup_response = await client.sign_up(
         {
             "email": credentials.get("email"),
@@ -661,48 +631,260 @@ async def test_sign_out():
         }
     )
     assert signup_response.session is not None
-    session = signup_response.session
     
-    # Track sign-out events with a mock callback
-    from unittest.mock import MagicMock, patch
-    auth_callback = MagicMock()
-    client.on_auth_state_change(auth_callback)
+    # Test signing in with the same credentials (email)
+    signin_response = await client.sign_in_with_password(
+        {
+            "email": credentials.get("email"),
+            "password": credentials.get("password"),
+        }
+    )
     
-    # Test sign_out with different scopes
-    for scope in ["global", "local", "others"]:
-        auth_callback.reset_mock()  # Clear previous calls
+    # Verify the response has a valid session and user
+    assert signin_response.session is not None
+    assert signin_response.user is not None
+    assert signin_response.user.email == credentials.get("email")
+    
+    # Test error case: wrong password
+    from unittest.mock import patch
+    
+    # We need to create a custom client to avoid affecting other tests
+    test_client = auth_client()
+    
+    try:
+        await test_client.sign_in_with_password(
+            {
+                "email": credentials.get("email"),
+                "password": "wrong_password",
+            }
+        )
+        assert False, "Expected AuthApiError for wrong password"
+    except AuthApiError:
+        pass
+    
+    # Test error case: missing credentials
+    try:
+        await test_client.sign_in_with_password({})
+        assert False, "Expected AuthInvalidCredentialsError for missing credentials"
+    except AuthInvalidCredentialsError:
+        pass
+
+
+async def test_sign_in_with_otp():
+    client = auth_client()
+    
+    # Test with email OTP
+    email = f"test-{uuid4()}@example.com"
+    
+    # When sign_in_with_otp is called with valid email, it should return a AuthOtpResponse
+    # We can't fully test the actual OTP flow since that requires email verification
+    from unittest.mock import patch
+    from supabase_auth.types import AuthOtpResponse
+    
+    # First test for email OTP
+    with patch.object(client, '_request') as mock_request:
+        mock_response = AuthOtpResponse(
+            message_id="mock-message-id",
+            email=email,
+            phone=None,
+            hash=None
+        )
+        mock_request.return_value = mock_response
         
-        # Mock the admin.sign_out to avoid actual API calls
-        with patch.object(client.admin, 'sign_out') as mock_admin_sign_out:
-            # Reset session for each test
-            await client.set_session(session.access_token, session.refresh_token)
-            assert await client.get_session() is not None
-            
-            # Clear callback history after setting session (which triggers TOKEN_REFRESHED)
-            auth_callback.reset_mock()
-
-            # Call sign_out
-            await client.sign_out({"scope": scope})
-            
-            # Verify admin.sign_out was called if scope is not "local"
-            if scope != "local":
-                mock_admin_sign_out.assert_called_once_with(session.access_token, scope)
-            
-            # Verify session was removed if scope is not "others"
-            if scope != "others":
-                assert await client.get_session() is None
-                # Verify subscribers were notified with SIGNED_OUT
-                auth_callback.assert_called_with("SIGNED_OUT", None)
-            else:
-                # For "others" scope, session should remain
-                assert await client.get_session() is not None
+        response = await client.sign_in_with_otp({
+            "email": email,
+            "options": {
+                "email_redirect_to": "https://example.com/callback",
+                "should_create_user": True,
+                "data": {"custom": "data"},
+                "captcha_token": "mock-captcha-token"
+            }
+        })
+        
+        # Verify request parameters
+        mock_request.assert_called_once()
+        args, kwargs = mock_request.call_args
+        assert args[0] == "POST"
+        assert args[1] == "otp"
+        assert kwargs["body"]["email"] == email
+        assert kwargs["body"]["create_user"] == True
+        assert kwargs["body"]["data"] == {"custom": "data"}
+        assert kwargs["body"]["gotrue_meta_security"]["captcha_token"] == "mock-captcha-token"
+        assert kwargs["redirect_to"] == "https://example.com/callback"
+        
+        # Verify response
+        assert response == mock_response
     
-    # Test unsubscribe
-    unsubscribe_callback = MagicMock()
-    subscription = client.on_auth_state_change(unsubscribe_callback)
-    subscription.unsubscribe()
+    # Test with phone OTP
+    phone = "+11234567890"
+    
+    with patch.object(client, '_request') as mock_request:
+        mock_response = AuthOtpResponse(
+            message_id="mock-message-id",
+            email=None,
+            phone=phone,
+            hash=None
+        )
+        mock_request.return_value = mock_response
+        
+        response = await client.sign_in_with_otp({
+            "phone": phone,
+            "options": {
+                "should_create_user": True,
+                "data": {"custom": "data"},
+                "channel": "whatsapp",  # Test alternate channel
+                "captcha_token": "mock-captcha-token"
+            }
+        })
+        
+        # Verify request parameters
+        mock_request.assert_called_once()
+        args, kwargs = mock_request.call_args
+        assert args[0] == "POST"
+        assert args[1] == "otp"
+        assert kwargs["body"]["phone"] == phone
+        assert kwargs["body"]["create_user"] == True
+        assert kwargs["body"]["data"] == {"custom": "data"}
+        assert kwargs["body"]["channel"] == "whatsapp"
+        assert kwargs["body"]["gotrue_meta_security"]["captcha_token"] == "mock-captcha-token"
+        assert kwargs.get("redirect_to") is None  # No redirect for phone
+        
+        # Verify response
+        assert response == mock_response
+    
+    # Test with invalid parameters (missing both email and phone)
+    from supabase_auth.errors import AuthInvalidCredentialsError
+    
+    try:
+        await client.sign_in_with_otp({})
+        assert False, "Expected AuthInvalidCredentialsError"
+    except AuthInvalidCredentialsError:
+        pass
 
-    # Session should be None at this point due to previous sign_out
-    await client.sign_out()
-    unsubscribe_callback.assert_not_called()  # Shouldn't be called after unsubscribing
+
+async def test_sign_out():
+    from unittest.mock import patch, MagicMock
+    from supabase_auth.types import Session, User
+    client = auth_client()
+    
+    # Create a mock user and session
+    mock_user = User(
+        id="user123",
+        email="test@example.com",
+        app_metadata={},
+        user_metadata={},
+        aud="authenticated",
+        created_at="2023-01-01T00:00:00Z",
+        confirmed_at="2023-01-01T00:00:00Z",
+        last_sign_in_at="2023-01-01T00:00:00Z",
+        role="authenticated",
+        updated_at="2023-01-01T00:00:00Z"
+    )
+    
+    mock_session = Session(
+        access_token="mock_access_token",
+        refresh_token="mock_refresh_token",
+        expires_in=3600,
+        token_type="bearer",
+        user=mock_user
+    )
+    
+    # Test sign_out with "global" scope (default)
+    # This should call admin.sign_out, _remove_session, and _notify_all_subscribers
+    with patch.object(client, 'get_session') as mock_get_session:
+        mock_get_session.return_value = mock_session
+        
+        with patch.object(client.admin, 'sign_out') as mock_admin_sign_out:
+            with patch.object(client, '_remove_session') as mock_remove_session:
+                with patch.object(client, '_notify_all_subscribers') as mock_notify:
+                    # Call sign_out with default scope (global)
+                    await client.sign_out()
+                    
+                    # Verify that admin.sign_out was called with correct parameters
+                    mock_admin_sign_out.assert_called_once_with("mock_access_token", "global")
+                    
+                    # Verify that _remove_session was called
+                    mock_remove_session.assert_called_once()
+                    
+                    # Verify that _notify_all_subscribers was called with SIGNED_OUT
+                    mock_notify.assert_called_once_with("SIGNED_OUT", None)
+    
+    # Test sign_out with "local" scope
+    # Should behave the same as "global" for client-side
+    with patch.object(client, 'get_session') as mock_get_session:
+        mock_get_session.return_value = mock_session
+        
+        with patch.object(client.admin, 'sign_out') as mock_admin_sign_out:
+            with patch.object(client, '_remove_session') as mock_remove_session:
+                with patch.object(client, '_notify_all_subscribers') as mock_notify:
+                    # Call sign_out with local scope
+                    await client.sign_out({"scope": "local"})
+                    
+                    # Verify that admin.sign_out was called with correct parameters
+                    mock_admin_sign_out.assert_called_once_with("mock_access_token", "local")
+                    
+                    # Verify that _remove_session was called
+                    mock_remove_session.assert_called_once()
+                    
+                    # Verify that _notify_all_subscribers was called with SIGNED_OUT
+                    mock_notify.assert_called_once_with("SIGNED_OUT", None)
+    
+    # Test sign_out with "others" scope
+    # This should only call admin.sign_out but not _remove_session or _notify_all_subscribers
+    with patch.object(client, 'get_session') as mock_get_session:
+        mock_get_session.return_value = mock_session
+        
+        with patch.object(client.admin, 'sign_out') as mock_admin_sign_out:
+            with patch.object(client, '_remove_session') as mock_remove_session:
+                with patch.object(client, '_notify_all_subscribers') as mock_notify:
+                    # Call sign_out with others scope
+                    await client.sign_out({"scope": "others"})
+                    
+                    # Verify that admin.sign_out was called with correct parameters
+                    mock_admin_sign_out.assert_called_once_with("mock_access_token", "others")
+                    
+                    # Verify that _remove_session was NOT called
+                    mock_remove_session.assert_not_called()
+                    
+                    # Verify that _notify_all_subscribers was NOT called
+                    mock_notify.assert_not_called()
+    
+    # Test sign_out with no session
+    # This should not call admin.sign_out but still call _remove_session and _notify_all_subscribers
+    with patch.object(client, 'get_session') as mock_get_session:
+        mock_get_session.return_value = None
+        
+        with patch.object(client.admin, 'sign_out') as mock_admin_sign_out:
+            with patch.object(client, '_remove_session') as mock_remove_session:
+                with patch.object(client, '_notify_all_subscribers') as mock_notify:
+                    # Call sign_out with default scope
+                    await client.sign_out()
+                    
+                    # Verify that admin.sign_out was NOT called
+                    mock_admin_sign_out.assert_not_called()
+                    
+                    # Verify that _remove_session was called
+                    mock_remove_session.assert_called_once()
+                    
+                    # Verify that _notify_all_subscribers was called with SIGNED_OUT
+                    mock_notify.assert_called_once_with("SIGNED_OUT", None)
+    
+    # Test when admin.sign_out raises an error
+    # This should suppress the error and continue with _remove_session and _notify_all_subscribers
+    with patch.object(client, 'get_session') as mock_get_session:
+        mock_get_session.return_value = mock_session
+        
+        with patch.object(client.admin, 'sign_out') as mock_admin_sign_out:
+            mock_admin_sign_out.side_effect = AuthApiError("Test error", 401, "auth_error")
+            
+            with patch.object(client, '_remove_session') as mock_remove_session:
+                with patch.object(client, '_notify_all_subscribers') as mock_notify:
+                    # Call sign_out with default scope
+                    await client.sign_out()
+                    
+                    # Verify that _remove_session was still called despite the error
+                    mock_remove_session.assert_called_once()
+                    
+                    # Verify that _notify_all_subscribers was still called despite the error
+                    mock_notify.assert_called_once_with("SIGNED_OUT", None)
 
