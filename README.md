@@ -5,12 +5,7 @@
 [![Version](https://img.shields.io/pypi/v/gotrue?color=%2334D058)](https://pypi.org/project/gotrue)
 [![Coverage Status](https://coveralls.io/repos/github/supabase/auth-py/badge.svg?branch=main)](https://coveralls.io/github/supabase/auth-py?branch=main)
 
-This is a Python port of the
-[supabase js gotrue client](https://github.com/supabase/gotrue-js). The current
-state is that there is a features parity but with small differences that are
-mentioned in the section **Differences to the JS client**. As of December 14th,
-we renamed to repo from `gotrue-py` to `auth-py` to mirror the changes in the
-JavaScript library.
+This is a Python port of the [supabase js gotrue client](https://github.com/supabase/gotrue-js). The current state is that there is a features parity but with small differences that are mentioned in the section **Differences to the JS client**. As of December 14th, we renamed to repo from `gotrue-py` to `auth-py` to mirror the changes in the JavaScript library.
 
 ## Installation
 
@@ -43,23 +38,11 @@ pip install supabase_auth
 
 ## Differences to the JS client
 
-It should be noted there are differences to the
-[JS client](https://github.com/supabase/gotrue-js). If you feel particulaly
-strongly about them and want to motivate a change, feel free to make a GitHub
-issue and we can discuss it there.
+It should be noted there are differences to the [JS client](https://github.com/supabase/gotrue-js). If you feel particulaly strongly about them and want to motivate a change, feel free to make a GitHub issue and we can discuss it there.
 
-Firstly, feature pairity is not 100% with the
-[JS client](https://github.com/supabase/gotrue-js). In most cases we match the
-methods and attributes of the [JS client](https://github.com/supabase/gotrue-js)
-and api classes, but is some places (e.g for browser specific code) it didn't
-make sense to port the code line for line.
+Firstly, feature pairity is not 100% with the [JS client](https://github.com/supabase/gotrue-js). In most cases we match the methods and attributes of the [JS client](https://github.com/supabase/gotrue-js) and api classes, but is some places (e.g for browser specific code) it didn't make sense to port the code line for line.
 
-There is also a divergence in terms of how errors are raised. In the
-[JS client](https://github.com/supabase/gotrue-js), the errors are returned as
-part of the object, which the user can choose to process in whatever way they
-see fit. In this Python client, we raise the errors directly where they
-originate, as it was felt this was more Pythonic and adhered to the idioms of
-the language more directly.
+There is also a divergence in terms of how errors are raised. In the [JS client](https://github.com/supabase/gotrue-js), the errors are returned as part of the object, which the user can choose to process in whatever way they see fit. In this Python client, we raise the errors directly where they originate, as it was felt this was more Pythonic and adhered to the idioms of the language more directly.
 
 In JS we return the error, but in Python we just raise it.
 
@@ -67,19 +50,13 @@ In JS we return the error, but in Python we just raise it.
 const { data, error } = client.sign_up(...)
 ```
 
-The other key difference is we do not use pascalCase to encode variable and
-method names. Instead we use the snake_case convention adopted in the Python
-language.
+The other key difference is we do not use pascalCase to encode variable and method names. Instead we use the snake_case convention adopted in the Python language.
 
-Also, the `supabase_auth` library for Python parses the date-time string into
-`datetime` Python objects. The
-[JS client](https://github.com/supabase/gotrue-js) keeps the date-time as
-strings.
+Also, the `supabase_auth` library for Python parses the date-time string into `datetime` Python objects. The [JS client](https://github.com/supabase/gotrue-js) keeps the date-time as strings.
 
 ## Usage
 
-The library provides both synchronous and asynchronous clients. Here are some
-examples:
+The library provides both synchronous and asynchronous clients. Here are some examples:
 
 ### Synchronous Client
 
