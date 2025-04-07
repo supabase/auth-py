@@ -1,22 +1,15 @@
 # Auth-py
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?label=license)](https://opensource.org/licenses/MIT)
 [![CI](https://github.com/supabase-community/gotrue-py/actions/workflows/ci.yml/badge.svg)](https://github.com/supabase-community/gotrue-py/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/pypi/pyversions/gotrue)](https://pypi.org/project/gotrue)
 [![Version](https://img.shields.io/pypi/v/gotrue?color=%2334D058)](https://pypi.org/project/gotrue)
-[![Codecov](https://codecov.io/gh/supabase-community/gotrue-py/branch/main/graph/badge.svg)](https://codecov.io/gh/supabase-community/gotrue-py)
-[![Last commit](https://img.shields.io/github/last-commit/supabase-community/gotrue-py.svg?style=flat)](https://github.com/supabase-community/gotrue-py/commits)
-[![GitHub commit activity](https://img.shields.io/github/commit-activity/m/supabase-community/gotrue-py)](https://github.com/supabase-community/gotrue-py/commits)
-[![Github Stars](https://img.shields.io/github/stars/supabase-community/gotrue-py?style=flat&logo=github)](https://github.com/supabase-community/gotrue-py/stargazers)
-[![Github Forks](https://img.shields.io/github/forks/supabase-community/gotrue-py?style=flat&logo=github)](https://github.com/supabase-community/gotrue-py/network/members)
-[![Github Watchers](https://img.shields.io/github/watchers/supabase-community/gotrue-py?style=flat&logo=github)](https://github.com/supabase-community/gotrue-py)
-[![GitHub contributors](https://img.shields.io/github/contributors/supabase-community/gotrue-py)](https://github.com/supabase-community/gotrue-py/graphs/contributors)
+[![Coverage Status](https://coveralls.io/repos/github/supabase/auth-py/badge.svg?branch=main)](https://coveralls.io/github/supabase/auth-py?branch=main)
 
 This is a Python port of the [supabase js gotrue client](https://github.com/supabase/gotrue-js). The current state is that there is a features parity but with small differences that are mentioned in the section **Differences to the JS client**. As of December 14th, we renamed to repo from `gotrue-py` to `auth-py` to mirror the changes in the JavaScript library.
 
 ## Installation
 
-We are still working on making the `supabase_auth` python library more user-friendly. For now here are some sparse notes on how to install the module.
+The package can be installed using pip or poetry:
 
 ### Poetry
 
@@ -29,6 +22,19 @@ poetry add supabase_auth
 ```bash
 pip install supabase_auth
 ```
+
+## Features
+
+- Full feature parity with the JavaScript client
+- Support for both synchronous and asynchronous operations
+- MFA (Multi-Factor Authentication) support
+- OAuth and SSO integration
+- Magic link and OTP authentication
+- Phone number authentication
+- Anonymous sign-in
+- Session management with auto-refresh
+- JWT token handling and verification
+- User management and profile updates
 
 ## Differences to the JS client
 
@@ -48,11 +54,11 @@ The other key difference is we do not use pascalCase to encode variable and meth
 
 Also, the `supabase_auth` library for Python parses the date-time string into `datetime` Python objects. The [JS client](https://github.com/supabase/gotrue-js) keeps the date-time as strings.
 
-## Usage (outdated)
+## Usage
 
-**Important:** This section is outdated, you can be guided by the [JS client documentation](https://supabase.github.io/gotrue-js) because this Python client has a lot of parity with the JS client.
+The library provides both synchronous and asynchronous clients. Here are some examples:
 
-To instantiate the client, you'll need the URL and any request headers at a minimum.
+### Synchronous Client
 
 ```python
 from supabase_auth import SyncGoTrueClient
@@ -62,37 +68,92 @@ headers = {
     # ... any other headers you might need.
 }
 client: SyncGoTrueClient = SyncGoTrueClient(url="www.genericauthwebsite.com", headers=headers)
-```
 
-To send a magic email link to the user, just provide the email kwarg to the `sign_in` method:
+# Sign up with email and password
+user = client.sign_up(email="example@gmail.com", password="*********")
 
-```python
-user: Dict[str, Any] = client.sign_up(email="example@gmail.com")
-```
+# Sign in with email and password
+user = client.sign_in_with_password(email="example@gmail.com", password="*********")
 
-To login with email and password, provide both to the `sign_in` method:
+# Sign in with magic link
+user = client.sign_in_with_otp(email="example@gmail.com")
 
-```python
-user: Dict[str, Any] = client.sign_up(email="example@gmail.com", password="*********")
-```
+# Sign in with phone number
+user = client.sign_in_with_otp(phone="+1234567890")
 
-To sign out of the logged in user, call the `sign_out` method. We can then assert that the session and user are null values.
+# Sign in with OAuth
+user = client.sign_in_with_oauth(provider="google")
 
-```python
+# Sign out
 client.sign_out()
-assert client.user() is None
-assert client.session() is None
+
+# Get current user
+user = client.get_user()
+
+# Update user profile
+user = client.update_user({"data": {"name": "John Doe"}})
 ```
 
-We can refesh a users session.
+### Asynchronous Client
 
 ```python
-# The user should already be signed in at this stage.
-user = client.refresh_session()
-assert client.user() is not None
-assert client.session() is not None
+from supabase_auth import AsyncGoTrueClient
+
+headers = {
+    "apiKey": "my-mega-awesome-api-key",
+    # ... any other headers you might need.
+}
+client: AsyncGoTrueClient = AsyncGoTrueClient(url="www.genericauthwebsite.com", headers=headers)
+
+async def main():
+    # Sign up with email and password
+    user = await client.sign_up(email="example@gmail.com", password="*********")
+
+    # Sign in with email and password
+    user = await client.sign_in_with_password(email="example@gmail.com", password="*********")
+
+    # Sign in with magic link
+    user = await client.sign_in_with_otp(email="example@gmail.com")
+
+    # Sign in with phone number
+    user = await client.sign_in_with_otp(phone="+1234567890")
+
+    # Sign in with OAuth
+    user = await client.sign_in_with_oauth(provider="google")
+
+    # Sign out
+    await client.sign_out()
+
+    # Get current user
+    user = await client.get_user()
+
+    # Update user profile
+    user = await client.update_user({"data": {"name": "John Doe"}})
+
+# Run the async code
+import asyncio
+asyncio.run(main())
+```
+
+### MFA Support
+
+The library includes support for Multi-Factor Authentication:
+
+```python
+# List MFA factors
+factors = client.mfa.list_factors()
+
+# Enroll a new MFA factor
+enrolled_factor = client.mfa.enroll({"factor_type": "totp"})
+
+# Challenge and verify MFA
+challenge = client.mfa.challenge({"factor_id": "factor_id"})
+verified = client.mfa.verify({"factor_id": "factor_id", "code": "123456"})
+
+# Unenroll a factor
+client.mfa.unenroll({"factor_id": "factor_id"})
 ```
 
 ## Contributions
 
-We would be immensely grateful for any contributions to this project. 
+We would be immensely grateful for any contributions to this project.
