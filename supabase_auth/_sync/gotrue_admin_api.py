@@ -3,7 +3,7 @@ from __future__ import annotations
 from functools import partial
 from typing import Dict, List, Optional
 
-from ..helpers import model_validate, parse_link_response, parse_user_response
+from ..helpers import model_validate, parse_link_response, parse_user_response, parse_auth_code_response
 from ..http_clients import SyncClient
 from ..types import (
     AdminUserAttributes,
@@ -16,7 +16,8 @@ from ..types import (
     InviteUserByEmailOptions,
     SignOutScope,
     User,
-    UserResponse,
+    IssueAuthCodeParams,
+    UserResponse, AuthCodeResponse,
 )
 from .gotrue_admin_mfa_api import SyncGoTrueAdminMFAAPI
 from .gotrue_base_api import SyncGoTrueBaseAPI
@@ -24,13 +25,13 @@ from .gotrue_base_api import SyncGoTrueBaseAPI
 
 class SyncGoTrueAdminAPI(SyncGoTrueBaseAPI):
     def __init__(
-        self,
-        *,
-        url: str = "",
-        headers: Dict[str, str] = {},
-        http_client: Optional[SyncClient] = None,
-        verify: bool = True,
-        proxy: Optional[str] = None,
+            self,
+            *,
+            url: str = "",
+            headers: Dict[str, str] = {},
+            http_client: Optional[SyncClient] = None,
+            verify: bool = True,
+            proxy: Optional[str] = None,
     ) -> None:
         SyncGoTrueBaseAPI.__init__(
             self,
@@ -57,9 +58,9 @@ class SyncGoTrueAdminAPI(SyncGoTrueBaseAPI):
         )
 
     def invite_user_by_email(
-        self,
-        email: str,
-        options: InviteUserByEmailOptions = {},
+            self,
+            email: str,
+            options: InviteUserByEmailOptions = {},
     ) -> UserResponse:
         """
         Sends an invite link to an email address.
@@ -70,6 +71,18 @@ class SyncGoTrueAdminAPI(SyncGoTrueBaseAPI):
             body={"email": email, "data": options.get("data")},
             redirect_to=options.get("redirect_to"),
             xform=parse_user_response,
+        )
+
+    def issue_auth_code(self, params: IssueAuthCodeParams) -> AuthCodeResponse:
+        return self._request(
+            "POST",
+            "admin/authcode",
+            body={
+                "user_id": params.get("user_id"),
+                "code_challenge_method": params.get("code_challenge_method"),
+                "code_challenge": params.get("code_challenge"),
+            },
+            xform=parse_auth_code_response
         )
 
     def generate_link(self, params: GenerateLinkParams) -> GenerateLinkResponse:
@@ -138,9 +151,9 @@ class SyncGoTrueAdminAPI(SyncGoTrueBaseAPI):
         )
 
     def update_user_by_id(
-        self,
-        uid: str,
-        attributes: AdminUserAttributes,
+            self,
+            uid: str,
+            attributes: AdminUserAttributes,
     ) -> UserResponse:
         """
         Updates the user data.
@@ -166,8 +179,8 @@ class SyncGoTrueAdminAPI(SyncGoTrueBaseAPI):
         return self._request("DELETE", f"admin/users/{id}", body=body)
 
     def _list_factors(
-        self,
-        params: AuthMFAAdminListFactorsParams,
+            self,
+            params: AuthMFAAdminListFactorsParams,
     ) -> AuthMFAAdminListFactorsResponse:
         return self._request(
             "GET",
@@ -176,8 +189,8 @@ class SyncGoTrueAdminAPI(SyncGoTrueBaseAPI):
         )
 
     def _delete_factor(
-        self,
-        params: AuthMFAAdminDeleteFactorParams,
+            self,
+            params: AuthMFAAdminDeleteFactorParams,
     ) -> AuthMFAAdminDeleteFactorResponse:
         return self._request(
             "DELETE",

@@ -903,3 +903,8 @@ def test_sign_out():
 
                     # Verify that _notify_all_subscribers was still called despite the error
                     mock_notify.assert_called_once_with("SIGNED_OUT", None)
+
+def test_generate_code_challenge_and_method():
+    response = auth_client().generate_code_challenge_and_method()
+    assert isinstance(response.code_challenge, str)
+    assert response.code_challenge_method == "s256"

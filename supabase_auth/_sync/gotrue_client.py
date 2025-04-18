@@ -58,6 +58,7 @@ from ..types import (
     AuthResponse,
     ClaimsResponse,
     CodeExchangeParams,
+    CodeChallengeResponse,
     IdentitiesResponse,
     JWKSet,
     MFAChallengeAndVerifyParams,
@@ -82,7 +83,7 @@ from ..types import (
     UserAttributes,
     UserIdentity,
     UserResponse,
-    VerifyOtpParams,
+    VerifyOtpParams, CodeChallengeMethod,
 )
 from .gotrue_admin_api import SyncGoTrueAdminAPI
 from .gotrue_base_api import SyncGoTrueBaseAPI
@@ -92,18 +93,18 @@ from .storage import SyncMemoryStorage, SyncSupportedStorage
 
 class SyncGoTrueClient(SyncGoTrueBaseAPI):
     def __init__(
-        self,
-        *,
-        url: Optional[str] = None,
-        headers: Optional[Dict[str, str]] = None,
-        storage_key: Optional[str] = None,
-        auto_refresh_token: bool = True,
-        persist_session: bool = True,
-        storage: Optional[SyncSupportedStorage] = None,
-        http_client: Optional[SyncClient] = None,
-        flow_type: AuthFlowType = "implicit",
-        verify: bool = True,
-        proxy: Optional[str] = None,
+            self,
+            *,
+            url: Optional[str] = None,
+            headers: Optional[Dict[str, str]] = None,
+            storage_key: Optional[str] = None,
+            auto_refresh_token: bool = True,
+            persist_session: bool = True,
+            storage: Optional[SyncSupportedStorage] = None,
+            http_client: Optional[SyncClient] = None,
+            flow_type: AuthFlowType = "implicit",
+            verify: bool = True,
+            proxy: Optional[str] = None,
     ) -> None:
         SyncGoTrueBaseAPI.__init__(
             self,
@@ -170,7 +171,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
     # Public methods
 
     def sign_in_anonymously(
-        self, credentials: Optional[SignInAnonymouslyCredentials] = None
+            self, credentials: Optional[SignInAnonymouslyCredentials] = None
     ) -> AuthResponse:
         """
         Creates a new anonymous user.
@@ -198,8 +199,8 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         return response
 
     def sign_up(
-        self,
-        credentials: SignUpWithPasswordCredentials,
+            self,
+            credentials: SignUpWithPasswordCredentials,
     ) -> AuthResponse:
         """
         Creates a new user.
@@ -253,8 +254,8 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         return response
 
     def sign_in_with_password(
-        self,
-        credentials: SignInWithPasswordCredentials,
+            self,
+            credentials: SignInWithPasswordCredentials,
     ) -> AuthResponse:
         """
         Log in an existing user with an email or phone and password.
@@ -310,8 +311,8 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         return response
 
     def sign_in_with_id_token(
-        self,
-        credentials: SignInWithIdTokenCredentials,
+            self,
+            credentials: SignInWithIdTokenCredentials,
     ) -> AuthResponse:
         """
         Allows signing in with an OIDC ID token. The authentication provider used should be enabled and configured.
@@ -346,6 +347,13 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
             self._save_session(response.session)
             self._notify_all_subscribers("SIGNED_IN", response.session)
         return response
+
+    def generate_code_challenge_and_method(self) -> CodeChallengeResponse:
+        code_challenge, code_challenge_method = self._generate_code_challenge_and_method()
+        return CodeChallengeResponse(
+            code_challenge=code_challenge,
+            code_challenge_method=code_challenge_method,
+        )
 
     def sign_in_with_sso(self, credentials: SignInWithSSOCredentials):
         """
@@ -405,8 +413,8 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         )
 
     def sign_in_with_oauth(
-        self,
-        credentials: SignInWithOAuthCredentials,
+            self,
+            credentials: SignInWithOAuthCredentials,
     ) -> OAuthResponse:
         """
         Log in an existing user via a third-party provider.
@@ -474,8 +482,8 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         )
 
     def sign_in_with_otp(
-        self,
-        credentials: SignInWithPasswordlessCredentials,
+            self,
+            credentials: SignInWithPasswordlessCredentials,
     ) -> AuthOtpResponse:
         """
         Log in a user using magiclink or a one-time password (OTP).
@@ -533,8 +541,8 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         )
 
     def resend(
-        self,
-        credentials: ResendCredentials,
+            self,
+            credentials: ResendCredentials,
     ) -> AuthOtpResponse:
         """
         Resends an existing signup confirmation email, email change email, SMS OTP or phone change OTP.
@@ -748,8 +756,8 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
             self._notify_all_subscribers("SIGNED_OUT", None)
 
     def on_auth_state_change(
-        self,
-        callback: Callable[[AuthChangeEvent, Optional[Session]], None],
+            self,
+            callback: Callable[[AuthChangeEvent, Optional[Session]], None],
     ) -> Subscription:
         """
         Receive a notification every time an auth event happens.
@@ -784,9 +792,9 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         )
 
     def reset_password_email(
-        self,
-        email: str,
-        options: Options = {},
+            self,
+            email: str,
+            options: Options = {},
     ) -> None:
         """
         Sends a password reset request to an email address.
@@ -834,8 +842,8 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         )
 
     def _challenge_and_verify(
-        self,
-        params: MFAChallengeAndVerifyParams,
+            self,
+            params: MFAChallengeAndVerifyParams,
     ) -> AuthMFAVerifyResponse:
         response = self._challenge(
             {
@@ -885,7 +893,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         return AuthMFAListFactorsResponse(all=all, totp=totp, phone=phone)
 
     def _get_authenticator_assurance_level(
-        self,
+            self,
     ) -> AuthMFAGetAuthenticatorAssuranceLevelResponse:
         session = self.get_session()
         if not session:
@@ -921,8 +929,8 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
             self._refresh_token_timer = None
 
     def _get_session_from_url(
-        self,
-        url: str,
+            self,
+            url: str,
     ) -> Tuple[Session, Optional[str]]:
         if not self._is_implicit_grant_flow(url):
             raise AuthImplicitGrantRedirectError("Not a valid implicit grant flow url.")
@@ -988,8 +996,8 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
                     self._network_retries = 0
                 except Exception as e:
                     if (
-                        isinstance(e, AuthRetryableError)
-                        and self._network_retries < MAX_RETRIES
+                            isinstance(e, AuthRetryableError)
+                            and self._network_retries < MAX_RETRIES
                     ):
                         if self._refresh_token_timer:
                             self._refresh_token_timer.cancel()
@@ -1055,8 +1063,8 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
                     self._network_retries = 0
             except Exception as e:
                 if (
-                    isinstance(e, AuthRetryableError)
-                    and self._network_retries < MAX_RETRIES
+                        isinstance(e, AuthRetryableError)
+                        and self._network_retries < MAX_RETRIES
                 ):
                     self._start_auto_refresh_token(
                         RETRY_INTERVAL ** (self._network_retries * 100)
@@ -1066,16 +1074,16 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         self._refresh_token_timer.start()
 
     def _notify_all_subscribers(
-        self,
-        event: AuthChangeEvent,
-        session: Optional[Session],
+            self,
+            event: AuthChangeEvent,
+            session: Optional[Session],
     ) -> None:
         for subscription in self._state_change_emitters.values():
             subscription.callback(event, session)
 
     def _get_valid_session(
-        self,
-        raw_session: Optional[str],
+            self,
+            raw_session: Optional[str],
     ) -> Optional[Session]:
         if not raw_session:
             return None
@@ -1099,9 +1107,9 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
             return None
 
     def _get_param(
-        self,
-        query_params: Dict[str, List[str]],
-        name: str,
+            self,
+            query_params: Dict[str, List[str]],
+            name: str,
     ) -> Optional[str]:
         return query_params[name][0] if name in query_params else None
 
@@ -1110,19 +1118,23 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         params = parse_qs(result.query)
         return "access_token" in params or "error_description" in params
 
+    def _generate_code_challenge_and_method(self):
+        code_verifier = generate_pkce_verifier()
+        code_challenge = generate_pkce_challenge(code_verifier)
+        self._storage.set_item(f"{self._storage_key}-code-verifier", code_verifier)
+        code_challenge_method: CodeChallengeMethod = (
+            "plain" if code_verifier == code_challenge else "s256"
+        )
+        return code_challenge, code_challenge_method
+
     def _get_url_for_provider(
-        self,
-        url: str,
-        provider: Provider,
-        params: Dict[str, str],
+            self,
+            url: str,
+            provider: Provider,
+            params: Dict[str, str],
     ) -> Tuple[str, Dict[str, str]]:
         if self._flow_type == "pkce":
-            code_verifier = generate_pkce_verifier()
-            code_challenge = generate_pkce_challenge(code_verifier)
-            self._storage.set_item(f"{self._storage_key}-code-verifier", code_verifier)
-            code_challenge_method = (
-                "plain" if code_verifier == code_challenge else "s256"
-            )
+            code_challenge, code_challenge_method = self._generate_code_challenge_and_method()
             params["code_challenge"] = code_challenge
             params["code_challenge_method"] = code_challenge_method
 
@@ -1161,7 +1173,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
             return jwk
 
         if self._jwks and (
-            self._jwks_cached_at and time.time() - self._jwks_cached_at < self._jwks_ttl
+                self._jwks_cached_at and time.time() - self._jwks_cached_at < self._jwks_ttl
         ):
             # try fetching from the cache.
             jwk = next(
@@ -1187,7 +1199,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
         raise AuthInvalidJwtError("JWT has no valid kid")
 
     def get_claims(
-        self, jwt: Optional[str] = None, jwks: Optional[JWKSet] = None
+            self, jwt: Optional[str] = None, jwks: Optional[JWKSet] = None
     ) -> Optional[ClaimsResponse]:
         token = jwt
         if not token:

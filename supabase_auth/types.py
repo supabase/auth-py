@@ -96,6 +96,9 @@ class AuthResponse(BaseModel):
     user: Optional[User] = None
     session: Optional[Session] = None
 
+class CodeChallengeResponse(BaseModel):
+    code_challenge: str
+    code_challenge_method: CodeChallengeMethod
 
 class AuthOtpResponse(BaseModel):
     user: None = None
@@ -122,6 +125,9 @@ class IdentitiesResponse(BaseModel):
 
 class UserResponse(BaseModel):
     user: User
+
+class AuthCodeResponse(BaseModel):
+    auth_code: str
 
 
 class Session(BaseModel):
@@ -509,6 +515,14 @@ GenerateLinkParams = Union[
     GenerateRecoveryLinkParams,
     GenerateEmailChangeLinkParams,
 ]
+
+CodeChallengeMethod = Literal["plain", "s256"]
+
+
+class IssueAuthCodeParams(TypedDict):
+    user_id: str
+    code_challenge_method: CodeChallengeMethod
+    code_challenge: str
 
 GenerateLinkType = Literal[
     "signup",

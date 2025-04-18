@@ -1,4 +1,5 @@
 import pytest
+from faker import Faker
 
 from supabase_auth.errors import (
     AuthApiError,
@@ -588,3 +589,15 @@ async def test_weak_phone_password_error():
         )
     except (AuthWeakPasswordError, AuthApiError) as e:
         assert e.to_dict()
+
+async def test_issue_auth_code():
+    code_challenge = await auth_client().generate_code_challenge_and_method()
+    faker = Faker()
+    response = await service_role_api_client().issue_auth_code(
+        {
+            "user_id": faker.uuid4(),
+            "code_challenge": code_challenge.code_challenge,
+            "code_challenge_method": code_challenge.code_challenge_method,
+        }
+    )
+    assert isinstance(response.auth_code, str)

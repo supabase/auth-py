@@ -35,7 +35,7 @@ from .types import (
     Session,
     SSOResponse,
     User,
-    UserResponse,
+    UserResponse, AuthCodeResponse,
 )
 
 TBaseModel = TypeVar("TBaseModel", bound=BaseModel)
@@ -95,6 +95,8 @@ def parse_auth_otp_response(data: Any) -> AuthOtpResponse:
 def parse_link_identity_response(data: Any) -> LinkIdentityResponse:
     return model_validate(LinkIdentityResponse, data)
 
+def parse_auth_code_response(data: Any) -> AuthCodeResponse:
+    return model_validate(AuthCodeResponse, data)
 
 def parse_link_response(data: Any) -> GenerateLinkResponse:
     properties = GenerateLinkProperties(
@@ -118,7 +120,6 @@ def parse_user_response(data: Any) -> UserResponse:
 
 def parse_sso_response(data: Any) -> SSOResponse:
     return model_validate(SSOResponse, data)
-
 
 def parse_jwks(response: Any) -> JWKSet:
     if "keys" not in response or len(response["keys"]) == 0:
