@@ -35,7 +35,8 @@ from .types import (
     Session,
     SSOResponse,
     User,
-    UserResponse, AuthCodeResponse,
+    UserResponse, 
+    AuthCodeResponse,
 )
 
 TBaseModel = TypeVar("TBaseModel", bound=BaseModel)
