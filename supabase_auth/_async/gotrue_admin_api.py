@@ -3,7 +3,7 @@ from __future__ import annotations
 from functools import partial
 from typing import Dict, List, Optional
 
-from ..helpers import model_validate, parse_link_response, parse_user_response
+from ..helpers import model_validate, parse_link_response, parse_user_response, parse_auth_code_response
 from ..http_clients import AsyncClient
 from ..types import (
     AdminUserAttributes,
@@ -16,7 +16,7 @@ from ..types import (
     InviteUserByEmailOptions,
     SignOutScope,
     User,
-    UserResponse,
+    UserResponse, IssueAuthCodeParams, AuthCodeResponse,
 )
 from .gotrue_admin_mfa_api import AsyncGoTrueAdminMFAAPI
 from .gotrue_base_api import AsyncGoTrueBaseAPI
@@ -70,6 +70,18 @@ class AsyncGoTrueAdminAPI(AsyncGoTrueBaseAPI):
             body={"email": email, "data": options.get("data")},
             redirect_to=options.get("redirect_to"),
             xform=parse_user_response,
+        )
+
+    async def issue_auth_code(self, params: IssueAuthCodeParams) -> AuthCodeResponse:
+        return await self._request(
+            "POST",
+            "admin/authcode",
+            body={
+                "user_id": params.get("user_id"),
+                "code_challenge_method": params.get("code_challenge_method"),
+                "code_challenge": params.get("code_challenge"),
+            },
+            xform=parse_auth_code_response
         )
 
     async def generate_link(self, params: GenerateLinkParams) -> GenerateLinkResponse:

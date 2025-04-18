@@ -713,8 +713,8 @@ async def test_sign_in_with_otp():
         assert kwargs["body"]["create_user"] == True
         assert kwargs["body"]["data"] == {"custom": "data"}
         assert (
-            kwargs["body"]["gotrue_meta_security"]["captcha_token"]
-            == "mock-captcha-token"
+                kwargs["body"]["gotrue_meta_security"]["captcha_token"]
+                == "mock-captcha-token"
         )
         assert kwargs["redirect_to"] == "https://example.com/callback"
 
@@ -752,8 +752,8 @@ async def test_sign_in_with_otp():
         assert kwargs["body"]["data"] == {"custom": "data"}
         assert kwargs["body"]["channel"] == "whatsapp"
         assert (
-            kwargs["body"]["gotrue_meta_security"]["captcha_token"]
-            == "mock-captcha-token"
+                kwargs["body"]["gotrue_meta_security"]["captcha_token"]
+                == "mock-captcha-token"
         )
         assert kwargs.get("redirect_to") is None  # No redirect for phone
 
@@ -905,3 +905,9 @@ async def test_sign_out():
 
                     # Verify that _notify_all_subscribers was still called despite the error
                     mock_notify.assert_called_once_with("SIGNED_OUT", None)
+
+
+async def test_generate_code_challenge_and_method():
+    response = await auth_client().generate_code_challenge_and_method()
+    assert isinstance(response.code_challenge, str)
+    assert response.code_challenge_method == "s256"

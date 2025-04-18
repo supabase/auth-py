@@ -82,7 +82,7 @@ from ..types import (
     UserAttributes,
     UserIdentity,
     UserResponse,
-    VerifyOtpParams,
+    VerifyOtpParams, CodeChallengeResponse, CodeChallengeMethod,
 )
 from .gotrue_admin_api import AsyncGoTrueAdminAPI
 from .gotrue_base_api import AsyncGoTrueBaseAPI
@@ -837,6 +837,13 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
             xform=partial(model_validate, AuthMFAChallengeResponse),
         )
 
+    async def generate_code_challenge_and_method(self) -> CodeChallengeResponse:
+        code_challenge, code_challenge_method = await self._generate_code_challenge_and_method()
+        return CodeChallengeResponse(
+            code_challenge=code_challenge,
+            code_challenge_method=code_challenge_method,
+        )
+
     async def _challenge_and_verify(
         self,
         params: MFAChallengeAndVerifyParams,
@@ -1114,6 +1121,17 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         params = parse_qs(result.query)
         return "access_token" in params or "error_description" in params
 
+    async def _generate_code_challenge_and_method(self):
+        code_verifier = generate_pkce_verifier()
+        code_challenge = generate_pkce_challenge(code_verifier)
+        await self._storage.set_item(
+            f"{self._storage_key}-code-verifier", code_verifier
+        )
+        code_challenge_method: CodeChallengeMethod = (
+            "plain" if code_verifier == code_challenge else "s256"
+        )
+        return code_challenge, code_challenge_method
+
     async def _get_url_for_provider(
         self,
         url: str,
@@ -1121,14 +1139,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
         params: Dict[str, str],
     ) -> Tuple[str, Dict[str, str]]:
         if self._flow_type == "pkce":
-            code_verifier = generate_pkce_verifier()
-            code_challenge = generate_pkce_challenge(code_verifier)
-            await self._storage.set_item(
-                f"{self._storage_key}-code-verifier", code_verifier
-            )
-            code_challenge_method = (
-                "plain" if code_verifier == code_challenge else "s256"
-            )
+            code_challenge, code_challenge_method = self._generate_code_challenge_and_method()
             params["code_challenge"] = code_challenge
             params["code_challenge_method"] = code_challenge_method
 
