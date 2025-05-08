@@ -15,7 +15,7 @@ on:
 jobs:
   ci:
     uses: supabase/actions/.github/workflows/python-ci.yml@main
-    with: 
+    with:
       test-command: |
         make run_tests
         pip install pydantic==1.10.12
@@ -24,7 +24,7 @@ jobs:
       package-name: supabase_auth
     secrets:
       COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    
+
   publish_legacy:
     needs: ci
     if: ${{ startsWith(github.event.head_commit.message, 'chore(main)') && github.ref == 'refs/heads/main' && github.event_name == 'push' && github.repository_owner == 'supabase' }}
