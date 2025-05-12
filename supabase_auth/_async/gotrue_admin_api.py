@@ -3,7 +3,12 @@ from __future__ import annotations
 from functools import partial
 from typing import Dict, List, Optional
 
-from ..helpers import model_validate, parse_link_response, parse_user_response
+from ..helpers import (
+    is_valid_uuid,
+    model_validate,
+    parse_link_response,
+    parse_user_response,
+)
 from ..http_clients import AsyncClient
 from ..types import (
     AdminUserAttributes,
@@ -131,6 +136,8 @@ class AsyncGoTrueAdminAPI(AsyncGoTrueBaseAPI):
         This function should only be called on a server.
         Never expose your `service_role` key in the browser.
         """
+        self._validate_uuid(uid)
+
         return await self._request(
             "GET",
             f"admin/users/{uid}",
@@ -148,6 +155,7 @@ class AsyncGoTrueAdminAPI(AsyncGoTrueBaseAPI):
         This function should only be called on a server.
         Never expose your `service_role` key in the browser.
         """
+        self._validate_uuid(uid)
         return await self._request(
             "PUT",
             f"admin/users/{uid}",
@@ -162,6 +170,7 @@ class AsyncGoTrueAdminAPI(AsyncGoTrueBaseAPI):
         This function should only be called on a server.
         Never expose your `service_role` key in the browser.
         """
+        self._validate_uuid(id)
         body = {"should_soft_delete": should_soft_delete}
         return await self._request("DELETE", f"admin/users/{id}", body=body)
 
@@ -169,6 +178,7 @@ class AsyncGoTrueAdminAPI(AsyncGoTrueBaseAPI):
         self,
         params: AuthMFAAdminListFactorsParams,
     ) -> AuthMFAAdminListFactorsResponse:
+        self._validate_uuid(params.get("user_id"))
         return await self._request(
             "GET",
             f"admin/users/{params.get('user_id')}/factors",
@@ -179,8 +189,14 @@ class AsyncGoTrueAdminAPI(AsyncGoTrueBaseAPI):
         self,
         params: AuthMFAAdminDeleteFactorParams,
     ) -> AuthMFAAdminDeleteFactorResponse:
+        self._validate_uuid(params.get("user_id"))
+        self._validate_uuid(params.get("id"))
         return await self._request(
             "DELETE",
-            f"admin/users/{params.get('user_id')}/factors/{params.get('factor_id')}",
+            f"admin/users/{params.get('user_id')}/factors/{params.get('id')}",
             xform=partial(model_validate, AuthMFAAdminDeleteFactorResponse),
         )
+
+    def _validate_uuid(self, id: str) -> None:
+        if not is_valid_uuid(id):
+            raise ValueError(f"Invalid id, '{id}' is not a valid uuid")

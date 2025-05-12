@@ -5,6 +5,7 @@ import hashlib
 import re
 import secrets
 import string
+import uuid
 from base64 import urlsafe_b64decode
 from datetime import datetime
 from json import loads
@@ -317,3 +318,11 @@ def validate_exp(exp: int) -> None:
     time_now = datetime.now().timestamp()
     if exp <= time_now:
         raise AuthInvalidJwtError("JWT has expired")
+
+
+def is_valid_uuid(value: str) -> bool:
+    try:
+        uuid.UUID(value)
+        return True
+    except ValueError:
+        return False
