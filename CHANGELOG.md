@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## [2.12.1](https://github.com/supabase/auth-py/compare/v2.12.0...v2.12.1) (2025-05-15)
+
+
+### Bug Fixes
+
+* validate uuid on admin methods and fix wrong factor in delete_factor method ([#706](https://github.com/supabase/auth-py/issues/706)) ([1649956](https://github.com/supabase/auth-py/commit/1649956c3aca418eaa10b2434292b17f40565a8b))
+
 ## [2.12.0](https://github.com/supabase/auth-py/compare/v2.11.4...v2.12.0) (2025-03-26)
 
 
