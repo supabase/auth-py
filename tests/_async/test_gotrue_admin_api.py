@@ -1,3 +1,5 @@
+import uuid
+
 import pytest
 
 from supabase_auth.errors import (
@@ -588,3 +590,51 @@ async def test_weak_phone_password_error():
         )
     except (AuthWeakPasswordError, AuthApiError) as e:
         assert e.to_dict()
+
+
+async def test_get_user_by_id_invalid_id_raises_error():
+    with pytest.raises(
+        ValueError, match=r"Invalid id, 'invalid_id' is not a valid uuid"
+    ):
+        await service_role_api_client().get_user_by_id("invalid_id")
+
+
+async def test_update_user_by_id_invalid_id_raises_error():
+    with pytest.raises(
+        ValueError, match=r"Invalid id, 'invalid_id' is not a valid uuid"
+    ):
+        await service_role_api_client().update_user_by_id(
+            "invalid_id", {"email": "test@test.com"}
+        )
+
+
+async def test_delete_user_invalid_id_raises_error():
+    with pytest.raises(
+        ValueError, match=r"Invalid id, 'invalid_id' is not a valid uuid"
+    ):
+        await service_role_api_client().delete_user("invalid_id")
+
+
+async def test_list_factors_invalid_id_raises_error():
+    with pytest.raises(
+        ValueError, match=r"Invalid id, 'invalid_id' is not a valid uuid"
+    ):
+        await service_role_api_client()._list_factors({"user_id": "invalid_id"})
+
+
+async def test_delete_factor_invalid_id_raises_error():
+    # invalid user id
+    with pytest.raises(
+        ValueError, match=r"Invalid id, 'invalid_id' is not a valid uuid"
+    ):
+        await service_role_api_client()._delete_factor(
+            {"user_id": "invalid_id", "id": "invalid_id"}
+        )
+
+    # valid user id, invalid factor id
+    with pytest.raises(
+        ValueError, match=r"Invalid id, 'invalid_id' is not a valid uuid"
+    ):
+        await service_role_api_client()._delete_factor(
+            {"user_id": str(uuid.uuid4()), "id": "invalid_id"}
+        )
