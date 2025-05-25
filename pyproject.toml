@@ -30,7 +30,7 @@ pre-commit = "^4.2.0"
 pytest-cov = "^6.0.0"
 pytest-depends = "^1.0.1"
 pytest-asyncio = "^0.26.0"
-Faker = "^37.1.0"
+Faker = "^37.3.0"
 unasync-cli = { git = "https://github.com/supabase-community/unasync-cli.git", branch = "main" }
 
 [tool.poetry.group.dev.dependencies]
