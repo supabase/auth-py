@@ -801,7 +801,7 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
             raise AuthSessionMissingError()
 
         body = {
-            "friendly_name": params["friendly_name"],
+            "friendly_name": params.get("friendly_name"),
             "factor_type": params["factor_type"],
         }
 
