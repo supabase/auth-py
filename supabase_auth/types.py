@@ -4,7 +4,7 @@ from datetime import datetime
 from time import time
 from typing import Any, Callable, Dict, List, Optional, Union
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 try:
     # > 2
@@ -643,7 +643,7 @@ class AuthMFAEnrollResponse(BaseModel):
     """
     Type of MFA factor. Only `totp` supported for now.
     """
-    totp: AuthMFAEnrollResponseTotp
+    totp: Optional[AuthMFAEnrollResponseTotp] = None
     """
     TOTP enrollment information.
     """
@@ -680,7 +680,9 @@ class AuthMFAChallengeResponse(BaseModel):
     """
     Timestamp in UNIX seconds when this challenge will no longer be usable.
     """
-    factor_type: Optional[Literal["totp", "phone"]] = None
+    factor_type: Optional[Literal["totp", "phone"]] = Field(
+        validation_alias="type", default=None
+    )
     """
     Factor Type which generated the challenge
     """
