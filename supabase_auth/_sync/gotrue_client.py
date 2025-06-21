@@ -802,13 +802,13 @@ class SyncGoTrueClient(SyncGoTrueBaseAPI):
 
         body = {
             "friendly_name": params.get("friendly_name"),
-            "factor_type": params["factor_type"],
+            "factor_type": params.get("factor_type"),
         }
 
         if params["factor_type"] == "phone":
-            body["phone"] = params["phone"]
+            body["phone"] = params.get("phone")
         else:
-            body["issuer"] = params["issuer"]
+            body["issuer"] = params.get("issuer")
 
         response = self._request(
             "POST",
