@@ -23,7 +23,6 @@ from supabase_auth.helpers import (
     generate_pkce_verifier,
     get_error_code,
     handle_exception,
-    is_valid_jwt,
     model_dump,
     model_dump_json,
     model_validate,
@@ -164,35 +163,6 @@ def test_parse_response_api_version_invalid_date():
 
     result = parse_response_api_version(mock_response)
     assert result is None
-
-
-# Test for is_valid_jwt
-def test_is_valid_jwt():
-    # Valid JWT format (3 parts with valid base64url encoding)
-    valid_jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
-    assert is_valid_jwt(valid_jwt) is True
-
-    # Valid JWT with Bearer prefix
-    valid_jwt_with_bearer = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
-    assert is_valid_jwt(valid_jwt_with_bearer) is True
-
-    # Invalid JWT - wrong number of parts
-    invalid_jwt_parts = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ"
-    assert is_valid_jwt(invalid_jwt_parts) is False
-
-    # Invalid JWT - not a string
-    assert is_valid_jwt(123) is False
-
-    # Need to patch the BASE64URL_REGEX to make invalid_jwt_encoding fail validation
-    with patch("supabase_auth.helpers.re.search") as mock_search:
-        # Make the invalid JWT fail the regex check
-        mock_search.side_effect = lambda pattern, string, flags=0: (
-            False if string == "AAA" else True
-        )
-
-        # Invalid JWT - invalid base64url encoding
-        invalid_jwt_encoding = "AAA.BBB.CCC"
-        assert is_valid_jwt(invalid_jwt_encoding) is False
 
 
 # Test for pydantic v1 compatibility in model_validate
