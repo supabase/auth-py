@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## [2.12.2](https://github.com/supabase/auth-py/compare/v2.12.1...v2.12.2) (2025-06-23)
+
+
+### Bug Fixes
+
+* add py.typed marker for type-checking support ([#721](https://github.com/supabase/auth-py/issues/721)) ([59fddd4](https://github.com/supabase/auth-py/commit/59fddd4faffca19f9f9d5523b72179ee32c90aa6))
+* remove unused jwt key validation ([#725](https://github.com/supabase/auth-py/issues/725)) ([13008b3](https://github.com/supabase/auth-py/commit/13008b3977b1e9ad688c4c8b7f0f6b79523ebca3))
+* sms mfa failure due to missing totp field ([#723](https://github.com/supabase/auth-py/issues/723)) ([8b81588](https://github.com/supabase/auth-py/commit/8b81588638f3cb4c972ba386ddf8d46c38ff712b))
+
 ## [2.12.1](https://github.com/supabase/auth-py/compare/v2.12.0...v2.12.1) (2025-05-15)
 
 
