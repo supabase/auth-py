@@ -43,7 +43,7 @@ from supabase_auth.types import (
 
 from ._sync.utils import mock_access_token
 
-TEST_URL = f"http://localhost"
+TEST_URL = "http://localhost"
 
 
 def test_handle_exception_with_api_version_and_error_code():
@@ -60,7 +60,7 @@ def test_handle_exception_with_api_version_and_error_code():
         )
         with pytest.raises(AuthApiError, match=r"Error code message") as exc:
             httpx.get(f"{TEST_URL}/hello-world")
-        assert exc.value != None
+        assert exc.value is not None
         assert exc.value.message == "Error code message"
         assert exc.value.code == err["code"]
         assert exc.value.name == err["ename"]
@@ -82,7 +82,7 @@ def test_handle_exception_without_api_version_and_weak_password_error_code():
         )
         with pytest.raises(AuthWeakPasswordError, match=r"Error code message") as exc:
             httpx.get(f"{TEST_URL}/hello-world")
-        assert exc.value != None
+        assert exc.value is not None
         assert exc.value.message == "Error code message"
         assert exc.value.code == err["code"]
         assert exc.value.name == err["ename"]
@@ -102,7 +102,7 @@ def test_handle_exception_with_api_version_2024_01_01_and_error_code():
         )
         with pytest.raises(AuthApiError, match=r"Error code message") as exc:
             httpx.get(f"{TEST_URL}/hello-world")
-        assert exc.value != None
+        assert exc.value is not None
         assert exc.value.message == "Error code message"
         assert exc.value.code == err["code"]
         assert exc.value.name == err["ename"]
@@ -123,7 +123,7 @@ def test_parse_response_api_version_with_invalid_dates():
         headers = Headers({API_VERSION_HEADER_NAME: date})
         response = Response(headers=headers, status_code=200)
         api_ver = parse_response_api_version(response)
-        assert api_ver == None
+        assert api_ver is None
 
 
 def test_parse_link_identity_response():
@@ -131,7 +131,7 @@ def test_parse_link_identity_response():
 
 
 def test_get_error_code():
-    assert get_error_code({}) == None
+    assert get_error_code({}) is None
     assert get_error_code({"error_code": "500"}) == "500"
 
 
@@ -585,9 +585,10 @@ def test_handle_exception_weak_password_branch():
             return True
         return original_isinstance(obj, cls)
 
-    with patch(
-        "supabase_auth.helpers.isinstance", side_effect=patched_isinstance
-    ), patch("supabase_auth.helpers.len", return_value=1):
+    with (
+        patch("supabase_auth.helpers.isinstance", side_effect=patched_isinstance),
+        patch("supabase_auth.helpers.len", return_value=1),
+    ):
         result = handle_exception(exception)
 
         # Check if our test coverage reached the AuthWeakPasswordError branch
