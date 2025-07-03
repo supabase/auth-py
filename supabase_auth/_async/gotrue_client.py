@@ -79,6 +79,7 @@ from ..types import (
     SignOutOptions,
     SignUpWithPasswordCredentials,
     Subscription,
+    UpdateUserOptions,
     UserAttributes,
     UserIdentity,
     UserResponse,
@@ -647,7 +648,9 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
                 return None
         return await self._request("GET", "user", jwt=jwt, xform=parse_user_response)
 
-    async def update_user(self, attributes: UserAttributes) -> UserResponse:
+    async def update_user(
+        self, attributes: UserAttributes, options: UpdateUserOptions = {}
+    ) -> UserResponse:
         """
         Updates user data, if there is a logged in user.
         """
@@ -658,6 +661,7 @@ class AsyncGoTrueClient(AsyncGoTrueBaseAPI):
             "PUT",
             "user",
             body=attributes,
+            redirect_to=options.get("email_redirect_to"),
             jwt=session.access_token,
             xform=parse_user_response,
         )
