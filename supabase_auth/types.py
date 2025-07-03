@@ -233,6 +233,7 @@ class UserAttributes(TypedDict):
     phone: NotRequired[str]
     password: NotRequired[str]
     data: NotRequired[Any]
+    nonce: NotRequired[str]
 
 
 class AdminUserAttributes(UserAttributes, TypedDict):
