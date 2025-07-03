@@ -400,7 +400,6 @@ def test_sign_in_with_oauth():
 
 
 def test_link_identity_missing_session():
-
     with pytest.raises(AuthSessionMissingError) as exc:
         client_api_auto_confirm_off_signups_enabled_client().link_identity(
             {

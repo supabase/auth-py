@@ -367,11 +367,13 @@ async def test_verify_otp_with_invalid_phone_number():
 
 async def test_sign_in_with_id_token():
     try:
-        await client_api_auto_confirm_off_signups_enabled_client().sign_in_with_id_token(
-            {
-                "provider": "google",
-                "token": "123456",
-            }
+        await (
+            client_api_auto_confirm_off_signups_enabled_client().sign_in_with_id_token(
+                {
+                    "provider": "google",
+                    "token": "123456",
+                }
+            )
         )
     except AuthApiError as e:
         assert e.to_dict()
@@ -398,7 +400,6 @@ async def test_sign_in_with_oauth():
 
 
 async def test_link_identity_missing_session():
-
     with pytest.raises(AuthSessionMissingError) as exc:
         await client_api_auto_confirm_off_signups_enabled_client().link_identity(
             {
