@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## [2.12.3](https://github.com/supabase/auth-py/compare/v2.12.2...v2.12.3) (2025-07-03)
+
+
+### Bug Fixes
+
+* add missing email_redirect_to option ([#728](https://github.com/supabase/auth-py/issues/728)) ([7e63772](https://github.com/supabase/auth-py/commit/7e637729af6442ec64a9cff1785e7b099c1b4007))
+* add missing nonce to the update_user method ([#731](https://github.com/supabase/auth-py/issues/731)) ([9db842a](https://github.com/supabase/auth-py/commit/9db842aba268c128db1d59a08de77c2c2c197aa3))
+
 ## [2.12.2](https://github.com/supabase/auth-py/compare/v2.12.1...v2.12.2) (2025-06-23)
 
 
