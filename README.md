@@ -11,4 +11,6 @@ The `gotrue` package name is deprecated and is not going to receive any more upd
 
 ## Reasoning
 
-The `gotrue` package has been replaced by the `supabase_auth` since December 14th, 2024, following the JavaScript implementation name switch. Changes and fixes were maintained for a couple of months by pushing them in both packages at the same time, using a patching script. In order to simplify maintenance and improve the CI, this package is going to cease receiving updates as of 7 of August 2025, and going forward everyone should use `supabase_auth` instead.
+The `gotrue` package has been replaced by the `supabase_auth` since December 14th, 2024, following the JavaScript implementation name switch. Changes and fixes were maintained for a couple of months by pushing them in both packages at the same time, using a patching script.
+
+In order to simplify maintenance and development of new features, the `gotrue` package is going to cease receiving updates as of 7th of August 2025, and going forward everyone should use `supabase_auth` instead.
