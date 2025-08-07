@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "supabase_auth"
+name = "gotrue"
 version = "2.12.3" # {x-release-please-version}
 description = "Python Client Library for Supabase Auth"
 authors = ["Joel Lee <joel@joellee.org>"]

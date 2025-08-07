@@ -5,12 +5,12 @@ from uuid import uuid4
 import pytest
 from jwt import encode
 
-from supabase_auth.errors import (
+from gotrue.errors import (
     AuthApiError,
     AuthInvalidJwtError,
     AuthSessionMissingError,
 )
-from supabase_auth.helpers import decode_jwt
+from gotrue.helpers import decode_jwt
 
 from .clients import (
     GOTRUE_JWT_SECRET,
@@ -313,7 +313,7 @@ def test_initialize_from_url():
     # Now test actual URL initialization with a valid URL containing auth tokens
     from unittest.mock import patch
 
-    from supabase_auth.types import Session, User, UserResponse
+    from gotrue.types import Session, User, UserResponse
 
     # Create a mock user and session to avoid actual API calls
     mock_user = User(
@@ -367,7 +367,7 @@ def test_initialize_from_url():
     error_url = "http://example.com/?error=invalid_request&error_description=Invalid+request&error_code=400"
 
     # Should throw an error when URL contains error parameters
-    from supabase_auth.errors import AuthImplicitGrantRedirectError
+    from gotrue.errors import AuthImplicitGrantRedirectError
 
     try:
         client.initialize_from_url(error_url)
@@ -457,7 +457,7 @@ def test_link_identity():
 
     from unittest.mock import patch
 
-    from supabase_auth.types import OAuthResponse
+    from gotrue.types import OAuthResponse
 
     # Since the test server has manual linking disabled, we'll mock the URL generation
     with patch.object(client, "_get_url_for_provider") as mock_url_provider:
@@ -513,7 +513,7 @@ def test_unlink_identity():
     # Mock a UserIdentity to test unlink_identity
     from unittest.mock import patch
 
-    from supabase_auth.types import UserIdentity
+    from gotrue.types import UserIdentity
 
     # Create a mock identity
     mock_identity = UserIdentity(
@@ -543,7 +543,7 @@ def test_unlink_identity():
 
     # Test error case: no session
     with patch.object(client, "get_session") as mock_get_session:
-        from supabase_auth.errors import AuthSessionMissingError
+        from gotrue.errors import AuthSessionMissingError
 
         mock_get_session.return_value = None
 
@@ -561,7 +561,7 @@ def test_verify_otp():
     import time
     from unittest.mock import patch
 
-    from supabase_auth.types import AuthResponse, Session, User
+    from gotrue.types import AuthResponse, Session, User
 
     mock_user = User(
         id="test-user-id",
@@ -623,7 +623,7 @@ def test_verify_otp():
 def test_sign_in_with_password():
     client = auth_client()
     credentials = mock_user_credentials()
-    from supabase_auth.errors import AuthApiError, AuthInvalidCredentialsError
+    from gotrue.errors import AuthApiError, AuthInvalidCredentialsError
 
     # First create a user we can sign in with
     signup_response = client.sign_up(
@@ -681,7 +681,7 @@ def test_sign_in_with_otp():
     # We can't fully test the actual OTP flow since that requires email verification
     from unittest.mock import patch
 
-    from supabase_auth.types import AuthOtpResponse
+    from gotrue.types import AuthOtpResponse
 
     # First test for email OTP
     with patch.object(client, "_request") as mock_request:
@@ -759,7 +759,7 @@ def test_sign_in_with_otp():
         assert response == mock_response
 
     # Test with invalid parameters (missing both email and phone)
-    from supabase_auth.errors import AuthInvalidCredentialsError
+    from gotrue.errors import AuthInvalidCredentialsError
 
     try:
         client.sign_in_with_otp({})
@@ -771,7 +771,7 @@ def test_sign_in_with_otp():
 def test_sign_out():
     from unittest.mock import patch
 
-    from supabase_auth.types import Session, User
+    from gotrue.types import Session, User
 
     client = auth_client()
 

@@ -7,17 +7,17 @@ import respx
 from httpx import Headers, HTTPStatusError, Response
 from pydantic import BaseModel
 
-from supabase_auth.constants import (
+from gotrue.constants import (
     API_VERSION_HEADER_NAME,
 )
-from supabase_auth.errors import (
+from gotrue.errors import (
     AuthApiError,
     AuthInvalidJwtError,
     AuthRetryableError,
     AuthUnknownError,
     AuthWeakPasswordError,
 )
-from supabase_auth.helpers import (
+from gotrue.helpers import (
     decode_jwt,
     generate_pkce_challenge,
     generate_pkce_verifier,
@@ -35,7 +35,7 @@ from supabase_auth.helpers import (
     parse_user_response,
     validate_exp,
 )
-from supabase_auth.types import (
+from gotrue.types import (
     GenerateLinkResponse,
     Session,
     User,
@@ -168,7 +168,7 @@ def test_parse_response_api_version_invalid_date():
 # Test for pydantic v1 compatibility in model_validate
 def test_model_validate_pydantic_v1():
     # We need to patch the actual calls inside the function
-    with patch("supabase_auth.helpers.TBaseModel") as MockType:
+    with patch("gotrue.helpers.TBaseModel") as MockType:
         # Mock the behavior of the try block to raise AttributeError
         mock_model = MagicMock()
         mock_model.model_validate.side_effect = AttributeError
@@ -229,11 +229,11 @@ def test_parse_auth_response_with_session():
         },
     }
 
-    with patch("supabase_auth.helpers.model_validate") as mock_validate:
+    with patch("gotrue.helpers.model_validate") as mock_validate:
         # First call for Session, second for User
         mock_validate.side_effect = [mock_session, mock_user]
 
-        with patch("supabase_auth.helpers.AuthResponse") as mock_auth_response:
+        with patch("gotrue.helpers.AuthResponse") as mock_auth_response:
             mock_auth_response.return_value = "auth_response_result"
 
             result = parse_auth_response(data)
@@ -263,10 +263,10 @@ def test_parse_auth_response_without_session():
         }
     }
 
-    with patch("supabase_auth.helpers.model_validate") as mock_validate:
+    with patch("gotrue.helpers.model_validate") as mock_validate:
         mock_validate.return_value = mock_user
 
-        with patch("supabase_auth.helpers.AuthResponse") as mock_auth_response:
+        with patch("gotrue.helpers.AuthResponse") as mock_auth_response:
             mock_auth_response.return_value = "auth_response_result"
 
             result = parse_auth_response(data)
@@ -297,10 +297,10 @@ def test_parse_link_response():
     }
 
     # We need to patch the GenerateLinkProperties constructor
-    with patch("supabase_auth.helpers.GenerateLinkProperties") as mock_gen_props:
+    with patch("gotrue.helpers.GenerateLinkProperties") as mock_gen_props:
         mock_gen_props.return_value = "mock_properties"
 
-        with patch("supabase_auth.helpers.model_dump") as mock_dump:
+        with patch("gotrue.helpers.model_dump") as mock_dump:
             mock_dump.return_value = {
                 "action_link": "https://example.com/verify",
                 "email_otp": "123456",
@@ -309,11 +309,11 @@ def test_parse_link_response():
                 "verification_type": "signup",
             }
 
-            with patch("supabase_auth.helpers.model_validate") as mock_validate:
+            with patch("gotrue.helpers.model_validate") as mock_validate:
                 mock_validate.return_value = mock_user
 
                 with patch(
-                    "supabase_auth.helpers.GenerateLinkResponse"
+                    "gotrue.helpers.GenerateLinkResponse"
                 ) as mock_gen_link:
                     mock_gen_link.return_value = mock_gen_link_response
 
@@ -343,7 +343,7 @@ def test_parse_user_response_with_user_object():
     # Test data with 'user' key
     data = {"user": {"id": "user-123", "email": "test@example.com"}}
 
-    with patch("supabase_auth.helpers.model_validate") as mock_validate:
+    with patch("gotrue.helpers.model_validate") as mock_validate:
         mock_validate.return_value = "mock_user_response"
 
         result = parse_user_response(data)
@@ -357,7 +357,7 @@ def test_parse_user_response_without_user_object():
     # Test data without 'user' key
     data = {"id": "user-123", "email": "test@example.com"}
 
-    with patch("supabase_auth.helpers.model_validate") as mock_validate:
+    with patch("gotrue.helpers.model_validate") as mock_validate:
         mock_validate.return_value = "mock_user_response"
 
         result = parse_user_response(data)
@@ -371,14 +371,14 @@ def test_parse_user_response_without_user_object():
 
 # Test for parse_sso_response
 def test_parse_sso_response():
-    with patch("supabase_auth.helpers.model_validate") as mock_validate:
+    with patch("gotrue.helpers.model_validate") as mock_validate:
         mock_validate.return_value = "sso_response"
 
         result = parse_sso_response({"provider": "google"})
         assert result == "sso_response"
 
         # Verify model_validate was called with correct params
-        from supabase_auth.types import SSOResponse
+        from gotrue.types import SSOResponse
 
         mock_validate.assert_called_once_with(SSOResponse, {"provider": "google"})
 
@@ -429,7 +429,7 @@ def test_handle_exception_with_weak_password_attribute():
 
     exception = HTTPStatusError("Error", request=MagicMock(), response=mock_response)
 
-    with patch("supabase_auth.helpers.parse_response_api_version", return_value=None):
+    with patch("gotrue.helpers.parse_response_api_version", return_value=None):
         result = handle_exception(exception)
 
         # Will return a normal AuthApiError
@@ -453,7 +453,7 @@ def test_handle_exception_weak_password_with_error_code():
         "Password error", request=MagicMock(), response=mock_response
     )
 
-    with patch("supabase_auth.helpers.parse_response_api_version", return_value=None):
+    with patch("gotrue.helpers.parse_response_api_version", return_value=None):
         result = handle_exception(exception)
 
         assert isinstance(result, AuthWeakPasswordError)
@@ -480,7 +480,7 @@ def test_handle_exception_with_new_api_version():
     )
 
     with patch(
-        "supabase_auth.helpers.parse_response_api_version", return_value=mock_date
+        "gotrue.helpers.parse_response_api_version", return_value=mock_date
     ):
         result = handle_exception(exception)
 
@@ -527,7 +527,7 @@ def test_validate_exp_with_valid_exp():
 
 
 def test_is_http_url():
-    from supabase_auth.helpers import is_http_url
+    from gotrue.helpers import is_http_url
 
     # Test valid HTTP URLs
     assert is_http_url("http://example.com") is True
@@ -550,8 +550,8 @@ def test_handle_exception_weak_password_branch():
     """
     import httpx
 
-    from supabase_auth.errors import AuthWeakPasswordError
-    from supabase_auth.helpers import handle_exception
+    from gotrue.errors import AuthWeakPasswordError
+    from gotrue.helpers import handle_exception
 
     # Create a proper mock Response with headers
     mock_response = MagicMock(spec=httpx.Response)
@@ -586,8 +586,8 @@ def test_handle_exception_weak_password_branch():
         return original_isinstance(obj, cls)
 
     with (
-        patch("supabase_auth.helpers.isinstance", side_effect=patched_isinstance),
-        patch("supabase_auth.helpers.len", return_value=1),
+        patch("gotrue.helpers.isinstance", side_effect=patched_isinstance),
+        patch("gotrue.helpers.len", return_value=1),
     ):
         result = handle_exception(exception)
 
@@ -599,8 +599,8 @@ def test_handle_exception_weak_password_branch():
 
 def test_parse_auth_otp_response():
     """Test for the parse_auth_otp_response function."""
-    from supabase_auth.helpers import parse_auth_otp_response
-    from supabase_auth.types import AuthOtpResponse
+    from gotrue.helpers import parse_auth_otp_response
+    from gotrue.types import AuthOtpResponse
 
     # Test with message_id field
     data = {"message_id": "12345"}

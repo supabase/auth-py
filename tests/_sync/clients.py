@@ -1,6 +1,6 @@
 from jwt import encode
 
-from supabase_auth import SyncGoTrueAdminAPI, SyncGoTrueClient
+from gotrue import SyncGoTrueAdminAPI, SyncGoTrueClient
 
 SIGNUP_ENABLED_AUTO_CONFIRM_OFF_PORT = 9999
 SIGNUP_ENABLED_AUTO_CONFIRM_ON_PORT = 9998

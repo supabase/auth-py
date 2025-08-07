@@ -46,7 +46,7 @@ rename_package_dir:
 	mv supabase_auth gotrue
 
 rename_package:
-	sed -i 's/supabase_auth/gotrue/g' pyproject.toml tests/_async/clients.py tests/_sync/clients.py tests/_async/test_gotrue_admin_api.py tests/_sync/test_gotrue_admin_api.py tests/_async/test_utils.py tests/_sync/test_utils.py tests/_async/utils.py tests/_sync/utils.py README.md
+	sed -i "" 's/supabase_auth/gotrue/g' pyproject.toml tests/_async/clients.py tests/_sync/clients.py tests/_async/test_gotrue_admin_api.py tests/_sync/test_gotrue_admin_api.py tests/_async/test_utils.py tests/_sync/test_utils.py tests/_async/utils.py tests/_sync/utils.py README.md
 
 build_package:
 	poetry build

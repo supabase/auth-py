@@ -14,13 +14,13 @@ The package can be installed using pip or poetry:
 ### Poetry
 
 ```bash
-poetry add supabase_auth
+poetry add gotrue
 ```
 
 ### Pip
 
 ```bash
-pip install supabase_auth
+pip install gotrue
 ```
 
 ## Features
@@ -52,7 +52,7 @@ const { data, error } = client.sign_up(...)
 
 The other key difference is we do not use pascalCase to encode variable and method names. Instead we use the snake_case convention adopted in the Python language.
 
-Also, the `supabase_auth` library for Python parses the date-time string into `datetime` Python objects. The [JS client](https://github.com/supabase/gotrue-js) keeps the date-time as strings.
+Also, the `gotrue` library for Python parses the date-time string into `datetime` Python objects. The [JS client](https://github.com/supabase/gotrue-js) keeps the date-time as strings.
 
 ## Usage
 
@@ -61,7 +61,7 @@ The library provides both synchronous and asynchronous clients. Here are some ex
 ### Synchronous Client
 
 ```python
-from supabase_auth import SyncGoTrueClient
+from gotrue import SyncGoTrueClient
 
 headers = {
     "apiKey": "my-mega-awesome-api-key",
@@ -97,7 +97,7 @@ user = client.update_user({"data": {"name": "John Doe"}})
 ### Asynchronous Client
 
 ```python
-from supabase_auth import AsyncGoTrueClient
+from gotrue import AsyncGoTrueClient
 
 headers = {
     "apiKey": "my-mega-awesome-api-key",

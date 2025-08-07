@@ -2,7 +2,7 @@ import uuid
 
 import pytest
 
-from supabase_auth.errors import (
+from gotrue.errors import (
     AuthApiError,
     AuthError,
     AuthInvalidCredentialsError,

@@ -6,7 +6,7 @@ from faker import Faker
 from jwt import encode
 from typing_extensions import NotRequired, TypedDict
 
-from supabase_auth.types import User
+from gotrue.types import User
 
 from .clients import GOTRUE_JWT_SECRET, service_role_api_client
 
