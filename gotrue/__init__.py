@@ -1,4 +1,7 @@
 from __future__ import annotations
+import warnings
+
+warnings.warn('The `gotrue` package is deprecated, is not going to receive updates in the future. Please, use `supabase_auth` instead.', DeprecationWarning, stacklevel=2)
 
 from ._async.gotrue_admin_api import AsyncGoTrueAdminAPI  # type: ignore # noqa: F401
 from ._async.gotrue_client import AsyncGoTrueClient  # type: ignore # noqa: F401
