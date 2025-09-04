@@ -28,7 +28,7 @@ jobs:
       - name: Clone Repository
         uses: actions/checkout@v5
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
       - name: Set up Poetry
@@ -86,7 +86,7 @@ jobs:
       contents: write # needed for dependabot to write to repo
     steps:
       - name: Set up Python 3.11
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: 3.11
 
@@ -121,7 +121,7 @@ jobs:
       contents: write # needed for github actions bot to write to repo
     steps:
       - name: Set up Python 3.11
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: 3.11
 
